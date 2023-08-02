@@ -27,6 +27,7 @@ import ProfileButton from "../components/home/header/ProfileButton";
 import Discover from "../screen/Discover";
 import CustomHeader from "../components/home/header/CustomHeader";
 import AddPostButton from "../components/global/AddPostButton";
+import ImageFullScreen from "../screen/ImageFullScreen";
 export default function Main() {
   return (
     <Stack.Navigator>
@@ -34,6 +35,11 @@ export default function Main() {
         name="Main"
         options={{ headerShown: false }}
         component={BottomTabNavigator}
+      />
+      <Stack.Screen
+        name="ImageFullScreen"
+        options={{ headerShown: false }}
+        component={ImageFullScreen}
       />
     </Stack.Navigator>
   );
