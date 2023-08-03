@@ -1,10 +1,16 @@
-import { View, Text, FlatList, Pressable } from "react-native";
+import { View, Text, FlatList, Pressable, Button } from "react-native";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { HomeNavigationProp } from "../../../../types/navigation";
-export default function PhotoPost({photoUri,width}:{photoUri:string[],width: number}) {
-
-    const navigation = useNavigation<HomeNavigationProp>()
+import Animated from "react-native-reanimated";
+export default function PhotoPost({
+  photoUri,
+  width,
+}: {
+  photoUri: string[];
+  width: number;
+}) {
+  const navigation = useNavigation<HomeNavigationProp>();
   return (
     <FlatList
       horizontal
@@ -15,21 +21,25 @@ export default function PhotoPost({photoUri,width}:{photoUri:string[],width: num
       snapToAlignment={"center"}
       decelerationRate={"fast"}
       renderItem={({ item }) => (
-        <Pressable
-        onPress={()=>{navigation.navigate('ImageFullScreen',{photoUri})}}
-          style={{
-            width: width * 0.8,
-            height: 150,
-            paddingHorizontal: 4,
-          }}
-        >
-          <Image
-            contentFit="cover"
-            transition={1000}
-            style={{ flex: 1, width: "100%", borderRadius: 15 }}
-            source={item}
-          />
-        </Pressable>
+        <>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("ImageFullScreen", { photoUri: item });
+            }}
+            style={{
+              width: width * 0.8,
+              height: 150,
+              paddingHorizontal: 4,
+            }}
+          >
+            <Animated.Image
+              width={width * 0.8}
+              sharedTransitionTag="a"
+              style={{ flex: 1, width: "100%", borderRadius: 15 }}
+              source={{ uri: item }}
+            />
+          </Pressable>
+        </>
       )}
     />
   );

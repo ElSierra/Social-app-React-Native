@@ -1,15 +1,18 @@
-import { View, Text, ScrollView, useColorScheme, FlatList } from "react-native";
+import { View, Text, ScrollView, useColorScheme, FlatList, Button } from "react-native";
 import React from "react";
 import Fab from "../components/home/post/components/Fab";
 import { AddIcon } from "../components/icons";
 import PostBuilder from "../components/home/post/PostBuilder";
 import { postLists } from "../data/test";
-
+import Animated, { FadeIn } from "react-native-reanimated";
+import { useNavigation } from "@react-navigation/native";
 export default function Home() {
   const scheme = useColorScheme();
   const isDark = scheme === "dark";
+  const navigate = useNavigation();
   return (
-    <>
+    <Animated.View entering={FadeIn.duration(400)} style={{flex:1}}>
+
       <Fab item={<AddIcon size={30} color="#D864A9" />} />
       <FlatList
         data={postLists}
@@ -33,6 +36,6 @@ export default function Home() {
           paddingBottom: 0,
         }}
       />
-    </>
+    </Animated.View>
   );
 }

@@ -28,6 +28,8 @@ import Discover from "../screen/Discover";
 import CustomHeader from "../components/home/header/CustomHeader";
 import AddPostButton from "../components/global/AddPostButton";
 import ImageFullScreen from "../screen/ImageFullScreen";
+import Test from "../screen/Test";
+import Show from "../screen/show";
 export default function Main() {
   return (
     <Stack.Navigator>
@@ -38,7 +40,12 @@ export default function Main() {
       />
       <Stack.Screen
         name="ImageFullScreen"
-        options={{ headerShown: false }}
+        options={{
+          headerTitle: "",
+          headerTransparent: true,
+          presentation: "transparentModal",
+          animation: "none",
+        }}
         component={ImageFullScreen}
       />
     </Stack.Navigator>
@@ -125,9 +132,12 @@ export function BottomTabNavigator() {
         component={Discover}
         options={{
           title: "Discover",
-          tabBarIcon: ({ size, color,focused }) => (
-            focused? <MessagesIcon size={size} color={color} />: <MessageUnfocused  size={size} color={color} />
-          ),
+          tabBarIcon: ({ size, color, focused }) =>
+            focused ? (
+              <MessagesIcon size={size} color={color} />
+            ) : (
+              <MessageUnfocused size={size} color={color} />
+            ),
         }}
       />
     </Tab.Navigator>

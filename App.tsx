@@ -1,9 +1,10 @@
+import 'react-native-gesture-handler';
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
-import Main from "./routes/Main";
+import Main, { BottomTabNavigator } from "./routes/Main";
 import { useCallback } from "react";
 
 SplashScreen.preventAutoHideAsync();
@@ -25,7 +26,8 @@ export default function App() {
   }
   return (
     <NavigationContainer onReady={onLayoutRootView}>
-      <Main />
+      <StatusBar animated={true} style="dark" backgroundColor="transparent" />
+      <BottomTabNavigator />
     </NavigationContainer>
   );
 }

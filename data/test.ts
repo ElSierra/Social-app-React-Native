@@ -5,7 +5,7 @@ export const postLists = [
     userTag: "@barcelona",
     verified: true,
     photoUri: [],
-    videoUri: "https://firebasestorage.googleapis.com/v0/b/expense-ec0ce.appspot.com/o/barca.mp4?alt=media&token=bc42da25-ff99-46d7-86cf-345e7daea86b",
+    videoUri: "https://quick-chop.nyc3.digitaloceanspaces.com/barca.mp4",
     videoTitle: "💥 HIGHLIGHTS I AC MILAN 0-1 BARÇA 💥",
     postText:
       "We beat AC Milan 1-0",
