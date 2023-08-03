@@ -30,13 +30,19 @@ import AddPostButton from "../components/global/AddPostButton";
 import ImageFullScreen from "../screen/ImageFullScreen";
 import Test from "../screen/Test";
 import Show from "../screen/show";
+import Messages from "../screen/Messages";
+import Notifications from "../screen/Notifications";
 export default function Main() {
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="Main"
-        options={{ headerShown: false }}
-        component={BottomTabNavigator}
+        options={{
+          header: ({ options }) => <CustomHeader title={options.title || ""} />,
+
+          title: "Home",
+        }}
+        component={Home}
       />
       <Stack.Screen
         name="ImageFullScreen"
@@ -44,9 +50,25 @@ export default function Main() {
           headerTitle: "",
           headerTransparent: true,
           presentation: "transparentModal",
-          animation: "none",
+          
         }}
         component={ImageFullScreen}
+      />
+      <Stack.Screen
+        name="Discover"
+        
+        component={Discover}
+        options={{ animation: "none",  header: ({ options }) => <CustomHeader title={options.title || ""} />,title:"Discover" }}
+      />
+      <Stack.Screen
+        name="Messages"
+        component={Messages}
+        options={{ animation: "none",  header: ({ options }) => <CustomHeader title={options.title || ""} />,title:"Messages" }}
+      />
+      <Stack.Screen
+        name="Notifications"
+        component={Notifications}
+        options={{ animation: "none",  header: ({ options }) => <CustomHeader title={options.title || ""} />,title:"Notifications" }}
       />
     </Stack.Navigator>
   );

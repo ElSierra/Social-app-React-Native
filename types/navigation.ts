@@ -1,3 +1,5 @@
+import { NotificationIcon } from './../components/icons/index';
+import { NotFunction } from "./../node_modules/@reduxjs/toolkit/src/createReducer";
 import { NavigationProp } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
@@ -6,6 +8,10 @@ export type RootStackParamList = {
   ImageFullScreen: {
     photoUri: string;
   };
+  Profile: undefined;
+  Messages: undefined;
+  Discover: undefined;
+  Notifications: undefined;
 };
 
 export type FullImageNavigationProp = NavigationProp<
@@ -17,4 +23,7 @@ export type HomeNavigationProp = NavigationProp<
   "ImageFullScreen"
 >;
 
-export type ImageFullScreenProp = NativeStackScreenProps<RootStackParamList, "ImageFullScreen">;
+export type ImageFullScreenProp = NativeStackScreenProps<
+  RootStackParamList,
+  "ImageFullScreen"
+>;

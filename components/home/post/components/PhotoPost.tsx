@@ -1,8 +1,9 @@
 import { View, Text, FlatList, Pressable, Button } from "react-native";
 import { Image } from "expo-image";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { HomeNavigationProp } from "../../../../types/navigation";
 import Animated from "react-native-reanimated";
+import AnimatedScreen from "../../../global/AnimatedScreen";
 export default function PhotoPost({
   photoUri,
   width,
@@ -11,6 +12,7 @@ export default function PhotoPost({
   width: number;
 }) {
   const navigation = useNavigation<HomeNavigationProp>();
+  
   return (
     <FlatList
       horizontal
@@ -32,12 +34,13 @@ export default function PhotoPost({
               paddingHorizontal: 4,
             }}
           >
+            <AnimatedScreen>
             <Animated.Image
               width={width * 0.8}
-              sharedTransitionTag="a"
+              sharedTransitionTag={item}
               style={{ flex: 1, width: "100%", borderRadius: 15 }}
               source={{ uri: item }}
-            />
+            /></AnimatedScreen>
           </Pressable>
         </>
       )}

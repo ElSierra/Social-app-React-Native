@@ -1,9 +1,16 @@
 import { View, Text, Pressable } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import IconButton from "../../../global/IconButton";
 import { ResizeMode, Video } from "expo-av";
 import { PlayIcon } from "../../../icons";
 import { Dimensions } from "react-native";
+import Animated, {
+  FadeIn,
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 export default function VideoPost({
   handlePlay,
@@ -22,7 +29,20 @@ export default function VideoPost({
   setStatus: React.Dispatch<React.SetStateAction<{}>>;
   videoViews?: string;
 }) {
-    const width = Dimensions.get("screen").width;
+  const width = Dimensions.get("screen").width;
+  const opacity = useSharedValue(0);
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: interpolate(opacity.value, [0, 1], [0, 1]), // map opacity value to range between 0 and 1
+    };
+  });
+  useEffect(() => {
+    if (!play) {
+      opacity.value = withTiming(1, { duration: 400 });
+    } else {
+      opacity.value = withTiming(0);
+    }
+  }, [play]);
   return (
     <View
       style={{
@@ -32,27 +52,38 @@ export default function VideoPost({
       }}
     >
       <View style={{ width: "100%", height: 200 }}>
-        <Pressable
-          onPress={handlePlay}
-          style={{
-            position: "absolute",
-
-            borderRadius: 10,
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 50,
-            top: 0,
-            left: 0,
-            bottom: 0,
-            right: 0,
-            backgroundColor: play ? "transparent" : "#0000008E",
-          }}
+        <Animated.View
+          style={[
+            {
+              width: "100%",
+              height: 200,
+              position: "absolute",
+              zIndex: 50,
+              top: 0,
+              left: 0,
+              bottom: 0,
+              right: 0,
+            },
+            animatedStyle,
+          ]}
         >
-          <IconButton
-            Icon={play ? <></> : <PlayIcon size={60} color="white" />}
+          <Pressable
             onPress={handlePlay}
-          />
-        </Pressable>
+            style={{
+              borderRadius: 10,
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              height: "100%",
+              backgroundColor: play ? "transparent" : "#0000008E",
+            }}
+          >
+            <IconButton
+              Icon={play ? <></> : <PlayIcon size={60} color="white" />}
+              onPress={handlePlay}
+            />
+          </Pressable>
+        </Animated.View>
         <Video
           ref={video}
           style={{ flex: 1, width: "100%", borderRadius: 10 }}
@@ -73,8 +104,15 @@ export default function VideoPost({
           alignItems: "center",
         }}
       >
-        <Text numberOfLines={1} style={{ fontFamily: "jakaraBold", fontSize: 14, maxWidth: width*0.6 }}>
-        {videoTitle}
+        <Text
+          numberOfLines={1}
+          style={{
+            fontFamily: "jakaraBold",
+            fontSize: 14,
+            maxWidth: width * 0.6,
+          }}
+        >
+          {videoTitle}
         </Text>
         <Text>{videoViews} Views</Text>
       </View>
