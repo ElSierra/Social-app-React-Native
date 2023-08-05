@@ -4,7 +4,10 @@ import IconWithValue from "./IconWithValue";
 import {
   ActivityUnfocused,
   HeartUnfocused,
+  HeartsFocused,
+  Love,
   MessageUnfocused,
+  MessagesIcon,
   ShareUnfocused,
 } from "../../../icons";
 
@@ -16,6 +19,7 @@ export default function Engagements({ title }: { title?: string }) {
     <View
       style={{
         flexDirection: "row",
+        paddingHorizontal: 20,
 
         alignItems: "center",
 
@@ -24,9 +28,21 @@ export default function Engagements({ title }: { title?: string }) {
       }}
     >
       {title && <Text>{title}</Text>}
-      <IconWithValue Icon={MessageUnfocused} text="210" />
-      <IconWithValue Icon={HeartUnfocused} text="110K" />
-      <IconWithValue Icon={ActivityUnfocused} text="110K" />
+      <IconWithValue
+        IconUnfocused={MessageUnfocused}
+        text="210"
+        IconFocused={MessagesIcon}
+      />
+      <IconWithValue
+        IconUnfocused={HeartUnfocused}
+        text="110K"
+        IconFocused={HeartsFocused}
+      />
+      <IconWithValue
+        IconUnfocused={ActivityUnfocused}
+        text="110K"
+        IconFocused={ActivityUnfocused}
+      />
       <ShareUnfocused size={20} color={color} />
     </View>
   );

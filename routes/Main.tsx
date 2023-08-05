@@ -1,4 +1,4 @@
-import { View, Text, useColorScheme } from "react-native";
+import { View, Text, useColorScheme, Dimensions } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   BottomTabBar,
@@ -43,6 +43,7 @@ import IconButtons from "../components/global/BottomBarButtons";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<BottomRootStackParamList>();
 const Drawer = createDrawerNavigator<DrawerRootStackParamList>();
+const width = Dimensions.get("screen").width;
 
 function DrawerNavigator() {
   const scheme = useColorScheme();
@@ -52,7 +53,10 @@ function DrawerNavigator() {
   return (
     <Drawer.Navigator
       drawerContent={CustomDrawerContent}
-      screenOptions={{ drawerStyle: { backgroundColor: "transparent" } }}
+      screenOptions={{
+        drawerStyle: { backgroundColor: "transparent", width: width * 0.85 },
+       
+      }}
     >
       <Drawer.Screen
         name="Home"
@@ -149,12 +153,11 @@ export function BottomTabNavigator() {
           <BottomTabBar {...props} />
         </BlurView>
       )}
-      sceneContainerStyle={{backgroundColor,}}
+      sceneContainerStyle={{ backgroundColor }}
       screenOptions={({ navigation, route }) => {
         return {
           tabBarHideOnKeyboard: true,
           tabBarShowLabel: false,
-          
 
           tabBarStyle: {
             backgroundColor: "transparent",

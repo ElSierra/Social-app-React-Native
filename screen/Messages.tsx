@@ -5,10 +5,10 @@ import AnimatedScreen from "../components/global/AnimatedScreen";
 
 
 export default function Messages() {
-  const isFocused = useIsFocused();
+
   return (
  
-    <AnimatedScreen style={{ flex: 1 }}>
+    <AnimatedScreen >
       
     </AnimatedScreen>
 

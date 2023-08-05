@@ -1,4 +1,10 @@
-import { View, Text, Pressable, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  ActivityIndicator,
+  useColorScheme,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import IconButton from "../../../global/IconButton";
 import { AVPlaybackStatus, ResizeMode, Video } from "expo-av";
@@ -30,13 +36,16 @@ function VideoPost({
   const width = Dimensions.get("screen").width;
   const opacity = useSharedValue(0);
   const opacityLoad = useSharedValue(0);
+  const scheme = useColorScheme();
+  const isDark = scheme === "dark";
+  const color = isDark ? "white" : "black";
   const animatedStyle = useAnimatedStyle(() => {
     return {
       opacity: interpolate(opacity.value, [0, 1], [0, 1]), // map opacity value to range between 0 and 1
     };
   });
   const [status, setStatus] = useState<AVPlaybackStatus | null>(null);
-  console.log("🚀 ~ file: VideoPost.tsx:39 ~ status:", status)
+  console.log("🚀 ~ file: VideoPost.tsx:39 ~ status:", status);
   const [play, setPlay] = useState(false);
   const animatedStyleLoading = useAnimatedStyle(() => {
     return {
@@ -128,7 +137,7 @@ function VideoPost({
                 alignItems: "center",
               }}
             >
-             <Text style={{color:"white"}}>Buffering</Text>
+              <Text style={{ color: "white" }}>Buffering</Text>
             </View>
           </Animated.View>
         )}
@@ -158,12 +167,13 @@ function VideoPost({
           style={{
             fontFamily: "jakaraBold",
             fontSize: 14,
+            color,
             maxWidth: width * 0.6,
           }}
         >
           {videoTitle}
         </Text>
-        <Text>{videoViews} Views</Text>
+        <Text style={{ color }}>{videoViews} Views</Text>
       </View>
     </View>
   );

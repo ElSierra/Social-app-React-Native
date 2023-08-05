@@ -16,7 +16,7 @@ export default function TextPost({
   return (
     <Text
       style={{
-        marginVertical: photoUri.length > 0 || videoUri ? 2 : 10,
+        marginBottom: photoUri.length > 0 || videoUri ? 2 : 10,
         color,
       }}
     >
