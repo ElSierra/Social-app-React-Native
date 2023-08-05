@@ -1,4 +1,4 @@
-import { View, Text, Pressable, FlatList, Dimensions } from "react-native";
+import { View, Text, Pressable, FlatList, Dimensions, useColorScheme } from "react-native";
 import { Image } from "expo-image";
 import { ReactNode, useRef, useState } from "react";
 import {
@@ -53,11 +53,15 @@ export default function PostBuilder({
   const handlePlay = () => {
     setPlay(!play);
   };
+
+  const scheme = useColorScheme();
+  const isDark = scheme === "dark";
+  const borderBottomColor = isDark? "#252222":"#CCC9C9"
   return (
     <View
       style={{
         borderBottomWidth: 0.5,
-        borderBottomColor: "#CCC9C9",
+        borderBottomColor,
         paddingHorizontal: 10,
         paddingVertical: 10,
       }}

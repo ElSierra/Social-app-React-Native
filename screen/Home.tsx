@@ -22,9 +22,13 @@ import Animated, {
 import { useIsFocused } from "@react-navigation/native";
 import CustomBottomBar from "../components/global/BottomBar.tsx/CustomBottomBar";
 import AnimatedScreen from "../components/global/AnimatedScreen";
+
+
+
 export default function Home() {
   const scheme = useColorScheme();
   const isDark = scheme === "dark";
+  const color = isDark? "white": "black";
 
   const isFocused = useIsFocused();
 
@@ -35,7 +39,7 @@ export default function Home() {
         entering={FadeIn.duration(400)}
         exiting={FadeOut.duration(400)}
       >
-        <Fab item={<AddIcon size={30} color="#D864A9" />} />
+        <Fab item={<AddIcon size={30} color={color} />} />
         <FlatList
           data={postLists}
           renderItem={({ item }) => (

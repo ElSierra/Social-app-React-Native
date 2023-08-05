@@ -27,3 +27,9 @@ export type ImageFullScreenProp = NativeStackScreenProps<
   RootStackParamList,
   "ImageFullScreen"
 >;
+
+
+export type HomeProp = NativeStackScreenProps<
+  RootStackParamList,
+  "Main"
+>;

@@ -1,11 +1,12 @@
 import { View, Text } from 'react-native'
 import React from 'react'
+import Animated from 'react-native-reanimated'
 
 
-export default function Home() {
+export default function Profile() {
   return (
-    <View style={{flex:1}}>
+    <Animated.View sharedTransitionTag='ppic' style={{flex:1}}>
     
-    </View>
+    </Animated.View>
   )
 }

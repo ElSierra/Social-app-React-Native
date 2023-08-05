@@ -16,7 +16,7 @@ export default function ProfileButton({
 }: ProfileButtonType) {
   return (
     <View style={style}>
-      <Pressable>
+      <Pressable onPress={onPress}>
         <ProfileIcon size={size} color={color} />
       </Pressable>
     </View>

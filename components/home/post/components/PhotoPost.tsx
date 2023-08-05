@@ -4,6 +4,7 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { HomeNavigationProp } from "../../../../types/navigation";
 import Animated from "react-native-reanimated";
 import AnimatedScreen from "../../../global/AnimatedScreen";
+import { transition } from "../../../../screen/ImageFullScreen";
 export default function PhotoPost({
   photoUri,
   width,
@@ -38,6 +39,7 @@ export default function PhotoPost({
             <Animated.Image
               width={width * 0.8}
               sharedTransitionTag={item}
+              sharedTransitionStyle={transition}
               style={{ flex: 1, width: "100%", borderRadius: 15 }}
               source={{ uri: item }}
             /></AnimatedScreen>

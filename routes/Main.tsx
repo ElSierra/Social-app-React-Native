@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, useColorScheme } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   BottomTabBar,
@@ -32,45 +32,95 @@ import Test from "../screen/Test";
 import Show from "../screen/show";
 import Messages from "../screen/Messages";
 import Notifications from "../screen/Notifications";
-export default function Main() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Main"
-        options={{
-          header: ({ options }) => <CustomHeader title={options.title || ""} />,
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import Profile from "../screen/Profile";
+import { StatusBar } from "expo-status-bar";
 
-          title: "Home",
-        }}
-        component={Home}
-      />
-      <Stack.Screen
-        name="ImageFullScreen"
-        options={{
-          headerTitle: "",
-          headerTransparent: true,
-          presentation: "transparentModal",
-          
-        }}
-        component={ImageFullScreen}
-      />
-      <Stack.Screen
-        name="Discover"
-        
-        component={Discover}
-        options={{ animation: "none",  header: ({ options }) => <CustomHeader title={options.title || ""} />,title:"Discover" }}
-      />
-      <Stack.Screen
-        name="Messages"
-        component={Messages}
-        options={{ animation: "none",  header: ({ options }) => <CustomHeader title={options.title || ""} />,title:"Messages" }}
-      />
-      <Stack.Screen
-        name="Notifications"
-        component={Notifications}
-        options={{ animation: "none",  header: ({ options }) => <CustomHeader title={options.title || ""} />,title:"Notifications" }}
-      />
-    </Stack.Navigator>
+const Drawer = createDrawerNavigator();
+
+function MyDrawer() {
+  return (
+    <Drawer.Navigator>
+      <Drawer.Screen name="Profile" component={Profile} />
+    </Drawer.Navigator>
+  );
+}
+export default function Main() {
+  const scheme = useColorScheme();
+  const isDark = scheme === "dark";
+  const style = isDark ? "light" : "dark";
+  return (
+    <>
+      <StatusBar animated={true} style={style} backgroundColor="transparent" />
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Main"
+          options={{
+            header: ({ options }) => (
+              <CustomHeader title={options.title || ""} />
+            ),
+
+            title: "Home",
+          }}
+          component={Home}
+        />
+        <Stack.Screen
+          name="ImageFullScreen"
+          options={{
+            headerTitle: "",
+            headerTintColor: "white",
+            headerTransparent: true,
+            presentation: "transparentModal",
+          }}
+          component={ImageFullScreen}
+        />
+        <Stack.Screen
+          name="Discover"
+          component={Discover}
+          options={{
+            animation: "none",
+            header: ({ options }) => (
+              <CustomHeader title={options.title || ""} />
+            ),
+            title: "Discover",
+          }}
+        />
+        <Stack.Screen
+          name="Messages"
+          component={Messages}
+          options={{
+            animation: "none",
+            header: ({ options }) => (
+              <CustomHeader title={options.title || ""} />
+            ),
+            title: "Messages",
+          }}
+        />
+        <Stack.Screen
+          name="Notifications"
+          component={Notifications}
+          options={{
+            animation: "none",
+            header: ({ options }) => (
+              <CustomHeader title={options.title || ""} />
+            ),
+            title: "Notifications",
+          }}
+        />
+        <Stack.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            headerTitle: "",
+            title: "profile",
+            header: ({ options }) => (
+              <CustomHeader title={options.title || ""} />
+            ),
+            animation: "slide_from_left",
+          }}
+        />
+      </Stack.Navigator>
+    </>
   );
 }
 

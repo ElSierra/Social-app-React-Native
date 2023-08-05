@@ -3,12 +3,15 @@ import { ImageFullScreenProp } from "../types/navigation";
 import { Image } from "expo-image";
 import Animated, {
   BounceIn,
+  Easing,
   FadeIn,
   FadeInDown,
   FadeInUp,
   FadeOut,
   FadingTransition,
+  SharedTransition,
   SlideInUp,
+  withTiming,
 } from "react-native-reanimated";
 import { BlurView } from "expo-blur";
 import { useLayoutEffect } from "react";
@@ -17,12 +20,31 @@ import { useRoute } from "@react-navigation/native";
 import CustomBottomBar from "../components/global/BottomBar.tsx/CustomBottomBar";
 //Hero Transition
 
+export const transition = SharedTransition.custom(values => {
+  'worklet';
+  return {
+    width: withTiming(values.targetWidth, {
+      easing: Easing.quad
+    }),
+    height: withTiming(values.targetHeight, {
+      easing: Easing.quad
+    }),
+    originX: withTiming(values.targetOriginX, {
+      easing: Easing.quad
+    }),
+    originY: withTiming(values.targetOriginY, {
+      easing: Easing.quad
+    }),
+  };
+});
 export default function ImageFullScreen({
   route,
   navigation,
 }: ImageFullScreenProp) {
   const { photoUri } = route.params;
   console.log("🚀 ~ file: ImageFullScreen.tsx:23 ~ route:", route);
+
+ 
   return (
     <>
       <StatusBar animated={true} style="light" backgroundColor="transparent" />
@@ -31,38 +53,26 @@ export default function ImageFullScreen({
         exiting={FadeOut.duration(400)}
         style={{
           flex: 1,
-
+          backgroundColor: "black",
           alignItems: "center",
           justifyContent: "center",
         }}
       >
-        <BlurView
-        intensity={5}
-        
-        tint="dark"
+        <View
           style={{
-            width:"100%",
-            height:"100%",
-            backgroundColor:"#000000E6",
             alignItems: "center",
             justifyContent: "center",
+            width: "100%",
+            height: 300,
           }}
         >
-          <View
-            style={{
-              alignItems: "center",
-              justifyContent: "center",
-              width: "100%",
-              height: 300,
-            }}
-          >
-            <Animated.Image
-              sharedTransitionTag={photoUri}
-              source={{ uri: photoUri }}
-              style={{ width: "100%", height: "100%" }}
-            />
-          </View>
-        </BlurView>
+          <Animated.Image
+            sharedTransitionTag={photoUri}
+            sharedTransitionStyle={transition}
+            source={{ uri: photoUri }}
+            style={{ width: "100%", height: "100%" }}
+          />
+        </View>
       </Animated.View>
     </>
   );

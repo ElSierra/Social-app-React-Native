@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, useColorScheme } from "react-native";
 import React from "react";
 
 export default function TextPost({
@@ -8,10 +8,18 @@ export default function TextPost({
 }: {
   postText: string;
   photoUri: string[];
-  videoUri?: string 
+  videoUri?: string;
 }) {
+  const scheme = useColorScheme();
+  const isDark = scheme === "dark";
+  const color = isDark ? "white" : "black";
   return (
-    <Text style={{ marginVertical: photoUri.length > 0 || videoUri ? 2 : 10 }}>
+    <Text
+      style={{
+        marginVertical: photoUri.length > 0 || videoUri ? 2 : 10,
+        color,
+      }}
+    >
       {postText}
     </Text>
   );

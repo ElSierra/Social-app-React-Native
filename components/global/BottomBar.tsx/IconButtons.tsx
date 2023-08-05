@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, useColorScheme } from "react-native";
 import React, { ElementType } from "react";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -20,6 +20,9 @@ export default function IconButtons({
     | "Notifications";
 }) {
   const navigate = useNavigation<HomeNavigationProp>();
+  const scheme = useColorScheme();
+  const isDark = scheme === "dark";
+  const color = isDark ? "white" : "black";
   return (
     <View style={{ width: 60, height: 50 ,borderRadius:60, overflow:"hidden"}}>
       <Pressable
@@ -36,7 +39,7 @@ export default function IconButtons({
           navigate.navigate(routeName);
         }}
       >
-        <Icon size={25} color="black" />
+        <Icon size={25} color={color} />
       </Pressable>
     </View>
   );
