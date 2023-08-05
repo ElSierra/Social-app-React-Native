@@ -1,6 +1,7 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useCallback, useEffect } from "react";
 
 import Animated, {
+  AnimateStyle,
   FadeIn,
   interpolate,
   useAnimatedStyle,
@@ -8,8 +9,12 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
-import { useIsFocused ,useRoute} from "@react-navigation/native";
-
+import {
+  useFocusEffect,
+  useIsFocused,
+  useRoute,
+} from "@react-navigation/native";
+import { StyleProp, View, ViewStyle, useColorScheme } from "react-native";
 
 export default function AnimatedScreen({ children }: { children: ReactNode }) {
   const opacity = useSharedValue(0);
@@ -19,21 +24,25 @@ export default function AnimatedScreen({ children }: { children: ReactNode }) {
     };
   });
 
-  const isFocused = useIsFocused();
-const route = useRoute()
-  console.log("🚀 ~ file: index.tsx:23 ~ AnimatedScreen ~ route:", route)
-  useEffect(() => {
-    if (isFocused) {
-      opacity.value = withTiming(1, { duration: 400 });
-    } else {
-      opacity.value = withTiming(0);
-    }
-  }, [isFocused]);
+  const scheme = useColorScheme();
+  const isDark = scheme === "dark";
+  const backgroundColor = isDark ? "black" : "white";
+
+  const route = useRoute();
+  console.log("🚀 ~ file: index.tsx:23 ~ AnimatedScreen ~ route:", route);
+  useFocusEffect(
+    useCallback(() => {
+      opacity.value = withTiming(1, { duration: 250 });
+      console.log("jjj");
+
+      return () => (opacity.value = withTiming(0, { duration: 250 }));
+    }, [opacity])
+  );
   return (
-    <>
-      <Animated.View style={[{ flex: 1 }, animatedStyle]}>
+    <View style={{flex:1,backgroundColor }}>
+      <Animated.View style={[{ flex: 1, backgroundColor }, animatedStyle]}>
         {children}
       </Animated.View>
-    </>
+    </View>
   );
 }

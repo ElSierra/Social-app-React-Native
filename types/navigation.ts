@@ -1,4 +1,5 @@
-import { NotificationIcon } from './../components/icons/index';
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import { NotificationIcon } from "./../components/icons/index";
 import { NotFunction } from "./../node_modules/@reduxjs/toolkit/src/createReducer";
 import { NavigationProp } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -8,10 +9,18 @@ export type RootStackParamList = {
   ImageFullScreen: {
     photoUri: string;
   };
+};
+
+export type BottomRootStackParamList = {
+  BottomHome: undefined
   Profile: undefined;
   Messages: undefined;
   Discover: undefined;
   Notifications: undefined;
+};
+
+export type DrawerRootStackParamList = {
+  Home: undefined
 };
 
 export type FullImageNavigationProp = NavigationProp<
@@ -28,8 +37,6 @@ export type ImageFullScreenProp = NativeStackScreenProps<
   "ImageFullScreen"
 >;
 
+export type HomeProp = NativeStackScreenProps<RootStackParamList, "Main">;
 
-export type HomeProp = NativeStackScreenProps<
-  RootStackParamList,
-  "Main"
->;
+export type BottomProp = BottomTabScreenProps<BottomRootStackParamList, "BottomHome">;

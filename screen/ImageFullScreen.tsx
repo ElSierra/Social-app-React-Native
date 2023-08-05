@@ -17,23 +17,23 @@ import { BlurView } from "expo-blur";
 import { useLayoutEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { useRoute } from "@react-navigation/native";
-import CustomBottomBar from "../components/global/BottomBar.tsx/CustomBottomBar";
+
 //Hero Transition
 
-export const transition = SharedTransition.custom(values => {
-  'worklet';
+export const transition = SharedTransition.custom((values) => {
+  "worklet";
   return {
     width: withTiming(values.targetWidth, {
-      easing: Easing.quad
+      easing: Easing.quad,
     }),
     height: withTiming(values.targetHeight, {
-      easing: Easing.quad
+      easing: Easing.quad,
     }),
     originX: withTiming(values.targetOriginX, {
-      easing: Easing.quad
+      easing: Easing.quad,
     }),
     originY: withTiming(values.targetOriginY, {
-      easing: Easing.quad
+      easing: Easing.quad,
     }),
   };
 });
@@ -44,13 +44,12 @@ export default function ImageFullScreen({
   const { photoUri } = route.params;
   console.log("🚀 ~ file: ImageFullScreen.tsx:23 ~ route:", route);
 
- 
   return (
     <>
       <StatusBar animated={true} style="light" backgroundColor="transparent" />
       <Animated.View
-        entering={FadeIn.duration(400)}
-        exiting={FadeOut.duration(400)}
+        entering={FadeIn.duration(250)}
+        exiting={FadeOut.duration(250)}
         style={{
           flex: 1,
           backgroundColor: "black",
@@ -67,8 +66,6 @@ export default function ImageFullScreen({
           }}
         >
           <Animated.Image
-            sharedTransitionTag={photoUri}
-            sharedTransitionStyle={transition}
             source={{ uri: photoUri }}
             style={{ width: "100%", height: "100%" }}
           />

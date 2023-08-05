@@ -1,7 +1,7 @@
-import { View, Text, Pressable } from "react-native";
-import React, { useEffect } from "react";
+import { View, Text, Pressable, ActivityIndicator } from "react-native";
+import React, { useEffect, useState } from "react";
 import IconButton from "../../../global/IconButton";
-import { ResizeMode, Video } from "expo-av";
+import { AVPlaybackStatus, ResizeMode, Video } from "expo-av";
 import { PlayIcon } from "../../../icons";
 import { Dimensions } from "react-native";
 import Animated, {
@@ -12,28 +12,35 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-export default function VideoPost({
-  handlePlay,
+function VideoPost({
   videoTitle,
-  play,
+
   video,
   videoUri,
-  setStatus,
+
   videoViews,
 }: {
-  handlePlay: () => void;
   videoTitle?: string;
   play: boolean;
   video: React.MutableRefObject<Video | null>;
   videoUri: string;
-  setStatus: React.Dispatch<React.SetStateAction<{}>>;
+
   videoViews?: string;
 }) {
   const width = Dimensions.get("screen").width;
   const opacity = useSharedValue(0);
+  const opacityLoad = useSharedValue(0);
   const animatedStyle = useAnimatedStyle(() => {
     return {
       opacity: interpolate(opacity.value, [0, 1], [0, 1]), // map opacity value to range between 0 and 1
+    };
+  });
+  const [status, setStatus] = useState<AVPlaybackStatus | null>(null);
+  console.log("🚀 ~ file: VideoPost.tsx:39 ~ status:", status)
+  const [play, setPlay] = useState(false);
+  const animatedStyleLoading = useAnimatedStyle(() => {
+    return {
+      opacity: interpolate(opacityLoad.value, [0, 1], [0, 1]), // map opacity value to range between 0 and 1
     };
   });
   useEffect(() => {
@@ -42,7 +49,17 @@ export default function VideoPost({
     } else {
       opacity.value = withTiming(0);
     }
-  }, [play]);
+    if (status?.isLoaded) {
+      opacityLoad.value = withTiming(0);
+    } else {
+      opacityLoad.value = withTiming(1, { duration: 400 });
+    }
+  }, [play, status?.isLoaded]);
+
+  const handlePlay = () => {
+    setPlay(!play);
+  };
+
   return (
     <View
       style={{
@@ -52,50 +69,82 @@ export default function VideoPost({
       }}
     >
       <View style={{ width: "100%", height: 200 }}>
-        <Animated.View
-          style={[
-            {
-              width: "100%",
-              height: 200,
-              position: "absolute",
-              zIndex: 50,
-              top: 0,
-              left: 0,
-              bottom: 0,
-              right: 0,
-            },
-            animatedStyle,
-          ]}
-        >
-          <Pressable
-            onPress={handlePlay}
-            style={{
-              borderRadius: 10,
-              justifyContent: "center",
-              alignItems: "center",
-              width: "100%",
-              height: "100%",
-              backgroundColor: play ? "transparent" : "#0000008E",
-            }}
+        {status?.isLoaded ? (
+          <Animated.View
+            style={[
+              {
+                width: "100%",
+                height: 200,
+                position: "absolute",
+                zIndex: 50,
+                top: 0,
+                left: 0,
+
+                bottom: 0,
+                right: 0,
+              },
+              animatedStyle,
+            ]}
           >
-            <IconButton
-              Icon={play ? <></> : <PlayIcon size={60} color="white" />}
+            <Pressable
               onPress={handlePlay}
-            />
-          </Pressable>
-        </Animated.View>
-        <Video
-          ref={video}
-          style={{ flex: 1, width: "100%", borderRadius: 10 }}
-          source={{
-            uri: videoUri,
-          }}
-          useNativeControls={false}
-          resizeMode={ResizeMode.COVER}
-          shouldPlay={play}
-          isLooping
-          onPlaybackStatusUpdate={(status) => setStatus(() => status)}
-        />
+              style={{
+                borderRadius: 10,
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
+                backgroundColor: play ? "transparent" : "#0000008E",
+              }}
+            >
+              <IconButton
+                Icon={play ? <></> : <PlayIcon size={60} color="white" />}
+                onPress={handlePlay}
+              />
+            </Pressable>
+          </Animated.View>
+        ) : (
+          <Animated.View
+            style={[
+              {
+                width: "100%",
+                height: 200,
+                backgroundColor: "black",
+                position: "absolute",
+                zIndex: 50,
+                borderRadius: 10,
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0,
+              },
+            ]}
+          >
+            <View
+              style={{
+                width: "100%",
+                height: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+             <Text style={{color:"white"}}>Buffering</Text>
+            </View>
+          </Animated.View>
+        )}
+        {
+          <Video
+            ref={video}
+            style={{ flex: 1, width: "100%", borderRadius: 10 }}
+            source={{
+              uri: videoUri,
+            }}
+            useNativeControls={false}
+            resizeMode={ResizeMode.COVER}
+            shouldPlay={play}
+            onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+          />
+        }
       </View>
       <View
         style={{
@@ -119,3 +168,5 @@ export default function VideoPost({
     </View>
   );
 }
+
+export default React.memo(VideoPost);

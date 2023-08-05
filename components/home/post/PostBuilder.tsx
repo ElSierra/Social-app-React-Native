@@ -1,4 +1,11 @@
-import { View, Text, Pressable, FlatList, Dimensions, useColorScheme } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  FlatList,
+  Dimensions,
+  useColorScheme,
+} from "react-native";
 import { Image } from "expo-image";
 import { ReactNode, useRef, useState } from "react";
 import {
@@ -45,18 +52,14 @@ export default function PostBuilder({
   repost?: string;
   title?: string;
 }) {
-  const video = useRef<null|Video>(null);
-  const [status, setStatus] = useState({});
-  console.log("🚀 ~ file: PostBuilder.tsx:44 ~ status:", status);
+  const video = useRef<null | Video>(null);
+
   const [play, setPlay] = useState(false);
   const width = Dimensions.get("screen").width;
-  const handlePlay = () => {
-    setPlay(!play);
-  };
 
   const scheme = useColorScheme();
   const isDark = scheme === "dark";
-  const borderBottomColor = isDark? "#252222":"#CCC9C9"
+  const borderBottomColor = isDark ? "#252222" : "#CCC9C9";
   return (
     <View
       style={{
@@ -87,13 +90,13 @@ export default function PostBuilder({
           </View>
           {videoUri && (
             <VideoPost
-              handlePlay={handlePlay}
+           
               videoTitle={videoTitle}
               play={play}
               video={video}
               videoUri={videoUri}
-              setStatus={setStatus}
-              videoViews={videoViews}/>
+              videoViews={videoViews}
+            />
           )}
           <Engagements title={title} />
         </View>

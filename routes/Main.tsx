@@ -4,7 +4,12 @@ import {
   BottomTabBar,
   createBottomTabNavigator,
 } from "@react-navigation/bottom-tabs";
-import { RootStackParamList } from "../types/navigation";
+import {
+  BottomProp,
+  BottomRootStackParamList,
+  DrawerRootStackParamList,
+  RootStackParamList,
+} from "../types/navigation";
 import Home from "../screen/Home";
 import {
   AddIcon,
@@ -20,28 +25,74 @@ import {
   SearchUnfocused,
   Settings,
 } from "../components/icons";
-const Stack = createNativeStackNavigator<RootStackParamList>();
-const Tab = createBottomTabNavigator();
+
 import { BlurView } from "expo-blur";
-import ProfileButton from "../components/home/header/ProfileButton";
+
 import Discover from "../screen/Discover";
-import CustomHeader from "../components/home/header/CustomHeader";
-import AddPostButton from "../components/global/AddPostButton";
+import CustomDrawerHeader from "../components/home/header/CustomDrawerHeader";
+
 import ImageFullScreen from "../screen/ImageFullScreen";
-import Test from "../screen/Test";
-import Show from "../screen/show";
-import Messages from "../screen/Messages";
-import Notifications from "../screen/Notifications";
+
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import Profile from "../screen/Profile";
 import { StatusBar } from "expo-status-bar";
+import CustomDrawerContent from "../components/home/drawer/CustomDrawer";
+import ProfileButton from "../components/home/header/ProfileButton";
+import IconButtons from "../components/global/BottomBarButtons";
 
-const Drawer = createDrawerNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator<BottomRootStackParamList>();
+const Drawer = createDrawerNavigator<DrawerRootStackParamList>();
 
-function MyDrawer() {
+function DrawerNavigator() {
+  const scheme = useColorScheme();
+  const isDark = scheme === "dark";
+  const tint = isDark ? "dark" : "light";
+  const color = isDark ? "white" : "black";
   return (
-    <Drawer.Navigator>
-      <Drawer.Screen name="Profile" component={Profile} />
+    <Drawer.Navigator
+      drawerContent={CustomDrawerContent}
+      screenOptions={{ drawerStyle: { backgroundColor: "transparent" } }}
+    >
+      <Drawer.Screen
+        name="Home"
+        component={Home}
+        options={({ navigation }) => {
+          return {
+            headerBackground: () => (
+              <BlurView
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  top: 0,
+                  right: 0,
+                }}
+                tint={tint}
+                intensity={200}
+              />
+            ),
+            headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
+            headerShadowVisible: false,
+            headerBackgroundContainerStyle: {
+              borderBottomWidth: 0.2,
+              borderColor: "#FFFFFF7D",
+            },
+            headerTransparent: true,
+            headerTitleAlign: "center",
+            headerLeft: () => (
+              <ProfileButton
+                color={color}
+                style={{ paddingLeft: 20 }}
+                size={40}
+                onPress={() => navigation.toggleDrawer()}
+              />
+            ),
+            headerStyle: { backgroundColor: "transparent" },
+            title: "QuickPost",
+          };
+        }}
+      />
     </Drawer.Navigator>
   );
 }
@@ -49,75 +100,27 @@ export default function Main() {
   const scheme = useColorScheme();
   const isDark = scheme === "dark";
   const style = isDark ? "light" : "dark";
+  const backgroundColor = isDark ? "black" : "white";
   return (
     <>
       <StatusBar animated={true} style={style} backgroundColor="transparent" />
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{ contentStyle: { backgroundColor } }}>
         <Stack.Screen
           name="Main"
-          options={{
-            header: ({ options }) => (
-              <CustomHeader title={options.title || ""} />
-            ),
-
-            title: "Home",
-          }}
-          component={Home}
+          options={{ headerShown: false }}
+          component={BottomTabNavigator}
         />
         <Stack.Screen
           name="ImageFullScreen"
           options={{
-            headerTitle: "",
-            headerTintColor: "white",
-            headerTransparent: true,
+            title: "",
+            animation: "fade",
             presentation: "transparentModal",
+            headerTransparent: true,
+            headerShadowVisible: false,
+            headerTintColor: "white",
           }}
           component={ImageFullScreen}
-        />
-        <Stack.Screen
-          name="Discover"
-          component={Discover}
-          options={{
-            animation: "none",
-            header: ({ options }) => (
-              <CustomHeader title={options.title || ""} />
-            ),
-            title: "Discover",
-          }}
-        />
-        <Stack.Screen
-          name="Messages"
-          component={Messages}
-          options={{
-            animation: "none",
-            header: ({ options }) => (
-              <CustomHeader title={options.title || ""} />
-            ),
-            title: "Messages",
-          }}
-        />
-        <Stack.Screen
-          name="Notifications"
-          component={Notifications}
-          options={{
-            animation: "none",
-            header: ({ options }) => (
-              <CustomHeader title={options.title || ""} />
-            ),
-            title: "Notifications",
-          }}
-        />
-        <Stack.Screen
-          name="Profile"
-          component={Profile}
-          options={{
-            headerTitle: "",
-            title: "profile",
-            header: ({ options }) => (
-              <CustomHeader title={options.title || ""} />
-            ),
-            animation: "slide_from_left",
-          }}
         />
       </Stack.Navigator>
     </>
@@ -125,6 +128,11 @@ export default function Main() {
 }
 
 export function BottomTabNavigator() {
+  const scheme = useColorScheme();
+  const isDark = scheme === "dark";
+  const tint = !isDark ? "light" : "dark";
+  const color = isDark ? "white" : "black";
+  const backgroundColor = isDark ? "black" : "white";
   return (
     <Tab.Navigator
       tabBar={(props) => (
@@ -135,41 +143,98 @@ export function BottomTabNavigator() {
             left: 0,
             right: 0,
           }}
-          tint="light"
+          tint={tint}
           intensity={200}
         >
           <BottomTabBar {...props} />
         </BlurView>
       )}
-      screenOptions={{
-        tabBarHideOnKeyboard: true,
-        tabBarInactiveTintColor: "black",
-        tabBarActiveTintColor: "black",
-        tabBarShowLabel: false,
-        tabBarStyle: {
-          backgroundColor: "transparent",
-          elevation: 0,
-          height: 60,
-        },
+      sceneContainerStyle={{backgroundColor,}}
+      screenOptions={({ navigation, route }) => {
+        return {
+          tabBarHideOnKeyboard: true,
+          tabBarShowLabel: false,
+          
+
+          tabBarStyle: {
+            backgroundColor: "transparent",
+            elevation: 0,
+            height: 60,
+            borderTopWidth: 0.2,
+            borderColor: "#FFFFFF7D",
+          },
+          headerBackgroundContainerStyle: {
+            borderBottomWidth: 0.2,
+            borderColor: "#FFFFFF7D",
+          },
+          headerBackground: () => (
+            <BlurView
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                top: 0,
+                right: 0,
+              }}
+              tint={tint}
+              intensity={200}
+            />
+          ),
+          tabBarIcon: ({ focused }) => {
+            const iconFocused = () => {
+              if (route.name === "BottomHome") {
+                return HomeIcon;
+              }
+              if (route.name === "Discover") {
+                return SearchIcon;
+              }
+              if (route.name === "Messages") {
+                return MessagesIcon;
+              } else {
+                return NotificationIcon;
+              }
+            };
+            const iconUnfocused = () => {
+              if (route.name === "BottomHome") {
+                return HomeIconUnfocused;
+              }
+              if (route.name === "Discover") {
+                return SearchUnfocused;
+              }
+              if (route.name === "Messages") {
+                return MessageUnfocused;
+              } else {
+                return NotificationUnfocused;
+              }
+            };
+            return (
+              <IconButtons
+                Icon={focused ? iconFocused() : iconUnfocused()}
+                onPress={() => navigation.navigate(route.name)}
+              />
+            );
+          },
+          headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
+          headerShadowVisible: false,
+          headerTransparent: true,
+          headerTitleAlign: "center",
+          headerStyle: { backgroundColor: "transparent" },
+        };
       }}
     >
       <Tab.Screen
-        name="Home"
-        options={{
-          header: ({ options }) => <CustomHeader title={options.title || ""} />,
+        name="BottomHome"
+        options={({ navigation, route }: BottomProp) => {
+          return {
+            headerShown: false,
 
-          title: "Home",
+            title: "Home",
 
-          tabBarIcon: ({ size, color, focused }) =>
-            focused ? (
-              <HomeIcon size={size} color={color} />
-            ) : (
-              <HomeIconUnfocused size={size} color={color} />
-            ),
-          headerTitleStyle: { fontFamily: "instaBold", fontSize: 24 },
-          headerTitleAlign: "center",
+            headerTitleStyle: { fontFamily: "instaBold", fontSize: 24 },
+            headerTitleAlign: "center",
+          };
         }}
-        component={Home}
+        component={DrawerNavigator}
       />
 
       <Tab.Screen
@@ -177,26 +242,14 @@ export function BottomTabNavigator() {
         component={Discover}
         options={{
           title: "Discover",
-          tabBarIcon: ({ size, color, focused }) =>
-            focused ? (
-              <SearchIcon size={size} color={color} />
-            ) : (
-              <SearchUnfocused size={size} color={color} />
-            ),
         }}
       />
 
       <Tab.Screen
-        name="Notification"
+        name="Notifications"
         component={Discover}
         options={{
           title: "Notification",
-          tabBarIcon: ({ size, color, focused }) =>
-            focused ? (
-              <NotificationIcon size={size} color={color} />
-            ) : (
-              <NotificationUnfocused size={size} color={color} />
-            ),
         }}
       />
       <Tab.Screen
@@ -204,12 +257,6 @@ export function BottomTabNavigator() {
         component={Discover}
         options={{
           title: "Discover",
-          tabBarIcon: ({ size, color, focused }) =>
-            focused ? (
-              <MessagesIcon size={size} color={color} />
-            ) : (
-              <MessageUnfocused size={size} color={color} />
-            ),
         }}
       />
     </Tab.Navigator>

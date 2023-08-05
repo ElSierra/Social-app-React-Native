@@ -6,7 +6,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import Main, { BottomTabNavigator } from "./routes/Main";
 import { useCallback } from "react";
-import CustomBottomBar from "./components/global/BottomBar.tsx/CustomBottomBar";
+
 
 SplashScreen.preventAutoHideAsync();
 export default function App() {
@@ -15,6 +15,7 @@ export default function App() {
 
 const Navigation = () => {
   const [fontsLoaded] = useFonts({
+    uberBold : require("./assets/fonts/UberMove-Bold.ttf"),
     instaBold: require("./assets/fonts/Instagram.ttf"),
     jakaraBold: require("./assets/fonts/PlusJakartaSans-ExtraBold.ttf"),
     jakara: require("./assets/fonts/PlusJakartaSans-Medium.ttf"),

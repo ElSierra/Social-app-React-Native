@@ -35,14 +35,14 @@ export default function PhotoPost({
               paddingHorizontal: 4,
             }}
           >
-            <AnimatedScreen>
+        
             <Animated.Image
               width={width * 0.8}
-              sharedTransitionTag={item}
+           
               sharedTransitionStyle={transition}
               style={{ flex: 1, width: "100%", borderRadius: 15 }}
               source={{ uri: item }}
-            /></AnimatedScreen>
+            />
           </Pressable>
         </>
       )}

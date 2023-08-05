@@ -11,7 +11,11 @@ import ProfileButton from "./ProfileButton";
 import React from "react";
 import { HomeNavigationProp } from "../../../types/navigation";
 import Animated from "react-native-reanimated";
-function CustomHeader({ title }: { title: string }) {
+import {
+  DrawerHeaderProps,
+  DrawerProps,
+} from "@react-navigation/drawer/lib/typescript/src/types";
+function CustomDrawerHeader(props: DrawerHeaderProps) {
   const navigation = useNavigation<HomeNavigationProp>();
   const scheme = useColorScheme();
   const isDark = scheme === "dark";
@@ -24,25 +28,20 @@ function CustomHeader({ title }: { title: string }) {
           { borderBlockColor: isDark ? "#0000002F" : "#FFFFFF30" },
         ]}
         tint={isDark ? "dark" : "light"}
-        intensity={70}
+        intensity={200}
       >
         <View style={style.titleView}>
-          <Animated.View
-            sharedTransitionTag="ppic"
-            style={{ width: "33.3%", alignItems: "flex-start" }}
-          >
-            {title !== "Home" ? null : (
-              <ProfileButton
-                onPress={() => navigation.navigate("Profile")}
-                size={45}
-                color={isDark ? "white" : "black"}
-              />
-            )}
-          </Animated.View>
+          <View style={{ width: "33.3%", alignItems: "flex-start" }}>
+            <ProfileButton
+              onPress={() => props.navigation.toggleDrawer()}
+              size={45}
+              color={isDark ? "white" : "black"}
+            />
+          </View>
 
           <View style={{ width: "33.3%", alignItems: "center" }}>
             <Text style={[style.headerStyle, { color: TextColor }]}>
-              {title}
+              {props.options.title}
             </Text>
           </View>
           <View style={{ width: "33.3%" }} />
@@ -52,7 +51,7 @@ function CustomHeader({ title }: { title: string }) {
   );
 }
 
-export default React.memo(CustomHeader);
+export default React.memo(CustomDrawerHeader);
 const style = StyleSheet.create({
   blurView: {
     position: "absolute",
