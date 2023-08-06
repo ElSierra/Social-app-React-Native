@@ -5,7 +5,7 @@ import {
   ActivityIndicator,
   useColorScheme,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import IconButton from "../../../global/IconButton";
 import { AVPlaybackStatus, ResizeMode, Video } from "expo-av";
 import { PlayIcon } from "../../../icons";
@@ -17,6 +17,8 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { Image } from "expo-image";
+import { useFocusEffect } from "@react-navigation/native";
 
 function VideoPost({
   videoTitle,
@@ -68,6 +70,14 @@ function VideoPost({
   const handlePlay = () => {
     setPlay(!play);
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setPlay(false);
+      };
+    }, [])
+  );
 
   return (
     <View
@@ -127,6 +137,7 @@ function VideoPost({
                 bottom: 0,
                 right: 0,
               },
+              
             ]}
           >
             <View
@@ -137,7 +148,10 @@ function VideoPost({
                 alignItems: "center",
               }}
             >
-              <Text style={{ color: "white" }}>Buffering</Text>
+              <Image
+                style={{ height: 200, width: "100%",opacity:0.5, borderRadius: 10 }}
+                source={require("../../../../assets/images/tv-static.gif")}
+              />
             </View>
           </Animated.View>
         )}

@@ -612,11 +612,50 @@ export const VerifiedIcon = ({
   </Svg>
 );
 
-export const HeartsFocused = ({ size, color }: { size: number; color: string }) => (
+export const HeartsFocused = ({
+  size,
+  color,
+}: {
+  size: number;
+  color: string;
+}) => (
   <Svg width={size} height={size} fill="none" viewBox="0 0 24 24">
     <Path
       fill="#ff0101"
       d="M16.44 3.102c-1.81 0-3.43.88-4.44 2.23a5.549 5.549 0 0 0-4.44-2.23c-3.07 0-5.56 2.5-5.56 5.59 0 1.19.19 2.29.52 3.31 1.58 5 6.45 7.99 8.86 8.81.34.12.9.12 1.24 0 2.41-.82 7.28-3.81 8.86-8.81.33-1.02.52-2.12.52-3.31 0-3.09-2.49-5.59-5.56-5.59Z"
+    />
+  </Svg>
+);
+
+export const ProfileIconUnfocused = ({
+  size,
+  color,
+}: {
+  size: number;
+  color: string;
+}) => (
+  <Svg width={size} height={size} fill="none" viewBox="0 0 24 24">
+    <Path
+      stroke={color}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={1.5}
+      d="M12.16 10.87c-.1-.01-.22-.01-.33 0a4.42 4.42 0 0 1-4.27-4.43C7.56 3.99 9.54 2 12 2a4.435 4.435 0 0 1 .16 8.87Zm-5 3.69c-2.42 1.62-2.42 4.26 0 5.87 2.75 1.84 7.26 1.84 10.01 0 2.42-1.62 2.42-4.26 0-5.87-2.74-1.83-7.25-1.83-10.01 0Z"
+    />
+  </Svg>
+);
+
+export const ProfileIconFocused = ({
+  size,
+  color,
+}: {
+  size: number;
+  color: string;
+}) => (
+  <Svg width={size} height={size} fill="none" viewBox="0 0 24 24">
+    <Path
+      fill={color}
+      d="M12 2C9.38 2 7.25 4.13 7.25 6.75c0 2.57 2.01 4.65 4.63 4.74.08-.01.16-.01.22 0h.07a4.738 4.738 0 0 0 4.58-4.74C16.75 4.13 14.62 2 12 2Zm5.08 12.149c-2.79-1.86-7.34-1.86-10.15 0-1.27.85-1.97 2-1.97 3.23s.7 2.37 1.96 3.21c1.4.94 3.24 1.41 5.08 1.41 1.84 0 3.68-.47 5.08-1.41 1.26-.85 1.96-1.99 1.96-3.23-.01-1.23-.7-2.37-1.96-3.21Z"
     />
   </Svg>
 );

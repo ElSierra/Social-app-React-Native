@@ -10,7 +10,7 @@ export default function Fab({ item }: { item: JSX.Element }) {
     <View
       style={{
         position: "absolute",
-        top: height * 0.8,
+        top: height * 0.85,
         borderRadius: 999,
         right: 10,
         overflow: "hidden",
@@ -21,8 +21,8 @@ export default function Fab({ item }: { item: JSX.Element }) {
         intensity={70}
         tint={tint}
         style={{
-          width: 50,
-          height: 50,
+          width: 60,
+          height: 60,
           backgroundColor: "#04511256",
           alignItems: "center",
           justifyContent: "center",

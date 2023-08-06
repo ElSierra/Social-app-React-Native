@@ -50,7 +50,7 @@ export default function Home() {
         <FlashList
           data={postLists}
           decelerationRate={0.991}
-          estimatedItemSize={300}
+          estimatedItemSize={250}
           keyExtractor={keyExtractor}
           estimatedListSize={{width, height}}
           renderItem={renderItem}

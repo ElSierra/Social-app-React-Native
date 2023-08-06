@@ -39,6 +39,8 @@ import { StatusBar } from "expo-status-bar";
 import CustomDrawerContent from "../components/home/drawer/CustomDrawer";
 import ProfileButton from "../components/home/header/ProfileButton";
 import IconButtons from "../components/global/BottomBarButtons";
+import Messages from "../screen/Messages";
+import Notifications from "../screen/Notifications";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<BottomRootStackParamList>();
@@ -55,7 +57,6 @@ function DrawerNavigator() {
       drawerContent={CustomDrawerContent}
       screenOptions={{
         drawerStyle: { backgroundColor: "transparent", width: width * 0.85 },
-       
       }}
     >
       <Drawer.Screen
@@ -76,6 +77,9 @@ function DrawerNavigator() {
                 intensity={200}
               />
             ),
+            freezeOnBlur: true,
+
+            drawerItemStyle: { display: "none" },
             headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
             headerShadowVisible: false,
             headerBackgroundContainerStyle: {
@@ -104,15 +108,39 @@ export default function Main() {
   const scheme = useColorScheme();
   const isDark = scheme === "dark";
   const style = isDark ? "light" : "dark";
+  const tint = isDark ? "dark" : "light";
   const backgroundColor = isDark ? "black" : "white";
   return (
     <>
       <StatusBar animated={true} style={style} backgroundColor="transparent" />
-      <Stack.Navigator screenOptions={{ contentStyle: { backgroundColor } }}>
+      <Stack.Navigator
+        screenOptions={{
+          contentStyle: { backgroundColor },
+        }}
+      >
         <Stack.Screen
           name="Main"
           options={{ headerShown: false }}
           component={BottomTabNavigator}
+        />
+        <Stack.Screen
+          name="Profile"
+          options={{
+            headerBackground: () => (
+              <BlurView
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  top: 0,
+                  right: 0,
+                }}
+                tint={tint}
+                intensity={200}
+              />
+            ),
+          }}
+          component={Profile}
         />
         <Stack.Screen
           name="ImageFullScreen"
@@ -250,14 +278,14 @@ export function BottomTabNavigator() {
 
       <Tab.Screen
         name="Notifications"
-        component={Discover}
+        component={Notifications}
         options={{
           title: "Notification",
         }}
       />
       <Tab.Screen
         name="Messages"
-        component={Discover}
+        component={Messages}
         options={{
           title: "Discover",
         }}

@@ -7,15 +7,16 @@ import { useFonts } from "expo-font";
 import Main, { BottomTabNavigator } from "./routes/Main";
 import { useCallback } from "react";
 
-
 SplashScreen.preventAutoHideAsync();
 export default function App() {
   return <Navigation />;
 }
 
 const Navigation = () => {
+  const scheme = useColorScheme();
+  const dark = scheme === "dark";
   const [fontsLoaded] = useFonts({
-    uberBold : require("./assets/fonts/UberMove-Bold.ttf"),
+    uberBold: require("./assets/fonts/UberMove-Bold.ttf"),
     instaBold: require("./assets/fonts/Instagram.ttf"),
     jakaraBold: require("./assets/fonts/PlusJakartaSans-ExtraBold.ttf"),
     jakara: require("./assets/fonts/PlusJakartaSans-Medium.ttf"),
@@ -30,7 +31,6 @@ const Navigation = () => {
   if (!fontsLoaded) {
     return null;
   }
-
 
   return (
     <NavigationContainer onReady={onLayoutRootView}>

@@ -15,21 +15,35 @@ export default function IconButtons({
   const isDark = scheme === "dark";
   const color = isDark ? "white" : "black";
   return (
-    <Pressable
-      android_ripple={{ color: "#0000004B", borderless: true, }}
+    <View
       style={{
         width: 80,
         height: 50,
         justifyContent: "center",
         alignItems: "center",
-       
-      }}
-      onPress={() => {
-        onPress();
-        console.log("pressed");
+        borderRadius:10,
+        overflow:"hidden",
       }}
     >
-      <Icon size={25} color={color} />
-    </Pressable>
+      <Pressable
+        android_ripple={{
+          color: "#0000004B",
+          borderless: false,
+          foreground: true,
+        }}
+        style={{
+          width: 80,
+          height: 50,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        onPress={() => {
+          onPress();
+          console.log("pressed");
+        }}
+      >
+        <Icon size={25} color={color} />
+      </Pressable>
+    </View>
   );
 }
