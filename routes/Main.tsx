@@ -10,7 +10,7 @@ import {
   DrawerRootStackParamList,
   RootStackParamList,
 } from "../types/navigation";
-import Home from "../screen/Home";
+import Home from "../screen/App/Home";
 import {
   AddIcon,
   DiscoverIcon,
@@ -28,19 +28,19 @@ import {
 
 import { BlurView } from "expo-blur";
 
-import Discover from "../screen/Discover";
+import Discover from "../screen/App/Discover";
 import CustomDrawerHeader from "../components/home/header/CustomDrawerHeader";
 
-import ImageFullScreen from "../screen/ImageFullScreen";
+import ImageFullScreen from "../screen/App/ImageFullScreen";
 
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import Profile from "../screen/Profile";
+import Profile from "../screen/App/Profile";
 import { StatusBar } from "expo-status-bar";
 import CustomDrawerContent from "../components/home/drawer/CustomDrawer";
 import ProfileButton from "../components/home/header/ProfileButton";
 import IconButtons from "../components/global/BottomBarButtons";
-import Messages from "../screen/Messages";
-import Notifications from "../screen/Notifications";
+import Messages from "../screen/App/Messages";
+import Notifications from "../screen/App/Notifications";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<BottomRootStackParamList>();
@@ -112,7 +112,7 @@ export default function Main() {
   const backgroundColor = isDark ? "black" : "white";
   return (
     <>
-      <StatusBar animated={true} style={style} backgroundColor="transparent" />
+   
       <Stack.Navigator
         screenOptions={{
           contentStyle: { backgroundColor },

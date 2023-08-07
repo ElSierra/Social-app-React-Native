@@ -6,22 +6,45 @@ import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import Main, { BottomTabNavigator } from "./routes/Main";
 import { useCallback } from "react";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
+
+import OnboardNavigation from "./routes/OnBoard";
+import { useAppSelector } from "./redux/hooks/hooks";
+import Auth from "./routes/Auth";
 
 SplashScreen.preventAutoHideAsync();
 export default function App() {
-  return <Navigation />;
+  return (
+    <Provider store={store}>
+      <Navigation />
+    </Provider>
+  );
 }
 
 const Navigation = () => {
   const scheme = useColorScheme();
   const dark = scheme === "dark";
+  const style = dark ? "light" : "dark";
+  const { route } = useAppSelector((state) => state.routes);
   const [fontsLoaded] = useFonts({
+    mulish: require("./assets/fonts/Mulish-Light.ttf"),
+    mulishBold: require("./assets/fonts/Mulish-Black.ttf"),
     uberBold: require("./assets/fonts/UberMove-Bold.ttf"),
     instaBold: require("./assets/fonts/Instagram.ttf"),
     jakaraBold: require("./assets/fonts/PlusJakartaSans-ExtraBold.ttf"),
     jakara: require("./assets/fonts/PlusJakartaSans-Medium.ttf"),
   });
 
+  const renderRoute = () => {
+    if (route === "onBoard") {
+      return <OnboardNavigation />;
+    } else if (route === "App") {
+      return <Main />;
+    } else if (route === "Auth") {
+      return <Auth />;
+    }
+  };
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
       await SplashScreen.hideAsync();
@@ -34,7 +57,8 @@ const Navigation = () => {
 
   return (
     <NavigationContainer onReady={onLayoutRootView}>
-      <Main />
+      <StatusBar animated={true} style={style} backgroundColor="transparent" />
+      {renderRoute()}
     </NavigationContainer>
   );
 };

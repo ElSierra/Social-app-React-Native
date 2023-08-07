@@ -8,10 +8,10 @@ import {
   Dimensions,
 } from "react-native";
 import React, { useEffect } from "react";
-import Fab from "../components/home/post/components/Fab";
-import { AddIcon } from "../components/icons";
-import PostBuilder from "../components/home/post/PostBuilder";
-import { postLists } from "../data/test";
+import Fab from "../../components/home/post/components/Fab";
+import { AddIcon } from "../../components/icons";
+import PostBuilder from "../../components/home/post/PostBuilder";
+import { postLists } from "../../data/test";
 import Animated, {
   FadeIn,
   FadeOut,
@@ -21,7 +21,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { FlashList } from "@shopify/flash-list";
-import AnimatedScreen from "../components/global/AnimatedScreen";
+import AnimatedScreen from "../../components/global/AnimatedScreen";
 export default function Home() {
   const scheme = useColorScheme();
   const isDark = scheme === "dark";

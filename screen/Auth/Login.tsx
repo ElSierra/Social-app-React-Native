@@ -1,0 +1,95 @@
+import {
+  View,
+  Text,
+  useColorScheme,
+  ScrollView,
+  Dimensions,
+} from "react-native";
+import AnimatedScreen from "../../components/global/AnimatedScreen";
+import { Image } from "expo-image";
+import InputText from "./components/InputText";
+import InputPassword from "./components/InputPassword";
+import Button from "../../components/global/Button";
+import { useAppDispatch } from "../../redux/hooks/hooks";
+import { setRoute } from "../../redux/slice/routes";
+const width = Dimensions.get("screen").width;
+export default function Login() {
+  const scheme = useColorScheme();
+  const isDark = scheme === "dark";
+  const color = isDark ? "white" : "black";
+  const dispatch = useAppDispatch();
+
+  return (
+    <AnimatedScreen>
+      <View style={{ flex: 1 }}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            alignItems: "center",
+            paddingHorizontal: 25,
+            paddingBottom: 50,
+          }}
+        >
+          <View style={{ alignItems: "center" }}>
+            <View>
+              <Image
+                source={require("../../assets/images/auth.png")}
+                contentFit="contain"
+                style={{ height: 200, width }}
+              />
+            </View>
+            <Text style={{ color, fontFamily: "mulishBold", fontSize: 24 }}>
+              Welcome Back
+            </Text>
+            <Text style={{ color, fontFamily: "mulish", fontSize: 14 }}>
+              sign in to access your account
+            </Text>
+            <View style={{ gap: 30, marginTop: 70 }}>
+              <InputText />
+              <InputPassword />
+            </View>
+          </View>
+        </ScrollView>
+        <View
+          style={{
+            width: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+            paddingBottom: 40,
+            paddingHorizontal: 25,
+          }}
+        >
+          <Button onPress={()=>{
+            dispatch(setRoute({route:"App"}))
+          }} >
+            <Text style={{ fontFamily: "jakaraBold", fontSize: 15 }}>
+              Login
+            </Text>
+          </Button>
+          <View
+            style={{
+              marginTop: 20,
+              flexDirection: "row",
+              gap: 4,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ color, includeFontPadding: false }}>
+              New Member?
+            </Text>
+            <Text
+              style={{
+                color,
+                fontFamily: "jakaraBold",
+                includeFontPadding: false,
+              }}
+            >
+              Register Now
+            </Text>
+          </View>
+        </View>
+      </View>
+    </AnimatedScreen>
+  );
+}

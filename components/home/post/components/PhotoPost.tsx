@@ -4,7 +4,7 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { HomeNavigationProp } from "../../../../types/navigation";
 import Animated from "react-native-reanimated";
 import AnimatedScreen from "../../../global/AnimatedScreen";
-import { transition } from "../../../../screen/ImageFullScreen";
+import { transition } from "../../../../screen/App/ImageFullScreen";
 export default function PhotoPost({
   photoUri,
   width,
