@@ -1,6 +1,6 @@
 import { View, Text, Pressable } from "react-native";
 import React from "react";
-import { AddIcon } from "../icons";
+import { AddIcon } from "../../icons";
 
 export default function AddPostButton() {
   return (

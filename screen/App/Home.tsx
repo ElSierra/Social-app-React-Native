@@ -22,13 +22,15 @@ import Animated, {
 } from "react-native-reanimated";
 import { FlashList } from "@shopify/flash-list";
 import AnimatedScreen from "../../components/global/AnimatedScreen";
+import useGetMode from "../../hooks/GetMode";
 export default function Home() {
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
+  const dark = useGetMode();
+  const isDark = dark;
   const color = isDark ? "white" : "black";
+  const backgroundColor = !isDark ? "white" : "black";
   console.log("i rendered");
-  const height = Dimensions.get("screen").height
-  const width = Dimensions.get("screen").width
+  const height = Dimensions.get("screen").height;
+  const width = Dimensions.get("screen").width;
   const renderItem = ({ item }: any) => (
     <PostBuilder
       imageUri={item.imageUri}
@@ -44,7 +46,7 @@ export default function Home() {
   );
   const keyExtractor = (item: any) => item.id.toString();
   return (
-    <>
+    <View style={{ backgroundColor, flex: 1 }}>
       <AnimatedScreen>
         <Fab item={<AddIcon size={30} color={color} />} />
         <FlashList
@@ -52,11 +54,11 @@ export default function Home() {
           decelerationRate={0.991}
           estimatedItemSize={250}
           keyExtractor={keyExtractor}
-          estimatedListSize={{width, height}}
+          estimatedListSize={{ width, height }}
           renderItem={renderItem}
           contentContainerStyle={{ paddingTop: 100, paddingBottom: 100 }}
         />
       </AnimatedScreen>
-    </>
+    </View>
   );
 }

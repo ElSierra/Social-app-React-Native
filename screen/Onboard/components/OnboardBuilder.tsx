@@ -1,6 +1,7 @@
 import { View, Text, Dimensions, useColorScheme } from "react-native";
 import { Image } from "expo-image";
 import Animated, { FadeInLeft } from "react-native-reanimated";
+import useGetMode from "../../../hooks/GetMode";
 
 const height = Dimensions.get("screen").height;
 const width = Dimensions.get("screen").width;
@@ -8,15 +9,16 @@ export default function OnboardBuilder({
   header,
   subText,
   imageUri,
+  quote,
 }: {
   header: string;
   subText: string;
   imageUri: string;
+  quote: string;
 }) {
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
-  const color = !isDark ? "black" : "white";
-  const backgroundColor = isDark ? "white" : "black";
+  const dark = useGetMode()
+  const color = !dark ? "black" : "white";
+
   return (
     <View style={{ width }}>
       <Animated.View
@@ -24,16 +26,21 @@ export default function OnboardBuilder({
         style={{
           width: width * 0.9,
           justifyContent: "center",
-          height: height / 2,
+          height: height / 2.5,
         }}
       >
         <Image style={{ flex: 1 }} contentFit="contain" source={imageUri} />
       </Animated.View>
-      <Text style={{ fontFamily: "mulishBold", fontSize: 36, width: 300,color }}>
+      <Text
+        style={{ fontFamily: "mulishBold", fontSize: 36, width: 300, color }}
+      >
         {header}
       </Text>
       <Text style={{ fontSize: 26, fontFamily: "mulish", color: "#929292" }}>
         {subText}
+      </Text>
+      <Text style={{ fontSize: 12, fontFamily: "mulish", color: "#929292",width: "70%" }}>
+        {quote}
       </Text>
     </View>
   );

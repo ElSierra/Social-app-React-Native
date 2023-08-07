@@ -1,9 +1,10 @@
 import { View, Text, useColorScheme } from "react-native";
 import { Image } from "expo-image";
+import useGetMode from "../../../hooks/GetMode";
 
 export default function HeaderDrawer() {
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
+  const dark = useGetMode();
+  const isDark = dark;
 
   const color = isDark ? "white" : "black";
   return (

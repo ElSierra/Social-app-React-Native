@@ -1,9 +1,10 @@
 import { View, Text, TextInput, useColorScheme } from "react-native";
 import React from "react";
+import useGetMode from "../../../hooks/GetMode";
 
 export default function InputText() {
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
+  const dark = useGetMode();
+  const isDark = dark;
   const backgroundColor = isDark ? "#292828" : "#f1f1f1";
   const color = isDark ? "white" : "black";
   const placeholderColor = isDark ? "#959595" : "#393939";

@@ -1,10 +1,11 @@
 import { View, Text, TextInput, useColorScheme, Pressable } from "react-native";
 import React, { useState } from "react";
 import { Eye, EyeSlash } from "../../../components/icons";
+import useGetMode from "../../../hooks/GetMode";
 
 export default function InputPassword() {
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
+  const dark = useGetMode();
+  const isDark = dark;
   const backgroundColor = isDark ? "#292828" : "#f1f1f1";
   const color = isDark ? "white" : "black";
   const [show, setShow] = useState(false);

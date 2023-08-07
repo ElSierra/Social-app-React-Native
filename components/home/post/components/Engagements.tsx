@@ -10,10 +10,11 @@ import {
   MessagesIcon,
   ShareUnfocused,
 } from "../../../icons";
+import useGetMode from "../../../../hooks/GetMode";
 
 export default function Engagements({ title }: { title?: string }) {
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
+  const dark = useGetMode();
+  const isDark = dark;
   const color = isDark ? "white" : "black";
   return (
     <View

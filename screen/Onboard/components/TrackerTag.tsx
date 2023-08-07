@@ -1,16 +1,24 @@
 import { View, Text, useColorScheme } from "react-native";
 import React from "react";
-import Animated, { FadeInLeft, FadeInRight } from "react-native-reanimated";
+import Animated, {
+  FadeIn,
+  FadeInLeft,
+  FadeInRight,
+  FadeOut,
+  FadeOutLeft,
+  FadeOutRight,
+} from "react-native-reanimated";
+import useGetMode from "../../../hooks/GetMode";
 
 export default function TrackerTag({ color }: { color?: string }) {
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
+  const dark = useGetMode();
+  const isDark = dark;
   const backgroundColor = !isDark ? "black" : "white";
 
   return (
     <Animated.View
-      entering={!color ? FadeInLeft.springify() : undefined}
-    
+      entering={!color ? FadeInLeft.springify() : FadeIn.springify()}
+      exiting={!color ? FadeOutLeft.springify() : FadeOut.springify()}
       style={{
         width: 20,
         height: 10,

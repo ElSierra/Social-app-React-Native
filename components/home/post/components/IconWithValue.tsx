@@ -9,6 +9,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
+import useGetMode from "../../../../hooks/GetMode";
 
 export default function IconWithValue({
   IconUnfocused,
@@ -19,8 +20,8 @@ export default function IconWithValue({
   IconFocused: ElementType;
   text: string;
 }) {
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
+  const dark = useGetMode();
+  const isDark = dark;
   const color = isDark ? "white" : "black";
   const [clicked, setClicked] = useState(false);
   const liked = useSharedValue(0);

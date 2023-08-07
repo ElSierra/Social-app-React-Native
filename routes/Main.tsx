@@ -38,9 +38,11 @@ import Profile from "../screen/App/Profile";
 import { StatusBar } from "expo-status-bar";
 import CustomDrawerContent from "../components/home/drawer/CustomDrawer";
 import ProfileButton from "../components/home/header/ProfileButton";
-import IconButtons from "../components/global/BottomBarButtons";
+import IconButtons from "../components/global/Buttons/BottomBarButtons";
 import Messages from "../screen/App/Messages";
 import Notifications from "../screen/App/Notifications";
+import useGetMode from "../hooks/GetMode";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<BottomRootStackParamList>();
@@ -48,10 +50,11 @@ const Drawer = createDrawerNavigator<DrawerRootStackParamList>();
 const width = Dimensions.get("screen").width;
 
 function DrawerNavigator() {
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
+  const dark = useGetMode();
+  const isDark = dark;
   const tint = isDark ? "dark" : "light";
   const color = isDark ? "white" : "black";
+  const backgroundColor = isDark ? "black" : "white";
   return (
     <Drawer.Navigator
       drawerContent={CustomDrawerContent}
@@ -105,14 +108,13 @@ function DrawerNavigator() {
   );
 }
 export default function Main() {
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
+  const dark = useGetMode();
+  const isDark = dark;
   const style = isDark ? "light" : "dark";
   const tint = isDark ? "dark" : "light";
   const backgroundColor = isDark ? "black" : "white";
   return (
-    <>
-   
+    <BottomSheetModalProvider>
       <Stack.Navigator
         screenOptions={{
           contentStyle: { backgroundColor },
@@ -155,13 +157,13 @@ export default function Main() {
           component={ImageFullScreen}
         />
       </Stack.Navigator>
-    </>
+    </BottomSheetModalProvider>
   );
 }
 
 export function BottomTabNavigator() {
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
+  const dark = useGetMode();
+  const isDark = dark;
   const tint = !isDark ? "light" : "dark";
   const color = isDark ? "white" : "black";
   const backgroundColor = isDark ? "black" : "white";

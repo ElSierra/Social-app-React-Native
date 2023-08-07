@@ -1,10 +1,11 @@
 import { BlurView } from "expo-blur";
 import { View, Text, Dimensions, useColorScheme } from "react-native";
+import useGetMode from "../../../../hooks/GetMode";
 
 export default function Fab({ item }: { item: JSX.Element }) {
   const height = Dimensions.get("screen").height;
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
+  const dark = useGetMode();
+  const isDark = dark;
   const tint = isDark ? "dark" : "light";
   return (
     <View

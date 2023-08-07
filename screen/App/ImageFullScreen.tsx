@@ -1,5 +1,5 @@
 import { View, Text, Button } from "react-native";
-import { ImageFullScreenProp } from "../types/navigation";
+import { ImageFullScreenProp } from "../../types/navigation";
 import { Image } from "expo-image";
 import Animated, {
   BounceIn,

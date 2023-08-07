@@ -20,13 +20,14 @@ import {
 } from "../../icons";
 import IconWithValue from "./components/IconWithValue";
 import { Video, ResizeMode } from "expo-av";
-import IconButton from "../../global/IconButton";
+import IconButton from "../../global/Buttons/IconButton";
 import ProfileImage from "./components/ProfileImage";
 import NameAndTag from "./components/NameAndTag";
 import TextPost from "./components/TextPost";
 import PhotoPost from "./components/PhotoPost";
 import VideoPost from "./components/VideoPost";
 import Engagements from "./components/Engagements";
+import useGetMode from "../../../hooks/GetMode";
 
 export default function PostBuilder({
   imageUri,
@@ -57,8 +58,8 @@ export default function PostBuilder({
   const [play, setPlay] = useState(false);
   const width = Dimensions.get("screen").width;
 
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
+  const dark = useGetMode();
+  const isDark = dark;
   const borderBottomColor = isDark ? "#252222" : "#CCC9C9";
   return (
     <View

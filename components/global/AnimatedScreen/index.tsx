@@ -15,6 +15,7 @@ import {
   useRoute,
 } from "@react-navigation/native";
 import { StyleProp, View, ViewStyle, useColorScheme } from "react-native";
+import useGetMode from "../../../hooks/GetMode";
 
 export default function AnimatedScreen({ children }: { children: ReactNode }) {
   const opacity = useSharedValue(0);
@@ -24,8 +25,8 @@ export default function AnimatedScreen({ children }: { children: ReactNode }) {
     };
   });
 
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
+  const dark = useGetMode();
+  const isDark = dark;
   const backgroundColor = isDark ? "black" : "white";
 
   const route = useRoute();
@@ -39,8 +40,10 @@ export default function AnimatedScreen({ children }: { children: ReactNode }) {
     }, [opacity])
   );
   return (
-    <View style={{flex:1,backgroundColor }}>
-      <Animated.View style={[{ flex: 1, backgroundColor }, animatedStyle]}>
+    <View style={{ flex: 1, backgroundColor: "transparent" }}>
+      <Animated.View
+        style={[{ flex: 1, backgroundColor: "transparent" }, animatedStyle]}
+      >
         {children}
       </Animated.View>
     </View>

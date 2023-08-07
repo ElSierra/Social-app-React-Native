@@ -1,6 +1,7 @@
 import { View, Text, useColorScheme } from "react-native";
 import React from "react";
 import { VerifiedIcon } from "../../../icons";
+import useGetMode from "../../../../hooks/GetMode";
 
 export default function NameAndTag({
   name,
@@ -11,8 +12,8 @@ export default function NameAndTag({
   verified: boolean;
   userTag: string;
 }) {
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
+  const dark = useGetMode();
+  const isDark = dark;
   const color = isDark ? "white" : "black";
   return (
     <View>

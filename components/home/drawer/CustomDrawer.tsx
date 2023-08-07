@@ -13,11 +13,12 @@ import ToggleSwitch from "toggle-switch-react-native";
 import { useNavigation } from "@react-navigation/native";
 import { ProfileIconUnfocused } from "../../icons";
 import { HomeNavigationProp } from "../../../types/navigation";
+import useGetMode from "../../../hooks/GetMode";
 export default function CustomDrawerContent(
   props: DrawerContentComponentProps
 ) {
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
+  const dark = useGetMode();
+  const isDark = dark;
   const style = !isDark ? "light" : "dark";
   const backgroundColor = isDark ? "white" : "black";
   const color = isDark ? "white" : "black";

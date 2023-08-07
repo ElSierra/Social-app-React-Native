@@ -15,10 +15,11 @@ import {
   DrawerHeaderProps,
   DrawerProps,
 } from "@react-navigation/drawer/lib/typescript/src/types";
+import useGetMode from "../../../hooks/GetMode";
 function CustomDrawerHeader(props: DrawerHeaderProps) {
   const navigation = useNavigation<HomeNavigationProp>();
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
+  const dark = useGetMode();
+  const isDark = dark;
   const TextColor = isDark ? "white" : "black";
   return (
     <SafeAreaView>

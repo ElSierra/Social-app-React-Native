@@ -9,14 +9,16 @@ import AnimatedScreen from "../../components/global/AnimatedScreen";
 import { Image } from "expo-image";
 import InputText from "./components/InputText";
 import InputPassword from "./components/InputPassword";
-import Button from "../../components/global/Button";
+import Button from "../../components/global/Buttons/Button";
 import { useAppDispatch } from "../../redux/hooks/hooks";
 import { setRoute } from "../../redux/slice/routes";
+import useGetMode from "../../hooks/GetMode";
 const width = Dimensions.get("screen").width;
 export default function Login() {
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
+  const dark = useGetMode();
+  const isDark = dark;
   const color = isDark ? "white" : "black";
+  const buttonColor = !isDark ? "white" : "black";
   const dispatch = useAppDispatch();
 
   return (
@@ -59,10 +61,18 @@ export default function Login() {
             paddingHorizontal: 25,
           }}
         >
-          <Button onPress={()=>{
-            dispatch(setRoute({route:"App"}))
-          }} >
-            <Text style={{ fontFamily: "jakaraBold", fontSize: 15 }}>
+          <Button
+            onPress={() => {
+              dispatch(setRoute({ route: "App" }));
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: "jakaraBold",
+                fontSize: 15,
+                color: buttonColor,
+              }}
+            >
               Login
             </Text>
           </Button>

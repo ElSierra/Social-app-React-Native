@@ -12,6 +12,7 @@ import { store } from "./redux/store";
 import OnboardNavigation from "./routes/OnBoard";
 import { useAppSelector } from "./redux/hooks/hooks";
 import Auth from "./routes/Auth";
+import { FadeInView } from "./components/global/AnimatedScreen/FadeInView";
 
 SplashScreen.preventAutoHideAsync();
 export default function App() {
@@ -40,7 +41,11 @@ const Navigation = () => {
     if (route === "onBoard") {
       return <OnboardNavigation />;
     } else if (route === "App") {
-      return <Main />;
+      return (
+        <FadeInView style={{flex:1}}>
+          <Main />
+        </FadeInView>
+      );
     } else if (route === "Auth") {
       return <Auth />;
     }

@@ -6,7 +6,7 @@ import {
   useColorScheme,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
-import IconButton from "../../../global/IconButton";
+import IconButton from "../../../global/Buttons/IconButton";
 import { AVPlaybackStatus, ResizeMode, Video } from "expo-av";
 import { PlayIcon } from "../../../icons";
 import { Dimensions } from "react-native";
@@ -19,6 +19,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { Image } from "expo-image";
 import { useFocusEffect } from "@react-navigation/native";
+import useGetMode from "../../../../hooks/GetMode";
 
 function VideoPost({
   videoTitle,
@@ -38,8 +39,8 @@ function VideoPost({
   const width = Dimensions.get("screen").width;
   const opacity = useSharedValue(0);
   const opacityLoad = useSharedValue(0);
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
+  const dark = useGetMode();
+  const isDark = dark;
   const color = isDark ? "white" : "black";
   const animatedStyle = useAnimatedStyle(() => {
     return {

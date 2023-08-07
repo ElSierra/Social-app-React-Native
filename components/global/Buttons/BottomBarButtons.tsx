@@ -1,7 +1,8 @@
 import { View, Text, Pressable, useColorScheme } from "react-native";
 import React, { ElementType } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { HomeNavigationProp, RootStackParamList } from "../../types/navigation";
+import { HomeNavigationProp, RootStackParamList } from "../../../types/navigation";
+import useGetMode from "../../../hooks/GetMode";
 
 export default function IconButtons({
   Icon,
@@ -11,8 +12,8 @@ export default function IconButtons({
   onPress: () => void;
 }) {
   const navigate = useNavigation<HomeNavigationProp>();
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
+  const dark = useGetMode();
+  const isDark = dark;
   const color = isDark ? "white" : "black";
   return (
     <View

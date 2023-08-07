@@ -1,5 +1,6 @@
 import { View, Text, Pressable, useColorScheme } from "react-native";
 import React, { ReactNode } from "react";
+import useGetMode from "../../../hooks/GetMode";
 
 export default function Button({
   children,
@@ -8,8 +9,8 @@ export default function Button({
   children: ReactNode;
   onPress: () => void;
 }) {
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
+  const dark = useGetMode();
+  const isDark = dark;
   const backgroundColor = isDark ? "white" : "black";
   const color = !isDark ? "white" : "black";
   return (

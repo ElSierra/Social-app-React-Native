@@ -21,6 +21,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { useAppDispatch } from "../../redux/hooks/hooks";
 import { setRoute } from "../../redux/slice/routes";
+import { murphyLaws } from "../../data/murphy";
 
 const height = Dimensions.get("screen").height;
 const width = Dimensions.get("window").width;
@@ -49,7 +50,14 @@ export default function Onboard() {
   const color = isDark ? "black" : "white";
   const backgroundColor = isDark ? "white" : "black";
   const dispatch = useAppDispatch();
-
+  const firstPage = (Math.random() * 2).toFixed();
+  const secondPage = () => {
+    if (Number(firstPage) === 2) {
+      return Number(firstPage) - 1;
+    } else {
+      return Number(firstPage) + 1;
+    }
+  };
   return (
     <View
       style={{
@@ -80,11 +88,13 @@ export default function Onboard() {
           header="Welcome to QuickPost"
           subText="Post to inspire"
           imageUri={require("../../assets/images/move.png")}
+          quote={murphyLaws[Number(firstPage)]}
         />
         <OnboardBuilder
           header={"Explore the \nnew world"}
           subText="to your desire"
           imageUri={require("../../assets/images/phone.png")}
+          quote={murphyLaws[Number(secondPage())]}
         />
       </ScrollView>
       <View
