@@ -43,6 +43,7 @@ import Messages from "../screen/App/Messages";
 import Notifications from "../screen/App/Notifications";
 import useGetMode from "../hooks/GetMode";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { BottomSheetContainer } from "../components/global/BottomSheetContainer";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<BottomRootStackParamList>();
@@ -100,7 +101,7 @@ function DrawerNavigator() {
               />
             ),
             headerStyle: { backgroundColor: "transparent" },
-            title: "QuickPost",
+            title: "Qui ",
           };
         }}
       />
@@ -115,48 +116,50 @@ export default function Main() {
   const backgroundColor = isDark ? "black" : "white";
   return (
     <BottomSheetModalProvider>
-      <Stack.Navigator
-        screenOptions={{
-          contentStyle: { backgroundColor },
-        }}
-      >
-        <Stack.Screen
-          name="Main"
-          options={{ headerShown: false }}
-          component={BottomTabNavigator}
-        />
-        <Stack.Screen
-          name="Profile"
-          options={{
-            headerBackground: () => (
-              <BlurView
-                style={{
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  top: 0,
-                  right: 0,
-                }}
-                tint={tint}
-                intensity={200}
-              />
-            ),
+      <BottomSheetContainer>
+        <Stack.Navigator
+          screenOptions={{
+            contentStyle: { backgroundColor },
           }}
-          component={Profile}
-        />
-        <Stack.Screen
-          name="ImageFullScreen"
-          options={{
-            title: "",
-            animation: "fade",
-            presentation: "transparentModal",
-            headerTransparent: true,
-            headerShadowVisible: false,
-            headerTintColor: "white",
-          }}
-          component={ImageFullScreen}
-        />
-      </Stack.Navigator>
+        >
+          <Stack.Screen
+            name="Main"
+            options={{ headerShown: false }}
+            component={BottomTabNavigator}
+          />
+          <Stack.Screen
+            name="Profile"
+            options={{
+              headerBackground: () => (
+                <BlurView
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    top: 0,
+                    right: 0,
+                  }}
+                  tint={tint}
+                  intensity={200}
+                />
+              ),
+            }}
+            component={Profile}
+          />
+          <Stack.Screen
+            name="ImageFullScreen"
+            options={{
+              title: "",
+              animation: "fade",
+              presentation: "transparentModal",
+              headerTransparent: true,
+              headerShadowVisible: false,
+              headerTintColor: "white",
+            }}
+            component={ImageFullScreen}
+          />
+        </Stack.Navigator>
+      </BottomSheetContainer>
     </BottomSheetModalProvider>
   );
 }

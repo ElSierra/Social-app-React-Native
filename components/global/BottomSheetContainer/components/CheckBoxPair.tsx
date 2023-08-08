@@ -1,0 +1,55 @@
+import { View, Text } from "react-native";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { useAppDispatch } from "../../../../redux/hooks/hooks";
+import { setMode } from "../../../../redux/slice/prefs";
+import useGetMode from "../../../../hooks/GetMode";
+
+export default function CheckBoxPair({
+  text,
+  type,
+  checked,
+}: {
+  text: string;
+  checked: boolean;
+  type: "system" | "light" | "dark";
+}) {
+  const dispatch = useAppDispatch();
+  const dark = useGetMode();
+  const color = !dark ? "black" : "white";
+  const fillColor = !dark ? "black" : "white";
+  const unFillColor = !dark ? "#505050" : "#757575";
+  return (
+    <View
+      style={{
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: "100%",
+      }}
+    >
+      <Text
+        style={{
+          paddingLeft: 15,
+          fontSize: 20,
+          color,
+          fontFamily: "mulishMedium",
+          includeFontPadding: false,
+        }}
+      >
+        {text}
+      </Text>
+      <BouncyCheckbox
+        size={24}
+        isChecked={checked}
+        fillColor={fillColor}
+        unfillColor={unFillColor}
+        disableBuiltInState
+        iconStyle={{ borderColor: "black" }}
+        innerIconStyle={{ borderWidth: 0 }}
+        onPress={() => {
+          dispatch(setMode({ mode: type }));
+        }}
+      />
+    </View>
+  );
+}

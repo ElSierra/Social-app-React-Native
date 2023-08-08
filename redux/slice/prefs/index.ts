@@ -19,4 +19,4 @@ const prefs = createSlice({
 });
 
 export default prefs.reducer;
-const { setMode } = prefs.actions;
+export const { setMode } = prefs.actions;

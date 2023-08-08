@@ -13,6 +13,7 @@ import OnboardNavigation from "./routes/OnBoard";
 import { useAppSelector } from "./redux/hooks/hooks";
 import Auth from "./routes/Auth";
 import { FadeInView } from "./components/global/AnimatedScreen/FadeInView";
+import useGetMode from "./hooks/GetMode";
 
 SplashScreen.preventAutoHideAsync();
 export default function App() {
@@ -24,13 +25,14 @@ export default function App() {
 }
 
 const Navigation = () => {
-  const scheme = useColorScheme();
-  const dark = scheme === "dark";
+  const dark = useGetMode();
+
   const style = dark ? "light" : "dark";
   const { route } = useAppSelector((state) => state.routes);
   const [fontsLoaded] = useFonts({
     mulish: require("./assets/fonts/Mulish-Light.ttf"),
     mulishBold: require("./assets/fonts/Mulish-Black.ttf"),
+    mulishMedium: require("./assets/fonts/Mulish-Medium.ttf"),
     uberBold: require("./assets/fonts/UberMove-Bold.ttf"),
     instaBold: require("./assets/fonts/Instagram.ttf"),
     jakaraBold: require("./assets/fonts/PlusJakartaSans-ExtraBold.ttf"),
@@ -42,7 +44,7 @@ const Navigation = () => {
       return <OnboardNavigation />;
     } else if (route === "App") {
       return (
-        <FadeInView style={{flex:1}}>
+        <FadeInView style={{ flex: 1 }}>
           <Main />
         </FadeInView>
       );

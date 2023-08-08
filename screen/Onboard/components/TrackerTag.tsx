@@ -17,8 +17,8 @@ export default function TrackerTag({ color }: { color?: string }) {
 
   return (
     <Animated.View
-      entering={!color ? FadeInLeft.springify() : FadeIn.springify()}
-      exiting={!color ? FadeOutLeft.springify() : FadeOut.springify()}
+      entering={FadeInLeft.springify()}
+      exiting={FadeOutLeft.springify()}
       style={{
         width: 20,
         height: 10,
