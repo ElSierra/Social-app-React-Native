@@ -8,7 +8,9 @@ export default function Discover() {
   const isFocused = useIsFocused();
   return (
     <>
-      <AnimatedScreen></AnimatedScreen>
+      <AnimatedScreen>
+        
+      </AnimatedScreen>
     </>
   );
 }

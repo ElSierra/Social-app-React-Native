@@ -1,22 +1,15 @@
-import { View, Text, Button } from "react-native";
+import { View } from "react-native";
 import { ImageFullScreenProp } from "../../types/navigation";
-import { Image } from "expo-image";
+
 import Animated, {
-  BounceIn,
   Easing,
   FadeIn,
-  FadeInDown,
-  FadeInUp,
   FadeOut,
-  FadingTransition,
   SharedTransition,
-  SlideInUp,
   withTiming,
 } from "react-native-reanimated";
-import { BlurView } from "expo-blur";
-import { useLayoutEffect } from "react";
+
 import { StatusBar } from "expo-status-bar";
-import { useRoute } from "@react-navigation/native";
 
 //Hero Transition
 
@@ -39,7 +32,6 @@ export const transition = SharedTransition.custom((values) => {
 });
 export default function ImageFullScreen({
   route,
-  navigation,
 }: ImageFullScreenProp) {
   const { photoUri } = route.params;
   console.log("🚀 ~ file: ImageFullScreen.tsx:23 ~ route:", route);

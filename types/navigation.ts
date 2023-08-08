@@ -10,6 +10,7 @@ export type RootStackParamList = {
     photoUri: string;
   };
   Profile: undefined;
+  PostContent: undefined;
 };
 
 export type BottomRootStackParamList = {
@@ -24,13 +25,9 @@ export type DrawerRootStackParamList = {
   Home: undefined;
 };
 
-export type FullImageNavigationProp = NavigationProp<
-  RootStackParamList,
-  "ImageFullScreen"
->;
 export type HomeNavigationProp = NavigationProp<
   RootStackParamList,
-  "ImageFullScreen"
+  "Main"
 >;
 
 export type ImageFullScreenProp = NativeStackScreenProps<

@@ -13,6 +13,7 @@ import Button from "../../components/global/Buttons/Button";
 import { useAppDispatch } from "../../redux/hooks/hooks";
 import { setRoute } from "../../redux/slice/routes";
 import useGetMode from "../../hooks/GetMode";
+import { useState } from "react";
 const width = Dimensions.get("screen").width;
 export default function Login() {
   const dark = useGetMode();
@@ -20,6 +21,9 @@ export default function Login() {
   const color = isDark ? "white" : "black";
   const buttonColor = !isDark ? "white" : "black";
   const dispatch = useAppDispatch();
+
+  //TODO: Change loading to authentication when api is implemented
+  const [loading, setLoading] = useState(false);
 
   return (
     <AnimatedScreen>
@@ -62,8 +66,11 @@ export default function Login() {
           }}
         >
           <Button
+            loading={loading}
             onPress={() => {
+              setLoading(true);
               dispatch(setRoute({ route: "App" }));
+          
             }}
           >
             <Text

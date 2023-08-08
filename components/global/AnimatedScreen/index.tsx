@@ -1,17 +1,15 @@
 import { ReactNode, useCallback, useEffect } from "react";
 
 import Animated, {
-  AnimateStyle,
-  FadeIn,
+ 
   interpolate,
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
   withTiming,
 } from "react-native-reanimated";
 import {
   useFocusEffect,
-  useIsFocused,
+
   useRoute,
 } from "@react-navigation/native";
 import { StyleProp, View, ViewStyle, useColorScheme } from "react-native";
@@ -25,17 +23,12 @@ export default function AnimatedScreen({ children }: { children: ReactNode }) {
     };
   });
 
-  const dark = useGetMode();
-  const isDark = dark;
-  const backgroundColor = isDark ? "black" : "white";
 
-  const route = useRoute();
-  console.log("🚀 ~ file: index.tsx:23 ~ AnimatedScreen ~ route:", route);
+  
   useFocusEffect(
     useCallback(() => {
       opacity.value = withTiming(1, { duration: 250 });
-      console.log("jjj");
-
+      
       return () => (opacity.value = withTiming(0, { duration: 250 }));
     }, [opacity])
   );

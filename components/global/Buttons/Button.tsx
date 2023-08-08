@@ -1,13 +1,21 @@
-import { View, Text, Pressable, useColorScheme } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  useColorScheme,
+  ActivityIndicator,
+} from "react-native";
 import React, { ReactNode } from "react";
 import useGetMode from "../../../hooks/GetMode";
 
 export default function Button({
   children,
   onPress,
+  loading,
 }: {
   children: ReactNode;
   onPress: () => void;
+  loading: boolean;
 }) {
   const dark = useGetMode();
   const isDark = dark;
@@ -24,6 +32,7 @@ export default function Button({
       }}
     >
       <Pressable
+        disabled={loading}
         android_ripple={{ color }}
         onPress={onPress}
         style={{
@@ -32,10 +41,9 @@ export default function Button({
           justifyContent: "center",
           alignItems: "center",
           borderRadius: 10,
-          
         }}
       >
-        {children}
+        {loading ? <ActivityIndicator color={"black"} /> : children}
       </Pressable>
     </View>
   );

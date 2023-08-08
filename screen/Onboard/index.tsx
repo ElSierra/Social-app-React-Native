@@ -22,6 +22,7 @@ import Animated, {
 import { useAppDispatch } from "../../redux/hooks/hooks";
 import { setRoute } from "../../redux/slice/routes";
 import { murphyLaws } from "../../data/murphy";
+import useGetMode from "../../hooks/GetMode";
 
 const height = Dimensions.get("screen").height;
 const width = Dimensions.get("window").width;
@@ -45,8 +46,8 @@ export default function Onboard() {
   }, []);
 
   console.log("🚀 ~ file: index.tsx:13 ~ Onboard ~ page:", page);
-  const scheme = useColorScheme();
-  const isDark = scheme === "dark";
+  const dark = useGetMode();
+  const isDark = dark
   const color = isDark ? "black" : "white";
   const backgroundColor = isDark ? "white" : "black";
   const dispatch = useAppDispatch();

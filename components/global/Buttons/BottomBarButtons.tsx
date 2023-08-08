@@ -40,7 +40,7 @@ export default function IconButtons({
         }}
         onPress={() => {
           onPress();
-          console.log("pressed");
+    
         }}
       >
         <Icon size={25} color={color} />

@@ -12,24 +12,19 @@ import {
 } from "../types/navigation";
 import Home from "../screen/App/Home";
 import {
-  AddIcon,
-  DiscoverIcon,
   HomeIcon,
   HomeIconUnfocused,
   MessageUnfocused,
   MessagesIcon,
   NotificationIcon,
   NotificationUnfocused,
-  ProfileIcon,
   SearchIcon,
   SearchUnfocused,
-  Settings,
 } from "../components/icons";
 
 import { BlurView } from "expo-blur";
 
 import Discover from "../screen/App/Discover";
-import CustomDrawerHeader from "../components/home/header/CustomDrawerHeader";
 
 import ImageFullScreen from "../screen/App/ImageFullScreen";
 
@@ -44,6 +39,7 @@ import Notifications from "../screen/App/Notifications";
 import useGetMode from "../hooks/GetMode";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { BottomSheetContainer } from "../components/global/BottomSheetContainer";
+import PostContent from "../screen/App/PostContent";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<BottomRootStackParamList>();
@@ -111,7 +107,6 @@ function DrawerNavigator() {
 export default function Main() {
   const dark = useGetMode();
   const isDark = dark;
-  const style = isDark ? "light" : "dark";
   const tint = isDark ? "dark" : "light";
   const backgroundColor = isDark ? "black" : "white";
   return (
@@ -157,6 +152,19 @@ export default function Main() {
               headerTintColor: "white",
             }}
             component={ImageFullScreen}
+          />
+          <Stack.Screen
+            name="PostContent"
+            options={{
+              title: "",
+              headerShown: false,
+              animation: "slide_from_bottom",
+              presentation: "transparentModal",
+              headerTransparent: true,
+              headerShadowVisible: false,
+              headerTintColor: "white",
+            }}
+            component={PostContent}
           />
         </Stack.Navigator>
       </BottomSheetContainer>

@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-type BottomSheet = {
+export type BottomSheet = {
   isOpen: boolean;
   type: string | null;
 };

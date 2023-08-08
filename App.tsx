@@ -14,12 +14,17 @@ import { useAppSelector } from "./redux/hooks/hooks";
 import Auth from "./routes/Auth";
 import { FadeInView } from "./components/global/AnimatedScreen/FadeInView";
 import useGetMode from "./hooks/GetMode";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
 
+const persistor = persistStore(store);
 SplashScreen.preventAutoHideAsync();
 export default function App() {
   return (
     <Provider store={store}>
-      <Navigation />
+      <PersistGate persistor={persistor}>
+        <Navigation />
+      </PersistGate>
     </Provider>
   );
 }
@@ -49,7 +54,11 @@ const Navigation = () => {
         </FadeInView>
       );
     } else if (route === "Auth") {
-      return <Auth />;
+      return (
+        <FadeInView style={{ flex: 1 }}>
+          <Auth />
+        </FadeInView>
+      );
     }
   };
   const onLayoutRootView = useCallback(async () => {

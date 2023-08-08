@@ -15,6 +15,7 @@ import Animated, {
   interpolate,
   useAnimatedStyle,
   useSharedValue,
+  withDelay,
   withTiming,
 } from "react-native-reanimated";
 import { Image } from "expo-image";
@@ -48,7 +49,7 @@ function VideoPost({
     };
   });
   const [status, setStatus] = useState<AVPlaybackStatus | null>(null);
-  console.log("🚀 ~ file: VideoPost.tsx:39 ~ status:", status);
+ 
   const [play, setPlay] = useState(false);
   const animatedStyleLoading = useAnimatedStyle(() => {
     return {
@@ -64,7 +65,7 @@ function VideoPost({
     if (status?.isLoaded) {
       opacityLoad.value = withTiming(0);
     } else {
-      opacityLoad.value = withTiming(1, { duration: 400 });
+      opacityLoad.value = withDelay(1000,withTiming(1, { duration: 400 }))
     }
   }, [play, status?.isLoaded]);
 
@@ -138,7 +139,7 @@ function VideoPost({
                 bottom: 0,
                 right: 0,
               },
-              
+              animatedStyleLoading
             ]}
           >
             <View
@@ -150,9 +151,10 @@ function VideoPost({
               }}
             >
               <Image
-                style={{ height: 200, width: "100%",opacity:0.5, borderRadius: 10 }}
+                style={{ height: 200, width: "100%",opacity:0.4, borderRadius: 10 }}
                 source={require("../../../../assets/images/tv-static.gif")}
               />
+              <View style={{position:"absolute"}}><ActivityIndicator color={"white"} size={"large"}/></View>
             </View>
           </Animated.View>
         )}

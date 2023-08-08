@@ -1,34 +1,20 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  useColorScheme,
-  FlatList,
-  Button,
-  Dimensions,
-} from "react-native";
+import { View, Dimensions } from "react-native";
 import React, { useEffect } from "react";
 import Fab from "../../components/home/post/components/Fab";
 import { AddIcon } from "../../components/icons";
 import PostBuilder from "../../components/home/post/PostBuilder";
 import { postLists } from "../../data/test";
-import Animated, {
-  FadeIn,
-  FadeOut,
-  interpolate,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated";
+
 import { FlashList } from "@shopify/flash-list";
 import AnimatedScreen from "../../components/global/AnimatedScreen";
 import useGetMode from "../../hooks/GetMode";
+import { useAppSelector } from "../../redux/hooks/hooks";
 export default function Home() {
   const dark = useGetMode();
+  const posts = useAppSelector((state)=>state.post)
   const isDark = dark;
   const color = isDark ? "white" : "black";
   const backgroundColor = !isDark ? "white" : "black";
-  console.log("i rendered");
   const height = Dimensions.get("screen").height;
   const width = Dimensions.get("screen").width;
   const renderItem = ({ item }: any) => (
@@ -50,7 +36,7 @@ export default function Home() {
       <AnimatedScreen>
         <Fab item={<AddIcon size={30} color={color} />} />
         <FlashList
-          data={postLists}
+          data={posts}
           decelerationRate={0.991}
           estimatedItemSize={250}
           keyExtractor={keyExtractor}

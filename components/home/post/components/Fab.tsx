@@ -1,36 +1,57 @@
 import { BlurView } from "expo-blur";
-import { View, Text, Dimensions, useColorScheme } from "react-native";
+import { View, Pressable } from "react-native";
 import useGetMode from "../../../../hooks/GetMode";
-
+import { useNavigation } from "@react-navigation/native";
+import { HomeNavigationProp } from "../../../../types/navigation";
 export default function Fab({ item }: { item: JSX.Element }) {
-  const height = Dimensions.get("screen").height;
   const dark = useGetMode();
   const isDark = dark;
+  const navigation = useNavigation<HomeNavigationProp>();
   const tint = isDark ? "dark" : "light";
   return (
     <View
       style={{
         position: "absolute",
-        top: height * 0.85,
+        bottom: 100,
         borderRadius: 999,
         right: 10,
+        alignItems: "center",
+        justifyContent: "center",
+        width: 50,
+        height: 50,
         overflow: "hidden",
         zIndex: 999,
       }}
     >
-      <BlurView
-        intensity={70}
-        tint={tint}
+      <Pressable
+        android_ripple={{ color: "white", foreground: true }}
+        onPress={() => {
+          navigation.navigate("PostContent");
+        }}
         style={{
-          width: 60,
-          height: 60,
-          backgroundColor: "#04511256",
+          height: "100%",
+          width: "100%",
           alignItems: "center",
           justifyContent: "center",
         }}
       >
-        {item}
-      </BlurView>
+        <>
+          <BlurView
+            intensity={70}
+            tint={tint}
+            style={{
+              width: "100%",
+              height: "100%",
+
+              position: "absolute",
+              backgroundColor: "#04511256",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          />
+          <View style={{ zIndex: 200 }}>{item}</View>
+        </>
+      </Pressable>
     </View>
   );
 }

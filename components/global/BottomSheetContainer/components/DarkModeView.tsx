@@ -15,10 +15,7 @@ export default function DarkModeView() {
     dark: mode === "dark",
     light: mode === "light",
   });
-  console.log(
-    "🚀 ~ file: DarkModeView.tsx:15 ~ DarkModeView ~ checked:",
-    checked
-  );
+
 
   useEffect(() => {
     setChecked({
