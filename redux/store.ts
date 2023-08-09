@@ -30,7 +30,7 @@ const persistConfig: PersistConfig<
 > = {
   key: "root",
   storage: reduxStorage,
-  blacklist: ["bottomSheet", "routes"],
+  blacklist: ["bottomSheet","post"],
 };
 
 const reducer = combineReducers({

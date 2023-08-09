@@ -16,6 +16,8 @@ import { FadeInView } from "./components/global/AnimatedScreen/FadeInView";
 import useGetMode from "./hooks/GetMode";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
+import Toast from "react-native-toast-message";
+import { toastConfig } from "./components/Toast/CustomToastConfig";
 
 const persistor = persistStore(store);
 SplashScreen.preventAutoHideAsync();
@@ -23,6 +25,9 @@ export default function App() {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
+        <View style={{ position: "absolute", width: "100%", zIndex: 999,top:0 }}>
+          <Toast config={toastConfig} />
+        </View>
         <Navigation />
       </PersistGate>
     </Provider>

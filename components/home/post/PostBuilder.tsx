@@ -1,26 +1,8 @@
-import {
-  View,
-  Text,
-  Pressable,
-  FlatList,
-  Dimensions,
-  useColorScheme,
-} from "react-native";
-import { Image } from "expo-image";
-import { ReactNode, useRef, useState } from "react";
-import {
-  ActivityUnfocused,
-  CommentIcon,
-  HeartUnfocused,
-  Love,
-  MessageUnfocused,
-  PlayIcon,
-  ShareUnfocused,
-  VerifiedIcon,
-} from "../../icons";
-import IconWithValue from "./components/IconWithValue";
+import { View, Dimensions } from "react-native";
+
+import { useRef, useState } from "react";
+
 import { Video, ResizeMode } from "expo-av";
-import IconButton from "../../global/Buttons/IconButton";
 import ProfileImage from "./components/ProfileImage";
 import NameAndTag from "./components/NameAndTag";
 import TextPost from "./components/TextPost";
@@ -28,6 +10,7 @@ import PhotoPost from "./components/PhotoPost";
 import VideoPost from "./components/VideoPost";
 import Engagements from "./components/Engagements";
 import useGetMode from "../../../hooks/GetMode";
+import AudioPost from "./components/AudioPost";
 
 export default function PostBuilder({
   imageUri,
@@ -40,6 +23,7 @@ export default function PostBuilder({
   videoTitle,
   videoViews,
   title,
+  audioUri,
 }: {
   imageUri: string;
   name: string;
@@ -52,7 +36,9 @@ export default function PostBuilder({
   videoViews?: string;
   repost?: string;
   title?: string;
+  audioUri?: string;
 }) {
+  console.log("🚀 ~ file: PostBuilder.tsx:41 ~ audioUri:", audioUri)
   const video = useRef<null | Video>(null);
 
   const [play, setPlay] = useState(false);
@@ -91,14 +77,13 @@ export default function PostBuilder({
           </View>
           {videoUri && (
             <VideoPost
-           
               videoTitle={videoTitle}
-              play={play}
               video={video}
               videoUri={videoUri}
               videoViews={videoViews}
             />
           )}
+          {audioUri && <AudioPost uri={audioUri} />}
           <Engagements title={title} />
         </View>
       </View>

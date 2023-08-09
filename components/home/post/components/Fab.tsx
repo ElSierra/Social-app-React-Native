@@ -3,6 +3,7 @@ import { View, Pressable } from "react-native";
 import useGetMode from "../../../../hooks/GetMode";
 import { useNavigation } from "@react-navigation/native";
 import { HomeNavigationProp } from "../../../../types/navigation";
+import Toast from "react-native-toast-message";
 export default function Fab({ item }: { item: JSX.Element }) {
   const dark = useGetMode();
   const isDark = dark;
@@ -27,6 +28,7 @@ export default function Fab({ item }: { item: JSX.Element }) {
         android_ripple={{ color: "white", foreground: true }}
         onPress={() => {
           navigation.navigate("PostContent");
+   
         }}
         style={{
           height: "100%",

@@ -17,12 +17,13 @@ export default function Home() {
   const backgroundColor = !isDark ? "white" : "black";
   const height = Dimensions.get("screen").height;
   const width = Dimensions.get("screen").width;
-  const renderItem = ({ item }: any) => (
+  const renderItem = ({ item }:{item: any}) => (
     <PostBuilder
       imageUri={item.imageUri}
       name={item.name}
       userTag={item.userTag}
       verified={item.verified}
+      audioUri={item.audioUri}
       photoUri={item.photoUri}
       videoTitle={item.videoTitle}
       videoUri={item.videoUri}

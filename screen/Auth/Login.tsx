@@ -14,6 +14,7 @@ import { useAppDispatch } from "../../redux/hooks/hooks";
 import { setRoute } from "../../redux/slice/routes";
 import useGetMode from "../../hooks/GetMode";
 import { useState } from "react";
+import Toast from "react-native-toast-message";
 const width = Dimensions.get("screen").width;
 export default function Login() {
   const dark = useGetMode();
@@ -69,6 +70,10 @@ export default function Login() {
             loading={loading}
             onPress={() => {
               setLoading(true);
+              Toast.show({
+                type: "authSuccess",
+                text1: "Signin Success",
+              });
               dispatch(setRoute({ route: "App" }));
           
             }}
