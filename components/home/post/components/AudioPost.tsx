@@ -17,7 +17,14 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-export default function AudioPost({ uri }: { uri: string }) {
+import { Image } from "expo-image";
+export default function AudioPost({
+  uri,
+  photoUri,
+}: {
+  uri: string;
+  photoUri: string;
+}) {
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const animationRef = useRef<Lottie>(null);
   const [status, setStatus] = useState<any>(null);
@@ -27,9 +34,16 @@ export default function AudioPost({ uri }: { uri: string }) {
   const maximumTrackTintColor = dark ? "white" : "#000000";
   const tint = dark ? "dark" : "light";
   const opacity = useSharedValue(1);
+  const opacityPic = useSharedValue(0);
+  const size = useSharedValue(55)
   const animatedStyle = useAnimatedStyle(() => {
     return {
       opacity: interpolate(opacity.value, [0, 1], [0, 1]), // map opacity value to range between 0 and 1
+    };
+  });
+  const picAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: interpolate(opacityPic.value, [0, 1], [0, 1]), // map opacity value to range between 0 and 1
     };
   });
   useEffect(() => {
@@ -46,8 +60,10 @@ export default function AudioPost({ uri }: { uri: string }) {
     sound?.setOnPlaybackStatusUpdate((status) => setStatus(status));
     if (status?.isPlaying) {
       opacity.value = withTiming(0, { duration: 400 });
+      opacityPic.value = withTiming(1, { duration: 400 });
     } else {
       opacity.value = withTiming(1, { duration: 400 });
+      opacityPic.value = withTiming(0, { duration: 400 });
     }
   }, [status]);
 
@@ -143,6 +159,26 @@ export default function AudioPost({ uri }: { uri: string }) {
                   }
                   playSound();
                 }}
+              />
+            </Animated.View>
+            <Animated.View
+              style={[
+                {
+                  position: "absolute",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  zIndex: 999,
+                  bottom: 0,
+                },
+                picAnimatedStyle,
+              ]}
+            >
+              <Image
+                source={photoUri}
+                style={{ width: 80, height: 80, borderRadius: 9999 }}
               />
             </Animated.View>
           </View>

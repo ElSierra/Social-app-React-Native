@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, useColorScheme } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
@@ -16,18 +16,21 @@ import { FadeInView } from "./components/global/AnimatedScreen/FadeInView";
 import useGetMode from "./hooks/GetMode";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
-import Toast from "react-native-toast-message";
-import { toastConfig } from "./components/Toast/CustomToastConfig";
+import CustomToast from "./components/global/Toast";
 
 const persistor = persistStore(store);
 SplashScreen.preventAutoHideAsync();
+const width = Dimensions.get("screen").width;
 export default function App() {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <View style={{ position: "absolute", width: "100%", zIndex: 999,top:0 }}>
-          <Toast config={toastConfig} />
+        <View
+          style={{ position: "absolute", width: "100%", zIndex: 999, top: 0 }}
+        >
+          <CustomToast />
         </View>
+
         <Navigation />
       </PersistGate>
     </Provider>

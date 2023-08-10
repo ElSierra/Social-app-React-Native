@@ -34,7 +34,10 @@ export type ImageFullScreenProp = NativeStackScreenProps<
   RootStackParamList,
   "ImageFullScreen"
 >;
-
+export type PostContentProp = NativeStackScreenProps<
+  RootStackParamList,
+  "PostContent"
+>;
 export type HomeProp = NativeStackScreenProps<RootStackParamList, "Main">;
 
 export type BottomProp = BottomTabScreenProps<

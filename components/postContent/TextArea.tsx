@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Image } from "expo-image";
 import InputText from "../../screen/Auth/components/InputText";
 import useGetMode from "../../hooks/GetMode";
-const height = Dimensions.get("screen").height;
+const heightFromScreen = Dimensions.get("screen").height;
 export default function TextArea() {
   const dark = useGetMode();
   const color = dark ? "white" : "black";
@@ -25,7 +25,7 @@ export default function TextArea() {
           @hojoisaac
         </Text>
       </View>
-      <View style={{ marginLeft: 55 }}>
+      <View style={{ marginLeft: 55, minHeight: heightFromScreen / 5 }}>
         <TextInput
           multiline
           cursorColor={color}
@@ -35,6 +35,7 @@ export default function TextArea() {
           style={{
             fontSize: 20,
             color,
+
             fontFamily: "mulishMedium",
             maxHeight: height,
             alignItems: "flex-start",

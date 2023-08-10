@@ -22,7 +22,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.hojoisaac.socialapp"
+      "package": "me.isaacojo.qui"
     },
     "web": {
       "favicon": "./assets/favicon.png"

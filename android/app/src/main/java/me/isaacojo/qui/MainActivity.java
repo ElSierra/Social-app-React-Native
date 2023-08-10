@@ -1,4 +1,4 @@
-package com.hojoisaac.socialapp;
+package me.isaacojo.qui;
 
 import android.os.Build;
 import android.os.Bundle;

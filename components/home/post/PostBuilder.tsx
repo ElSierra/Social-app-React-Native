@@ -38,7 +38,7 @@ export default function PostBuilder({
   title?: string;
   audioUri?: string;
 }) {
-  console.log("🚀 ~ file: PostBuilder.tsx:41 ~ audioUri:", audioUri)
+  console.log("🚀 ~ file: PostBuilder.tsx:41 ~ audioUri:", audioUri);
   const video = useRef<null | Video>(null);
 
   const [play, setPlay] = useState(false);
@@ -83,7 +83,7 @@ export default function PostBuilder({
               videoViews={videoViews}
             />
           )}
-          {audioUri && <AudioPost uri={audioUri} />}
+          {audioUri && <AudioPost uri={audioUri} photoUri={imageUri} />}
           <Engagements title={title} />
         </View>
       </View>

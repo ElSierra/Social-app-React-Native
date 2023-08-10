@@ -8,6 +8,7 @@ import prefs, { Prefs } from "./slice/prefs";
 import bottomSheet, { BottomSheet } from "./slice/bottomSheet";
 import { reduxStorage } from "./storage";
 import post from "./slice/post";
+import toast, { ToastState } from "./slice/toast/toast";
 import {
   persistReducer,
   REHYDRATE,
@@ -26,11 +27,12 @@ const persistConfig: PersistConfig<
     prefs: Prefs;
     bottomSheet: BottomSheet;
     post: typeof postLists;
+    toast : ToastState
   }>
 > = {
   key: "root",
   storage: reduxStorage,
-  blacklist: ["bottomSheet","post"],
+  blacklist: ["bottomSheet","post","toast","routes"],
 };
 
 const reducer = combineReducers({
@@ -38,6 +40,7 @@ const reducer = combineReducers({
   prefs,
   bottomSheet,
   post,
+  toast,
 });
 const persistedReducer = persistReducer(persistConfig, reducer);
 

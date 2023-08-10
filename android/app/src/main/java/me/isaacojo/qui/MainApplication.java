@@ -1,4 +1,4 @@
-package com.hojoisaac.socialapp;
+package me.isaacojo.qui;
 
 import android.app.Application;
 import android.content.res.Configuration;
