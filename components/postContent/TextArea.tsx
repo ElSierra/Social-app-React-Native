@@ -25,7 +25,7 @@ export default function TextArea() {
           @hojoisaac
         </Text>
       </View>
-      <View style={{ marginLeft: 55, minHeight: heightFromScreen / 5 }}>
+      <View style={{ marginLeft: 55, minHeight: heightFromScreen / 20 }}>
         <TextInput
           multiline
           cursorColor={color}
@@ -33,7 +33,7 @@ export default function TextArea() {
             setHeight(event.nativeEvent.contentSize.height);
           }}
           style={{
-            fontSize: 20,
+            fontSize: 16,
             color,
 
             fontFamily: "mulishMedium",
