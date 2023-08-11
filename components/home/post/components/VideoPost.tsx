@@ -65,7 +65,7 @@ function VideoPost({
     if (status?.isLoaded) {
       opacityLoad.value = withTiming(0);
     } else {
-      opacityLoad.value = withDelay(1000, withTiming(1, { duration: 400 }));
+      opacityLoad.value = withTiming(1, { duration: 400 });
     }
   }, [play, status?.isLoaded]);
 
@@ -159,9 +159,6 @@ function VideoPost({
                 }}
                 source={require("../../../../assets/images/tv-static.gif")}
               />
-              <View style={{ position: "absolute" }}>
-                <ActivityIndicator color={"white"} size={"large"} />
-              </View>
             </View>
           </Animated.View>
         )}

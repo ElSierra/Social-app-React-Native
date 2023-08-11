@@ -34,7 +34,7 @@ export default function Home() {
   const keyExtractor = (item: any) => item.id.toString();
   return (
     <View style={{ backgroundColor, flex: 1 }}>
-      <AnimatedScreen>
+      
         <Fab item={<AddIcon size={30} color={color} />} />
         <FlashList
           data={posts}
@@ -45,7 +45,7 @@ export default function Home() {
           renderItem={renderItem}
           contentContainerStyle={{ paddingTop: 100, paddingBottom: 100 }}
         />
-      </AnimatedScreen>
+      
     </View>
   );
 }

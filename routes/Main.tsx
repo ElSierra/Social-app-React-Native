@@ -77,8 +77,7 @@ function DrawerNavigator() {
                 intensity={200}
               />
             ),
-            freezeOnBlur: true,
-
+        
             drawerItemStyle: { display: "none" },
             headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
             headerShadowVisible: false,
@@ -157,6 +156,7 @@ export default function Main() {
             name="PostContent"
             options={{
               title: "",
+              
               headerShown: false,
               animation: "slide_from_bottom",
               presentation: "transparentModal",

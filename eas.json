@@ -18,8 +18,5 @@
   },
   "submit": {
     "production": {}
-  },
-  "expo": {
-    "scheme": "post"
   }
 }

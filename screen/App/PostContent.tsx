@@ -43,6 +43,7 @@ export default function PostContent({ navigation }: PostContentProp) {
   const animationRef = useRef<Lottie>(null);
 
   function handleSetPhotoPost(mimeType: string, uri: string, size: number) {
+    console.log("🚀 ~ file: PostContent.tsx:46 ~ handleSetPhotoPost ~ uri:", uri)
     setPostPhoto({
       mimeType,
       uri,
@@ -149,7 +150,7 @@ export default function PostContent({ navigation }: PostContentProp) {
           >
             <Pressable
               onPress={() => {
-                navigation.pop();
+                navigation.navigate("Profile");
               }}
               style={{
                 flex: 1,
@@ -175,8 +176,8 @@ export default function PostContent({ navigation }: PostContentProp) {
         >
           {postPhoto && (
             <Image
-              style={{ flex: 1, borderRadius: 20 }}
-              source={postPhoto?.uri}
+              style={{ width:"100%",height:"100%", borderRadius: 20 }}
+              source={{uri:postPhoto?.uri}}
               contentFit="cover"
               transition={1000}
             />

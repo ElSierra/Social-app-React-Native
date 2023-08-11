@@ -43,8 +43,10 @@ export default function CustomToast() {
       {toastState.open && (
         <Animated.View
           style={{
-            width: width,
             height: 85,
+            width: width,
+            position: "absolute",
+            zIndex: 999,
             backgroundColor:
               toastState.type === "Failed"
                 ? "#D8000061"
@@ -54,7 +56,7 @@ export default function CustomToast() {
             justifyContent: "flex-end",
             alignItems: "center",
           }}
-          entering={FadeInUp.springify().duration(400).withCallback(callback)}
+          entering={FadeInUp.mass(200).withCallback(callback)}
           exiting={FadeOutUp.mass(200).duration(400).delay(1000)}
         >
           <BlurView

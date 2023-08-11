@@ -21,17 +21,14 @@ import CustomToast from "./components/global/Toast";
 const persistor = persistStore(store);
 SplashScreen.preventAutoHideAsync();
 const width = Dimensions.get("screen").width;
+const height = Dimensions.get("screen").height;
 export default function App() {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <View
-          style={{ position: "absolute", width: "100%", zIndex: 999, top: 0 }}
-        >
-          <CustomToast />
+        <View style={{ width, height }}>
+          <Navigation />
         </View>
-
-        <Navigation />
       </PersistGate>
     </Provider>
   );
@@ -58,6 +55,7 @@ const Navigation = () => {
     } else if (route === "App") {
       return (
         <FadeInView style={{ flex: 1 }}>
+          <CustomToast />
           <Main />
         </FadeInView>
       );
