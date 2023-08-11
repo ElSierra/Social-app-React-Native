@@ -9,7 +9,10 @@ import { FlashList } from "@shopify/flash-list";
 import AnimatedScreen from "../../components/global/AnimatedScreen";
 import useGetMode from "../../hooks/GetMode";
 import { useAppSelector } from "../../redux/hooks/hooks";
+
 export default function Home() {
+  const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+  console.log("🚀 ~ file: Home.tsx:15 ~ Home ~ apiUrl:", apiUrl)
   const dark = useGetMode();
   const posts = useAppSelector((state)=>state.post)
   const isDark = dark;
@@ -38,8 +41,9 @@ export default function Home() {
         <Fab item={<AddIcon size={30} color={color} />} />
         <FlashList
           data={posts}
+        
           decelerationRate={0.991}
-          estimatedItemSize={250}
+          estimatedItemSize={300}
           keyExtractor={keyExtractor}
           estimatedListSize={{ width, height }}
           renderItem={renderItem}

@@ -28,7 +28,7 @@ export default function AudioPost({
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const animationRef = useRef<Lottie>(null);
   const [status, setStatus] = useState<any>(null);
-  console.log("🚀 ~ file: AudioPost.tsx:10 ~ AudioPost ~ status:", status);
+
   const dark = useGetMode();
   const minimumTrackTintColor = "#757575";
   const maximumTrackTintColor = dark ? "white" : "#000000";

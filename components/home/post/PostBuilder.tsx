@@ -38,10 +38,9 @@ export default function PostBuilder({
   title?: string;
   audioUri?: string;
 }) {
-  console.log("🚀 ~ file: PostBuilder.tsx:41 ~ audioUri:", audioUri);
+
   const video = useRef<null | Video>(null);
 
-  const [play, setPlay] = useState(false);
   const width = Dimensions.get("screen").width;
 
   const dark = useGetMode();

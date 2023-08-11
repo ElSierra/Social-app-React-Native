@@ -1,8 +1,8 @@
-import { View, Text, TextInput, useColorScheme } from "react-native";
+import { View, Text, TextInput, useColorScheme, TextInputProps } from "react-native";
 import React from "react";
 import useGetMode from "../../../hooks/GetMode";
 
-export default function InputText() {
+export default function InputText({props}:{props:TextInputProps}) {
   const dark = useGetMode();
   const isDark = dark;
   const backgroundColor = isDark ? "#292828" : "#f1f1f1";
@@ -33,6 +33,7 @@ export default function InputText() {
           fontFamily: "jakara",
           includeFontPadding: false,
         }}
+        {...props}
       />
       <View
         style={{

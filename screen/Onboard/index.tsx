@@ -47,7 +47,7 @@ export default function Onboard() {
 
   console.log("🚀 ~ file: index.tsx:13 ~ Onboard ~ page:", page);
   const dark = useGetMode();
-  const isDark = dark
+  const isDark = dark;
   const color = isDark ? "black" : "white";
   const backgroundColor = isDark ? "white" : "black";
   const dispatch = useAppDispatch();
@@ -101,7 +101,10 @@ export default function Onboard() {
       <View
         style={{
           flexDirection: "row",
+          height: 70,
+          width: "100%",
           alignItems: "center",
+          backgroundColor: "transparent",
           justifyContent: "space-between",
         }}
       >

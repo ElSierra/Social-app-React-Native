@@ -2,8 +2,9 @@ import { View, Text, TextInput, useColorScheme, Pressable } from "react-native";
 import React, { useState } from "react";
 import { Eye, EyeSlash } from "../../../components/icons";
 import useGetMode from "../../../hooks/GetMode";
+import { TextInputProps } from "react-native-paper";
 
-export default function InputPassword() {
+export default function InputPassword({ props }: { props: TextInputProps }) {
   const dark = useGetMode();
   const isDark = dark;
   const backgroundColor = isDark ? "#292828" : "#f1f1f1";
@@ -35,6 +36,7 @@ export default function InputPassword() {
           fontFamily: "jakara",
           includeFontPadding: false,
         }}
+        {...props}
       />
       <View
         style={{

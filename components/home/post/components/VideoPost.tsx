@@ -200,4 +200,4 @@ function VideoPost({
   );
 }
 
-export default React.memo(VideoPost);
+export default VideoPost;

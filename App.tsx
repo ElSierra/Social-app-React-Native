@@ -17,6 +17,7 @@ import useGetMode from "./hooks/GetMode";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
 import CustomToast from "./components/global/Toast";
+import { PaperProvider, Portal } from "react-native-paper";
 
 const persistor = persistStore(store);
 SplashScreen.preventAutoHideAsync();
@@ -26,9 +27,10 @@ export default function App() {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <View style={{ width, height }}>
+        <PaperProvider>
+          <CustomToast />
           <Navigation />
-        </View>
+        </PaperProvider>
       </PersistGate>
     </Provider>
   );
@@ -39,6 +41,8 @@ const Navigation = () => {
 
   const style = dark ? "light" : "dark";
   const { route } = useAppSelector((state) => state.routes);
+  const userAuthenticated = useAppSelector((state) => state.user.token);
+  console.log("🚀 ~ file: App.tsx:45 ~ Navigation ~ userAuthenticated:", userAuthenticated)
   const [fontsLoaded] = useFonts({
     mulish: require("./assets/fonts/Mulish-Light.ttf"),
     mulishBold: require("./assets/fonts/Mulish-Black.ttf"),
@@ -52,14 +56,13 @@ const Navigation = () => {
   const renderRoute = () => {
     if (route === "onBoard") {
       return <OnboardNavigation />;
-    } else if (route === "App") {
+    } else if (userAuthenticated) {
       return (
         <FadeInView style={{ flex: 1 }}>
-          <CustomToast />
           <Main />
         </FadeInView>
       );
-    } else if (route === "Auth") {
+    } else if (route === "Auth" || !userAuthenticated) {
       return (
         <FadeInView style={{ flex: 1 }}>
           <Auth />

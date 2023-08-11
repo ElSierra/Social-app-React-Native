@@ -1,17 +1,19 @@
 import { View, Text, useColorScheme } from "react-native";
 import { Image } from "expo-image";
 import useGetMode from "../../../hooks/GetMode";
+import { useAppSelector } from "../../../redux/hooks/hooks";
 
 export default function HeaderDrawer() {
   const dark = useGetMode();
   const isDark = dark;
 
   const color = isDark ? "white" : "black";
+  const user = useAppSelector((state) => state.user.data);
   return (
     <View style={{ paddingLeft: 14, flex: 1 }}>
       <Image
         style={{ height: 50, width: 50, borderRadius: 9999 }}
-        source={require("../../../assets/avatar/placeholder.png")}
+        source={{uri: user?.imageUri}}
       />
       <View style={{ marginTop: 10 }}>
         <Text
@@ -22,12 +24,12 @@ export default function HeaderDrawer() {
             fontSize: 22,
           }}
         >
-          Ojo Isaac
+          {user?.name}
         </Text>
         <Text
           style={{ fontFamily: "jakara", color, includeFontPadding: false }}
         >
-          @Hojoisaac
+          @{user?.userName}
         </Text>
       </View>
       <View style={{ flexDirection: "row", gap: 8 }}>

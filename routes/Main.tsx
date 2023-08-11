@@ -40,6 +40,7 @@ import useGetMode from "../hooks/GetMode";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { BottomSheetContainer } from "../components/global/BottomSheetContainer";
 import PostContent from "../screen/App/PostContent";
+import CustomToast from "../components/global/Toast";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<BottomRootStackParamList>();
@@ -77,7 +78,7 @@ function DrawerNavigator() {
                 intensity={200}
               />
             ),
-        
+
             drawerItemStyle: { display: "none" },
             headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
             headerShadowVisible: false,
@@ -156,10 +157,9 @@ export default function Main() {
             name="PostContent"
             options={{
               title: "",
-              
+
               headerShown: false,
-              animation: "slide_from_bottom",
-              presentation: "transparentModal",
+              animation: "fade_from_bottom",
               headerTransparent: true,
               headerShadowVisible: false,
               headerTintColor: "white",

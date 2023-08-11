@@ -16,7 +16,6 @@ import {
 import { BlurView } from "expo-blur";
 import { Image } from "expo-image";
 import HeaderDrawer from "./HeaderDrawer";
-import ToggleSwitch from "toggle-switch-react-native";
 import { useNavigation } from "@react-navigation/native";
 import { MoonIcon, ProfileIconUnfocused } from "../../icons";
 import { HomeNavigationProp } from "../../../types/navigation";

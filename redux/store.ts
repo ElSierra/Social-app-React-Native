@@ -9,6 +9,9 @@ import bottomSheet, { BottomSheet } from "./slice/bottomSheet";
 import { reduxStorage } from "./storage";
 import post from "./slice/post";
 import toast, { ToastState } from "./slice/toast/toast";
+import { authApi } from "./api/auth";
+
+import user, { UserState } from "./slice/user";
 import {
   persistReducer,
   REHYDRATE,
@@ -27,12 +30,15 @@ const persistConfig: PersistConfig<
     prefs: Prefs;
     bottomSheet: BottomSheet;
     post: typeof postLists;
-    toast : ToastState
+    toast: ToastState;
+    user: UserState;
+
+    [authApi.reducerPath]: any;
   }>
 > = {
   key: "root",
   storage: reduxStorage,
-  blacklist: ["bottomSheet","post","toast","routes"],
+  blacklist: ["bottomSheet", "post", "toast",],
 };
 
 const reducer = combineReducers({
@@ -41,6 +47,9 @@ const reducer = combineReducers({
   bottomSheet,
   post,
   toast,
+
+  [authApi.reducerPath]: authApi.reducer,
+  user,
 });
 const persistedReducer = persistReducer(persistConfig, reducer);
 
@@ -51,7 +60,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }),
+    }).concat(authApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

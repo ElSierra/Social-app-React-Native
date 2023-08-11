@@ -10,22 +10,37 @@ import { Image } from "expo-image";
 import InputText from "./components/InputText";
 import InputPassword from "./components/InputPassword";
 import Button from "../../components/global/Buttons/Button";
-import { useAppDispatch } from "../../redux/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
 import { setRoute } from "../../redux/slice/routes";
 import useGetMode from "../../hooks/GetMode";
 import { useState } from "react";
 import { openToast } from "../../redux/slice/toast/toast";
+import { useLoginMutation } from "../../redux/api/auth";
+import { signOut } from "../../redux/slice/user";
 
 const width = Dimensions.get("screen").width;
 export default function Login() {
   const dark = useGetMode();
   const isDark = dark;
+  const [login, loginResponse] = useLoginMutation();
   const color = isDark ? "white" : "black";
   const buttonColor = !isDark ? "white" : "black";
   const dispatch = useAppDispatch();
-
+  const [loginData, setLoginData] = useState({ userName: "", password: "" });
   //TODO: Change loading to authentication when api is implemented
-  const [loading, setLoading] = useState(false);
+  const handleLogin = () => {
+    login(loginData)
+      .unwrap()
+      .then((e) => {
+        console.log(e);
+        dispatch(openToast({ text: "Successful Login", type: "Success" }));
+      })
+      .catch((e) => {
+        console.log(e);
+
+        dispatch(openToast({ text: e.data?.msg, type: "Failed" }));
+      });
+  };
 
   return (
     <AnimatedScreen>
@@ -53,8 +68,32 @@ export default function Login() {
               sign in to access your account
             </Text>
             <View style={{ gap: 30, marginTop: 70 }}>
-              <InputText />
-              <InputPassword />
+              <InputText
+                props={{
+                  value: loginData.userName,
+                  onChangeText(text) {
+                    setLoginData((prev) => {
+                      return {
+                        ...prev,
+                        userName: text,
+                      };
+                    });
+                  },
+                }}
+              />
+              <InputPassword
+                props={{
+                  value: loginData.password,
+                  onChangeText(text) {
+                    setLoginData((prev) => {
+                      return {
+                        ...prev,
+                        password: text,
+                      };
+                    });
+                  },
+                }}
+              />
             </View>
           </View>
         </ScrollView>
@@ -67,16 +106,7 @@ export default function Login() {
             paddingHorizontal: 25,
           }}
         >
-          <Button
-            loading={loading}
-            onPress={() => {
-              setLoading(true);
-              dispatch(
-                openToast({ text: "Successful Login", type: "Success" })
-              );
-              dispatch(setRoute({ route: "App" }));
-            }}
-          >
+          <Button loading={loginResponse.isLoading} onPress={handleLogin}>
             <Text
               style={{
                 fontFamily: "jakaraBold",

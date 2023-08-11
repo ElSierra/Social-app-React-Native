@@ -10,6 +10,7 @@ import { closeToast } from "../../../redux/slice/toast/toast";
 import { BlurView } from "expo-blur";
 import { ForbiddenIcon, InfoIcon, VerifyIcon } from "../../icons";
 import useGetMode from "../../../hooks/GetMode";
+import { Portal } from "react-native-paper";
 
 const width = Dimensions.get("screen").width;
 export default function CustomToast() {
@@ -31,7 +32,7 @@ export default function CustomToast() {
 
   const renderIcon = () => {
     if (toastState.type === "Failed") {
-      return <ForbiddenIcon size={20} color={"#400000"} />;
+      return <ForbiddenIcon size={20} color={colorForbidden} />;
     } else if (toastState.type === "Success") {
       return <VerifyIcon size={20} color={"green"} />;
     } else {
@@ -39,14 +40,12 @@ export default function CustomToast() {
     }
   };
   return (
-    <>
+    <Portal>
       {toastState.open && (
         <Animated.View
           style={{
             height: 85,
             width: width,
-            position: "absolute",
-            zIndex: 999,
             backgroundColor:
               toastState.type === "Failed"
                 ? "#D8000061"
@@ -56,8 +55,9 @@ export default function CustomToast() {
             justifyContent: "flex-end",
             alignItems: "center",
           }}
-          entering={FadeInUp.mass(200).withCallback(callback)}
-          exiting={FadeOutUp.mass(200).duration(400).delay(1000)}
+          entering={FadeInUp.mass(200)
+            .withCallback(callback)}
+          exiting={FadeOutUp.mass(200).duration(400).delay(2000)}
         >
           <BlurView
             tint={tint}
@@ -86,6 +86,6 @@ export default function CustomToast() {
           </View>
         </Animated.View>
       )}
-    </>
+    </Portal>
   );
 }

@@ -43,12 +43,16 @@ export default function PostContent({ navigation }: PostContentProp) {
   const animationRef = useRef<Lottie>(null);
 
   function handleSetPhotoPost(mimeType: string, uri: string, size: number) {
-    console.log("🚀 ~ file: PostContent.tsx:46 ~ handleSetPhotoPost ~ uri:", uri)
+    console.log(
+      "🚀 ~ file: PostContent.tsx:46 ~ handleSetPhotoPost ~ uri:",
+      uri
+    );
     setPostPhoto({
       mimeType,
       uri,
       size,
     });
+    setPostAudio(null);
   }
 
   function handleSetAudioPost(mimeType: string, uri: string, size: number) {
@@ -57,6 +61,7 @@ export default function PostContent({ navigation }: PostContentProp) {
       uri,
       size,
     });
+    setPostPhoto(null);
   }
   async function hasAndroidPermission() {
     const getCheckPermissionPromise = () => {
@@ -150,7 +155,7 @@ export default function PostContent({ navigation }: PostContentProp) {
           >
             <Pressable
               onPress={() => {
-                navigation.navigate("Profile");
+                navigation.pop();
               }}
               style={{
                 flex: 1,
@@ -176,8 +181,8 @@ export default function PostContent({ navigation }: PostContentProp) {
         >
           {postPhoto && (
             <Image
-              style={{ width:"100%",height:"100%", borderRadius: 20 }}
-              source={{uri:postPhoto?.uri}}
+              style={{ width: "100%", height: "100%", borderRadius: 20 }}
+              source={{ uri: postPhoto?.uri }}
               contentFit="cover"
               transition={1000}
             />
@@ -208,20 +213,31 @@ export default function PostContent({ navigation }: PostContentProp) {
             contentContainerStyle={{ gap: 10, paddingLeft: 10 }}
             data={photos}
             renderItem={({ item }) => (
-              <Pressable
-                onPress={() => {
-                  setPostPhoto({
-                    uri: item?.node?.image?.uri,
-                    mimeType: item?.node?.type,
-                    size: item?.node?.image?.fileSize || 0,
-                  });
+              <View
+                style={{
+                  height: 100,
+                  width: 100,
+                  borderRadius: 10,
+                  overflow: "hidden",
                 }}
               >
-                <Image
-                  style={{ height: 100, width: 100, borderRadius: 10 }}
-                  source={{ uri: item?.node?.image?.uri }}
-                />
-              </Pressable>
+                <Pressable
+                  android_ripple={{ color: "#FFFFFF", foreground: true }}
+                  style={{ borderRadius: 10 }}
+                  onPress={() => {
+                    setPostPhoto({
+                      uri: item?.node?.image?.uri,
+                      mimeType: item?.node?.type,
+                      size: item?.node?.image?.fileSize || 0,
+                    });
+                  }}
+                >
+                  <Image
+                    style={{ height: 100, width: 100, borderRadius: 10 }}
+                    source={{ uri: item?.node?.image?.uri }}
+                  />
+                </Pressable>
+              </View>
             )}
           />
         </View>
