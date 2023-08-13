@@ -21,6 +21,7 @@ import Animated, {
 import { Image } from "expo-image";
 import { useFocusEffect } from "@react-navigation/native";
 import useGetMode from "../../../../hooks/GetMode";
+import { current } from "@reduxjs/toolkit";
 
 function VideoPost({
   videoTitle,
@@ -42,7 +43,9 @@ function VideoPost({
   const opacityLoad = useSharedValue(0);
   const dark = useGetMode();
   const isDark = dark;
+ 
   const color = isDark ? "white" : "black";
+  const backgroundVideoColor = isDark ? "#1d1d1d": "black"
   const animatedStyle = useAnimatedStyle(() => {
     return {
       opacity: interpolate(opacity.value, [0, 1], [0, 1]), // map opacity value to range between 0 and 1
@@ -51,19 +54,33 @@ function VideoPost({
   const [status, setStatus] = useState<AVPlaybackStatus | null>(null);
 
   const [play, setPlay] = useState(false);
-  const animatedStyleLoading = useAnimatedStyle(() => {
-    return {
-      opacity: interpolate(opacityLoad.value, [0, 1], [0, 1]), // map opacity value to range between 0 and 1
-    };
-  });
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    video.current?.unloadAsync();
+
+  }, []);
   useEffect(() => {
     if (!play) {
       opacity.value = withTiming(1, { duration: 400 });
     } else {
       opacity.value = withTiming(0);
+      if (!status?.isLoaded) {
+        setIsLoading(true)
+        video.current
+          ?.loadAsync({ uri: videoUri })
+          .then((e) => {
+            video.current?.playAsync();
+            ;
+          })
+          .catch((e) => {});
+        return;
+      }
+      video.current?.playAsync();
     }
     if (status?.isLoaded) {
+      setIsLoading(false)
       opacityLoad.value = withTiming(0);
+      
     } else {
       opacityLoad.value = withTiming(1, { duration: 400 });
     }
@@ -90,40 +107,60 @@ function VideoPost({
       }}
     >
       <View style={{ width: "100%", height: 200 }}>
-        {status?.isLoaded ? (
-          <Animated.View
-            style={[
-              {
-                width: "100%",
-                height: 200,
-                position: "absolute",
-                zIndex: 50,
-                top: 0,
-                left: 0,
+        <Animated.View
+          style={[
+            {
+              width: "100%",
+              height: 200,
+              position: "absolute",
+              zIndex: 50,
+              top: 0,
+              left: 0,
 
-                bottom: 0,
-                right: 0,
-              },
-              animatedStyle,
-            ]}
+              bottom: 0,
+              right: 0,
+            },
+            animatedStyle,
+          ]}
+        >
+          <Pressable
+            onPress={handlePlay}
+            style={{
+              borderRadius: 10,
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              height: "100%",
+              backgroundColor: play
+                ? "transparent"
+                : !status?.isLoaded
+                ? backgroundVideoColor
+                : "#0000008E",
+            }}
           >
-            <Pressable
+            <IconButton
+              Icon={play ? <></> : <PlayIcon size={60} color="white" />}
               onPress={handlePlay}
-              style={{
-                borderRadius: 10,
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-                height: "100%",
-                backgroundColor: play ? "transparent" : "#0000008E",
-              }}
-            >
-              <IconButton
-                Icon={play ? <></> : <PlayIcon size={60} color="white" />}
-                onPress={handlePlay}
-              />
-            </Pressable>
-          </Animated.View>
+            />
+          </Pressable>
+        </Animated.View>
+
+        {isLoading && (
+          <View
+            style={{
+              position: "absolute",
+              zIndex: 999,
+              justifyContent: "center",
+              width: "100%",
+              height: "100%",
+              alignItems: "center",
+            }}
+          >
+            <ActivityIndicator size={50} color={color} />
+          </View>
+        )}
+        {/* {status?.isLoaded ? (
+         null
         ) : (
           <Animated.View
             style={[
@@ -161,7 +198,7 @@ function VideoPost({
               />
             </View>
           </Animated.View>
-        )}
+        )} */}
         {
           <Video
             ref={video}

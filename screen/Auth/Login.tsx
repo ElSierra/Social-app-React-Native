@@ -13,7 +13,7 @@ import Button from "../../components/global/Buttons/Button";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
 import { setRoute } from "../../redux/slice/routes";
 import useGetMode from "../../hooks/GetMode";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { openToast } from "../../redux/slice/toast/toast";
 import { useLoginMutation } from "../../redux/api/auth";
 import { signOut } from "../../redux/slice/user";
@@ -26,6 +26,7 @@ export default function Login() {
   const color = isDark ? "white" : "black";
   const buttonColor = !isDark ? "white" : "black";
   const dispatch = useAppDispatch();
+  const name = useAppSelector((state) => state.user.data?.name);
   const [loginData, setLoginData] = useState({ userName: "", password: "" });
   //TODO: Change loading to authentication when api is implemented
   const handleLogin = () => {
@@ -62,7 +63,7 @@ export default function Login() {
               />
             </View>
             <Text style={{ color, fontFamily: "mulishBold", fontSize: 24 }}>
-              Welcome Back
+              Welcome Back{name && `, ${name.split(" ")[0]}`}
             </Text>
             <Text style={{ color, fontFamily: "mulish", fontSize: 14 }}>
               sign in to access your account
@@ -70,12 +71,13 @@ export default function Login() {
             <View style={{ gap: 30, marginTop: 70 }}>
               <InputText
                 props={{
+                
                   value: loginData.userName,
                   onChangeText(text) {
                     setLoginData((prev) => {
                       return {
                         ...prev,
-                        userName: text,
+                        userName: text.trim(),
                       };
                     });
                   },

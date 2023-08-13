@@ -55,9 +55,9 @@ export default function CustomToast() {
             justifyContent: "flex-end",
             alignItems: "center",
           }}
-          entering={FadeInUp.mass(200)
+          entering={FadeInUp.springify()
             .withCallback(callback)}
-          exiting={FadeOutUp.mass(200).duration(400).delay(2000)}
+          exiting={FadeOutUp.springify().delay(2000)}
         >
           <BlurView
             tint={tint}

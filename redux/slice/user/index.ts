@@ -1,14 +1,9 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { authApi } from "../../api/auth";
+import { IUSerData } from "../../../types/api";
 
 export interface UserState {
-  data: {
-    name: string;
-    userName: string;
-    email: string;
-    imageUri: string;
-    emailIsVerified: boolean;
-  } | null;
+  data: IUSerData | null;
   error: any;
   token: string | null;
   loading: boolean;
@@ -23,21 +18,9 @@ const user = createSlice({
   } as UserState,
   reducers: {
     signOut: (state) => {
-      state = {
-        data: null,
-        error: null,
-        loading: false,
-        token: null,
-      };
-    },
-    testAdd: (state) => {
-      console.log("dispatched");
-      state = {
-        data: null,
-        error: "yes teststs",
-        loading: false,
-        token: null,
-      };
+      state.error = null;
+      state.loading = false;
+      state.token = null;
     },
   },
   extraReducers: (builder) => {
@@ -70,4 +53,4 @@ const user = createSlice({
 
 export default user.reducer;
 
-export const { signOut, testAdd } = user.actions;
+export const { signOut } = user.actions;

@@ -1,17 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { UserState } from "../slice/user";
+import { IUSerData } from "../../types/api";
 
 interface loginResult {
   msg: string;
   token: string;
-  data: {
-    name: string;
-    userName: string;
-    email: string;
-    imageUri: string;
-    emailIsVerified: boolean;
-  };
+  data: IUSerData
 }
+
+
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({

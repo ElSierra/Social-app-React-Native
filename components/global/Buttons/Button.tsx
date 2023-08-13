@@ -21,6 +21,7 @@ export default function Button({
   const isDark = dark;
   const backgroundColor = isDark ? "white" : "black";
   const color = !isDark ? "white" : "black";
+  const loadingColor = isDark ? "black" : "white";
   return (
     <View
       style={{
@@ -43,7 +44,7 @@ export default function Button({
           borderRadius: 10,
         }}
       >
-        {loading ? <ActivityIndicator color={"black"} /> : children}
+        {loading ? <ActivityIndicator color={loadingColor} /> : children}
       </Pressable>
     </View>
   );

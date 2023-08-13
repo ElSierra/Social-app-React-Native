@@ -17,11 +17,12 @@ import { BlurView } from "expo-blur";
 import { Image } from "expo-image";
 import HeaderDrawer from "./HeaderDrawer";
 import { useNavigation } from "@react-navigation/native";
-import { MoonIcon, ProfileIconUnfocused } from "../../icons";
+import { LogoutIcon, MoonIcon, ProfileIconUnfocused } from "../../icons";
 import { HomeNavigationProp } from "../../../types/navigation";
 import useGetMode from "../../../hooks/GetMode";
 import { useAppDispatch } from "../../../redux/hooks/hooks";
 import { openSheet } from "../../../redux/slice/bottomSheet";
+import { signOut } from "../../../redux/slice/user";
 export default function CustomDrawerContent(
   props: DrawerContentComponentProps
 ) {
@@ -89,29 +90,63 @@ export default function CustomDrawerContent(
       </DrawerContentScrollView>
       <View
         style={{
-          marginBottom: 50,
-          height: 40,
-          width: 40,
-          borderRadius: 999,
-          overflow: "hidden",
+          width: "100%",
+          justifyContent: "space-between",
+          flexDirection: "row",
         }}
       >
-        <Pressable
+        <View
           style={{
+            marginBottom: 50,
             height: 40,
             width: 40,
             borderRadius: 999,
-            justifyContent: "center",
-            alignItems: "center",
+            overflow: "hidden",
           }}
-          onPress={() => {
-            props.navigation.closeDrawer();
-            dispatch(openSheet({ type: "modeSelect" }));
-          }}
-          android_ripple={{ color: pressColor, foreground: true }}
         >
-          <MoonIcon size={25} color={color} />
-        </Pressable>
+          <Pressable
+            style={{
+              height: 40,
+              width: 40,
+              borderRadius: 999,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onPress={() => {
+              props.navigation.closeDrawer();
+              dispatch(openSheet({ type: "modeSelect" }));
+            }}
+            android_ripple={{ color: pressColor, foreground: true }}
+          >
+            <MoonIcon size={25} color={color} />
+          </Pressable>
+        </View>
+        <View
+          style={{
+            marginBottom: 50,
+            height: 40,
+            width: 40,
+            borderRadius: 999,
+            overflow: "hidden",
+          }}
+        >
+          <Pressable
+            style={{
+              height: 40,
+              width: 40,
+              borderRadius: 999,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onPress={() => {
+              props.navigation.closeDrawer();
+              dispatch(signOut());
+            }}
+            android_ripple={{ color: pressColor, foreground: true }}
+          >
+            <LogoutIcon size={25} color={color} />
+          </Pressable>
+        </View>
       </View>
     </View>
   );

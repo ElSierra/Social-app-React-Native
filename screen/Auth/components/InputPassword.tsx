@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Eye, EyeSlash } from "../../../components/icons";
 import useGetMode from "../../../hooks/GetMode";
 import { TextInputProps } from "react-native-paper";
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
 export default function InputPassword({ props }: { props: TextInputProps }) {
   const dark = useGetMode();
@@ -63,7 +64,9 @@ export default function InputPassword({ props }: { props: TextInputProps }) {
           android_ripple={{ color: "#FFFFFF" }}
         >
           {!show ? (
-            <Eye size={22} color={color} />
+            <Animated.View>
+              <Eye size={22} color={color} />
+            </Animated.View >
           ) : (
             <EyeSlash size={22} color={color} />
           )}
