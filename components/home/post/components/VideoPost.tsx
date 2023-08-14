@@ -43,9 +43,9 @@ function VideoPost({
   const opacityLoad = useSharedValue(0);
   const dark = useGetMode();
   const isDark = dark;
- 
+
   const color = isDark ? "white" : "black";
-  const backgroundVideoColor = isDark ? "#1d1d1d": "black"
+  const backgroundVideoColor = isDark ? "#1d1d1d" : "black";
   const animatedStyle = useAnimatedStyle(() => {
     return {
       opacity: interpolate(opacity.value, [0, 1], [0, 1]), // map opacity value to range between 0 and 1
@@ -57,7 +57,6 @@ function VideoPost({
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     video.current?.unloadAsync();
-
   }, []);
   useEffect(() => {
     if (!play) {
@@ -65,22 +64,20 @@ function VideoPost({
     } else {
       opacity.value = withTiming(0);
       if (!status?.isLoaded) {
-        setIsLoading(true)
+        setIsLoading(true);
         video.current
           ?.loadAsync({ uri: videoUri })
           .then((e) => {
             video.current?.playAsync();
-            ;
           })
           .catch((e) => {});
         return;
       }
-      video.current?.playAsync();
+      video.current?.playAsync().then().catch();
     }
     if (status?.isLoaded) {
-      setIsLoading(false)
+      setIsLoading(false);
       opacityLoad.value = withTiming(0);
-      
     } else {
       opacityLoad.value = withTiming(1, { duration: 400 });
     }
@@ -159,58 +156,26 @@ function VideoPost({
             <ActivityIndicator size={50} color={color} />
           </View>
         )}
-        {/* {status?.isLoaded ? (
-         null
-        ) : (
-          <Animated.View
-            style={[
-              {
-                width: "100%",
-                height: 200,
-                backgroundColor: "black",
-                position: "absolute",
-                zIndex: 50,
-                borderRadius: 10,
-                top: 0,
-                left: 0,
-                bottom: 0,
-                right: 0,
-              },
-              animatedStyleLoading,
-            ]}
-          >
-            <View
-              style={{
-                width: "100%",
-                height: "100%",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Image
-                style={{
-                  height: 200,
-                  width: "100%",
-                  opacity: 0.4,
-                  borderRadius: 10,
-                }}
-                source={require("../../../../assets/images/tv-static.gif")}
-              />
-            </View>
-          </Animated.View>
-        )} */}
+
         {
-          <Video
-            ref={video}
-            style={{ flex: 1, width: "100%", borderRadius: 10 }}
-            source={{
-              uri: videoUri,
+          <Pressable
+            style={{ flex: 1, width: "100%" }}
+            onPress={() => {
+              setPlay(!play);
             }}
-            useNativeControls={false}
-            resizeMode={ResizeMode.COVER}
-            shouldPlay={play}
-            onPlaybackStatusUpdate={(status) => setStatus(() => status)}
-          />
+          >
+            <Video
+              ref={video}
+              style={{ flex: 1, width: "100%", borderRadius: 10 }}
+              source={{
+                uri: videoUri,
+              }}
+              useNativeControls={false}
+              resizeMode={ResizeMode.COVER}
+              shouldPlay={play}
+              onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+            />
+          </Pressable>
         }
       </View>
       <View

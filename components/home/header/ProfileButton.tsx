@@ -23,7 +23,11 @@ export default function ProfileButton({
       <Pressable onPress={onPress}>
         {imageUri ? (
           <Image
+            placeholder={{
+              uri: "../../../assets/images/place-dark.svg"
+            }}
             source={{ uri: imageUri }}
+            transition={1000}
             style={{ height: size, width: size, borderRadius: 9999 }}
           />
         ) : (

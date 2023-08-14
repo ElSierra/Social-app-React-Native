@@ -23,6 +23,7 @@ import {
   PersistConfig,
 } from "redux-persist";
 import { postLists } from "../data/test";
+import { userApi } from "./api/user";
 
 const persistConfig: PersistConfig<
   CombinedState<{
@@ -34,11 +35,12 @@ const persistConfig: PersistConfig<
     user: UserState;
 
     [authApi.reducerPath]: any;
+    [userApi.reducerPath]: any;
   }>
 > = {
   key: "root",
   storage: reduxStorage,
-  blacklist: ["bottomSheet", "post", "toast",],
+  blacklist: ["bottomSheet", "post", "toast",`${userApi.reducerPath}`, `${authApi.reducerPath}`],
 };
 
 const reducer = combineReducers({
@@ -49,6 +51,7 @@ const reducer = combineReducers({
   toast,
 
   [authApi.reducerPath]: authApi.reducer,
+  [userApi.reducerPath]: userApi.reducer,
   user,
 });
 const persistedReducer = persistReducer(persistConfig, reducer);
@@ -60,7 +63,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(authApi.middleware),
+    }).concat(authApi.middleware).concat(userApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

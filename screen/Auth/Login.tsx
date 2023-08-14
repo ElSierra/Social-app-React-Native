@@ -3,6 +3,7 @@ import {
   Text,
   useColorScheme,
   ScrollView,
+  Animated,
   Dimensions,
 } from "react-native";
 import AnimatedScreen from "../../components/global/AnimatedScreen";
@@ -13,10 +14,11 @@ import Button from "../../components/global/Buttons/Button";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
 import { setRoute } from "../../redux/slice/routes";
 import useGetMode from "../../hooks/GetMode";
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { openToast } from "../../redux/slice/toast/toast";
 import { useLoginMutation } from "../../redux/api/auth";
 import { signOut } from "../../redux/slice/user";
+import { useForm, Controller } from "react-hook-form";
 
 const width = Dimensions.get("screen").width;
 export default function Login() {
@@ -28,9 +30,29 @@ export default function Login() {
   const dispatch = useAppDispatch();
   const name = useAppSelector((state) => state.user.data?.name);
   const [loginData, setLoginData] = useState({ userName: "", password: "" });
-  //TODO: Change loading to authentication when api is implemented
-  const handleLogin = () => {
-    login(loginData)
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      userName: "",
+      password: "",
+    },
+  });
+  //
+  const animUser = useRef(new Animated.Value(0));
+  const animPass = useRef(new Animated.Value(0));
+
+  const shakeUserName = useCallback(() => {
+    vibrateAnimation(animUser);
+  }, []);
+  const shakePassword = useCallback(() => {
+    vibrateAnimation(animPass);
+  }, []);
+
+  const onSubmit = (data: { userName: string; password: string }) => {
+    login({ userName: data.userName.trim(), password: data.password })
       .unwrap()
       .then((e) => {
         console.log(e);
@@ -42,7 +64,39 @@ export default function Login() {
         dispatch(openToast({ text: e.data?.msg, type: "Failed" }));
       });
   };
+  useEffect(() => {
+    if (errors.userName) {
+      shakeUserName();
+    }
+    if (errors.password) {
+      shakePassword();
+    }
+  }, [errors.userName, errors.password]);
 
+  const vibrateAnimation = (name: React.MutableRefObject<Animated.Value>) => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(name.current, {
+          useNativeDriver: true,
+          toValue: -2,
+          duration: 50,
+        }),
+
+        Animated.timing(name.current, {
+          useNativeDriver: true,
+          toValue: 2,
+          duration: 50,
+        }),
+
+        Animated.timing(name.current, {
+          useNativeDriver: true,
+          toValue: 0,
+          duration: 50,
+        }),
+      ]),
+      { iterations: 2 }
+    ).start();
+  };
   return (
     <AnimatedScreen>
       <View style={{ flex: 1 }}>
@@ -69,33 +123,56 @@ export default function Login() {
               sign in to access your account
             </Text>
             <View style={{ gap: 30, marginTop: 70 }}>
-              <InputText
-                props={{
-                
-                  value: loginData.userName,
-                  onChangeText(text) {
-                    setLoginData((prev) => {
-                      return {
-                        ...prev,
-                        userName: text.trim(),
-                      };
-                    });
-                  },
-                }}
-              />
-              <InputPassword
-                props={{
-                  value: loginData.password,
-                  onChangeText(text) {
-                    setLoginData((prev) => {
-                      return {
-                        ...prev,
-                        password: text,
-                      };
-                    });
-                  },
-                }}
-              />
+              <Animated.View
+                style={{ transform: [{ translateX: animUser.current }] }}
+              >
+                <Controller
+                  control={control}
+                  rules={{
+                    required: true,
+                  }}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <InputText
+                      style={{
+                        borderColor: errors.userName ? "red" : "",
+                        borderWidth: errors.userName ? 1 : 0,
+                      }}
+                      props={{
+                        value: value,
+                        onBlur,
+                        onChangeText: onChange,
+                      }}
+                    />
+                  )}
+                  name="userName"
+                />
+              </Animated.View>
+              <Animated.View
+                style={{ transform: [{ translateX: animPass.current }] }}
+              >
+                <Controller
+                  control={control}
+                  rules={{
+                    maxLength: 100,
+                    minLength: 3,
+                    required: true,
+                  }}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <InputPassword
+                      style={{
+                        borderColor: errors.password ? "red" : "",
+                        borderWidth: errors.password ? 1 : 0,
+                      }}
+                      props={{
+                        value,
+                        onChangeText: onChange,
+                        onBlur,
+                      }}
+                    />
+                  )}
+                  name="password"
+                />
+              </Animated.View>
             </View>
           </View>
         </ScrollView>
@@ -108,7 +185,10 @@ export default function Login() {
             paddingHorizontal: 25,
           }}
         >
-          <Button loading={loginResponse.isLoading} onPress={handleLogin}>
+          <Button
+            loading={loginResponse.isLoading}
+            onPress={handleSubmit(onSubmit)}
+          >
             <Text
               style={{
                 fontFamily: "jakaraBold",

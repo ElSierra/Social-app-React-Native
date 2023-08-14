@@ -11,6 +11,7 @@ import { BlurView } from "expo-blur";
 import { ForbiddenIcon, InfoIcon, VerifyIcon } from "../../icons";
 import useGetMode from "../../../hooks/GetMode";
 import { Portal } from "react-native-paper";
+import { useForm } from "react-hook-form";
 
 const width = Dimensions.get("screen").width;
 export default function CustomToast() {

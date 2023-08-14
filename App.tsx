@@ -5,12 +5,12 @@ import { NavigationContainer } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import Main, { BottomTabNavigator } from "./routes/Main";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 
 import OnboardNavigation from "./routes/OnBoard";
-import { useAppSelector } from "./redux/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "./redux/hooks/hooks";
 import Auth from "./routes/Auth";
 import { FadeInView } from "./components/global/AnimatedScreen/FadeInView";
 import useGetMode from "./hooks/GetMode";
@@ -18,6 +18,8 @@ import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
 import CustomToast from "./components/global/Toast";
 import { PaperProvider, Portal } from "react-native-paper";
+import { useGetUserQuery, useTokenValidQuery } from "./redux/api/user";
+import { signOut } from "./redux/slice/user";
 
 const persistor = persistStore(store);
 SplashScreen.preventAutoHideAsync();
@@ -38,11 +40,41 @@ export default function App() {
 
 const Navigation = () => {
   const dark = useGetMode();
+  const [wait, setWaiting] = useState(false);
+  const [skip, setSkip] = useState(true);
 
   const style = dark ? "light" : "dark";
   const { route } = useAppSelector((state) => state.routes);
   const userAuthenticated = useAppSelector((state) => state.user.token);
-  console.log("🚀 ~ file: App.tsx:45 ~ Navigation ~ userAuthenticated:", userAuthenticated)
+  console.log(
+    "🚀 ~ file: App.tsx:48 ~ Navigation ~ userAuthenticated:",
+    userAuthenticated
+  );
+  const dispatch = useAppDispatch();
+  const validUser = useTokenValidQuery(undefined, { skip });
+  console.log("🚀 ~ file: App.tsx:49 ~ Navigation ~ validUser:", validUser);
+
+  useEffect(() => {
+    if (userAuthenticated) {
+      setSkip(false);
+    }
+  }, []);
+  useEffect(() => {
+    if (validUser.isFetching) {
+      setWaiting(true);
+    }
+    if (validUser.isSuccess) {
+      console.log("reeached");
+      setWaiting(false);
+      if (!validUser.data?.msg) {
+        dispatch(signOut());
+      }
+    }
+  }, [validUser.isFetching]);
+  console.log(
+    "🚀 ~ file: App.tsx:45 ~ Navigation ~ userAuthenticated:",
+    userAuthenticated
+  );
   const [fontsLoaded] = useFonts({
     mulish: require("./assets/fonts/Mulish-Light.ttf"),
     mulishBold: require("./assets/fonts/Mulish-Black.ttf"),
@@ -71,10 +103,10 @@ const Navigation = () => {
     }
   };
   const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
+    if (fontsLoaded && !wait) {
       await SplashScreen.hideAsync();
     }
-  }, [fontsLoaded]);
+  }, [fontsLoaded, wait]);
 
   if (!fontsLoaded) {
     return null;
