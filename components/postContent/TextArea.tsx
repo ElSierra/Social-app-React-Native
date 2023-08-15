@@ -3,17 +3,19 @@ import React, { useState } from "react";
 import { Image } from "expo-image";
 import InputText from "../../screen/Auth/components/InputText";
 import useGetMode from "../../hooks/GetMode";
+import { useAppSelector } from "../../redux/hooks/hooks";
 const heightFromScreen = Dimensions.get("screen").height;
 export default function TextArea() {
   const dark = useGetMode();
   const color = dark ? "white" : "black";
   const [height, setHeight] = useState(50);
+  const userDetails = useAppSelector((state)=>state.user.data)
   return (
     <View>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
         <Image
           style={{ height: 50, width: 50, borderRadius: 9999 }}
-          source={require("../../assets/avatar/placeholder.png")}
+          source={{uri: userDetails?.imageUri}}
         />
         <Text
           style={{
@@ -22,7 +24,7 @@ export default function TextArea() {
             includeFontPadding: false,
           }}
         >
-          @hojoisaac
+          @{userDetails?.userName}
         </Text>
       </View>
       <View style={{ marginLeft: 55, minHeight: heightFromScreen / 20 }}>

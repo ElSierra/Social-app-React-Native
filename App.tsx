@@ -20,6 +20,7 @@ import CustomToast from "./components/global/Toast";
 import { PaperProvider, Portal } from "react-native-paper";
 import { useGetUserQuery, useTokenValidQuery } from "./redux/api/user";
 import { signOut } from "./redux/slice/user";
+import { openToast } from "./redux/slice/toast/toast";
 
 const persistor = persistStore(store);
 SplashScreen.preventAutoHideAsync();
@@ -40,8 +41,6 @@ export default function App() {
 
 const Navigation = () => {
   const dark = useGetMode();
-  const [wait, setWaiting] = useState(false);
-  const [skip, setSkip] = useState(true);
 
   const style = dark ? "light" : "dark";
   const { route } = useAppSelector((state) => state.routes);
@@ -50,27 +49,7 @@ const Navigation = () => {
     "🚀 ~ file: App.tsx:48 ~ Navigation ~ userAuthenticated:",
     userAuthenticated
   );
-  const dispatch = useAppDispatch();
-  const validUser = useTokenValidQuery(undefined, { skip });
-  console.log("🚀 ~ file: App.tsx:49 ~ Navigation ~ validUser:", validUser);
 
-  useEffect(() => {
-    if (userAuthenticated) {
-      setSkip(false);
-    }
-  }, []);
-  useEffect(() => {
-    if (validUser.isFetching) {
-      setWaiting(true);
-    }
-    if (validUser.isSuccess) {
-      console.log("reeached");
-      setWaiting(false);
-      if (!validUser.data?.msg) {
-        dispatch(signOut());
-      }
-    }
-  }, [validUser.isFetching]);
   console.log(
     "🚀 ~ file: App.tsx:45 ~ Navigation ~ userAuthenticated:",
     userAuthenticated
@@ -103,10 +82,10 @@ const Navigation = () => {
     }
   };
   const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded && !wait) {
+    if (fontsLoaded) {
       await SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, wait]);
+  }, [fontsLoaded]);
 
   if (!fontsLoaded) {
     return null;

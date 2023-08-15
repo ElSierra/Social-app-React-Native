@@ -8,21 +8,31 @@ import { postLists } from "../../data/test";
 import { FlashList } from "@shopify/flash-list";
 import AnimatedScreen from "../../components/global/AnimatedScreen";
 import useGetMode from "../../hooks/GetMode";
-import { useAppSelector } from "../../redux/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
 import { useGetUserQuery, useTokenValidQuery } from "../../redux/api/user";
+import { signOut } from "../../redux/slice/user";
 
 export default function Home() {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
   console.log("🚀 ~ file: Home.tsx:15 ~ Home ~ apiUrl:", apiUrl);
   const dark = useGetMode();
+  const dispatch = useAppDispatch();
   const posts = useAppSelector((state) => state.post);
   const isDark = dark;
   const color = isDark ? "white" : "black";
   const backgroundColor = !isDark ? "white" : "black";
   const height = Dimensions.get("screen").height;
   const width = Dimensions.get("screen").width;
-
-  
+  const userAuthValidate = useTokenValidQuery(null);
+  console.log(
+    "🚀 ~ file: Home.tsx:27 ~ Home ~ userAuthValidate:",
+    userAuthValidate
+  );
+  useEffect(() => {
+    if (userAuthValidate.data?.msg === false) {
+      dispatch(signOut());
+    }
+  }, [userAuthValidate.data?.msg]);
   const renderItem = ({ item }: { item: any }) => (
     <PostBuilder
       imageUri={item.imageUri}

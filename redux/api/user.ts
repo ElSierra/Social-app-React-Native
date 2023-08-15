@@ -28,13 +28,15 @@ export const userApi = createApi({
   }),
   tagTypes: ["user"],
   endpoints: (builder) => ({
-    getUser: builder.query<IUSerData, undefined>({
+    getUser: builder.query<IUSerData, null>({
       query: () => "/get-user",
       providesTags: ["user"],
+      extraOptions: { maxRetries: 2 },
     }),
-    tokenValid: builder.query<{msg:boolean}, undefined>({
+    tokenValid: builder.query<{msg:boolean}, null>({
         query: () => "/token-valid",
         providesTags: ["user"],
+        extraOptions: { maxRetries: 0 },
       }),
   }),
 });

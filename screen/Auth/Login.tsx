@@ -5,6 +5,8 @@ import {
   ScrollView,
   Animated,
   Dimensions,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import AnimatedScreen from "../../components/global/AnimatedScreen";
 import { Image } from "expo-image";
@@ -14,7 +16,14 @@ import Button from "../../components/global/Buttons/Button";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
 import { setRoute } from "../../redux/slice/routes";
 import useGetMode from "../../hooks/GetMode";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  LegacyRef,
+  RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { openToast } from "../../redux/slice/toast/toast";
 import { useLoginMutation } from "../../redux/api/auth";
 import { signOut } from "../../redux/slice/user";
@@ -43,7 +52,7 @@ export default function Login() {
   //
   const animUser = useRef(new Animated.Value(0));
   const animPass = useRef(new Animated.Value(0));
-
+  const scrollViewRef = useRef<ScrollView | null>(null);
   const shakeUserName = useCallback(() => {
     vibrateAnimation(animUser);
   }, []);
@@ -97,132 +106,160 @@ export default function Login() {
       { iterations: 2 }
     ).start();
   };
+
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+ useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        scrollViewRef.current?.scrollTo({x: 80, y: 0, animated: true});
+        setKeyboardVisible(true); // or some other action
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false); // or some other action
+      }
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
+
   return (
     <AnimatedScreen>
-      <View style={{ flex: 1 }}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            alignItems: "center",
-            paddingHorizontal: 25,
-            paddingBottom: 50,
-          }}
-        >
-          <View style={{ alignItems: "center" }}>
-            <View>
-              <Image
-                source={require("../../assets/images/auth.png")}
-                contentFit="contain"
-                style={{ height: 200, width }}
-              />
-            </View>
-            <Text style={{ color, fontFamily: "mulishBold", fontSize: 24 }}>
-              Welcome Back{name && `, ${name.split(" ")[0]}`}
-            </Text>
-            <Text style={{ color, fontFamily: "mulish", fontSize: 14 }}>
-              sign in to access your account
-            </Text>
-            <View style={{ gap: 30, marginTop: 70 }}>
-              <Animated.View
-                style={{ transform: [{ translateX: animUser.current }] }}
-              >
-                <Controller
-                  control={control}
-                  rules={{
-                    required: true,
-                  }}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <InputText
-                      style={{
-                        borderColor: errors.userName ? "red" : "",
-                        borderWidth: errors.userName ? 1 : 0,
-                      }}
-                      props={{
-                        value: value,
-                        onBlur,
-                        onChangeText: onChange,
-                      }}
-                    />
-                  )}
-                  name="userName"
-                />
-              </Animated.View>
-              <Animated.View
-                style={{ transform: [{ translateX: animPass.current }] }}
-              >
-                <Controller
-                  control={control}
-                  rules={{
-                    maxLength: 100,
-                    minLength: 3,
-                    required: true,
-                  }}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <InputPassword
-                      style={{
-                        borderColor: errors.password ? "red" : "",
-                        borderWidth: errors.password ? 1 : 0,
-                      }}
-                      props={{
-                        value,
-                        onChangeText: onChange,
-                        onBlur,
-                      }}
-                    />
-                  )}
-                  name="password"
-                />
-              </Animated.View>
-            </View>
-          </View>
-        </ScrollView>
-        <View
-          style={{
-            width: "100%",
-            justifyContent: "center",
-            alignItems: "center",
-            paddingBottom: 40,
-            paddingHorizontal: 25,
-          }}
-        >
-          <Button
-            loading={loginResponse.isLoading}
-            onPress={handleSubmit(onSubmit)}
-          >
-            <Text
-              style={{
-                fontFamily: "jakaraBold",
-                fontSize: 15,
-                color: buttonColor,
-              }}
-            >
-              Login
-            </Text>
-          </Button>
-          <View
-            style={{
-              marginTop: 20,
-              flexDirection: "row",
-              gap: 4,
-              justifyContent: "center",
+      <TouchableWithoutFeedback style={{ flex: 1 }} onPress={Keyboard.dismiss}>
+        <View style={{ flex: 1 }}>
+          <ScrollView
+            ref={scrollViewRef}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
               alignItems: "center",
+              paddingHorizontal: 25,
+              paddingBottom: 50,
             }}
           >
-            <Text style={{ color, includeFontPadding: false }}>
-              New Member?
-            </Text>
-            <Text
+            <View style={{ alignItems: "center" }}>
+              <View>
+                <Image
+                  source={require("../../assets/images/auth.png")}
+                  contentFit="contain"
+                  style={{ height: 200, width }}
+                />
+              </View>
+              <Text style={{ color, fontFamily: "mulishBold", fontSize: 24 }}>
+                Welcome Back{name && `, ${name.split(" ")[0]}`}
+              </Text>
+              <Text style={{ color, fontFamily: "mulish", fontSize: 14 }}>
+                sign in to access your account
+              </Text>
+              <View style={{ gap: 30, marginTop: 70 }}>
+                <Animated.View
+                  style={{ transform: [{ translateX: animUser.current }] }}
+                >
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: true,
+                    }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <InputText
+                        style={{
+                          borderColor: errors.userName ? "red" : "",
+                          borderWidth: errors.userName ? 1 : 0,
+                        }}
+                        props={{
+                          value: value,
+                          onBlur,
+                          onChangeText: onChange,
+                        }}
+                      />
+                    )}
+                    name="userName"
+                  />
+                </Animated.View>
+                <Animated.View
+                  style={{ transform: [{ translateX: animPass.current }] }}
+                >
+                  <Controller
+                    control={control}
+                    rules={{
+                      maxLength: 100,
+                      minLength: 3,
+                      required: true,
+                    }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <InputPassword
+                        style={{
+                          borderColor: errors.password ? "red" : "",
+                          borderWidth: errors.password ? 1 : 0,
+                        }}
+                        props={{
+                          value,
+                          onChangeText: onChange,
+                          onBlur,
+                        }}
+                      />
+                    )}
+                    name="password"
+                  />
+                </Animated.View>
+              </View>
+            </View>
+          </ScrollView>
+          <View
+            style={{
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+              paddingBottom: 40,
+              paddingHorizontal: 25,
+            }}
+          >
+            <Button
+              loading={loginResponse.isLoading}
+              onPress={handleSubmit(onSubmit)}
+            >
+              <Text
+                style={{
+                  fontFamily: "jakaraBold",
+                  fontSize: 15,
+                  color: buttonColor,
+                }}
+              >
+                Login
+              </Text>
+            </Button>
+            <View
               style={{
-                color,
-                fontFamily: "jakaraBold",
-                includeFontPadding: false,
+                marginTop: 20,
+                flexDirection: "row",
+                gap: 4,
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
-              Register Now
-            </Text>
+              <Text style={{ color, includeFontPadding: false }}>
+                New Member?
+              </Text>
+              <Text
+                style={{
+                  color,
+                  fontFamily: "jakaraBold",
+                  includeFontPadding: false,
+                }}
+              >
+                Register Now
+              </Text>
+            </View>
           </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     </AnimatedScreen>
   );
 }

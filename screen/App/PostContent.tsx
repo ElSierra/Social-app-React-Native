@@ -25,6 +25,8 @@ import VideoTextArea from "../../components/postContent/VideoTextArea";
 import RingAudio from "../../components/home/post/components/RingAudio";
 import Lottie from "lottie-react-native";
 import PickAudioButton from "../../components/postContent/PickAudioButton";
+import axios from "axios";
+import { useAppSelector } from "../../redux/hooks/hooks";
 const width = Dimensions.get("screen").width;
 export default function PostContent({ navigation }: PostContentProp) {
   const dark = useGetMode();
@@ -41,12 +43,8 @@ export default function PostContent({ navigation }: PostContentProp) {
   } | null>(null);
   const backgroundColor = dark ? "white" : "black";
   const animationRef = useRef<Lottie>(null);
-
+  const token = useAppSelector((state) => state.user?.token);
   function handleSetPhotoPost(mimeType: string, uri: string, size: number) {
-    console.log(
-      "🚀 ~ file: PostContent.tsx:46 ~ handleSetPhotoPost ~ uri:",
-      uri
-    );
     setPostPhoto({
       mimeType,
       uri,
@@ -54,6 +52,11 @@ export default function PostContent({ navigation }: PostContentProp) {
     });
     setPostAudio(null);
   }
+  const [fileToServer, setFTServer] = useState<null | string>(null);
+  console.log(
+    "🚀 ~ file: PostContent.tsx:56 ~ PostContent ~ fileToServer:",
+    fileToServer
+  );
 
   function handleSetAudioPost(mimeType: string, uri: string, size: number) {
     setPostAudio({
@@ -139,6 +142,38 @@ export default function PostContent({ navigation }: PostContentProp) {
       animationRef.current?.pause;
     };
   }, [postAudio]);
+
+  useEffect(() => {
+    if (postPhoto?.mimeType.startsWith("image/")) {
+      const blob: any = {
+        name: "photo.jpg",
+        type: postPhoto.mimeType,
+        uri: postPhoto.uri,
+      };
+      const formData = new FormData();
+
+      formData.append("photos", blob);
+      axios
+        .post(
+          `${process.env.EXPO_PUBLIC_API_URL}/api/services/upload-photos` as string,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((response) => {
+          // handle the response
+          setFTServer(response.data?.photo);
+        })
+        .catch((error) => {
+          // handle errors
+          console.log(error);
+        });
+    }
+  }, [postPhoto]);
   return (
     <AnimatedScreen>
       <View style={{ flex: 1, padding: 20, marginTop: 30 }}>
