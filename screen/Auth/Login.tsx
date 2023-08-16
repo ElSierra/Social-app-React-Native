@@ -109,16 +109,16 @@ export default function Login() {
 
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
- useEffect(() => {
+  useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
+      "keyboardDidShow",
       () => {
-        scrollViewRef.current?.scrollTo({x: 80, y: 0, animated: true});
+        scrollViewRef.current?.scrollTo({ x: 80, y: 0, animated: true });
         setKeyboardVisible(true); // or some other action
       }
     );
     const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
+      "keyboardDidHide",
       () => {
         setKeyboardVisible(false); // or some other action
       }
@@ -129,7 +129,6 @@ export default function Login() {
       keyboardDidShowListener.remove();
     };
   }, []);
-
 
   return (
     <AnimatedScreen>
@@ -223,7 +222,10 @@ export default function Login() {
           >
             <Button
               loading={loginResponse.isLoading}
-              onPress={handleSubmit(onSubmit)}
+              onPress={() => {
+                Keyboard.dismiss()
+                handleSubmit(onSubmit)();
+              }}
             >
               <Text
                 style={{

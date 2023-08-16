@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { UserState } from "../slice/user";
-import { IUSerData } from "../../types/api";
+import { IPost, IPostContent, IUSerData } from "../../types/api";
 import storage from "../storage";
 
 interface loginResult {
@@ -13,10 +13,10 @@ const JSONpersistedState = persistedState && JSON.parse(persistedState);
 const tokenFromState = JSON.parse(JSONpersistedState?.user)?.token;
 console.log("🚀 ~ file: auth.ts:9 ~ tokenFromState:", tokenFromState);
 
-export const authApi = createApi({
-  reducerPath: "authApi",
+export const servicesApi = createApi({
+  reducerPath: "servicesApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env.EXPO_PUBLIC_API_URL}/api/auth`,
+    baseUrl: `${process.env.EXPO_PUBLIC_API_URL}/api/services`,
     prepareHeaders: (headers) => {
       const token = tokenFromState;
       // If we have a token, set it in the header
@@ -26,26 +26,38 @@ export const authApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["user"],
+  tagTypes: ["post"],
   endpoints: (builder) => ({
-    login: builder.mutation<
-      loginResult,
-      {
-        userName: string;
-        password: string;
-      }
-    >({
+    uploadPhoto: builder.mutation<{ photo: string }, any>({
       query: (payload) => ({
-        url: "/login",
+        url: "/upload-photos",
+        method: "POST",
+        body: payload,
+        headers: {
+          "Content-type": "multipart/form-data",
+        },
+      }),
+      invalidatesTags: ["post"],
+    }),
+    postContent: builder.mutation<{msg:string},IPostContent >({
+      query: (payload) => ({
+        url: "/post",
         method: "POST",
         body: payload,
         headers: {
           "Content-type": "application/json; charset=UTF-8",
         },
       }),
-      invalidatesTags: ["user"],
+      invalidatesTags: ["post"],
     }),
+
+    getAllPosts: builder.query<{posts:IPost[]}, null>({
+      query: () => "/all-posts",
+      providesTags: ["post"],
+      extraOptions: { maxRetries: 2 },
+    }),
+    
   }),
 });
 
-export const { useLoginMutation } = authApi;
+export const { useUploadPhotoMutation,usePostContentMutation,useGetAllPostsQuery } = servicesApi;

@@ -146,6 +146,7 @@ export default function Main() {
             options={{
               title: "",
               animation: "fade",
+           
               presentation: "transparentModal",
               headerTransparent: true,
               headerShadowVisible: false,

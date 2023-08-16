@@ -6,6 +6,7 @@ import {
   PermissionsAndroid,
   FlatList,
   Dimensions,
+  Keyboard,
 } from "react-native";
 import AnimatedScreen from "../../components/global/AnimatedScreen";
 import { CameraIcon, CloseCircleIcon } from "../../components/icons";
@@ -18,7 +19,7 @@ import {
   CameraRoll,
   PhotoIdentifier,
 } from "@react-native-camera-roll/camera-roll";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { Image } from "expo-image";
 import PickImageButton from "../../components/postContent/PickImageButton";
 import VideoTextArea from "../../components/postContent/VideoTextArea";
@@ -26,10 +27,21 @@ import RingAudio from "../../components/home/post/components/RingAudio";
 import Lottie from "lottie-react-native";
 import PickAudioButton from "../../components/postContent/PickAudioButton";
 import axios from "axios";
-import { useAppSelector } from "../../redux/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
+import { ActivityIndicator } from "react-native-paper";
+import {
+  usePostContentMutation,
+  useUploadPhotoMutation,
+} from "../../redux/api/services";
+import { openToast } from "../../redux/slice/toast/toast";
+import {
+  closeLoadingModal,
+  openLoadingModal,
+} from "../../redux/slice/modal/loading";
 const width = Dimensions.get("screen").width;
 export default function PostContent({ navigation }: PostContentProp) {
   const dark = useGetMode();
+  const dispatch = useAppDispatch();
   const [photos, setPhotos] = useState<PhotoIdentifier[]>([]);
   const [postPhoto, setPostPhoto] = useState<{
     mimeType: string;
@@ -52,11 +64,10 @@ export default function PostContent({ navigation }: PostContentProp) {
     });
     setPostAudio(null);
   }
-  const [fileToServer, setFTServer] = useState<null | string>(null);
-  console.log(
-    "🚀 ~ file: PostContent.tsx:56 ~ PostContent ~ fileToServer:",
-    fileToServer
-  );
+  const [fileToServer, setFTServer] = useState<string | undefined>(undefined);
+  const [postText, setPostText] = useState<string | undefined>(undefined);
+  const [done, setDone] = useState(false);
+  console.log('',postPhoto);
 
   function handleSetAudioPost(mimeType: string, uri: string, size: number) {
     setPostAudio({
@@ -121,6 +132,7 @@ export default function PostContent({ navigation }: PostContentProp) {
 
       CameraRoll.getPhotos({
         first: 20,
+
         assetType: "Photos",
       })
         .then((r) => {
@@ -142,8 +154,10 @@ export default function PostContent({ navigation }: PostContentProp) {
       animationRef.current?.pause;
     };
   }, [postAudio]);
-
-  useEffect(() => {
+  const [photo] = useUploadPhotoMutation();
+  const [postContent] = usePostContentMutation();
+  useMemo(() => {
+    setDone(false);
     if (postPhoto?.mimeType.startsWith("image/")) {
       const blob: any = {
         name: "photo.jpg",
@@ -153,27 +167,69 @@ export default function PostContent({ navigation }: PostContentProp) {
       const formData = new FormData();
 
       formData.append("photos", blob);
-      axios
-        .post(
-          `${process.env.EXPO_PUBLIC_API_URL}/api/services/upload-photos` as string,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        .then((response) => {
-          // handle the response
-          setFTServer(response.data?.photo);
+      console.log(
+        "🚀 ~ file: PostContent.tsx:161 ~ useEffect ~ formData:",
+        formData
+      );
+      photo(formData)
+        .unwrap()
+        .then((r) => {
+          console.log("🚀 ~ file: PostContent.tsx:166 ~ photo ~ r:", r);
+          setDone(true);
+          setFTServer(r.photo);
         })
-        .catch((error) => {
-          // handle errors
-          console.log(error);
+        .catch((e) => {
+          setDone(true);
+          console.log(e);
+          dispatch(openToast({ text: "Photo didn't upload", type: "Failed" }));
         });
+      // axios
+      //   .post(
+      //     `${process.env.EXPO_PUBLIC_API_URL}/api/services/upload-photos` as string,
+      //     formData,
+      //     {
+      //       headers: {
+      //         "Content-Type": "multipart/form-data",
+      //         Authorization: `Bearer ${token}`,
+      //       },
+      //     }
+      //   )
+      //   .then((response) => {
+      //     setDone(true);
+      //     setFTServer(response.data?.photo);
+      //   })
+      //   .catch((error) => {
+      //     // handle errors
+      //     console.log(error);
+      //   });
     }
   }, [postPhoto]);
+
+  const handlePostText = (text: string) => {
+    setPostText(text);
+  };
+
+  const handlePostContent = () => {
+    Keyboard.dismiss();
+    if (postPhoto?.mimeType.startsWith("image/")) {
+      if (fileToServer) {
+        dispatch(openLoadingModal());
+        postContent({ photoUri: [fileToServer], postText })
+          .then((e) => {
+            dispatch(
+              openToast({ text: "Successfully posted", type: "Success" })
+            );
+            navigation.pop();
+            dispatch(closeLoadingModal());
+          })
+          .catch((e) => {
+            dispatch(openToast({ text: "Post failed ", type: "Failed" }));
+            dispatch(closeLoadingModal());
+          });
+      }
+    }
+  };
+
   return (
     <AnimatedScreen>
       <View style={{ flex: 1, padding: 20, marginTop: 30 }}>
@@ -203,9 +259,13 @@ export default function PostContent({ navigation }: PostContentProp) {
               <CloseCircleIcon size={30} color={backgroundColor} />
             </Pressable>
           </View>
-          <PostButton />
+          <PostButton
+            isDisabled={!done}
+            isLoading={!done}
+            onPress={handlePostContent}
+          />
         </View>
-        <TextArea />
+        <TextArea handlePostText={handlePostText} />
         <View
           style={{
             height: 200,
@@ -214,6 +274,58 @@ export default function PostContent({ navigation }: PostContentProp) {
             justifyContent: "center",
           }}
         >
+          {(postAudio || postPhoto) && (
+            <View
+              style={{
+                height: 30,
+                width: 30,
+                position: "absolute",
+                zIndex: 999,
+                top: 0,
+
+                right: 0,
+                padding: 20,
+                borderRadius: 9999,
+                overflow: "hidden",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Pressable
+                onPress={() => {
+                  setFTServer(undefined);
+                  setPostAudio(null);
+                  setPostPhoto(null);
+                }}
+                style={{
+                  flex: 1,
+                  borderRadius: 9999,
+                  backgroundColor: "red",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                android_ripple={{ color: "white", foreground: true }}
+              >
+                <CloseCircleIcon size={30} color={"red"} />
+              </Pressable>
+            </View>
+          )}
+          {!done && (
+            <View
+              style={{
+                position: "absolute",
+                zIndex: 999,
+                left: 0,
+                right: 0,
+                top: 0,
+                justifyContent: "center",
+                alignItems: "center",
+                bottom: 0,
+              }}
+            >
+              {<ActivityIndicator size={40} color="white" />}
+            </View>
+          )}
           {postPhoto && (
             <Image
               style={{ width: "100%", height: "100%", borderRadius: 20 }}

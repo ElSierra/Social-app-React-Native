@@ -10,12 +10,15 @@ import Animated, {
   FadeOutUp,
 } from "react-native-reanimated";
 
+
 export default function Discover() {
   const isFocused = useIsFocused();
   return (
     <View style={{ marginTop: 200 }}>
 
-      <AnimatedScreen></AnimatedScreen>
+      <AnimatedScreen>
+
+      </AnimatedScreen>
     </View>
   );
 }

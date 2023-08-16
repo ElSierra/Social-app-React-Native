@@ -21,6 +21,7 @@ import { PaperProvider, Portal } from "react-native-paper";
 import { useGetUserQuery, useTokenValidQuery } from "./redux/api/user";
 import { signOut } from "./redux/slice/user";
 import { openToast } from "./redux/slice/toast/toast";
+import { LoadingModal } from "./components/global/Modal/LoadingOverlay";
 
 const persistor = persistStore(store);
 SplashScreen.preventAutoHideAsync();
@@ -32,6 +33,7 @@ export default function App() {
       <PersistGate persistor={persistor}>
         <PaperProvider>
           <CustomToast />
+          <LoadingModal/>
           <Navigation />
         </PaperProvider>
       </PersistGate>

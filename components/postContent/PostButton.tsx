@@ -4,17 +4,26 @@ import useGetMode from "../../hooks/GetMode";
 import { useAppDispatch } from "../../redux/hooks/hooks";
 import { openToast } from "../../redux/slice/toast/toast";
 
-export default function PostButton() {
+export default function PostButton({
+  isLoading,
+  isDisabled,
+  onPress,
+}: {
+  isLoading: boolean;
+  isDisabled?: boolean;
+  onPress: () => void;
+}) {
   const dark = useGetMode();
   const dispatch = useAppDispatch();
 
   const backgroundColor = dark ? "white" : "black";
+  const backgroundColorLoad = dark ? "#FFFFFF38" : "#00000041";
   const rippleColor = !dark ? "white" : "black";
   const color = !dark ? "white" : "black";
   return (
     <View
       style={{
-        backgroundColor,
+        backgroundColor: !isLoading ? backgroundColor : backgroundColorLoad,
         height: 45,
         width: 80,
         borderRadius: 9999,
@@ -24,13 +33,15 @@ export default function PostButton() {
       }}
     >
       <Pressable
+        disabled={isLoading || isDisabled}
         onPress={() => {
-          dispatch(openToast({ text: "Successful Login", type: "Success" }));
+          onPress();
         }}
         android_ripple={{ color: rippleColor, foreground: true }}
         style={{
           height: 45,
           width: 80,
+
           borderRadius: 9999,
           justifyContent: "center",
           alignItems: "center",

@@ -9,6 +9,7 @@
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
   <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+  
   <uses-feature android:name="android.hardware.camera" android:required="false"/>
   <uses-feature android:name="android.hardware.camera.front" android:required="false"/>
   <queries>
@@ -32,6 +33,7 @@
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
+            <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
         <data android:scheme="me.isaacojo.qui"/>
         <data android:scheme="addpost"/>
       </intent-filter>

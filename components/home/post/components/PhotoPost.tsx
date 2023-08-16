@@ -24,7 +24,14 @@ export default function PhotoPost({
       snapToAlignment={"center"}
       decelerationRate={"fast"}
       renderItem={({ item }) => (
-        <View style={{ width: width * 0.8, height: 150 , borderRadius:15, overflow:"hidden"}}>
+        <View
+          style={{
+            width: width * 0.8,
+            height: 150,
+            borderRadius: 15,
+            overflow: "hidden",
+          }}
+        >
           <Pressable
             android_ripple={{ color: "#000000", foreground: true }}
             onPress={() => {
@@ -34,12 +41,11 @@ export default function PhotoPost({
               width: width * 0.8,
               height: 150,
               paddingHorizontal: 4,
-              borderRadius:15
+              borderRadius: 15,
             }}
           >
-            <Animated.Image
-              width={width * 0.9}
-              sharedTransitionStyle={transition}
+            <Image
+              placeholder={require("../../../../assets/images/placeholder.png")}
               style={{ flex: 1, width: "100%", borderRadius: 15 }}
               source={{ uri: item }}
             />

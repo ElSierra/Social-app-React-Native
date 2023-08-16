@@ -7,7 +7,7 @@ import routes, { Route } from "./slice/routes";
 import prefs, { Prefs } from "./slice/prefs";
 import bottomSheet, { BottomSheet } from "./slice/bottomSheet";
 import { reduxStorage } from "./storage";
-import post from "./slice/post";
+import post, { postState } from "./slice/post";
 import toast, { ToastState } from "./slice/toast/toast";
 import { authApi } from "./api/auth";
 
@@ -24,23 +24,26 @@ import {
 } from "redux-persist";
 import { postLists } from "../data/test";
 import { userApi } from "./api/user";
+import { servicesApi } from "./api/services";
+import loadingModal, { LoadingModal } from "./slice/modal/loading";
 
 const persistConfig: PersistConfig<
   CombinedState<{
     routes: Route;
     prefs: Prefs;
     bottomSheet: BottomSheet;
-    post: typeof postLists;
+    post: postState;
     toast: ToastState;
     user: UserState;
-
+    loadingModal: LoadingModal;
     [authApi.reducerPath]: any;
     [userApi.reducerPath]: any;
+    [servicesApi.reducerPath]: any;
   }>
 > = {
   key: "root",
   storage: reduxStorage,
-  blacklist: ["bottomSheet", "post", "toast",`${userApi.reducerPath}`, `${authApi.reducerPath}`],
+  whitelist: ["routes", "prefs", "user"],
 };
 
 const reducer = combineReducers({
@@ -49,9 +52,10 @@ const reducer = combineReducers({
   bottomSheet,
   post,
   toast,
-
+  loadingModal,
   [authApi.reducerPath]: authApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
+  [servicesApi.reducerPath]: servicesApi.reducer,
   user,
 });
 const persistedReducer = persistReducer(persistConfig, reducer);
@@ -63,7 +67,10 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(authApi.middleware).concat(userApi.middleware),
+    })
+      .concat(authApi.middleware)
+      .concat(userApi.middleware)
+      .concat(servicesApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
