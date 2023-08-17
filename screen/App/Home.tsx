@@ -24,6 +24,7 @@ import Animated, {
   FadeOutDown,
   ZoomIn,
 } from "react-native-reanimated";
+import EmptyLottie from "../../components/home/post/components/EmptyLottie";
 
 export default function Home() {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -81,7 +82,7 @@ export default function Home() {
   );
   const keyExtractor = (item: IPost) => item.id.toString();
   return (
-    <AnimatedScreen >
+    <AnimatedScreen>
       <Fab item={<AddIcon size={30} color={color} />} />
       {posts.loading ? (
         <View
@@ -89,6 +90,14 @@ export default function Home() {
         >
           <ActivityIndicator size={"large"} color={color} />
         </View>
+      ) : posts.data.length === 0 ? (
+        <Animated.View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center", }}
+          entering={FadeInDown.springify().duration(400)}
+          exiting={FadeOutDown.springify()}
+        >
+          <EmptyLottie />
+        </Animated.View>
       ) : (
         <Animated.View
           style={{ flex: 1 }}
