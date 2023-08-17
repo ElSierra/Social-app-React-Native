@@ -1,9 +1,9 @@
 import { View, Text, Pressable } from "react-native";
 import React from "react";
-import { CameraIcon } from "../icons";
+import { CameraIcon, VideoIcon } from "../icons";
 import ImagePicker from "react-native-image-crop-picker";
 import useGetMode from "../../hooks/GetMode";
-export default function PickImageButton({
+export default function PickVideoButton({
   handleSetPhotoPost,
 }: {
   handleSetPhotoPost: (mimeType: string, uri: string, size: number) => void;
@@ -27,25 +27,17 @@ export default function PickImageButton({
       <Pressable
         onPress={() => {
           ImagePicker.openPicker({
-            cropping: true,
-            cropperStatusBarColor: "#000000",
-            cropperToolbarColor: "#000000",
-            showCropGuidelines: false,
-            cropperTintColor: "red",
-            cropperActiveWidgetColor: "red",
-
-            cropperToolbarWidgetColor: "#FFFFFF",
-            cropperCancelText: "#FFFFFF",
-            cropperChooseColor: "#FFFFFF",
+          
+            mediaType: "video",
             compressImageQuality: 0.5,
           })
-            .then((image) => {
+            .then((video) => {
               console.log(
                 "🚀 ~ file: PostContent.tsx:173 ~ PostContent ~ image:",
-                image
+                video
               );
 
-              handleSetPhotoPost(image?.mime, image?.path, image?.size);
+              handleSetPhotoPost(video?.mime, video?.path, video?.size);
             })
             .catch((e) => {});
         }}
@@ -57,7 +49,7 @@ export default function PickImageButton({
           alignItems: "center",
         }}
       >
-        <CameraIcon color={backgroundColor} size={40} />
+        <VideoIcon color={backgroundColor} size={40} />
       </Pressable>
     </View>
   );

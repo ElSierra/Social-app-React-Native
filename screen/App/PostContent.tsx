@@ -38,6 +38,7 @@ import {
   closeLoadingModal,
   openLoadingModal,
 } from "../../redux/slice/modal/loading";
+import PickVideoButton from "../../components/postContent/PickVideoButton";
 const width = Dimensions.get("screen").width;
 export default function PostContent({ navigation }: PostContentProp) {
   const dark = useGetMode();
@@ -352,7 +353,9 @@ export default function PostContent({ navigation }: PostContentProp) {
             horizontal
             ListHeaderComponent={
               <View style={{ flexDirection: "row", gap: 10 }}>
+              
                 <PickImageButton handleSetPhotoPost={handleSetPhotoPost} />
+                <PickVideoButton handleSetPhotoPost={handleSetPhotoPost} />
                 <PickAudioButton handleSetAudioPost={handleSetAudioPost} />
               </View>
             }
