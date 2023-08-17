@@ -39,7 +39,7 @@ export const servicesApi = createApi({
       }),
       invalidatesTags: ["post"],
     }),
-    postContent: builder.mutation<{msg:string},IPostContent >({
+    postContent: builder.mutation<{ msg: string }, IPostContent>({
       query: (payload) => ({
         url: "/post",
         method: "POST",
@@ -51,13 +51,17 @@ export const servicesApi = createApi({
       invalidatesTags: ["post"],
     }),
 
-    getAllPosts: builder.query<{posts:IPost[]}, null>({
+    getAllPosts: builder.query<{ posts: IPost[] }, null>({
       query: () => "/all-posts",
       providesTags: ["post"],
       extraOptions: { maxRetries: 2 },
     }),
-    
   }),
 });
 
-export const { useUploadPhotoMutation,usePostContentMutation,useGetAllPostsQuery } = servicesApi;
+export const {
+  useUploadPhotoMutation,
+  usePostContentMutation,
+  useGetAllPostsQuery,
+  useLazyGetAllPostsQuery,
+} = servicesApi;

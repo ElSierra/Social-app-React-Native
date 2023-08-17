@@ -1,5 +1,5 @@
-import { View, Dimensions } from "react-native";
-import React, { useEffect } from "react";
+import { View, Dimensions, RefreshControl } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
 import Fab from "../../components/home/post/components/Fab";
 import { AddIcon } from "../../components/icons";
 import PostBuilder from "../../components/home/post/PostBuilder";
@@ -13,7 +13,17 @@ import { useGetUserQuery, useTokenValidQuery } from "../../redux/api/user";
 import { signOut } from "../../redux/slice/user";
 import { ActivityIndicator } from "react-native-paper";
 import { IPost } from "../../types/api";
-import { useGetAllPostsQuery } from "../../redux/api/services";
+import {
+  useGetAllPostsQuery,
+  useLazyGetAllPostsQuery,
+} from "../../redux/api/services";
+import { openToast } from "../../redux/slice/toast/toast";
+import Animated, {
+  FadeInDown,
+  FadeInUp,
+  FadeOutDown,
+  ZoomIn,
+} from "react-native-reanimated";
 
 export default function Home() {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -26,8 +36,26 @@ export default function Home() {
   const backgroundColor = !isDark ? "white" : "black";
   const height = Dimensions.get("screen").height;
   const width = Dimensions.get("screen").width;
+
   const userAuthValidate = useTokenValidQuery(null);
   useGetAllPostsQuery(null);
+  const [getLazyPost, postRes] = useLazyGetAllPostsQuery();
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true),
+      getLazyPost(null)
+        .unwrap()
+        .then((r) => {
+          setRefreshing(false);
+        })
+        .catch((e) => {
+          setRefreshing(false);
+          dispatch(
+            openToast({ text: "couldn't get recent posts", type: "Failed" })
+          );
+        });
+  }, []);
+
   console.log(
     "🚀 ~ file: Home.tsx:27 ~ Home ~ userAuthValidate:",
     userAuthValidate
@@ -53,25 +81,38 @@ export default function Home() {
   );
   const keyExtractor = (item: IPost) => item.id.toString();
   return (
-    <View style={{ backgroundColor, flex: 1 }}>
+    <AnimatedScreen >
       <Fab item={<AddIcon size={30} color={color} />} />
       {posts.loading ? (
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <ActivityIndicator size={"large"}/>
+          <ActivityIndicator size={"large"} color={color} />
         </View>
       ) : (
-        <FlashList
-          data={posts.data}
-          decelerationRate={0.991}
-          estimatedItemSize={300}
-          keyExtractor={keyExtractor}
-          estimatedListSize={{ width, height }}
-          renderItem={renderItem}
-          contentContainerStyle={{ paddingTop: 100, paddingBottom: 100 }}
-        />
+        <Animated.View
+          style={{ flex: 1 }}
+          entering={FadeInDown.springify().duration(400)}
+          exiting={FadeOutDown.springify()}
+        >
+          <FlashList
+            data={posts.data}
+            decelerationRate={0.991}
+            estimatedItemSize={300}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                colors={["red", "blue"]}
+              />
+            }
+            keyExtractor={keyExtractor}
+            estimatedListSize={{ width, height }}
+            renderItem={renderItem}
+            contentContainerStyle={{ paddingTop: 100, paddingBottom: 100 }}
+          />
+        </Animated.View>
       )}
-    </View>
+    </AnimatedScreen>
   );
 }

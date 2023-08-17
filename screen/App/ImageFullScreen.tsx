@@ -1,5 +1,6 @@
 import { Pressable, View, Text } from "react-native";
 import { ImageFullScreenProp } from "../../types/navigation";
+import { Image } from "expo-image";
 
 import Animated, {
   Easing,
@@ -14,6 +15,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useEffect, useLayoutEffect } from "react";
 import axios from "axios";
 import RNFetchBlob from "rn-fetch-blob";
+import { BlurView } from "expo-blur";
 
 //Hero Transition
 const dirs = RNFetchBlob.fs.dirs;
@@ -78,18 +80,22 @@ export default function ImageFullScreen({
             alignItems: "center",
             justifyContent: "center",
             width: "100%",
-            height: 300,
+            height: "100%",
           }}
         >
-          <Animated.Image
+          <Image
             source={{ uri: photoUri }}
+            contentFit="contain"
             style={{ width: "100%", height: "100%" }}
           />
         </View>
       </Animated.View>
       <View
         style={{
-          backgroundColor: "#CDC7C7",
+          elevation:4,
+         borderColor:"white",
+        backgroundColor:"#CFF8FF3C",
+         borderTopWidth:0.5,
           position: "absolute",
           height: 50,
           bottom: 0,
@@ -99,11 +105,12 @@ export default function ImageFullScreen({
           width: "100%",
         }}
       >
+        <BlurView intensity={40} style={{position:"absolute", width:"100%",height:50}}/>
         <Pressable
           android_ripple={{ color: "black" }}
           onPress={handleDownload}
           style={{
-            backgroundColor: "#CDC7C7",
+            
             position: "absolute",
             height: 50,
             bottom: 0,
@@ -122,10 +129,10 @@ export default function ImageFullScreen({
           >
             <MaterialCommunityIcons
               name="download-box"
-              size={30}
-              color="black"
+              size={20}
+              color="white"
             />
-            <Text style={{ fontFamily: "mulishBold" }}>Download</Text>
+            <Text style={{ fontFamily: "mulishBold" ,color:"white"}}>Download</Text>
           </View>
         </Pressable>
       </View>

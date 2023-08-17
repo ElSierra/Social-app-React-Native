@@ -45,6 +45,7 @@ export default function PhotoPost({
             }}
           >
             <Image
+              placeholderContentFit="cover"
               placeholder={require("../../../../assets/images/placeholder.png")}
               style={{ flex: 1, width: "100%", borderRadius: 15 }}
               source={{ uri: item }}
