@@ -1,10 +1,8 @@
 import { View, Text, FlatList, Pressable, Button } from "react-native";
 import { Image } from "expo-image";
-import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { HomeNavigationProp } from "../../../../types/navigation";
-import Animated from "react-native-reanimated";
-import AnimatedScreen from "../../../global/AnimatedScreen";
-import { transition } from "../../../../screen/App/ImageFullScreen";
+
 export default function PhotoPost({
   photoUri,
   width,
@@ -48,6 +46,7 @@ export default function PhotoPost({
               placeholderContentFit="cover"
               placeholder={require("../../../../assets/images/placeholder.png")}
               style={{ flex: 1, width: "100%", borderRadius: 15 }}
+              contentFit="cover"
               source={{ uri: item }}
             />
           </Pressable>

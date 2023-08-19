@@ -10,6 +10,7 @@ export default function PickVideoButton({
 }) {
   const dark = useGetMode();
   const backgroundColor = dark ? "white" : "black";
+  const backgroundColorView = !dark ? "white" : "black";
   const rippleColor = !dark ? "#ABABAB" : "#55555500";
   return (
     <View
@@ -18,6 +19,7 @@ export default function PickVideoButton({
         borderWidth: 1,
         width: 100,
         borderRadius: 10,
+        backgroundColor: backgroundColorView,
         overflow: "hidden",
         height: 100,
         justifyContent: "center",

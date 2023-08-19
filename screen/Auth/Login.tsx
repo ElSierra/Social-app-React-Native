@@ -7,6 +7,7 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
   Keyboard,
+  Vibration,
 } from "react-native";
 import AnimatedScreen from "../../components/global/AnimatedScreen";
 import { Image } from "expo-image";
@@ -38,7 +39,7 @@ export default function Login() {
   const buttonColor = !isDark ? "white" : "black";
   const dispatch = useAppDispatch();
   const name = useAppSelector((state) => state.user.data?.name);
-  const [loginData, setLoginData] = useState({ userName: "", password: "" });
+  
   const {
     control,
     handleSubmit,
@@ -65,12 +66,13 @@ export default function Login() {
       .unwrap()
       .then((e) => {
         console.log(e);
+        Vibration.vibrate(5);
         dispatch(openToast({ text: "Successful Login", type: "Success" }));
       })
       .catch((e) => {
         console.log(e);
-
-        dispatch(openToast({ text: e.data?.msg, type: "Failed" }));
+        Vibration.vibrate(5);
+        dispatch(openToast({ text: "Network Error", type: "Failed" }));
       });
   };
   useEffect(() => {

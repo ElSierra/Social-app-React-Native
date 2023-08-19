@@ -1,11 +1,17 @@
-import { View, Text, TextInput, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Dimensions,
+  TextInputProps,
+} from "react-native";
 import React, { useState } from "react";
 import { Image } from "expo-image";
 import InputText from "../../screen/Auth/components/InputText";
 import useGetMode from "../../hooks/GetMode";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 const heightFromScreen = Dimensions.get("screen").height;
-export default function VideoTextArea() {
+export default function VideoTextArea(props: TextInputProps) {
   const dark = useGetMode();
   const color = dark ? "white" : "black";
   const [height, setHeight] = useState(50);
@@ -13,7 +19,7 @@ export default function VideoTextArea() {
     <Animated.View
       entering={FadeIn.duration(400)}
       exiting={FadeOut.duration(400)}
-      style={{padding:20,minHeight: heightFromScreen / 20 }}
+      style={{ padding: 20, minHeight: heightFromScreen / 20 }}
     >
       <TextInput
         multiline
@@ -30,6 +36,7 @@ export default function VideoTextArea() {
           alignItems: "flex-start",
         }}
         placeholder="Video Title"
+        {...props}
       />
     </Animated.View>
   );

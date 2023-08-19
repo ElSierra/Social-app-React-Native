@@ -10,6 +10,7 @@ export default function PickImageButton({
 }) {
   const dark = useGetMode();
   const backgroundColor = dark ? "white" : "black";
+  const backgroundColorView = !dark ? "white" : "black";
   const rippleColor = !dark ? "#ABABAB" : "#55555500";
   return (
     <View
@@ -17,6 +18,7 @@ export default function PickImageButton({
         borderColor: "#B4B4B488",
         borderWidth: 1,
         width: 100,
+        backgroundColor: backgroundColorView,
         borderRadius: 10,
         overflow: "hidden",
         height: 100,

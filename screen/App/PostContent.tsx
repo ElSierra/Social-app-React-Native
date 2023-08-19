@@ -31,7 +31,9 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
 import { ActivityIndicator } from "react-native-paper";
 import {
   usePostContentMutation,
+  useUploadAudioMutation,
   useUploadPhotoMutation,
+  useUploadVideoMutation,
 } from "../../redux/api/services";
 import { openToast } from "../../redux/slice/toast/toast";
 import {
@@ -39,6 +41,7 @@ import {
   openLoadingModal,
 } from "../../redux/slice/modal/loading";
 import PickVideoButton from "../../components/postContent/PickVideoButton";
+import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated";
 const width = Dimensions.get("screen").width;
 export default function PostContent({ navigation }: PostContentProp) {
   const dark = useGetMode();
@@ -52,11 +55,12 @@ export default function PostContent({ navigation }: PostContentProp) {
   const [postAudio, setPostAudio] = useState<{
     mimeType: string;
     uri: string;
+    name: string;
     size: number;
   } | null>(null);
   const backgroundColor = dark ? "white" : "black";
   const animationRef = useRef<Lottie>(null);
-  const token = useAppSelector((state) => state.user?.token);
+
   function handleSetPhotoPost(mimeType: string, uri: string, size: number) {
     setPostPhoto({
       mimeType,
@@ -68,13 +72,21 @@ export default function PostContent({ navigation }: PostContentProp) {
   const [fileToServer, setFTServer] = useState<string | undefined>(undefined);
   const [postText, setPostText] = useState<string | undefined>(undefined);
   const [done, setDone] = useState(false);
-  console.log('',postPhoto);
+  const [videoTitle, setVideoTitle] = useState<string | undefined>(undefined);
+  console.log("", postPhoto);
 
-  function handleSetAudioPost(mimeType: string, uri: string, size: number) {
+  function handleSetAudioPost(
+    mimeType: string,
+    uri: string,
+    size: number,
+    name: string
+  ) {
+    console.log(`passed to ${mimeType} ${name}`);
     setPostAudio({
       mimeType,
       uri,
       size,
+      name,
     });
     setPostPhoto(null);
   }
@@ -155,24 +167,18 @@ export default function PostContent({ navigation }: PostContentProp) {
       animationRef.current?.pause;
     };
   }, [postAudio]);
+  console.log(
+    "🚀 ~ file: PostContent.tsx:159 ~ PostContent ~ postAudio:",
+    postAudio
+  );
   const [photo] = useUploadPhotoMutation();
+  const [audio] = useUploadAudioMutation();
+  const [video] = useUploadVideoMutation();
   const [postContent] = usePostContentMutation();
   useMemo(() => {
     setDone(false);
     if (postPhoto?.mimeType.startsWith("image/")) {
-      const blob: any = {
-        name: "photo.jpg",
-        type: postPhoto.mimeType,
-        uri: postPhoto.uri,
-      };
-      const formData = new FormData();
-
-      formData.append("photos", blob);
-      console.log(
-        "🚀 ~ file: PostContent.tsx:161 ~ useEffect ~ formData:",
-        formData
-      );
-      photo(formData)
+      photo(postPhoto)
         .unwrap()
         .then((r) => {
           console.log("🚀 ~ file: PostContent.tsx:166 ~ photo ~ r:", r);
@@ -184,27 +190,37 @@ export default function PostContent({ navigation }: PostContentProp) {
           console.log(e);
           dispatch(openToast({ text: "Photo didn't upload", type: "Failed" }));
         });
-      // axios
-      //   .post(
-      //     `${process.env.EXPO_PUBLIC_API_URL}/api/services/upload-photos` as string,
-      //     formData,
-      //     {
-      //       headers: {
-      //         "Content-Type": "multipart/form-data",
-      //         Authorization: `Bearer ${token}`,
-      //       },
-      //     }
-      //   )
-      //   .then((response) => {
-      //     setDone(true);
-      //     setFTServer(response.data?.photo);
-      //   })
-      //   .catch((error) => {
-      //     // handle errors
-      //     console.log(error);
-      //   });
     }
-  }, [postPhoto]);
+    if (postAudio) {
+      console.log("audio here");
+      audio(postAudio)
+        .unwrap()
+        .then((r) => {
+          console.log("🚀 ~ file: PostContent.tsx:166 ~ photo ~ r:", r);
+          setDone(true);
+          setFTServer(r.audio);
+        })
+        .catch((e) => {
+          setDone(true);
+          console.log(e);
+          dispatch(openToast({ text: "Audio didn't upload", type: "Failed" }));
+        });
+    }
+    if (postPhoto?.mimeType.startsWith("video/")) {
+      video(postPhoto)
+        .unwrap()
+        .then((r) => {
+          console.log("🚀 ~ file: PostContent.tsx:166 ~ photo ~ r:", r);
+          setDone(true);
+          setFTServer(r.video);
+        })
+        .catch((e) => {
+          setDone(true);
+          console.log(e);
+          dispatch(openToast({ text: "video didn't upload", type: "Failed" }));
+        });
+    }
+  }, [postPhoto, postAudio]);
 
   const handlePostText = (text: string) => {
     setPostText(text);
@@ -227,7 +243,70 @@ export default function PostContent({ navigation }: PostContentProp) {
             dispatch(openToast({ text: "Post failed ", type: "Failed" }));
             dispatch(closeLoadingModal());
           });
+      } else {
+        dispatch(
+          openToast({
+            text: "Image didnot upload due to server error",
+            type: "Failed",
+          })
+        );
       }
+    }
+
+    if (postAudio) {
+      if (fileToServer) {
+        dispatch(openLoadingModal());
+        postContent({ audioUri: fileToServer, postText, audioTitle: "Audio" })
+          .then((e) => {
+            dispatch(
+              openToast({ text: "Successfully posted", type: "Success" })
+            );
+            navigation.pop();
+            dispatch(closeLoadingModal());
+          })
+          .catch((e) => {
+            console.log(
+              "🚀 ~ file: PostContent.tsx:250 ~ handlePostContent ~ e:",
+              e
+            );
+            dispatch(openToast({ text: "Post failed ", type: "Failed" }));
+            dispatch(closeLoadingModal());
+          });
+      } else {
+        dispatch(
+          openToast({
+            text: "Audio didnot upload due to server error",
+            type: "Failed",
+          })
+        );
+      }
+    }
+    if (postPhoto?.mimeType.startsWith("video/")) {
+      if (fileToServer) {
+        dispatch(openLoadingModal());
+        postContent({ videoUri: fileToServer, videoTitle:videoTitle||"🎥", postText })
+          .then((e) => {
+            dispatch(
+              openToast({ text: "Successfully posted", type: "Success" })
+            );
+            navigation.pop();
+            dispatch(closeLoadingModal());
+          })
+          .catch((e) => {
+            dispatch(openToast({ text: "Post failed ", type: "Failed" }));
+            dispatch(closeLoadingModal());
+          });
+      } else {
+        dispatch(
+          openToast({
+            text: "Video did not upload due to server error",
+            type: "Failed",
+          })
+        );
+      }
+    }
+    if(postText && !postAudio && !postPhoto){
+      
     }
   };
 
@@ -267,6 +346,35 @@ export default function PostContent({ navigation }: PostContentProp) {
           />
         </View>
         <TextArea handlePostText={handlePostText} />
+        {(postAudio || postPhoto) && (
+          <View
+            style={{
+              padding: 20,
+              borderRadius: 9999,
+              overflow: "hidden",
+              justifyContent: "center",
+              alignItems: "flex-end",
+            }}
+          >
+            <Pressable
+              onPress={() => {
+                setFTServer(undefined);
+                setPostAudio(null);
+                setPostPhoto(null);
+              }}
+              style={{
+                flex: 1,
+                borderRadius: 9999,
+                backgroundColor: "red",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              android_ripple={{ color: "white", foreground: true }}
+            >
+              <CloseCircleIcon size={30} color={"red"} />
+            </Pressable>
+          </View>
+        )}
         <View
           style={{
             height: 200,
@@ -275,47 +383,12 @@ export default function PostContent({ navigation }: PostContentProp) {
             justifyContent: "center",
           }}
         >
-          {(postAudio || postPhoto) && (
+          {!done ? (
             <View
-              style={{
-                height: 30,
-                width: 30,
-                position: "absolute",
-                zIndex: 999,
-                top: 0,
-
-                right: 0,
-                padding: 20,
-                borderRadius: 9999,
-                overflow: "hidden",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Pressable
-                onPress={() => {
-                  setFTServer(undefined);
-                  setPostAudio(null);
-                  setPostPhoto(null);
-                }}
-                style={{
-                  flex: 1,
-                  borderRadius: 9999,
-                  backgroundColor: "red",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-                android_ripple={{ color: "white", foreground: true }}
-              >
-                <CloseCircleIcon size={30} color={"red"} />
-              </Pressable>
-            </View>
-          )}
-          {!done && (
-            <View
+              key={"portal"}
               style={{
                 position: "absolute",
-                zIndex: 999,
+                zIndex: 9,
                 left: 0,
                 right: 0,
                 top: 0,
@@ -326,71 +399,83 @@ export default function PostContent({ navigation }: PostContentProp) {
             >
               {<ActivityIndicator size={40} color="white" />}
             </View>
+          ) : (
+            <></>
           )}
           {postPhoto && (
             <Image
-              style={{ width: "100%", height: "100%", borderRadius: 20 }}
+              style={{ width: "100%", height: "100%", borderRadius: 20,paddingHorizontal:20 }}
               source={{ uri: postPhoto?.uri }}
-              contentFit="cover"
+              contentFit="contain"
               transition={1000}
             />
           )}
           {postAudio && <RingAudio animationRef={animationRef} />}
         </View>
 
-        {postPhoto?.mimeType === "video/mp4" && <VideoTextArea />}
-        <View
-          style={{
-            position: "absolute",
-            bottom: 0,
-            flexDirection: "row",
-            gap: 10,
-            width,
-            marginBottom: 20,
-          }}
-        >
-          <FlatList
-            horizontal
-            ListHeaderComponent={
-              <View style={{ flexDirection: "row", gap: 10 }}>
-              
-                <PickImageButton handleSetPhotoPost={handleSetPhotoPost} />
-                <PickVideoButton handleSetPhotoPost={handleSetPhotoPost} />
-                <PickAudioButton handleSetAudioPost={handleSetAudioPost} />
-              </View>
-            }
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ gap: 10, paddingLeft: 10 }}
-            data={photos}
-            renderItem={({ item }) => (
-              <View
-                style={{
-                  height: 100,
-                  width: 100,
-                  borderRadius: 10,
-                  overflow: "hidden",
-                }}
-              >
-                <Pressable
-                  android_ripple={{ color: "#FFFFFF", foreground: true }}
-                  style={{ borderRadius: 10 }}
-                  onPress={() => {
-                    setPostPhoto({
-                      uri: item?.node?.image?.uri,
-                      mimeType: item?.node?.type,
-                      size: item?.node?.image?.fileSize || 0,
-                    });
+        {postPhoto?.mimeType === "video/mp4" && (
+          <VideoTextArea
+            value={videoTitle}
+            onChangeText={(text) => {
+              setVideoTitle(text);
+            }}
+          />
+        )}
+        {!postPhoto && !postAudio && (
+          <Animated.View
+            entering={FadeInDown.springify()}
+            exiting={FadeOutDown.springify()}
+            style={{
+              position: "absolute",
+              bottom: 0,
+              flexDirection: "row",
+              gap: 10,
+              width,
+              marginBottom: 20,
+            }}
+          >
+            <FlatList
+              horizontal
+              ListHeaderComponent={
+                <View style={{ flexDirection: "row", gap: 10 }}>
+                  <PickImageButton handleSetPhotoPost={handleSetPhotoPost} />
+                  <PickVideoButton handleSetPhotoPost={handleSetPhotoPost} />
+                  <PickAudioButton handleSetAudioPost={handleSetAudioPost} />
+                </View>
+              }
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ gap: 10, paddingLeft: 10 }}
+              data={photos}
+              renderItem={({ item }) => (
+                <View
+                  style={{
+                    height: 100,
+                    width: 100,
+                    borderRadius: 10,
+                    overflow: "hidden",
                   }}
                 >
-                  <Image
-                    style={{ height: 100, width: 100, borderRadius: 10 }}
-                    source={{ uri: item?.node?.image?.uri }}
-                  />
-                </Pressable>
-              </View>
-            )}
-          />
-        </View>
+                  <Pressable
+                    android_ripple={{ color: "#FFFFFF", foreground: true }}
+                    style={{ borderRadius: 10 }}
+                    onPress={() => {
+                      setPostPhoto({
+                        uri: item?.node?.image?.uri,
+                        mimeType: item?.node?.type,
+                        size: item?.node?.image?.fileSize || 0,
+                      });
+                    }}
+                  >
+                    <Image
+                      style={{ height: 100, width: 100, borderRadius: 10 }}
+                      source={{ uri: item?.node?.image?.uri }}
+                    />
+                  </Pressable>
+                </View>
+              )}
+            />
+          </Animated.View>
+        )}
       </View>
     </AnimatedScreen>
   );

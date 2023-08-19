@@ -6,10 +6,16 @@ import useGetMode from "../../hooks/GetMode";
 export default function PickAudioButton({
   handleSetAudioPost,
 }: {
-  handleSetAudioPost: (mimeType: string, uri: string, size: number) => void;
+  handleSetAudioPost: (
+    mimeType: string,
+    uri: string,
+    size: number,
+    name: string
+  ) => void;
 }) {
   const dark = useGetMode();
   const backgroundColor = dark ? "white" : "black";
+  const backgroundColorView = !dark ? "white" : "black";
   const rippleColor = !dark ? "#ABABAB" : "#55555500";
   return (
     <View
@@ -19,6 +25,7 @@ export default function PickAudioButton({
         width: 100,
         borderRadius: 10,
         overflow: "hidden",
+        backgroundColor: backgroundColorView,
         height: 100,
         justifyContent: "center",
         alignItems: "center",
@@ -27,8 +34,14 @@ export default function PickAudioButton({
       <Pressable
         onPress={() => {
           DocumentPicker.pick({ type: "audio/mpeg" })
-            .then((e: any) => {
-              handleSetAudioPost(e.uri, e.type, e.size);
+            .then((e) => {
+              console.log("🚀 ~ file: PickAudioButton.tsx:33 ~ .then ~ e:", e);
+              handleSetAudioPost(
+                e[0]?.type as string,
+                e[0].uri,
+                e[0]?.size || 0,
+                e[0]?.name || "any.mp3"
+              );
             })
             .catch((e) => {});
         }}

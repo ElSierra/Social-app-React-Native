@@ -9,8 +9,9 @@ interface loginResult {
   data: IUSerData;
 }
 const persistedState = storage.getString("persist:root");
-const JSONpersistedState = persistedState && JSON.parse(persistedState);
-const tokenFromState = JSON.parse(JSONpersistedState?.user)?.token;
+console.log("🚀 ~ file: services.ts:12 ~ persistedState:", persistedState)
+const JSONpersistedState = persistedState? JSON.parse(persistedState): null
+const tokenFromState = JSONpersistedState?.user ?(JSON.parse(JSONpersistedState?.user)?.token):null
 console.log("🚀 ~ file: auth.ts:9 ~ tokenFromState:", tokenFromState);
 
 export const userApi = createApi({
