@@ -17,8 +17,8 @@ export default function Fab({ item }: { item: JSX.Element }) {
         right: 10,
         alignItems: "center",
         justifyContent: "center",
-        width: 50,
-        height: 50,
+        width: 65,
+        height: 65,
         overflow: "hidden",
         zIndex: 999,
       }}

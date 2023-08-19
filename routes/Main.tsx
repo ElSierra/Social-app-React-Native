@@ -7,6 +7,7 @@ import {
 import {
   BottomProp,
   BottomRootStackParamList,
+  DiscoverProp,
   DrawerRootStackParamList,
   RootStackParamList,
 } from "../types/navigation";
@@ -41,6 +42,9 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { BottomSheetContainer } from "../components/global/BottomSheetContainer";
 import PostContent from "../screen/App/PostContent";
 import CustomToast from "../components/global/Toast";
+import InputText from "../screen/Auth/components/InputText";
+import SearchBar from "../components/discover/SearchBar";
+
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<BottomRootStackParamList>();
@@ -58,6 +62,7 @@ function DrawerNavigator() {
       drawerContent={CustomDrawerContent}
       screenOptions={{
         drawerStyle: { backgroundColor: "transparent", width: width * 0.85 },
+        sceneContainerStyle: { backgroundColor },
       }}
     >
       <Drawer.Screen
@@ -146,7 +151,7 @@ export default function Main() {
             options={{
               title: "",
               animation: "fade",
-           
+
               presentation: "transparentModal",
               headerTransparent: true,
               headerShadowVisible: false,
@@ -285,8 +290,21 @@ export function BottomTabNavigator() {
       <Tab.Screen
         name="Discover"
         component={Discover}
-        options={{
-          title: "Discover",
+        options={({ navigation, route }: DiscoverProp) => {
+          return {
+            title: "Discover",
+            headerTitle: () => {
+              return <SearchBar />;
+            },
+            headerLeft: () => (
+              <ProfileButton
+                color={color}
+                style={{ paddingLeft: 20 }}
+                size={40}
+                onPress={() => {navigation.navigate("BottomHome")}}
+              />
+            ),
+          };
         }}
       />
 

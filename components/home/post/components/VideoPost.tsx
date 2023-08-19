@@ -122,6 +122,9 @@ function VideoPost({
         >
           <Pressable
             onPress={handlePlay}
+            onLongPress={()=>{
+              console.log('long')
+            }}
             style={{
               borderRadius: 10,
               justifyContent: "center",

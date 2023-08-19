@@ -44,3 +44,8 @@ export type BottomProp = BottomTabScreenProps<
   BottomRootStackParamList,
   "BottomHome"
 >;
+
+export type DiscoverProp = BottomTabScreenProps<
+  BottomRootStackParamList,
+  "Discover"
+>;

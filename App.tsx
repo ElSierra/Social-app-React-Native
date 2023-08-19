@@ -1,11 +1,17 @@
 import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
-import { Dimensions, StyleSheet, View } from "react-native";
+import {
+
+  Dimensions,
+  ImageURISource,
+  StyleSheet,
+  View,
+} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import Main, { BottomTabNavigator } from "./routes/Main";
-import { useCallback, useEffect, useState } from "react";
+import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 
@@ -22,6 +28,8 @@ import { useGetUserQuery, useTokenValidQuery } from "./redux/api/user";
 import { signOut } from "./redux/slice/user";
 import { openToast } from "./redux/slice/toast/toast";
 import { LoadingModal } from "./components/global/Modal/LoadingOverlay";
+import Constants from "expo-constants";
+import Animated, { BounceInDown, BounceOut, BounceOutDown, FadeIn, FadeInDown, FadeInUp, FadeOut } from "react-native-reanimated";
 
 const persistor = persistStore(store);
 SplashScreen.preventAutoHideAsync();
@@ -33,11 +41,69 @@ export default function App() {
       <PersistGate persistor={persistor}>
         <PaperProvider>
           <CustomToast />
-          <LoadingModal/>
+          <LoadingModal />
           <Navigation />
         </PaperProvider>
       </PersistGate>
     </Provider>
+  );
+}
+function AnimatedSplashScreen({
+  children,
+  image,
+}: {
+  children: ReactNode;
+  image: ImageURISource;
+}) {
+ 
+  const [isAppReady, setAppReady] = useState(false);
+
+
+
+
+  const onImageLoaded = useCallback(async () => {
+    try {
+      await SplashScreen.hideAsync();
+      // Load stuff
+      await Promise.all([]);
+    } catch (e) {
+      // handle errors
+    } finally {
+      setAppReady(true);
+    }
+  }, []);
+
+  return (
+    <View style={{ flex: 1 }}>
+      {isAppReady && children}
+      {!isAppReady && (
+        <Animated.View
+        exiting={FadeOut.duration(400)}
+          pointerEvents="none"
+          style={[
+            StyleSheet.absoluteFill,
+            {
+              backgroundColor: "black",
+              
+            },
+          ]}
+        >
+          <Animated.Image
+            style={{
+              width: "100%",
+              height: "100%",
+              resizeMode: "contain",
+              
+            }}
+         
+            exiting={BounceOutDown.duration(400)}
+            source={image}
+            onLoadEnd={onImageLoaded}
+            fadeDuration={0}
+          />
+        </Animated.View>
+      )}
+    </View>
   );
 }
 
@@ -94,10 +160,16 @@ const Navigation = () => {
   }
 
   return (
-    <NavigationContainer onReady={onLayoutRootView}>
-      <StatusBar animated={true} style={style} backgroundColor="transparent" />
-      {renderRoute()}
-    </NavigationContainer>
+    <AnimatedSplashScreen image={require("./assets/splash.png")}>
+      <NavigationContainer onReady={onLayoutRootView}>
+        <StatusBar
+          animated={true}
+          style={style}
+          backgroundColor="transparent"
+        />
+        {renderRoute()}
+      </NavigationContainer>
+    </AnimatedSplashScreen>
   );
 };
 

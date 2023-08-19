@@ -9,15 +9,14 @@ import Animated, {
   FadeOut,
   FadeOutUp,
 } from "react-native-reanimated";
-
+import { Skeleton } from "../../components/home/post/components/Skeleton";
 
 export default function Discover() {
   const isFocused = useIsFocused();
   return (
     <View style={{ marginTop: 200 }}>
-
       <AnimatedScreen>
-
+        <Skeleton />
       </AnimatedScreen>
     </View>
   );
