@@ -14,7 +14,7 @@ export default function SearchBar() {
   const dark = useGetMode();
   const color = dark ? "white" : "black";
   const placeholderColor = !dark ? "grey" : "grey";
-  const borderColor = dark ? "#FFFFFF" : "#000000";
+  const borderColor = dark ? "#FFFFFF" : "#DAD9D9";
   const backgroundColor = dark ? "#383838" : "#eff3f4";
 
   return (

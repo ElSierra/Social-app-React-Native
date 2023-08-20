@@ -29,21 +29,18 @@ export default function Engagements({ title }: { title?: string }) {
       }}
     >
       {title && <Text>{title}</Text>}
-      <IconWithValue
-        IconUnfocused={MessageUnfocused}
-        text="210"
-        IconFocused={MessagesIcon}
-      />
-      <IconWithValue
-        IconUnfocused={HeartUnfocused}
-        text="110K"
-        IconFocused={HeartsFocused}
-      />
-      <IconWithValue
-        IconUnfocused={ActivityUnfocused}
-        text="110K"
-        IconFocused={ActivityUnfocused}
-      />
+      <View style={{flexDirection:"row"}}>
+        <IconWithValue
+          IconUnfocused={MessageUnfocused}
+          text="210"
+          IconFocused={MessageUnfocused}
+        />
+        <IconWithValue
+          IconUnfocused={HeartUnfocused}
+          text="110K"
+          IconFocused={HeartsFocused}
+        />
+      </View>
       <ShareUnfocused size={20} color={color} />
     </View>
   );

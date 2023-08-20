@@ -16,9 +16,11 @@ import { useEffect, useLayoutEffect } from "react";
 import axios from "axios";
 import RNFetchBlob from "rn-fetch-blob";
 import { BlurView } from "expo-blur";
+import { useAppDispatch } from "../../redux/hooks/hooks";
+import { openToast } from "../../redux/slice/toast/toast";
 
 //Hero Transition
-const dirs = RNFetchBlob.fs.dirs;
+
 export const transition = SharedTransition.custom((values) => {
   "worklet";
   return {
@@ -42,6 +44,7 @@ export default function ImageFullScreen({
   navigation,
 }: ImageFullScreenProp) {
   const { photoUri } = route.params;
+  const dispatch = useAppDispatch();
   console.log("🚀 ~ file: ImageFullScreen.tsx:23 ~ route:", route);
   const handleDownload = () => {
     RNFetchBlob.config({
@@ -56,12 +59,49 @@ export default function ImageFullScreen({
       },
       // response data will be saved to this path if it has access right.
     })
-      .fetch("GET", photoUri)
+      .fetch("GET", route.params?.photoUri)
       .then((res) => {
         // the path should be dirs.DocumentDir + 'path-to-file.anything'
-        console.log("The file saved to ", res.path());
+        dispatch(
+          openToast({ text: "File saved in notification", type: "Info" })
+        );
+      })
+      .catch((e) => {
+        console.log("The file failed to ", e);
       });
   };
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Pressable
+          android_ripple={{ color: "black" }}
+          onPress={handleDownload}
+          style={{
+            height: 50,
+            bottom: 0,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            width: 50,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <MaterialCommunityIcons
+              name="download-box"
+              size={30}
+              color="white"
+            />
+          </View>
+        </Pressable>
+      ),
+    });
+  });
   return (
     <>
       <StatusBar animated={true} style="light" backgroundColor="transparent" />
@@ -90,7 +130,7 @@ export default function ImageFullScreen({
           />
         </View>
       </Animated.View>
-      <View
+      {/* <View
         style={{
           elevation:4,
          borderColor:"white",
@@ -135,7 +175,7 @@ export default function ImageFullScreen({
             <Text style={{ fontFamily: "mulishBold" ,color:"white"}}>Download</Text>
           </View>
         </Pressable>
-      </View>
+      </View> */}
     </>
   );
 }

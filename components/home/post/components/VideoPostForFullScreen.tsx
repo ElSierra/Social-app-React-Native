@@ -5,7 +5,13 @@ import {
   ActivityIndicator,
   TouchableWithoutFeedback,
 } from "react-native";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import { AVPlaybackStatus, ResizeMode, Video } from "expo-av";
 import { PlayIcon } from "../../../icons";
@@ -43,17 +49,11 @@ export default function VideoPostFullScreen({
   videoViews?: string;
 }) {
   const video = useRef<null | Video>(null);
-  console.log("🚀 ~ file: VideoPostForFullScreen.tsx:48 ~ video:", video);
 
   const [status, setStatus] = useState<any>(null);
-  console.log("🚀 ~ file: VideoPostForFullScreen.tsx:49 ~ status:", status);
 
   const [play, setPlay] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
-  console.log(
-    "🚀 ~ file: VideoPostForFullScreen.tsx:52 ~ isLoading:",
-    isLoading
-  );
 
   useEffect(() => {
     video.current?.setIsLoopingAsync(true).catch((e) => {});
@@ -128,9 +128,7 @@ export default function VideoPostFullScreen({
         </Animated.View>
       )}
       {!play && (
-        <TouchableWithoutFeedback
-          onPress={handlePlay}
-        >
+        <TouchableWithoutFeedback onPress={handlePlay}>
           <Animated.View
             entering={FadeInDown.springify()}
             exiting={FadeOutDown.springify()}

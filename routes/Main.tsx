@@ -46,7 +46,6 @@ import InputText from "../screen/Auth/components/InputText";
 import SearchBar from "../components/discover/SearchBar";
 import VideoFullScreen from "../screen/App/VideoFullScreen";
 
-
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<BottomRootStackParamList>();
 const Drawer = createDrawerNavigator<DrawerRootStackParamList>();
@@ -173,13 +172,14 @@ export default function Main() {
             }}
             component={PostContent}
           />
-           <Stack.Screen
+          <Stack.Screen
             name="VideoFullScreen"
             options={{
               title: "",
-              contentStyle:{backgroundColor:"black"},
-              headerShown: false,
-              animation: "fade_from_bottom",
+              contentStyle: { backgroundColor: "black" },
+              animation: "fade",
+
+              presentation: "transparentModal",
               headerTransparent: true,
               headerShadowVisible: false,
               headerTintColor: "white",
@@ -315,7 +315,9 @@ export function BottomTabNavigator() {
                 color={color}
                 style={{ paddingLeft: 20 }}
                 size={40}
-                onPress={() => {navigation.navigate("BottomHome")}}
+                onPress={() => {
+                  navigation.navigate("BottomHome");
+                }}
               />
             ),
           };
