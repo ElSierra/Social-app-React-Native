@@ -44,6 +44,7 @@ import PostContent from "../screen/App/PostContent";
 import CustomToast from "../components/global/Toast";
 import InputText from "../screen/Auth/components/InputText";
 import SearchBar from "../components/discover/SearchBar";
+import VideoFullScreen from "../screen/App/VideoFullScreen";
 
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -171,6 +172,19 @@ export default function Main() {
               headerTintColor: "white",
             }}
             component={PostContent}
+          />
+           <Stack.Screen
+            name="VideoFullScreen"
+            options={{
+              title: "",
+              contentStyle:{backgroundColor:"black"},
+              headerShown: false,
+              animation: "fade_from_bottom",
+              headerTransparent: true,
+              headerShadowVisible: false,
+              headerTintColor: "white",
+            }}
+            component={VideoFullScreen}
           />
         </Stack.Navigator>
       </BottomSheetContainer>

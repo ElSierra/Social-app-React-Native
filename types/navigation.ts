@@ -9,6 +9,14 @@ export type RootStackParamList = {
   ImageFullScreen: {
     photoUri: string;
   };
+  VideoFullScreen: {
+    videoUri: string;
+    videoTitle: string;
+    videoViews: string;
+    imageUri: string;
+    userTag: string;
+    name: string;
+  };
   Profile: undefined;
   PostContent: undefined;
 };
@@ -25,10 +33,7 @@ export type DrawerRootStackParamList = {
   Home: undefined;
 };
 
-export type HomeNavigationProp = NavigationProp<
-  RootStackParamList,
-  "Main"
->;
+export type HomeNavigationProp = NavigationProp<RootStackParamList, "Main">;
 
 export type ImageFullScreenProp = NativeStackScreenProps<
   RootStackParamList,
@@ -48,4 +53,8 @@ export type BottomProp = BottomTabScreenProps<
 export type DiscoverProp = BottomTabScreenProps<
   BottomRootStackParamList,
   "Discover"
+>;
+export type VideoFullScreen = NativeStackScreenProps<
+  RootStackParamList,
+  "VideoFullScreen"
 >;

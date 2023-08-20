@@ -39,7 +39,7 @@ export default function PostBuilder({
   audioUri?: string;
 }) {
 
-  const video = useRef<null | Video>(null);
+
 
   const width = Dimensions.get("screen").width;
 
@@ -77,7 +77,9 @@ export default function PostBuilder({
           {videoUri && (
             <VideoPost
               videoTitle={videoTitle}
-              video={video}
+              imageUri={imageUri}
+              name={name}
+              userTag={userTag}
               videoUri={videoUri}
               videoViews={videoViews}
             />

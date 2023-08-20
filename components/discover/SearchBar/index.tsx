@@ -7,6 +7,7 @@ import {
   Dimensions,
 } from "react-native";
 import useGetMode from "../../../hooks/GetMode";
+import Animated, { FadeInRight } from "react-native-reanimated";
 
 const { width } = Dimensions.get("screen");
 export default function SearchBar() {
@@ -14,8 +15,11 @@ export default function SearchBar() {
   const color = dark ? "white" : "black";
   const placeholderColor = !dark ? "grey" : "grey";
   const borderColor = dark ? "#FFFFFF" : "#000000";
+  const backgroundColor = dark ? "#383838" : "#eff3f4";
+
   return (
-    <View
+    <Animated.View
+      entering={FadeInRight.springify()}
       style={[
         {
           width: width * 0.7,
@@ -25,7 +29,7 @@ export default function SearchBar() {
           paddingVertical: 10,
           paddingHorizontal: 20,
           borderRadius: 20,
-          backgroundColor: "#eff3f4",
+          backgroundColor,
         },
       ]}
     >
@@ -42,6 +46,6 @@ export default function SearchBar() {
           includeFontPadding: false,
         }}
       />
-    </View>
+    </Animated.View>
   );
 }

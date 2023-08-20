@@ -9,15 +9,29 @@ import Animated, {
   FadeOut,
   FadeOutUp,
 } from "react-native-reanimated";
-import { Skeleton } from "../../components/home/post/components/Skeleton";
+import { Skeleton } from "../../components/home/misc/Skeleton";
+import SkeletonGroupPost from "../../components/home/misc/SkeletonGroupPost";
 
 export default function Discover() {
   const isFocused = useIsFocused();
   return (
-    <View style={{ marginTop: 200 }}>
-      <AnimatedScreen>
-        <Skeleton />
-      </AnimatedScreen>
-    </View>
+    <AnimatedScreen>
+      <View style={{ flex: 1, paddingTop: 100 }}>
+        <Text>People</Text>
+        <View style={{ width: "100%", height: 1, backgroundColor: "black" }} />
+        <View style={{ width: "50%", height: 50, flexDirection: "row" }}>
+          <Image
+            source={require("../../assets/avatar/placeholder.png")}
+            style={{ height: 50, width: 50, borderRadius: 9999 }}
+          />
+          <View>
+            <Text>Isaac Ojo</Text>
+            <Text>@hojoIsaac</Text>
+          </View>
+        </View>
+        <Text>Posts</Text>
+        <View style={{ width: "100%", height: 1, backgroundColor: "black" }} />
+      </View>
+    </AnimatedScreen>
   );
 }

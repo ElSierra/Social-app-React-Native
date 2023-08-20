@@ -18,6 +18,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { Image } from "expo-image";
+import AudioPlayLottie from "./AudioPlayLottie";
 export default function AudioPost({
   uri,
   photoUri,
@@ -29,13 +30,9 @@ export default function AudioPost({
   const animationRef = useRef<Lottie>(null);
   const [status, setStatus] = useState<any>(null);
 
-  const dark = useGetMode();
-  const minimumTrackTintColor = "#757575";
-  const maximumTrackTintColor = dark ? "white" : "#000000";
-  const tint = dark ? "dark" : "light";
   const opacity = useSharedValue(1);
   const opacityPic = useSharedValue(0);
-  const size = useSharedValue(55)
+
   const animatedStyle = useAnimatedStyle(() => {
     return {
       opacity: interpolate(opacity.value, [0, 1], [0, 1]), // map opacity value to range between 0 and 1
@@ -83,9 +80,7 @@ export default function AudioPost({
       await sound.pauseAsync();
     } catch (e) {}
   }
-  async function setMil() {
-    sound?.setPositionAsync(15000);
-  }
+
   React.useEffect(() => {
     return sound
       ? () => {
@@ -126,11 +121,8 @@ export default function AudioPost({
             justifyContent: "center",
           }}
         >
-          {/* <Button title="Play Sound" onPress={playSound} />
-      <Button title="Play Sound" onPress={pauseSound} />
-      <Button title="Play Sound" onPress={setMil} /> */}
           <View style={{ height: 200, width: 200 }}>
-            <RingAudio animationRef={animationRef} />
+            <AudioPlayLottie animationRef={animationRef} src={photoUri} />
             <Animated.View
               style={[
                 {
@@ -147,7 +139,7 @@ export default function AudioPost({
               ]}
             >
               <IconButton
-                Icon={<PlayIcon size={60} color="black" />}
+                Icon={<PlayIcon size={60} color="white" />}
                 onPress={() => {
                   if (!status && !status?.isLoaded) {
                     return;
@@ -182,28 +174,7 @@ export default function AudioPost({
               />
             </Animated.View>
           </View>
-          {
-            //TODO - Implement slider in UI [Slider Complete]
-            /* <Slider
-        thumbTintColor="black"
-        style={{ width: "100%", height: 40 }}
-        minimumValue={0}
-        thumbImage={
-          dark
-            ? require("../../../../assets/images/seek-darkMode.png")
-            : require("../../../../assets/images/seek.png")
-        }
-        upperLimit={status?.playableDurationMillis}
-        disabled={status === null || status.loaded === false}
-        value={status?.positionMillis}
-        maximumValue={status?.durationMillis}
-        onValueChange={(position: number) => {
-          sound?.setPositionAsync(position);
-        }}
-        minimumTrackTintColor="#757575"
-        maximumTrackTintColor={maximumTrackTintColor}
-      /> */
-          }
+    
         </View>
       </Pressable>
     </View>

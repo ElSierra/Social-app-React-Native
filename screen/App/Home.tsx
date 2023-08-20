@@ -25,6 +25,7 @@ import Animated, {
   ZoomIn,
 } from "react-native-reanimated";
 import EmptyLottie from "../../components/home/post/components/EmptyLottie";
+import SkeletonGroupPost from "../../components/home/misc/SkeletonGroupPost";
 
 export default function Home() {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -85,11 +86,7 @@ export default function Home() {
     <AnimatedScreen>
       <Fab item={<AddIcon size={30} color={color} />} />
       {posts.loading ? (
-        <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
-          <ActivityIndicator size={"large"} color={color} />
-        </View>
+       <SkeletonGroupPost/>
       ) : posts.data.length === 0 ? (
         <Animated.View
           style={{ flex: 1, justifyContent: "center", alignItems: "center", }}
