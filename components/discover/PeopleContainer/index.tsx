@@ -2,6 +2,7 @@ import { View, Text } from "react-native";
 
 import { Image } from "expo-image";
 import { Button } from "react-native-paper";
+import { BlurView } from "expo-blur";
 export default function PeopleContainer() {
   return (
     <View
@@ -16,6 +17,7 @@ export default function PeopleContainer() {
         borderRadius: 20,
       }}
     >
+        <BlurView style={{position:"absolute",height:100,width:"100%"}}/>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
         <Image
           source={require("../../../assets/avatar/placeholder.png")}
@@ -32,16 +34,7 @@ export default function PeopleContainer() {
         Follow
       </Button>
 
-      <Image
-        source={require("../../../assets/avatar/placeholder.png")}
-        style={{
-          height: 100,
-          width: 100,
-          opacity: 0.05,
-          position: "absolute",
-          right: 0,
-        }}
-      />
+     
     </View>
   );
 }
