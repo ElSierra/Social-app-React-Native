@@ -153,7 +153,7 @@ export default function Main() {
               animation: "fade",
 
               presentation: "transparentModal",
-              headerTransparent: true,
+            headerStyle:{backgroundColor:"black"},
               headerShadowVisible: false,
               headerTintColor: "white",
             }}

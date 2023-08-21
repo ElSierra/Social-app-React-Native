@@ -284,7 +284,11 @@ export default function PostContent({ navigation }: PostContentProp) {
     if (postPhoto?.mimeType.startsWith("video/")) {
       if (fileToServer) {
         dispatch(openLoadingModal());
-        postContent({ videoUri: fileToServer, videoTitle:videoTitle||"🎥", postText })
+        postContent({
+          videoUri: fileToServer,
+          videoTitle: videoTitle || "🎥",
+          postText,
+        })
           .then((e) => {
             dispatch(
               openToast({ text: "Successfully posted", type: "Success" })
@@ -305,8 +309,18 @@ export default function PostContent({ navigation }: PostContentProp) {
         );
       }
     }
-    if(postText && !postAudio && !postPhoto){
-      
+    if (postText && !postAudio && !postPhoto) {
+      dispatch(openLoadingModal());
+      postContent({ postText })
+        .then((e) => {
+          dispatch(openToast({ text: "Successfully posted", type: "Success" }));
+          navigation.pop();
+          dispatch(closeLoadingModal());
+        })
+        .catch((e) => {
+          dispatch(openToast({ text: "Post failed ", type: "Failed" }));
+          dispatch(closeLoadingModal());
+        });
     }
   };
 
@@ -339,11 +353,19 @@ export default function PostContent({ navigation }: PostContentProp) {
               <CloseCircleIcon size={30} color={backgroundColor} />
             </Pressable>
           </View>
-          <PostButton
-            isDisabled={!done}
-            isLoading={!done}
-            onPress={handlePostContent}
-          />
+          {postPhoto || postAudio ? (
+            <PostButton
+              isDisabled={!done}
+              isLoading={!done}
+              onPress={handlePostContent}
+            />
+          ) : (
+            <PostButton
+              isDisabled={!postText}
+              isLoading={!postText}
+              onPress={handlePostContent}
+            />
+          )}
         </View>
         <TextArea handlePostText={handlePostText} />
         {(postAudio || postPhoto) && (
@@ -404,7 +426,12 @@ export default function PostContent({ navigation }: PostContentProp) {
           )}
           {postPhoto && (
             <Image
-              style={{ width: "100%", height: "100%", borderRadius: 20,paddingHorizontal:20 }}
+              style={{
+                width: "100%",
+                height: "100%",
+                borderRadius: 20,
+                paddingHorizontal: 20,
+              }}
               source={{ uri: postPhoto?.uri }}
               contentFit="contain"
               transition={1000}

@@ -262,22 +262,16 @@ export const LogoutIcon = ({
   size: number;
   color: string;
 }) => (
-  <Svg
-  width={size}
-  height={size}
-  fill="none"
-  viewBox="0 0 24 24"
-
->
-  <Path
-    stroke={color}
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    strokeMiterlimit={10}
-    strokeWidth={1.5}
-    d="M17.44 14.62 20 12.06 17.44 9.5m-7.68 2.56h10.17M11.76 20c-4.42 0-8-3-8-8s3.58-8 8-8"
-  />
-</Svg>
+  <Svg width={size} height={size} fill="none" viewBox="0 0 24 24">
+    <Path
+      stroke={color}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeMiterlimit={10}
+      strokeWidth={1.5}
+      d="M17.44 14.62 20 12.06 17.44 9.5m-7.68 2.56h10.17M11.76 20c-4.42 0-8-3-8-8s3.58-8 8-8"
+    />
+  </Svg>
 );
 
 export const VerifyIcon = ({
@@ -757,13 +751,7 @@ export const AudioIcon = ({ size, color }: { size: number; color: string }) => (
 );
 
 export const VideoIcon = ({ size, color }: { size: number; color: string }) => (
-  <Svg
-   
-    width={size}
-    height={size}
-    fill="none"
-    viewBox="0 0 24 24"
-   >
+  <Svg width={size} height={size} fill="none" viewBox="0 0 24 24">
     <Path
       fill={color}
       d="M22 7.81v7.89c0-.01-.01-.02-.02-.03-.04-.06-.09-.12-.14-.17-.01-.01-.02-.03-.03-.04-.81-.9-2-1.46-3.31-1.46-1.26 0-2.41.52-3.23 1.36a4.5 4.5 0 0 0-.62 5.46c.22.37.5.71.82.99.02.01.03.02.04.03.05.05.1.09.16.14h.01c.01.01.02.02.03.02h-7.9C4.17 22 2 19.83 2 16.19V7.81c0-.51.04-1 .13-1.45C2.64 3.61 4.67 2.01 7.77 2h8.46c3.1.01 5.13 1.61 5.64 4.36.09.45.13.94.13 1.45Z"
@@ -772,6 +760,38 @@ export const VideoIcon = ({ size, color }: { size: number; color: string }) => (
     <Path
       fill={color}
       d="M22 7.81v.05H2v-.05c0-.51.04-1 .13-1.45h5.64V2h1.5v4.36h5.46V2h1.5v4.36h5.64c.09.45.13.94.13 1.45Zm0 7.89c0-.01-.01-.02-.02-.03-.04-.06-.09-.12-.14-.17-.01-.01-.02-.03-.03-.04-.81-.9-2-1.46-3.31-1.46-1.26 0-2.41.52-3.23 1.36a4.5 4.5 0 0 0-.62 5.46c.22.37.5.71.82.99.02.01.03.02.04.03.05.05.1.09.16.14h.01c.01.01.02.02.03.02.75.63 1.72 1 2.79 1 1.64 0 3.07-.88 3.85-2.18.23-.39.41-.82.52-1.27.09-.34.13-.69.13-1.05 0-1.06-.37-2.04-1-2.8Zm-1.82 3.53h-.93v.97c0 .41-.34.75-.75.75s-.75-.34-.75-.75v-.97h-.93c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h.93v-.89c0-.41.34-.75.75-.75s.75.34.75.75v.89h.93a.749.749 0 1 1 0 1.5Z"
+    />
+  </Svg>
+);
+
+export const GlobalIcon = ({
+  size,
+  color,
+}: {
+  size: number;
+  color: string;
+}) => (
+  <Svg width={size} height={size} fill="none" viewBox="0 0 24 24">
+    <Path
+      stroke={color}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={1.5}
+      d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z"
+    />
+    <Path
+      stroke={color}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={1.5}
+      d="M8 3h1a28.424 28.424 0 0 0 0 18H8m7-18a28.424 28.424 0 0 1 0 18"
+    />
+    <Path
+      stroke={color}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={1.5}
+      d="M3 16v-1a28.424 28.424 0 0 0 18 0v1M3 9a28.424 28.424 0 0 1 18 0"
     />
   </Svg>
 );

@@ -8,6 +8,7 @@ import prefs, { Prefs } from "./slice/prefs";
 import bottomSheet, { BottomSheet } from "./slice/bottomSheet";
 import { reduxStorage } from "./storage";
 import post, { postState } from "./slice/post";
+import searchPost from "./slice/post/search";
 import toast, { ToastState } from "./slice/toast/toast";
 import { authApi } from "./api/auth";
 
@@ -33,6 +34,7 @@ const persistConfig: PersistConfig<
     prefs: Prefs;
     bottomSheet: BottomSheet;
     post: postState;
+    searchPost: postState;
     toast: ToastState;
     user: UserState;
     loadingModal: LoadingModal;
@@ -53,6 +55,7 @@ const reducer = combineReducers({
   post,
   toast,
   loadingModal,
+  searchPost,
   [authApi.reducerPath]: authApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
   [servicesApi.reducerPath]: servicesApi.reducer,

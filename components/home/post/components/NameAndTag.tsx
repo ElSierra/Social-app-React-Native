@@ -38,7 +38,7 @@ export default function NameAndTag({
             marginBottom: 2,
           }}
         >
-          {userTag}
+          @{userTag}
         </Text>
       </View>
     </View>

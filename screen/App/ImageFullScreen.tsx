@@ -1,4 +1,4 @@
-import { Pressable, View, Text } from "react-native";
+import { Pressable, View, StyleSheet } from "react-native";
 import { ImageFullScreenProp } from "../../types/navigation";
 import { Image } from "expo-image";
 
@@ -18,6 +18,7 @@ import RNFetchBlob from "rn-fetch-blob";
 import { BlurView } from "expo-blur";
 import { useAppDispatch } from "../../redux/hooks/hooks";
 import { openToast } from "../../redux/slice/toast/toast";
+import { SharedElement } from "react-navigation-shared-element";
 
 //Hero Transition
 
@@ -43,7 +44,7 @@ export default function ImageFullScreen({
   route,
   navigation,
 }: ImageFullScreenProp) {
-  const { photoUri } = route.params;
+  const { photoUri,id} = route.params;
   const dispatch = useAppDispatch();
   console.log("🚀 ~ file: ImageFullScreen.tsx:23 ~ route:", route);
   const handleDownload = () => {
@@ -123,11 +124,12 @@ export default function ImageFullScreen({
             height: "100%",
           }}
         >
+          <SharedElement id={id} style={StyleSheet.absoluteFill}>
           <Image
             source={{ uri: photoUri }}
             contentFit="contain"
             style={{ width: "100%", height: "100%" }}
-          />
+          /></SharedElement>
         </View>
       </Animated.View>
       {/* <View

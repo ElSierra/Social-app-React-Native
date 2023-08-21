@@ -12,19 +12,7 @@ import Engagements from "./components/Engagements";
 import useGetMode from "../../../hooks/GetMode";
 import AudioPost from "./components/AudioPost";
 
-export default function PostBuilder({
-  imageUri,
-  name,
-  userTag,
-  photoUri,
-  verified,
-  videoUri,
-  postText,
-  videoTitle,
-  videoViews,
-  title,
-  audioUri,
-}: {
+export type IPostBuilder = {
   imageUri: string;
   name: string;
   userTag: string;
@@ -36,11 +24,23 @@ export default function PostBuilder({
   videoViews?: string;
   repost?: string;
   title?: string;
+  id: string;
   audioUri?: string;
-}) {
-
-
-
+};
+export default function PostBuilder({
+  imageUri,
+  name,
+  userTag,
+  photoUri,
+  verified,
+  videoUri,
+  postText,
+  videoTitle,
+  videoViews,
+  title,
+  id,
+  audioUri,
+}: IPostBuilder) {
   const width = Dimensions.get("screen").width;
 
   const dark = useGetMode();
@@ -71,7 +71,7 @@ export default function PostBuilder({
           />
           <View>
             {photoUri.length > 0 && (
-              <PhotoPost photoUri={photoUri} width={width} />
+              <PhotoPost id={id} photoUri={photoUri} width={width} />
             )}
           </View>
           {videoUri && (

@@ -17,12 +17,14 @@ import { BlurView } from "expo-blur";
 import { Image } from "expo-image";
 import HeaderDrawer from "./HeaderDrawer";
 import { useNavigation } from "@react-navigation/native";
-import { LogoutIcon, MoonIcon, ProfileIconUnfocused } from "../../icons";
+import { GlobalIcon, LogoutIcon, MoonIcon, ProfileIconUnfocused } from "../../icons";
 import { HomeNavigationProp } from "../../../types/navigation";
 import useGetMode from "../../../hooks/GetMode";
 import { useAppDispatch } from "../../../redux/hooks/hooks";
 import { openSheet } from "../../../redux/slice/bottomSheet";
 import { signOut } from "../../../redux/slice/user";
+import { InAppBrowser } from "react-native-inappbrowser-reborn";
+
 export default function CustomDrawerContent(
   props: DrawerContentComponentProps
 ) {
@@ -31,9 +33,50 @@ export default function CustomDrawerContent(
   const style = !isDark ? "light" : "dark";
   const backgroundColor = isDark ? "white" : "black";
   const color = isDark ? "white" : "black";
+  const toolbarColor = isDark ? "black" : "white";
   const pressColor = isDark ? "#BEBEBE" : "#4F4F4F";
   const dispatch = useAppDispatch();
   const navigation = useNavigation<HomeNavigationProp>();
+
+  const openLink = async () => {
+    try {
+      const url = "https://isaacojo.me";
+      if (await InAppBrowser.isAvailable()) {
+        const result = await InAppBrowser.open(url, {
+          // iOS Properties
+          dismissButtonStyle: "cancel",
+          preferredBarTintColor: toolbarColor,
+          preferredControlTintColor: color,
+          readerMode: false,
+          animated: true,
+          modalPresentationStyle: "fullScreen",
+          modalTransitionStyle: "coverVertical",
+          modalEnabled: true,
+          enableBarCollapsing: false,
+          // Android Properties
+          showTitle: true,
+          toolbarColor: toolbarColor,
+          secondaryToolbarColor: toolbarColor,
+          navigationBarColor: toolbarColor,
+          navigationBarDividerColor: "white",
+          enableUrlBarHiding: true,
+          enableDefaultShare: true,
+          forceCloseOnRedirection: false,
+          // Specify full animation resource identifier(package:anim/name)
+          // or only resource name(in case of animation bundled with app).
+          animations: {
+            startEnter: "slide_in_right",
+            startExit: "slide_out_left",
+            endEnter: "slide_in_left",
+            endExit: "slide_out_right",
+          },
+          headers: {
+            "my-custom-header": "my custom header value",
+          },
+        });
+      } else Linking.openURL(url);
+    } catch (error) {}
+  };
   return (
     <View style={{ flex: 1, padding: 20 }}>
       <BlurView
@@ -88,6 +131,7 @@ export default function CustomDrawerContent(
           }}
         />
       </DrawerContentScrollView>
+   
       <View
         style={{
           width: "100%",
@@ -119,6 +163,32 @@ export default function CustomDrawerContent(
             android_ripple={{ color: pressColor, foreground: true }}
           >
             <MoonIcon size={25} color={color} />
+          </Pressable>
+        </View>
+        <View
+          style={{
+            marginBottom: 50,
+            height: 40,
+            width: 40,
+            borderRadius: 999,
+            overflow: "hidden",
+          }}
+        >
+          <Pressable
+            style={{
+              height: 40,
+              width: 40,
+              borderRadius: 999,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onPress={() => {
+              props.navigation.closeDrawer();
+              openLink();
+            }}
+            android_ripple={{ color: pressColor, foreground: true }}
+          >
+            <GlobalIcon size={25} color={color} />
           </Pressable>
         </View>
         <View

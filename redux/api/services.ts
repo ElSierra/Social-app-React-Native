@@ -9,9 +9,11 @@ interface loginResult {
   data: IUSerData;
 }
 const persistedState = storage.getString("persist:root");
-console.log("🚀 ~ file: services.ts:12 ~ persistedState:", persistedState)
-const JSONpersistedState = persistedState? JSON.parse(persistedState): null
-const tokenFromState = JSONpersistedState?.user ?(JSON.parse(JSONpersistedState?.user)?.token):null
+console.log("🚀 ~ file: services.ts:12 ~ persistedState:", persistedState);
+const JSONpersistedState = persistedState ? JSON.parse(persistedState) : null;
+const tokenFromState = JSONpersistedState?.user
+  ? JSON.parse(JSONpersistedState?.user)?.token
+  : null;
 console.log("🚀 ~ file: auth.ts:9 ~ tokenFromState:", tokenFromState);
 
 export const servicesApi = createApi({
@@ -120,6 +122,10 @@ export const servicesApi = createApi({
       providesTags: ["post"],
       extraOptions: { maxRetries: 2 },
     }),
+    getRandomPosts: builder.query<{ posts: IPost[] }, null>({
+      query: () => "/random-posts",
+      extraOptions: { maxRetries: 2 },
+    }),
   }),
 });
 
@@ -128,6 +134,8 @@ export const {
   usePostContentMutation,
   useUploadAudioMutation,
   useUploadVideoMutation,
+  useGetRandomPostsQuery,
+  useLazyGetRandomPostsQuery,
   useGetAllPostsQuery,
   useLazyGetAllPostsQuery,
 } = servicesApi;

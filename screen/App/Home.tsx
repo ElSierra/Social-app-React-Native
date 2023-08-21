@@ -15,6 +15,7 @@ import { ActivityIndicator } from "react-native-paper";
 import { IPost } from "../../types/api";
 import {
   useGetAllPostsQuery,
+  useGetRandomPostsQuery,
   useLazyGetAllPostsQuery,
 } from "../../redux/api/services";
 import { openToast } from "../../redux/slice/toast/toast";
@@ -41,6 +42,7 @@ export default function Home() {
 
   const userAuthValidate = useTokenValidQuery(null);
   useGetAllPostsQuery(null);
+  useGetRandomPostsQuery(null);
   const [getLazyPost, postRes] = useLazyGetAllPostsQuery();
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = useCallback(() => {
@@ -69,6 +71,7 @@ export default function Home() {
   }, [userAuthValidate.data?.msg]);
   const renderItem = ({ item }: { item: IPost }) => (
     <PostBuilder
+      id={item.id}
       imageUri={item.user?.imageUri}
       name={item.user?.name}
       userTag={item.user?.userName}
@@ -86,10 +89,10 @@ export default function Home() {
     <AnimatedScreen>
       <Fab item={<AddIcon size={30} color={color} />} />
       {posts.loading ? (
-       <SkeletonGroupPost/>
+        <SkeletonGroupPost />
       ) : posts.data.length === 0 ? (
         <Animated.View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center", }}
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
           entering={FadeInDown.springify().duration(400)}
           exiting={FadeOutDown.springify()}
         >

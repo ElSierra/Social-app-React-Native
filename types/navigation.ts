@@ -8,6 +8,7 @@ export type RootStackParamList = {
   Main: undefined;
   ImageFullScreen: {
     photoUri: string;
+    id:string;
   };
   VideoFullScreen: {
     videoUri: string;

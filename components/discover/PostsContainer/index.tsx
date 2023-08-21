@@ -5,8 +5,22 @@ import { Button } from "react-native-paper";
 import { BlurView } from "expo-blur";
 import Animated, { FadeInLeft } from "react-native-reanimated";
 import { useState } from "react";
+import { IPostBuilder } from "../../home/post/PostBuilder";
 const { width } = Dimensions.get("screen");
-export default function PeopleContainer() {
+export default function PostsContainer({
+  imageUri,
+  name,
+  userTag,
+  photoUri,
+  verified,
+  videoUri,
+  postText,
+  videoTitle,
+  videoViews,
+  title,
+  id,
+  audioUri,
+}: IPostBuilder) {
   const [follow, setFollow] = useState(false);
 
   const handleFollow = () => {
@@ -29,40 +43,21 @@ export default function PeopleContainer() {
       <BlurView style={{ position: "absolute", height: 100, width }} />
       <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
         <Image
-          source={require("../../../assets/avatar/placeholder.png")}
+          source={{uri:imageUri}}
           style={{ height: 30, width: 30, borderRadius: 9999 }}
         />
         <View>
-          <Text style={{ fontSize: 16, fontFamily: "mulishBold" }}>
-            Isaac Ojo
+          <Text style={{ fontFamily: "jakara", fontSize: 12 }}>@{userTag}</Text>
+          <Text style={{ fontFamily: "jakaraBold" }}>
+            {postText}
           </Text>
-          <Text style={{ fontFamily: "jakara", fontSize: 12 }}>@hojoIsaac</Text>
         </View>
       </View>
-      <View
-        style={{
-          borderRadius: 999,
-          borderWidth: 1,
-          backgroundColor: follow ? "black" : "transparent",
-          overflow: "hidden",
-          borderColor: "black",
-        }}
-      >
-        <Pressable
-          android_ripple={{ color: "white" }}
-          onPress={handleFollow}
-          style={{ paddingHorizontal: 10, paddingVertical: 6 }}
-        >
-          <Text
-            style={{
-              fontFamily: "jakara",
-              color: !follow ? "black" : "white",
-              includeFontPadding: false,
-            }}
-          >
-            {follow ? "Following" : "Follow"}
-          </Text>
-        </Pressable>
+      <View>
+        <Image
+          style={{ height: 50, width: 50, borderRadius: 16 }}
+          source={{uri: photoUri[0] || videoUri}}
+        />
       </View>
     </Animated.View>
   );

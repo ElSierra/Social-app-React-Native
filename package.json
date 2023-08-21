@@ -41,6 +41,7 @@
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "~2.12.0",
     "react-native-image-crop-picker": "^0.40.0",
+    "react-native-inappbrowser-reborn": "^3.7.0",
     "react-native-linear-gradient": "^2.8.2",
     "react-native-mmkv": "^2.10.1",
     "react-native-paper": "^5.10.1",
