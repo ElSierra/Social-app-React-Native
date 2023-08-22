@@ -8,42 +8,35 @@ import PostsContainer from "../../components/discover/PostsContainer";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import { useGetRandomPostsQuery } from "../../redux/api/services";
 import { useAppSelector } from "../../redux/hooks/hooks";
+import { SearchSkeleton } from "../../components/discover/Skeleton/SearchSkeleton";
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
+import { useState } from "react";
+import People from "../../components/discover/Page/People";
+import Posts from "../../components/discover/Page/Posts";
 
 export default function Discover() {
-  const posts = useAppSelector((state) => state.searchPost.data);
+  const posts = useAppSelector((state) => state.searchPost);
+  
+  const persons = useAppSelector((state) => state.searchPeople);
+  console.log("🚀 ~ file: Discover.tsx:21 ~ Discover ~ persons:", persons)
+  const [people, setPeople] = useState(true);
 
   return (
     <AnimatedScreen>
       <View style={{ flex: 1, paddingTop: 100, padding: 10 }}>
-        <HeaderTag text="People" />
-        <View style={{ gap: 5, marginVertical: 20 }}>
-          <PeopleContainer />
-          <PeopleContainer />
-          <PeopleContainer />
-        </View>
-
-        <HeaderTag text="Posts" />
-        <View style={{ gap: 5, marginVertical: 20, height: 200 }}>
-          <FlatList
-            data={posts}
-            contentContainerStyle={{ gap: 5 }}
-            renderItem={({ item }) => (
-              <PostsContainer
-                id={item.id}
-                imageUri={item.user?.imageUri}
-                name={item.user?.name}
-                userTag={item.user?.userName}
-                verified={item.user?.verified}
-                audioUri={item.audioUri || undefined}
-                photoUri={item.photoUri}
-                videoTitle={item.videoTitle || undefined}
-                videoUri={item.videoUri || undefined}
-                postText={item.postText}
-              />
-            )}
-            keyExtractor={(item) => item.id.toString()}
+        <View style={{ flexDirection: "row", gap: 5 }}>
+          <HeaderTag
+            onPress={() => setPeople(true)}
+            text="People"
+            selected={people}
+          />
+          <HeaderTag
+            onPress={() => setPeople(false)}
+            text="Posts"
+            selected={!people}
           />
         </View>
+        {people ? <People people={persons} /> : <Posts posts={posts} />}
       </View>
     </AnimatedScreen>
   );

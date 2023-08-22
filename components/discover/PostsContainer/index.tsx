@@ -48,7 +48,7 @@ export default function PostsContainer({
         />
         <View>
           <Text style={{ fontFamily: "jakara", fontSize: 12 }}>@{userTag}</Text>
-          <Text style={{ fontFamily: "jakaraBold" }}>
+          <Text  style={{ fontFamily: "jakaraBold" ,width:width*0.6}} numberOfLines={1} >
             {postText}
           </Text>
         </View>

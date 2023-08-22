@@ -27,6 +27,7 @@ import { postLists } from "../data/test";
 import { userApi } from "./api/user";
 import { servicesApi } from "./api/services";
 import loadingModal, { LoadingModal } from "./slice/modal/loading";
+import searchPeople, { personState } from "./slice/people/search";
 
 const persistConfig: PersistConfig<
   CombinedState<{
@@ -37,6 +38,7 @@ const persistConfig: PersistConfig<
     searchPost: postState;
     toast: ToastState;
     user: UserState;
+    searchPeople: personState;
     loadingModal: LoadingModal;
     [authApi.reducerPath]: any;
     [userApi.reducerPath]: any;
@@ -60,6 +62,7 @@ const reducer = combineReducers({
   [userApi.reducerPath]: userApi.reducer,
   [servicesApi.reducerPath]: servicesApi.reducer,
   user,
+  searchPeople,
 });
 const persistedReducer = persistReducer(persistConfig, reducer);
 

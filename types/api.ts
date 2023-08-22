@@ -17,6 +17,14 @@ export interface IPostContent {
   postText?: string;
 }
 
+export interface IPerson {
+  name: string;
+  userName: string;
+  id: string;
+  isFollowed:boolean;
+  imageUri: string;
+}
+
 export interface User {
   imageUri: string;
   name: string;

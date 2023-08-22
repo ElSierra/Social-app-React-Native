@@ -14,13 +14,14 @@ import React, {
 } from "react";
 
 import { AVPlaybackStatus, ResizeMode, Video } from "expo-av";
-import { PlayIcon } from "../../../icons";
+import { PauseIcon, PlayIcon } from "../../../icons";
 
 import Animated, {
   FadeIn,
   FadeInDown,
   FadeOut,
   FadeOutDown,
+  runOnJS,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
@@ -53,6 +54,7 @@ export default function VideoPostFullScreen({
   const [status, setStatus] = useState<any>(null);
 
   const [play, setPlay] = useState(true);
+  const [overlay, setShowOverlay] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -68,6 +70,13 @@ export default function VideoPostFullScreen({
   }, [status?.positionMillis, status?.playableDurationMillis]);
   const handlePlay = () => {
     setPlay(!play);
+    setShowOverlay(!overlay);
+  };
+
+  const handleOverlayDelay = () => {
+    setTimeout(() => {
+      setShowOverlay(false);
+    }, 2000);
   };
 
   useFocusEffect(
@@ -78,6 +87,57 @@ export default function VideoPostFullScreen({
     }, [])
   );
 
+  const renderPlayPause = () => {
+    if (!play && overlay) {
+      return (
+        <Animated.View
+          entering={FadeIn.springify()}
+          exiting={FadeOut.springify()}
+          style={{
+            width: "100%",
+            height: "100%",
+
+            justifyContent: "center",
+            alignItems: "center",
+            position: "absolute",
+            zIndex: 999,
+            pointerEvents: "box-none",
+          }}
+        >
+          <Pressable onPress={handlePlay}>
+            <PlayIcon size={80} color="white" />
+          </Pressable>
+        </Animated.View>
+      );
+    }
+    if (play && overlay) {
+      return (
+        <Animated.View
+          entering={FadeIn.springify()}
+          exiting={FadeOut.springify()}
+          style={{
+            width: "100%",
+            height: "100%",
+
+            justifyContent: "center",
+            alignItems: "center",
+            position: "absolute",
+            zIndex: 999,
+            pointerEvents: "box-none",
+          }}
+        >
+          <Pressable onPress={handlePlay}>
+            <PauseIcon size={80} color="white" />
+          </Pressable>
+        </Animated.View>
+      );
+    }
+  };
+
+  function callback() {
+    "worklet";
+    runOnJS(handleOverlayDelay)();
+  }
   return (
     <View
       style={{
@@ -91,7 +151,7 @@ export default function VideoPostFullScreen({
           <TouchableWithoutFeedback
             style={{ flex: 1, width: "100%" }}
             onPress={() => {
-              setPlay(!play);
+              setShowOverlay(true);
               console.log("pressed");
             }}
           >
@@ -109,28 +169,15 @@ export default function VideoPostFullScreen({
           </TouchableWithoutFeedback>
         }
       </View>
-      {!play && (
-        <Animated.View
-          entering={FadeIn.springify()}
-          exiting={FadeOut.springify()}
-          style={{
-            width: "100%",
-            height: "100%",
-            justifyContent: "center",
-            alignItems: "center",
-            position: "absolute",
-            zIndex: 999,
+
+      {overlay && (
+        <TouchableWithoutFeedback
+          onPress={() => {
+            setShowOverlay(!overlay);
           }}
         >
-          <Pressable onPress={handlePlay}>
-            <PlayIcon size={80} color="white" />
-          </Pressable>
-        </Animated.View>
-      )}
-      {!play && (
-        <TouchableWithoutFeedback onPress={handlePlay}>
           <Animated.View
-            entering={FadeInDown.springify()}
+            entering={FadeInDown.springify().withCallback(callback)}
             exiting={FadeOutDown.springify()}
             style={{
               position: "absolute",
@@ -222,26 +269,7 @@ export default function VideoPostFullScreen({
           <ActivityIndicator size={50} color={"white"} />
         </View>
       )}
-      {/* <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Text
-          numberOfLines={1}
-          style={{
-            fontFamily: "jakaraBold",
-            fontSize: 14,
-            color,
-            maxWidth: width * 0.6,
-          }}
-        >
-          {videoTitle}
-        </Text>
-        <Text style={{ color }}>{videoViews} Views</Text>
-      </View> */}
+      {renderPlayPause()}
     </View>
   );
 }

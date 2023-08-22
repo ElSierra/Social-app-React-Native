@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { UserState } from "../slice/user";
-import { IPost, IPostContent, IUSerData } from "../../types/api";
+import { IPerson, IPost, IPostContent, IUSerData } from "../../types/api";
 import storage from "../storage";
 
 interface loginResult {
@@ -126,6 +126,18 @@ export const servicesApi = createApi({
       query: () => "/random-posts",
       extraOptions: { maxRetries: 2 },
     }),
+    getRandomPeople: builder.query<{ people: IPerson[] }, null>({
+      query: () => "/random-people",
+      extraOptions: { maxRetries: 2 },
+    }),
+    searchPosts: builder.query<{ posts: IPost[] }, { q: string }>({
+      query: ({ q }) => `/search-posts?q=${q}`,
+      extraOptions: { maxRetries: 0 },
+    }),
+    searchPeople: builder.query<{ people: IPerson[] }, { q: string }>({
+      query: ({ q }) => `/search-people?q=${q}`,
+      extraOptions: { maxRetries: 0 },
+    }),
   }),
 });
 
@@ -134,8 +146,11 @@ export const {
   usePostContentMutation,
   useUploadAudioMutation,
   useUploadVideoMutation,
+  useLazySearchPeopleQuery,
   useGetRandomPostsQuery,
   useLazyGetRandomPostsQuery,
   useGetAllPostsQuery,
+  useGetRandomPeopleQuery,
+  useLazySearchPostsQuery,
   useLazyGetAllPostsQuery,
 } = servicesApi;

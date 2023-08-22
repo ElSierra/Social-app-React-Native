@@ -1,22 +1,44 @@
-import { View, Text } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import React from "react";
 
-export default function HeaderTag({ text }: { text: string }) {
+export default function HeaderTag({
+  text,
+  onPress,
+  selected,
+}: {
+  text: string;
+  onPress: () => void;
+  selected: boolean;
+}) {
   return (
     <View
       style={{
-        padding: 10,
-        borderColor: "black",
-        width: 80,
+        overflow: "hidden",
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "black",
         borderRadius: 60,
       }}
     >
-      <Text style={{ fontFamily: "jakaraBold", fontSize: 16, color: "white" }}>
-       {text}
-      </Text>
+      <Pressable
+        onPress={onPress}
+        style={{
+          width: 60,
+          padding: 10,
+          backgroundColor: selected ? "black" : "grey",
+          borderRadius: 60,
+
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        android_ripple={{ color: "white" }}
+      >
+        <Text
+          style={{ fontFamily: "jakaraBold", fontSize: 12, color: "white" }}
+        >
+          {text}
+        </Text>
+      </Pressable>
     </View>
   );
 }

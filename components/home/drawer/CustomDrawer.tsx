@@ -61,7 +61,7 @@ export default function CustomDrawerContent(
           navigationBarDividerColor: "white",
           enableUrlBarHiding: true,
           enableDefaultShare: true,
-          forceCloseOnRedirection: false,
+          forceCloseOnRedirection: true,
           // Specify full animation resource identifier(package:anim/name)
           // or only resource name(in case of animation bundled with app).
           animations: {
@@ -74,6 +74,7 @@ export default function CustomDrawerContent(
             "my-custom-header": "my custom header value",
           },
         });
+        console.log("🚀 ~ file: CustomDrawer.tsx:77 ~ openLink ~ result:", result)
       } else Linking.openURL(url);
     } catch (error) {}
   };
@@ -183,7 +184,6 @@ export default function CustomDrawerContent(
               alignItems: "center",
             }}
             onPress={() => {
-              props.navigation.closeDrawer();
               openLink();
             }}
             android_ripple={{ color: pressColor, foreground: true }}

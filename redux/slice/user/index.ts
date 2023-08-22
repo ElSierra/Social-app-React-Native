@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { authApi } from "../../api/auth";
 import { IUSerData } from "../../../types/api";
+import { userApi } from "../../api/user";
 
 export interface UserState {
   data: IUSerData | null;
@@ -24,6 +25,27 @@ const user = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addMatcher(
+      userApi.endpoints.getUser.matchFulfilled,
+      (state, { payload }) => {
+        state.data = payload.data;
+        state.error = null;
+        state.loading = false;
+      }
+    );
+    builder.addMatcher(userApi.endpoints.getUser.matchPending, (state) => {
+      state.data = null;
+      state.error = null;
+      state.loading = true;
+    });
+    builder.addMatcher(
+      userApi.endpoints.getUser.matchRejected,
+      (state, { error }) => {
+        state.data = null;
+        state.error = error;
+        state.loading = true;
+      }
+    );
     builder.addMatcher(
       authApi.endpoints.login.matchFulfilled,
       (state, { payload }) => {

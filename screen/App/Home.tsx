@@ -1,10 +1,10 @@
-import { View, Dimensions, RefreshControl } from "react-native";
+import { View, Dimensions, RefreshControl, Pressable } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import Fab from "../../components/home/post/components/Fab";
-import { AddIcon } from "../../components/icons";
+import { AddIcon, ReloadIcon } from "../../components/icons";
 import PostBuilder from "../../components/home/post/PostBuilder";
 import { postLists } from "../../data/test";
-
+import {useNetInfo} from "@react-native-community/netinfo";
 import { FlashList } from "@shopify/flash-list";
 import AnimatedScreen from "../../components/global/AnimatedScreen";
 import useGetMode from "../../hooks/GetMode";
@@ -15,6 +15,7 @@ import { ActivityIndicator } from "react-native-paper";
 import { IPost } from "../../types/api";
 import {
   useGetAllPostsQuery,
+  useGetRandomPeopleQuery,
   useGetRandomPostsQuery,
   useLazyGetAllPostsQuery,
 } from "../../redux/api/services";
@@ -27,6 +28,7 @@ import Animated, {
 } from "react-native-reanimated";
 import EmptyLottie from "../../components/home/post/components/EmptyLottie";
 import SkeletonGroupPost from "../../components/home/misc/SkeletonGroupPost";
+import EmptyList from "../../components/home/misc/EmptyList";
 
 export default function Home() {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -42,7 +44,9 @@ export default function Home() {
 
   const userAuthValidate = useTokenValidQuery(null);
   useGetAllPostsQuery(null);
+  useGetUserQuery(null);
   useGetRandomPostsQuery(null);
+  useGetRandomPeopleQuery(null)
   const [getLazyPost, postRes] = useLazyGetAllPostsQuery();
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = useCallback(() => {
@@ -91,13 +95,7 @@ export default function Home() {
       {posts.loading ? (
         <SkeletonGroupPost />
       ) : posts.data.length === 0 ? (
-        <Animated.View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-          entering={FadeInDown.springify().duration(400)}
-          exiting={FadeOutDown.springify()}
-        >
-          <EmptyLottie />
-        </Animated.View>
+        <EmptyList />
       ) : (
         <Animated.View
           style={{ flex: 1 }}

@@ -44,6 +44,31 @@ const searchPost = createSlice({
         state.loading = false;
       }
     );
+
+    builder.addMatcher(
+      servicesApi.endpoints.searchPosts.matchFulfilled,
+      (state, { payload }) => {
+        state.data = payload.posts;
+        state.error = null;
+        state.loading = false;
+      }
+    );
+    builder.addMatcher(
+      servicesApi.endpoints.searchPosts.matchPending,
+      (state, { payload }) => {
+        state.data = [];
+        state.error = null;
+        state.loading = true;
+      }
+    );
+    builder.addMatcher(
+      servicesApi.endpoints.searchPosts.matchRejected,
+      (state, { payload, error }) => {
+        state.data = [];
+        state.error = error;
+        state.loading = false;
+      }
+    );
   },
 });
 

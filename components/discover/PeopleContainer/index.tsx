@@ -5,9 +5,16 @@ import { Button } from "react-native-paper";
 import { BlurView } from "expo-blur";
 import Animated, { FadeInLeft } from "react-native-reanimated";
 import { useState } from "react";
+import { IPerson } from "../../../types/api";
 const { width } = Dimensions.get("screen");
-export default function PeopleContainer() {
-  const [follow, setFollow] = useState(false);
+export default function PeopleContainer({
+  name,
+  userName,
+  id,
+  imageUri,
+  isFollowed
+}: IPerson) {
+  const [follow, setFollow] = useState(()=>isFollowed);
 
   const handleFollow = () => {
     setFollow(!follow);
@@ -29,14 +36,14 @@ export default function PeopleContainer() {
       <BlurView style={{ position: "absolute", height: 100, width }} />
       <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
         <Image
-          source={require("../../../assets/avatar/placeholder.png")}
+          source={{ uri: imageUri }}
           style={{ height: 30, width: 30, borderRadius: 9999 }}
         />
         <View>
-          <Text style={{ fontSize: 16, fontFamily: "mulishBold" }}>
-            Isaac Ojo
+          <Text style={{ fontSize: 16, fontFamily: "mulishBold" }}>{name}</Text>
+          <Text style={{ fontFamily: "jakara", fontSize: 12 }}>
+            @{userName}
           </Text>
-          <Text style={{ fontFamily: "jakara", fontSize: 12 }}>@hojoIsaac</Text>
         </View>
       </View>
       <View

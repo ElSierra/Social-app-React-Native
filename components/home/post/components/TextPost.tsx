@@ -16,7 +16,9 @@ export default function TextPost({
   const color = isDark ? "white" : "black";
   return (
     <Text
+    numberOfLines={2}
       style={{
+        
         marginBottom: photoUri.length > 0 || videoUri ? 2 : 10,
         color,
       }}

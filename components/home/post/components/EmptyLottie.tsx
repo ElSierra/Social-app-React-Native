@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import Lottie from "lottie-react-native";
-
+import { Dimensions } from "react-native";
+const { width } = Dimensions.get("screen");
 export default function EmptyLottie() {
   const lottieRef = useRef<Lottie>(null);
 
@@ -11,7 +12,7 @@ export default function EmptyLottie() {
 
   return (
     <Lottie
-      style={{ width: 200, height: 200 }}
+      style={{ width: width / 1.5, height: width / 1.5 }}
       ref={lottieRef}
       source={require("../../../../assets/lottie/emptyList.json")}
     />

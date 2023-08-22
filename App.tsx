@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
-import { Dimensions, ImageURISource, StyleSheet, View } from "react-native";
+import { Text, ImageURISource, StyleSheet, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
@@ -17,16 +17,19 @@ import useGetMode from "./hooks/GetMode";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
 import CustomToast from "./components/global/Toast";
-import { PaperProvider,} from "react-native-paper";
+import { PaperProvider } from "react-native-paper";
 
 import { LoadingModal } from "./components/global/Modal/LoadingOverlay";
 
 import Animated, {
-
   BounceOutDown,
- 
+  FadeIn,
+  FadeInDown,
+  FadeInUp,
   FadeOut,
 } from "react-native-reanimated";
+import { useNetInfo } from "@react-native-community/netinfo";
+import { openToast } from "./redux/slice/toast/toast";
 
 const persistor = persistStore(store);
 SplashScreen.preventAutoHideAsync();
@@ -70,7 +73,7 @@ function AnimatedSplashScreen({
       {isAppReady && children}
       {!isAppReady && (
         <Animated.View
-          exiting={FadeOut.duration(400)}
+          exiting={FadeOut.duration(800)}
           pointerEvents="none"
           style={[
             StyleSheet.absoluteFill,
@@ -90,6 +93,27 @@ function AnimatedSplashScreen({
             onLoadEnd={onImageLoaded}
             fadeDuration={0}
           />
+          <Animated.View
+            entering={FadeIn.springify()}
+            style={{
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+              position: "absolute",
+              bottom: 0,
+              marginBottom: 20,
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: "mulish",
+                color: "white",
+                fontSize: 14,
+              }}
+            >
+              Qui v1.0
+            </Text>
+          </Animated.View>
         </Animated.View>
       )}
     </View>
@@ -98,11 +122,18 @@ function AnimatedSplashScreen({
 
 const Navigation = () => {
   const dark = useGetMode();
-
+  const dispatch = useAppDispatch();
   const style = dark ? "light" : "dark";
   const { route } = useAppSelector((state) => state.routes);
   const userAuthenticated = useAppSelector((state) => state.user.token);
-
+  const netInfo = useNetInfo();
+  useEffect(() => {
+    if (netInfo.isConnected !== null) {
+      if (!netInfo.isConnected) {
+        dispatch(openToast({ text: "No Internet", type: "Failed" }));
+      }
+    }
+  }, [netInfo]);
   const [fontsLoaded] = useFonts({
     mulish: require("./assets/fonts/Mulish-Light.ttf"),
     mulishBold: require("./assets/fonts/Mulish-Black.ttf"),
@@ -153,4 +184,3 @@ const Navigation = () => {
     </AnimatedSplashScreen>
   );
 };
-

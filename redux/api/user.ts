@@ -29,7 +29,7 @@ export const userApi = createApi({
   }),
   tagTypes: ["user"],
   endpoints: (builder) => ({
-    getUser: builder.query<IUSerData, null>({
+    getUser: builder.query<{data:IUSerData}, null>({
       query: () => "/get-user",
       providesTags: ["user"],
       extraOptions: { maxRetries: 2 },
@@ -42,4 +42,4 @@ export const userApi = createApi({
   }),
 });
 
-export const { useGetUserQuery,useTokenValidQuery } = userApi;
+export const { useGetUserQuery,useTokenValidQuery,useLazyGetUserQuery } = userApi;

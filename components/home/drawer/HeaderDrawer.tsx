@@ -41,7 +41,7 @@ export default function HeaderDrawer() {
               includeFontPadding: false,
             }}
           >
-            {user?.followers.length}
+            {user?.following.length}
           </Text>
           <Text
             style={{ fontFamily: "jakara", color, includeFontPadding: false }}
@@ -57,7 +57,7 @@ export default function HeaderDrawer() {
               includeFontPadding: false,
             }}
           >
-           {user?.following.length}
+           {user?.followers.length}
           </Text>
           <Text
             style={{ fontFamily: "jakara", color, includeFontPadding: false }}
