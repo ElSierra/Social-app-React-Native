@@ -2,8 +2,8 @@ export interface IUSerData {
   name: string;
   userName: string;
   email: string;
-  followers: any[];
-  following: any[];
+  followersCount: string;
+  followingCount: string;
   imageUri: string;
   emailIsVerified: boolean;
 }
@@ -21,7 +21,7 @@ export interface IPerson {
   name: string;
   userName: string;
   id: string;
-  isFollowed:boolean;
+  isFollowed: boolean;
   imageUri: string;
 }
 

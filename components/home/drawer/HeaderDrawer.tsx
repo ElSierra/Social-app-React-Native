@@ -13,7 +13,7 @@ export default function HeaderDrawer() {
     <View style={{ paddingLeft: 14, flex: 1 }}>
       <Image
         style={{ height: 50, width: 50, borderRadius: 9999 }}
-        source={{uri: user?.imageUri}}
+        source={{ uri: user?.imageUri }}
       />
       <View style={{ marginTop: 10 }}>
         <Text
@@ -41,7 +41,7 @@ export default function HeaderDrawer() {
               includeFontPadding: false,
             }}
           >
-            {user?.following.length}
+            {user?.followingCount || 0}
           </Text>
           <Text
             style={{ fontFamily: "jakara", color, includeFontPadding: false }}
@@ -57,7 +57,7 @@ export default function HeaderDrawer() {
               includeFontPadding: false,
             }}
           >
-           {user?.followers.length}
+            {user?.followingCount || 0}
           </Text>
           <Text
             style={{ fontFamily: "jakara", color, includeFontPadding: false }}

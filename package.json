@@ -38,6 +38,7 @@
     "react-hook-form": "^7.45.4",
     "react-native": "0.72.3",
     "react-native-bouncy-checkbox": "^3.0.7",
+    "react-native-device-info": "^10.8.0",
     "react-native-document-picker": "^9.0.1",
     "react-native-dotenv": "^3.4.9",
     "react-native-fs": "^2.20.0",

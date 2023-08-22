@@ -118,7 +118,7 @@ function AnimatedSplashScreen({
                 fontSize: 14,
               }}
             >
-              Qui v1.0
+              Qui v
             </Text>
           </Animated.View>
         </Animated.View>
