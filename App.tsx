@@ -31,6 +31,13 @@ import Animated, {
 import { useNetInfo } from "@react-native-community/netinfo";
 import { openToast } from "./redux/slice/toast/toast";
 
+import * as Sentry from '@sentry/react-native';
+
+Sentry.init({ 
+  dsn: 'https://a5db1485b6b50a45db57917521128254@o4505750037725184.ingest.sentry.io/4505750586195968', 
+});
+
+
 const persistor = persistStore(store);
 SplashScreen.preventAutoHideAsync();
 
