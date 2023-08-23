@@ -117,8 +117,11 @@ export const servicesApi = createApi({
       invalidatesTags: ["post"],
     }),
 
-    getAllPosts: builder.query<{ posts: IPost[] }, null>({
-      query: () => "/all-posts",
+    getAllPosts: builder.query<
+      { posts: IPost[] },
+      { take: number; skip: number }
+    >({
+      query: ({ take, skip }) => `/all-posts?take=${take}&skip=${skip}`,
       providesTags: ["post"],
       extraOptions: { maxRetries: 2 },
     }),
@@ -138,6 +141,14 @@ export const servicesApi = createApi({
       query: ({ q }) => `/search-people?q=${q}`,
       extraOptions: { maxRetries: 0 },
     }),
+    followUser: builder.query<{ msg: string }, { id: string }>({
+      query: ({ id }) => `/follow?id=${id}`,
+      extraOptions: { maxRetries: 0 },
+    }),
+    unfollowUser: builder.query<{ msg: string }, { id: string }>({
+      query: ({ id }) => `/unfollow?id=${id}`,
+      extraOptions: { maxRetries: 0 },
+    }),
   }),
 });
 
@@ -151,6 +162,8 @@ export const {
   useLazyGetRandomPostsQuery,
   useGetAllPostsQuery,
   useGetRandomPeopleQuery,
+  useLazyFollowUserQuery,
+  useLazyUnfollowUserQuery,
   useLazySearchPostsQuery,
   useLazyGetAllPostsQuery,
 } = servicesApi;

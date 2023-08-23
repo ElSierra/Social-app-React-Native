@@ -6,18 +6,48 @@ import { BlurView } from "expo-blur";
 import Animated, { FadeInLeft } from "react-native-reanimated";
 import { useState } from "react";
 import { IPerson } from "../../../types/api";
+import {
+  useLazyFollowUserQuery,
+  useLazyUnfollowUserQuery,
+} from "../../../redux/api/services";
+import {
+  useLazyGetFollowDetailsQuery,
+  useLazyGetUserQuery,
+} from "../../../redux/api/user";
+import { useAppSelector } from "../../../redux/hooks/hooks";
+import useGetMode from "../../../hooks/GetMode";
+
 const { width } = Dimensions.get("screen");
 export default function PeopleContainer({
   name,
   userName,
   id,
   imageUri,
-  isFollowed
+  isFollowed,
 }: IPerson) {
-  const [follow, setFollow] = useState(()=>isFollowed);
+  console.log("🚀 ~ file: index.tsx:18 ~ id:", id);
+  const [follow, setFollow] = useState(() => isFollowed);
+  const followState = useAppSelector((state) => state.followers);
+  console.log("🚀 ~ file: index.tsx:30 ~ followState:", followState.loading);
+  const [followUser] = useLazyFollowUserQuery();
+  const [unfollowUser] = useLazyUnfollowUserQuery();
+  const dark = useGetMode();
+  const color = dark ? "white" : "black";
+  const backgroundColor = !dark ? "#E5E9F899" : "#25252599";
+  const nbuttonBackgroundColor = !dark ? "#FFFFFF" : "#00000099";
+  const fbuttonBackgroundColor = dark ? "#FFFFFF" : "#00000099";
+  const nBColor = !dark ? "white" : "black";
+  const fBColor = dark ? "white" : "black";
 
   const handleFollow = () => {
     setFollow(!follow);
+    if (!follow) {
+      followUser({ id }).then((e) => {});
+    } else {
+      unfollowUser({ id }).then((e) => {
+        console.log("🚀 ~ file: index.tsx:34 ~ followUser ~ e:", e);
+      });
+    }
   };
   return (
     <Animated.View
@@ -29,19 +59,20 @@ export default function PeopleContainer({
         padding: 6,
         alignItems: "center",
         flexDirection: "row",
-        backgroundColor: "#E5E9F899",
+        backgroundColor,
         borderRadius: 20,
       }}
     >
-      <BlurView style={{ position: "absolute", height: 100, width }} />
       <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
         <Image
           source={{ uri: imageUri }}
           style={{ height: 30, width: 30, borderRadius: 9999 }}
         />
         <View>
-          <Text style={{ fontSize: 16, fontFamily: "mulishBold" }}>{name}</Text>
-          <Text style={{ fontFamily: "jakara", fontSize: 12 }}>
+          <Text style={{ fontSize: 16, fontFamily: "mulishBold", color }}>
+            {name}
+          </Text>
+          <Text style={{ fontFamily: "jakara", fontSize: 12, color }}>
             @{userName}
           </Text>
         </View>
@@ -50,9 +81,9 @@ export default function PeopleContainer({
         style={{
           borderRadius: 999,
           borderWidth: 1,
-          backgroundColor: follow ? "black" : "transparent",
+          backgroundColor: follow ? fbuttonBackgroundColor : "transparent",
           overflow: "hidden",
-          borderColor: "black",
+          borderColor: fbuttonBackgroundColor,
         }}
       >
         <Pressable
@@ -63,7 +94,7 @@ export default function PeopleContainer({
           <Text
             style={{
               fontFamily: "jakara",
-              color: !follow ? "black" : "white",
+              color: !follow ? fBColor : nBColor,
               includeFontPadding: false,
             }}
           >

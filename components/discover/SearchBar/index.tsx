@@ -27,7 +27,7 @@ export default function SearchBar() {
   const [getSearchPosts, res] = useLazySearchPostsQuery();
   const [getSearchPeople] = useLazySearchPeopleQuery();
 
-  useMemo(() => {
+  useEffect(() => {
     if (query) {
       getSearchPosts({ q: query });
       getSearchPeople({ q: query });

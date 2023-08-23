@@ -19,17 +19,17 @@ export default function IconButtons({
     <View
       style={{
         width: 80,
-        height: 50,
+        height: 60,
         justifyContent: "center",
         alignItems: "center",
-        borderRadius:10,
+        borderRadius:9999,
         overflow:"hidden",
       }}
     >
       <Pressable
         android_ripple={{
           color: "#0000004B",
-          borderless: false,
+          borderless: true,
           foreground: true,
         }}
         style={{

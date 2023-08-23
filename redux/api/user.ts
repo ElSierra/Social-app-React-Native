@@ -9,9 +9,11 @@ interface loginResult {
   data: IUSerData;
 }
 const persistedState = storage.getString("persist:root");
-console.log("🚀 ~ file: services.ts:12 ~ persistedState:", persistedState)
-const JSONpersistedState = persistedState? JSON.parse(persistedState): null
-const tokenFromState = JSONpersistedState?.user ?(JSON.parse(JSONpersistedState?.user)?.token):null
+console.log("🚀 ~ file: services.ts:12 ~ persistedState:", persistedState);
+const JSONpersistedState = persistedState ? JSON.parse(persistedState) : null;
+const tokenFromState = JSONpersistedState?.user
+  ? JSON.parse(JSONpersistedState?.user)?.token
+  : null;
 console.log("🚀 ~ file: auth.ts:9 ~ tokenFromState:", tokenFromState);
 
 export const userApi = createApi({
@@ -29,17 +31,31 @@ export const userApi = createApi({
   }),
   tagTypes: ["user"],
   endpoints: (builder) => ({
-    getUser: builder.query<{data:IUSerData}, null>({
+    getUser: builder.query<{ data: IUSerData }, null>({
       query: () => "/get-user",
       providesTags: ["user"],
       extraOptions: { maxRetries: 2 },
     }),
-    tokenValid: builder.query<{msg:boolean}, null>({
-        query: () => "/token-valid",
-        providesTags: ["user"],
-        extraOptions: { maxRetries: 0 },
-      }),
+    getFollowDetails: builder.query<
+      { following: string; followers: string },
+      null
+    >({
+      query: () => "/get-follows",
+      providesTags: ["user"],
+      extraOptions: { maxRetries: 2 },
+    }),
+    tokenValid: builder.query<{ msg: boolean }, null>({
+      query: () => "/token-valid",
+      providesTags: ["user"],
+      extraOptions: { maxRetries: 0 },
+    }),
   }),
 });
 
-export const { useGetUserQuery,useTokenValidQuery,useLazyGetUserQuery } = userApi;
+export const {
+  useGetUserQuery,
+  useTokenValidQuery,
+  useLazyGetUserQuery,
+  useGetFollowDetailsQuery,
+  useLazyGetFollowDetailsQuery,
+} = userApi;

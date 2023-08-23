@@ -3,13 +3,16 @@ import { View, Pressable } from "react-native";
 import useGetMode from "../../../../hooks/GetMode";
 import { useNavigation } from "@react-navigation/native";
 import { HomeNavigationProp } from "../../../../types/navigation";
+import Animated, { BounceIn, BounceOut, FadeIn, FadeOut, ZoomIn, ZoomOut } from "react-native-reanimated";
 export default function Fab({ item }: { item: JSX.Element }) {
   const dark = useGetMode();
   const isDark = dark;
   const navigation = useNavigation<HomeNavigationProp>();
   const tint = isDark ? "dark" : "light";
   return (
-    <View
+    <Animated.View
+    entering={ZoomIn.delay(500).duration(200)}
+    exiting={ZoomOut.duration(200)}
       style={{
         position: "absolute",
         bottom: 100,
@@ -53,6 +56,6 @@ export default function Fab({ item }: { item: JSX.Element }) {
           <View style={{ zIndex: 200 }}>{item}</View>
         </>
       </Pressable>
-    </View>
+    </Animated.View>
   );
 }

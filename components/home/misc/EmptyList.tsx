@@ -6,7 +6,7 @@ import useGetMode from "../../../hooks/GetMode";
 import { ReloadIcon } from "../../icons";
 import { useLazyGetAllPostsQuery } from "../../../redux/api/services";
 
-export default function EmptyList() {
+export default function EmptyList({handleRefetch}:{handleRefetch:()=>void}) {
   const dark = useGetMode();
   const isDark = dark;
   const [getPosts] = useLazyGetAllPostsQuery();
@@ -39,9 +39,7 @@ export default function EmptyList() {
           }}
         >
           <Pressable
-            onPress={() => {
-              getPosts(null);
-            }}
+            onPress={handleRefetch}
             android_ripple={{ color }}
             style={{
               backgroundColor,

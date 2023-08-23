@@ -45,6 +45,8 @@ import CustomToast from "../components/global/Toast";
 import InputText from "../screen/Auth/components/InputText";
 import SearchBar from "../components/discover/SearchBar";
 import VideoFullScreen from "../screen/App/VideoFullScreen";
+import { useAppSelector } from "../redux/hooks/hooks";
+import { useLazyGetFollowDetailsQuery } from "../redux/api/user";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<BottomRootStackParamList>();
@@ -56,11 +58,15 @@ function DrawerNavigator() {
   const isDark = dark;
   const tint = isDark ? "dark" : "light";
   const color = isDark ? "white" : "black";
+  const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
   const backgroundColor = isDark ? "black" : "white";
+  const [getCurrentFollowData] = useLazyGetFollowDetailsQuery();
   return (
     <Drawer.Navigator
       drawerContent={CustomDrawerContent}
       screenOptions={{
+        headerStatusBarHeight: 30,
+
         drawerStyle: { backgroundColor: "transparent", width: width * 0.85 },
         sceneContainerStyle: { backgroundColor },
       }}
@@ -89,7 +95,7 @@ function DrawerNavigator() {
             headerShadowVisible: false,
             headerBackgroundContainerStyle: {
               borderBottomWidth: 0.2,
-              borderColor: "#FFFFFF7D",
+              borderColor,
             },
             headerTransparent: true,
             headerTitleAlign: "center",
@@ -98,7 +104,10 @@ function DrawerNavigator() {
                 color={color}
                 style={{ paddingLeft: 20 }}
                 size={40}
-                onPress={() => navigation.toggleDrawer()}
+                onPress={() => {
+                  getCurrentFollowData(null);
+                  navigation.toggleDrawer();
+                }}
               />
             ),
             headerStyle: { backgroundColor: "transparent" },
@@ -153,7 +162,7 @@ export default function Main() {
               animation: "fade",
 
               presentation: "transparentModal",
-            headerStyle:{backgroundColor:"black"},
+              headerStyle: { backgroundColor: "black" },
               headerShadowVisible: false,
               headerTintColor: "white",
             }}
@@ -198,6 +207,7 @@ export function BottomTabNavigator() {
   const tint = !isDark ? "light" : "dark";
   const color = isDark ? "white" : "black";
   const backgroundColor = isDark ? "black" : "white";
+  const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
   return (
     <Tab.Navigator
       tabBar={(props) => (
@@ -219,17 +229,18 @@ export function BottomTabNavigator() {
         return {
           tabBarHideOnKeyboard: true,
           tabBarShowLabel: false,
+          headerStatusBarHeight: 30,
 
           tabBarStyle: {
             backgroundColor: "transparent",
             elevation: 0,
             height: 60,
             borderTopWidth: 0.2,
-            borderColor: "#FFFFFF7D",
+            borderColor,
           },
           headerBackgroundContainerStyle: {
             borderBottomWidth: 0.2,
-            borderColor: "#FFFFFF7D",
+            borderColor,
           },
           headerBackground: () => (
             <BlurView

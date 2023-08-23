@@ -3,6 +3,7 @@ import React from "react";
 import useGetMode from "../../hooks/GetMode";
 import { useAppDispatch } from "../../redux/hooks/hooks";
 import { openToast } from "../../redux/slice/toast/toast";
+import { resetPost } from "../../redux/slice/post";
 
 export default function PostButton({
   isLoading,
@@ -36,6 +37,7 @@ export default function PostButton({
         disabled={isLoading || isDisabled}
         onPress={() => {
           onPress();
+          dispatch(resetPost())
         }}
         android_ripple={{ color: rippleColor, foreground: true }}
         style={{

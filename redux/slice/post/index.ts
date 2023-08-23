@@ -18,12 +18,19 @@ const post = createSlice({
   } as postState,
   reducers: {
     addPost: () => {},
+    resetPost: (state) => {
+      state.data = [];
+      state.error = null;
+      state.loading = false;
+    },
   },
+
   extraReducers: (builder) => {
     builder.addMatcher(
       servicesApi.endpoints.getAllPosts.matchFulfilled,
       (state, { payload }) => {
-        state.data = payload.posts;
+        const data = [...state.data, ...payload.posts];
+        state.data = data;
         state.error = null;
         state.loading = false;
       }
@@ -31,7 +38,6 @@ const post = createSlice({
     builder.addMatcher(
       servicesApi.endpoints.getAllPosts.matchPending,
       (state, { payload }) => {
-        state.data = [];
         state.error = null;
         state.loading = true;
       }
@@ -39,7 +45,6 @@ const post = createSlice({
     builder.addMatcher(
       servicesApi.endpoints.getAllPosts.matchRejected,
       (state, { payload, error }) => {
-        state.data = [];
         state.error = error;
         state.loading = false;
       }
@@ -48,3 +53,4 @@ const post = createSlice({
 });
 
 export default post.reducer;
+export const {resetPost} = post.actions

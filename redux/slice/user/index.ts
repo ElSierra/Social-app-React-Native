@@ -34,7 +34,6 @@ const user = createSlice({
       }
     );
     builder.addMatcher(userApi.endpoints.getUser.matchPending, (state) => {
-      state.data = null;
       state.error = null;
       state.loading = true;
     });

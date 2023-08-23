@@ -12,7 +12,18 @@ import {
 } from "../../../icons";
 import useGetMode from "../../../../hooks/GetMode";
 
-export default function Engagements({ title }: { title?: string }) {
+export default function Engagements({
+  title,
+  like,
+  comments,
+  isLiked,
+}: {
+  title?: string;
+  like?: number;
+  comments?: number;
+  isLiked: boolean;
+}) {
+  console.log("🚀 ~ file: Engagements.tsx:26 ~ isLiked:", {isLiked,})
   const dark = useGetMode();
   const isDark = dark;
   const color = isDark ? "white" : "black";
@@ -29,15 +40,16 @@ export default function Engagements({ title }: { title?: string }) {
       }}
     >
       {title && <Text>{title}</Text>}
-      <View style={{flexDirection:"row"}}>
+      <View style={{ flexDirection: "row" }}>
         <IconWithValue
           IconUnfocused={MessageUnfocused}
-          text="210"
+          text={comments?.toString() || "0"}
           IconFocused={MessageUnfocused}
         />
         <IconWithValue
+          isLiked={isLiked}
           IconUnfocused={HeartUnfocused}
-          text="110K"
+          text={like?.toString() || "0"}
           IconFocused={HeartsFocused}
         />
       </View>

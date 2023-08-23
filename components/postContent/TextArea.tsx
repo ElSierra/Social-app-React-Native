@@ -34,6 +34,7 @@ export default function TextArea({
       <View style={{ marginLeft: 55, minHeight: heightFromScreen / 20 }}>
         <TextInput
           multiline
+          maxLength={400}
           onChangeText={handlePostText}
           cursorColor={color}
           onContentSizeChange={(event) => {
@@ -44,7 +45,7 @@ export default function TextArea({
             color,
 
             fontFamily: "mulishMedium",
-            maxHeight: height,
+            minHeight: height,
             alignItems: "flex-start",
           }}
           placeholder="What's happening?"

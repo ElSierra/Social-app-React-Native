@@ -3,6 +3,7 @@ import { NotificationIcon } from "./../components/icons/index";
 import { NotFunction } from "./../node_modules/@reduxjs/toolkit/src/createReducer";
 import { NavigationProp } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { DrawerScreenProps } from "@react-navigation/drawer";
 
 export type RootStackParamList = {
   Main: undefined;
@@ -45,6 +46,7 @@ export type PostContentProp = NativeStackScreenProps<
   "PostContent"
 >;
 export type HomeProp = NativeStackScreenProps<RootStackParamList, "Main">;
+export type DrawerHomeProp = DrawerScreenProps<DrawerRootStackParamList, "Home">;
 
 export type BottomProp = BottomTabScreenProps<
   BottomRootStackParamList,

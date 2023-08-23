@@ -1,5 +1,5 @@
 import { View, Text, useColorScheme, Pressable } from "react-native";
-import React, { ElementType, useState } from "react";
+import React, { ElementType, useEffect, useState } from "react";
 import Animated, {
   Extrapolate,
   FadeIn,
@@ -14,17 +14,24 @@ import useGetMode from "../../../../hooks/GetMode";
 export default function IconWithValue({
   IconUnfocused,
   IconFocused,
+  isLiked,
   text,
 }: {
   IconUnfocused: ElementType;
   IconFocused: ElementType;
   text: string;
+  isLiked?: boolean;
 }) {
   const dark = useGetMode();
   const isDark = dark;
   const color = isDark ? "white" : "black";
   const [clicked, setClicked] = useState(false);
   const liked = useSharedValue(0);
+  useEffect(() => {
+    if (isLiked) {
+      setClicked(true);
+    }
+  }, [isLiked]);
 
   const outlineStyle = useAnimatedStyle(() => {
     return {
@@ -59,13 +66,13 @@ export default function IconWithValue({
         setClicked(!clicked);
       }}
     >
-      <Animated.View style={clicked ? fillStyle : outlineStyle}>
+      
         {clicked ? (
           <IconFocused size={16} color={color} />
         ) : (
           <IconUnfocused size={16} color={color} />
         )}
-      </Animated.View>
+    
 
       <Text style={{ color }}>{text}</Text>
     </Pressable>

@@ -16,6 +16,8 @@ export type IPostBuilder = {
   imageUri: string;
   name: string;
   userTag: string;
+  comments?: number;
+  isLiked: boolean;
   verified: boolean;
   photoUri: string[];
   videoUri?: string;
@@ -24,23 +26,28 @@ export type IPostBuilder = {
   videoViews?: string;
   repost?: string;
   title?: string;
+  like?: number;
   id: string;
   audioUri?: string;
 };
 export default function PostBuilder({
   imageUri,
   name,
+  isLiked,
   userTag,
   photoUri,
   verified,
   videoUri,
   postText,
   videoTitle,
+  comments,
   videoViews,
   title,
+  like,
   id,
   audioUri,
 }: IPostBuilder) {
+  console.log("🚀 ~ file: PostBuilder.tsx:50 ~ isLiked:", isLiked)
   const width = Dimensions.get("screen").width;
 
   const dark = useGetMode();
@@ -85,7 +92,7 @@ export default function PostBuilder({
             />
           )}
           {audioUri && <AudioPost uri={audioUri} photoUri={imageUri} />}
-          <Engagements title={title} />
+          <Engagements title={title} comments={comments} like={like} isLiked={isLiked} />
         </View>
       </View>
     </View>

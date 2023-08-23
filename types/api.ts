@@ -34,8 +34,9 @@ export interface User {
 
 export interface IPost {
   id: string;
-
+  _count: { like: number; comments: number };
   userId: string;
+  isLiked: boolean;
   audioUri: string | null;
   audioTitle: string | null;
   videoUri: string | null;

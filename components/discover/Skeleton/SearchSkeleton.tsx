@@ -14,9 +14,9 @@ export const SearchSkeleton = () => {
     : ["#ebebeb", "#c5c5c5", "#ebebeb"];
   return (
     <View style={{ width: "100%" }}>
-      <View style={{ width: "100%", height: 60, gap: 10 }}>
+      <View style={{ width: "100%", height: 40, gap: 10 }}>
         <ShimmerPlaceholder
-          height={60}
+          height={40}
           width={width - 20}
           shimmerColors={shimmerColors}
           style={{ borderRadius: 20 }}

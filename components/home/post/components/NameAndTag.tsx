@@ -22,7 +22,7 @@ export default function NameAndTag({
           style={{
             fontFamily: "jakaraBold",
             includeFontPadding: false,
-            fontSize: 18,
+            fontSize: 14,
             color,
           }}
         >
@@ -34,7 +34,7 @@ export default function NameAndTag({
             fontFamily: "jakara",
             includeFontPadding: false,
             color: "#7a868f",
-            fontSize: 18,
+            fontSize: 16,
             marginBottom: 2,
           }}
         >
