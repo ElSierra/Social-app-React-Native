@@ -35,7 +35,7 @@ export default function PickAudioButton({
         onPress={() => {
           DocumentPicker.pick({ type: "audio/mpeg" })
             .then((e) => {
-              console.log("🚀 ~ file: PickAudioButton.tsx:33 ~ .then ~ e:", e);
+
               handleSetAudioPost(
                 e[0]?.type as string,
                 e[0].uri,

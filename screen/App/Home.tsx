@@ -46,10 +46,12 @@ import SkeletonGroupPost from "../../components/home/misc/SkeletonGroupPost";
 import EmptyList from "../../components/home/misc/EmptyList";
 import { resetPost } from "../../redux/slice/post";
 import { DrawerHomeProp, HomeProp } from "../../types/navigation";
+import storage from "../../redux/storage";
+import Robot from "../../components/home/post/misc/Robot";
 
 export default function Home({ navigation }: DrawerHomeProp) {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
-  console.log("🚀 ~ file: Home.tsx:15 ~ Home ~ apiUrl:", apiUrl);
+
   const dark = useGetMode();
   const dispatch = useAppDispatch();
   const posts = useAppSelector((state) => state.post);
@@ -60,13 +62,12 @@ export default function Home({ navigation }: DrawerHomeProp) {
   const width = Dimensions.get("screen").width;
 
   const [skip, setSkip] = useState(0);
+  console.log("🚀 ~ file: Home.tsx:64 ~ Home ~ skip:", skip);
+
   const [noMore, setNoMore] = useState(false);
 
   const userAuthValidate = useTokenValidQuery(null);
-  useGetAllPostsQuery({
-    take: 10,
-    skip: 0,
-  });
+
   useGetUserQuery(null);
   useGetRandomPostsQuery(null);
   useGetRandomPeopleQuery(null);
@@ -94,19 +95,27 @@ export default function Home({ navigation }: DrawerHomeProp) {
   const onRefresh = useCallback(() => {
     dispatch(resetPost());
     setSkip(0);
+    setNoMore(false);
     setRefreshing(true),
-      getLazyPost({ take: 10, skip: 0 })
+      getLazyPost({ take: 20, skip })
         .unwrap()
-        .then((r) => {
-          setRefreshing(false);
+        .then((e) => {
+          setSkip(skip + e.posts.length);
+          console.log(
+            "🚀 ~ file: Home.tsx:178 ~ .then ~ length:",
+            e.posts.length
+          );
+          if (e.posts.length === 0) {
+            setNoMore(true);
+          }
         })
         .catch((e) => {
-          setRefreshing(false);
           dispatch(
             openToast({ text: "couldn't get recent posts", type: "Failed" })
           );
         });
   }, []);
+
   const renderFooter = () => {
     if (noMore) {
       return (
@@ -118,7 +127,7 @@ export default function Home({ navigation }: DrawerHomeProp) {
             alignItems: "center",
           }}
         >
-          <Text style={{ fontFamily: "mulishBold" }}>No More Posts</Text>
+          <Robot />
         </View>
       );
     } else if (posts.loading) {
@@ -139,26 +148,57 @@ export default function Home({ navigation }: DrawerHomeProp) {
     }
   };
 
+  // useEffect(() => {
+  //   if (skip !== 0 && !noMore && !posts.loading)
+  //     getLazyPost({ take: 10, skip })
+  //       .unwrap()
+  //       .then((r) => {
+  //         setSkip(r.posts?.length || 0);
+  //         setNoMore(r.posts?.length === 0);
+  //       })
+  //       .catch((e) => {
+  //         dispatch(
+  //           openToast({ text: "couldn't get recent posts", type: "Failed" })
+  //         );
+  //       });
+  // }, [skip, noMore]);
+
   useEffect(() => {
-    if (skip !== 0 && !noMore && !posts.loading)
-      getLazyPost({ take: 10, skip })
+    getLazyPost({ take: 20, skip })
+      .unwrap()
+      .then((e) => {
+        setSkip(e.posts?.length);
+      })
+      .catch((e) => {
+        dispatch(
+          openToast({ text: "couldn't get recent posts", type: "Failed" })
+        );
+      });
+  }, []);
+
+  const fetchMoreData = () => {
+    if (!noMore)
+      getLazyPost({ take: 20, skip })
         .unwrap()
-        .then((r) => {
-          console.log("🚀 ~ file: Home.tsx:78 ~ .then ~ r:", r);
-          setNoMore(r.posts?.length === 0);
+        .then((e) => {
+          setSkip(skip + e.posts.length);
+          console.log(
+            "🚀 ~ file: Home.tsx:178 ~ .then ~ length:",
+            e.posts.length
+          );
+          if (e.posts.length === 0) {
+            setNoMore(true);
+          }
         })
         .catch((e) => {
           dispatch(
             openToast({ text: "couldn't get recent posts", type: "Failed" })
           );
         });
-  }, [skip, noMore]);
-
-  const fetchMoreData = () => {
-    setSkip(skip + 10);
   };
   const handleRefetch = () => {
     setSkip(0);
+    setNoMore(false);
     getLazyPost({ take: 10, skip: 0 })
       .unwrap()
       .then((r) => {
@@ -215,8 +255,6 @@ export default function Home({ navigation }: DrawerHomeProp) {
             decelerationRate={0.991}
             estimatedItemSize={300}
             ListFooterComponent={renderFooter}
-            onScrollEndDrag={() => showFab(true)}
-            onScrollBeginDrag={() => showFab(false)}
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}
@@ -233,7 +271,7 @@ export default function Home({ navigation }: DrawerHomeProp) {
           />
         </Animated.View>
       )}
-      {fab && <Fab item={<AddIcon size={30} color={color} />} />}
+      <Fab item={<AddIcon size={30} color={color} />} />
     </AnimatedScreen>
   );
 }

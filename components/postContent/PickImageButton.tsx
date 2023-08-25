@@ -42,10 +42,7 @@ export default function PickImageButton({
             compressImageQuality: 0.5,
           })
             .then((image) => {
-              console.log(
-                "🚀 ~ file: PostContent.tsx:173 ~ PostContent ~ image:",
-                image
-              );
+             
 
               handleSetPhotoPost(image?.mime, image?.path, image?.size);
             })

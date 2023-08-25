@@ -22,7 +22,7 @@ export default function Discover() {
   const dark = useGetMode();
   const tint = dark ? "dark" : "light";
   const persons = useAppSelector((state) => state.searchPeople);
-  console.log("🚀 ~ file: Discover.tsx:21 ~ Discover ~ persons:", persons);
+
   const [people, setPeople] = useState(true);
 
   return (

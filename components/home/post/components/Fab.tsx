@@ -10,9 +10,8 @@ export default function Fab({ item }: { item: JSX.Element }) {
   const navigation = useNavigation<HomeNavigationProp>();
   const tint = isDark ? "dark" : "light";
   return (
-    <Animated.View
-    entering={ZoomIn.delay(500).duration(200)}
-    exiting={ZoomOut.duration(200)}
+    <View
+ 
       style={{
         position: "absolute",
         bottom: 100,
@@ -56,6 +55,6 @@ export default function Fab({ item }: { item: JSX.Element }) {
           <View style={{ zIndex: 200 }}>{item}</View>
         </>
       </Pressable>
-    </Animated.View>
+    </View>
   );
 }

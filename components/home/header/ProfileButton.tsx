@@ -17,7 +17,7 @@ export default function ProfileButton({
   style,
 }: ProfileButtonType) {
   const imageUri = useAppSelector((state) => state.user.data?.imageUri);
-  console.log("🚀 ~ file: ProfileButton.tsx:20 ~ imageUri:", imageUri);
+
   return (
     <View style={style}>
       <Pressable onPress={onPress}>

@@ -3,8 +3,6 @@ import { UserState } from "../slice/user";
 import { IUSerData } from "../../types/api";
 import storage from "../storage";
 
-
-
 interface loginResult {
   msg: string;
   token: string;
@@ -33,9 +31,27 @@ export const authApi = createApi({
           "Content-type": "application/json; charset=UTF-8",
         },
       }),
-      invalidatesTags: ["user"],
+    }),
+    register: builder.mutation<
+      loginResult,
+      {
+        userName: string;
+        password: string;
+        email: string;
+        name: string;
+      }
+    >({
+      query: (payload) => ({
+        url: "/signup",
+        method: "POST",
+        body: payload,
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }),
+     
     }),
   }),
 });
 
-export const { useLoginMutation } = authApi;
+export const { useLoginMutation ,useRegisterMutation} = authApi;

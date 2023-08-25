@@ -26,7 +26,7 @@ import useGetMode from "../../hooks/GetMode";
 
 const height = Dimensions.get("screen").height;
 const width = Dimensions.get("window").width;
-console.log("🚀 ~ file: index.tsx:17 ~ width:", width);
+
 
 export default function Onboard() {
   const [page, setPage] = useState(0);
@@ -45,7 +45,7 @@ export default function Onboard() {
     };
   }, []);
 
-  console.log("🚀 ~ file: index.tsx:13 ~ Onboard ~ page:", page);
+
   const dark = useGetMode();
   const isDark = dark;
   const color = isDark ? "black" : "white";

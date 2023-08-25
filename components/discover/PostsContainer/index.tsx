@@ -23,7 +23,7 @@ export default function PostsContainer({
   id,
   audioUri,
 }: IPostBuilder) {
-  console.log("🚀 ~ file: index.tsx:26 ~ audioUri:", audioUri);
+
   const [follow, setFollow] = useState(false);
   const dark = useGetMode();
   const color = dark ? "white" : "black";
@@ -45,10 +45,7 @@ export default function PostsContainer({
       );
     }
     if (audioUri) {
-      console.log(
-        "🚀 ~ file: index.tsx:46 ~ assetRender ~ audioUri:",
-        audioUri
-      );
+  
       return (
         <View style={{ height: 50, width: 50 }}>
           <AudioIcon size={50} color={color} />

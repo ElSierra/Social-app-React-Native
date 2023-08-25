@@ -73,7 +73,6 @@ export default function PostContent({ navigation }: PostContentProp) {
   const [postText, setPostText] = useState<string | undefined>(undefined);
   const [done, setDone] = useState(false);
   const [videoTitle, setVideoTitle] = useState<string | undefined>(undefined);
-  console.log("", postPhoto);
 
   function handleSetAudioPost(
     mimeType: string,
@@ -81,7 +80,7 @@ export default function PostContent({ navigation }: PostContentProp) {
     size: number,
     name: string
   ) {
-    console.log(`passed to ${mimeType} ${name}`);
+
     setPostAudio({
       mimeType,
       uri,
@@ -167,10 +166,7 @@ export default function PostContent({ navigation }: PostContentProp) {
       animationRef.current?.pause;
     };
   }, [postAudio]);
-  console.log(
-    "🚀 ~ file: PostContent.tsx:159 ~ PostContent ~ postAudio:",
-    postAudio
-  );
+ 
   const [photo] = useUploadPhotoMutation();
   const [audio] = useUploadAudioMutation();
   const [video] = useUploadVideoMutation();
@@ -181,28 +177,28 @@ export default function PostContent({ navigation }: PostContentProp) {
       photo(postPhoto)
         .unwrap()
         .then((r) => {
-          console.log("🚀 ~ file: PostContent.tsx:166 ~ photo ~ r:", r);
+       
           setDone(true);
           setFTServer(r.photo);
         })
         .catch((e) => {
           setDone(true);
-          console.log(e);
+         
           dispatch(openToast({ text: "Photo didn't upload", type: "Failed" }));
         });
     }
     if (postAudio) {
-      console.log("audio here");
+   
       audio(postAudio)
         .unwrap()
         .then((r) => {
-          console.log("🚀 ~ file: PostContent.tsx:166 ~ photo ~ r:", r);
+    
           setDone(true);
           setFTServer(r.audio);
         })
         .catch((e) => {
           setDone(true);
-          console.log(e);
+
           dispatch(openToast({ text: "Audio didn't upload", type: "Failed" }));
         });
     }
@@ -210,13 +206,13 @@ export default function PostContent({ navigation }: PostContentProp) {
       video(postPhoto)
         .unwrap()
         .then((r) => {
-          console.log("🚀 ~ file: PostContent.tsx:166 ~ photo ~ r:", r);
+       
           setDone(true);
           setFTServer(r.video);
         })
         .catch((e) => {
           setDone(true);
-          console.log(e);
+
           dispatch(openToast({ text: "video didn't upload", type: "Failed" }));
         });
     }
@@ -265,10 +261,8 @@ export default function PostContent({ navigation }: PostContentProp) {
             dispatch(closeLoadingModal());
           })
           .catch((e) => {
-            console.log(
-              "🚀 ~ file: PostContent.tsx:250 ~ handlePostContent ~ e:",
-              e
-            );
+        
+          
             dispatch(openToast({ text: "Post failed ", type: "Failed" }));
             dispatch(closeLoadingModal());
           });

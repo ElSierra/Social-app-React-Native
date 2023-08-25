@@ -2,6 +2,7 @@ import { View, Text, useColorScheme } from "react-native";
 import { Image } from "expo-image";
 import useGetMode from "../../../hooks/GetMode";
 import { useAppSelector } from "../../../redux/hooks/hooks";
+import { ProfileIcon } from "../../icons";
 
 export default function HeaderDrawer() {
   const dark = useGetMode();
@@ -12,10 +13,10 @@ export default function HeaderDrawer() {
   const follows = useAppSelector((state) => state.followers);
   return (
     <View style={{ paddingLeft: 14, flex: 1 }}>
-      <Image
+      {user?.imageUri ?<Image
         style={{ height: 50, width: 50, borderRadius: 9999 }}
         source={{ uri: user?.imageUri }}
-      />
+      />: <ProfileIcon color={color} size={50}/>}
       <View style={{ marginTop: 10 }}>
         <Text
           style={{

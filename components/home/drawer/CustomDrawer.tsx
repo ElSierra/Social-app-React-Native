@@ -17,13 +17,20 @@ import { BlurView } from "expo-blur";
 import { Image } from "expo-image";
 import HeaderDrawer from "./HeaderDrawer";
 import { useNavigation } from "@react-navigation/native";
-import { GlobalIcon, LogoutIcon, MoonIcon, ProfileIconUnfocused } from "../../icons";
+import {
+  GlobalIcon,
+  LogoutIcon,
+  MoonIcon,
+  ProfileIconUnfocused,
+} from "../../icons";
 import { HomeNavigationProp } from "../../../types/navigation";
 import useGetMode from "../../../hooks/GetMode";
 import { useAppDispatch } from "../../../redux/hooks/hooks";
 import { openSheet } from "../../../redux/slice/bottomSheet";
 import { signOut } from "../../../redux/slice/user";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
+import { resetPost } from "../../../redux/slice/post";
+import { resetFollowers } from "../../../redux/slice/user/followers";
 
 export default function CustomDrawerContent(
   props: DrawerContentComponentProps
@@ -74,7 +81,10 @@ export default function CustomDrawerContent(
             "my-custom-header": "my custom header value",
           },
         });
-        console.log("🚀 ~ file: CustomDrawer.tsx:77 ~ openLink ~ result:", result)
+        console.log(
+          "🚀 ~ file: CustomDrawer.tsx:77 ~ openLink ~ result:",
+          result
+        );
       } else Linking.openURL(url);
     } catch (error) {}
   };
@@ -132,7 +142,7 @@ export default function CustomDrawerContent(
           }}
         />
       </DrawerContentScrollView>
-   
+
       <View
         style={{
           width: "100%",
@@ -210,7 +220,9 @@ export default function CustomDrawerContent(
             }}
             onPress={() => {
               props.navigation.closeDrawer();
+              dispatch(resetPost());
               dispatch(signOut());
+              dispatch(resetFollowers());
             }}
             android_ripple={{ color: pressColor, foreground: true }}
           >

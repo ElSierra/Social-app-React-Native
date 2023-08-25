@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Vibration,
+  Pressable,
 } from "react-native";
 import AnimatedScreen from "../../components/global/AnimatedScreen";
 import { Image } from "expo-image";
@@ -29,17 +30,21 @@ import { openToast } from "../../redux/slice/toast/toast";
 import { useLoginMutation } from "../../redux/api/auth";
 import { signOut } from "../../redux/slice/user";
 import { useForm, Controller } from "react-hook-form";
+import { LoginScreen } from "../../types/navigation";
+import { servicesApi } from "../../redux/api/services";
+import { userApi } from "../../redux/api/user";
 
 const width = Dimensions.get("screen").width;
-export default function Login() {
+export default function Login({ navigation }: LoginScreen) {
   const dark = useGetMode();
   const isDark = dark;
   const [login, loginResponse] = useLoginMutation();
   const color = isDark ? "white" : "black";
   const buttonColor = !isDark ? "white" : "black";
   const dispatch = useAppDispatch();
+  const borderColor = isDark ? "white" : "black";
   const name = useAppSelector((state) => state.user.data?.name);
-  
+
   const {
     control,
     handleSubmit,
@@ -65,12 +70,14 @@ export default function Login() {
     login({ userName: data.userName.trim(), password: data.password })
       .unwrap()
       .then((e) => {
-        console.log(e);
+  
         Vibration.vibrate(5);
+        userApi.util.resetApiState();
+        servicesApi.util.resetApiState();
         dispatch(openToast({ text: "Successful Login", type: "Success" }));
       })
       .catch((e) => {
-        console.log(e);
+
         Vibration.vibrate(5);
         dispatch(openToast({ text: "Network Error", type: "Failed" }));
       });
@@ -225,7 +232,7 @@ export default function Login() {
             <Button
               loading={loginResponse.isLoading}
               onPress={() => {
-                Keyboard.dismiss()
+                Keyboard.dismiss();
                 handleSubmit(onSubmit)();
               }}
             >
@@ -241,25 +248,44 @@ export default function Login() {
             </Button>
             <View
               style={{
-                marginTop: 20,
                 flexDirection: "row",
-                gap: 4,
+                width: "100%",
+                height: 50,
                 justifyContent: "center",
                 alignItems: "center",
               }}
             >
-              <Text style={{ color, includeFontPadding: false }}>
-                New Member?
-              </Text>
-              <Text
+              <Pressable
                 style={{
-                  color,
-                  fontFamily: "jakaraBold",
-                  includeFontPadding: false,
+                  width: "100%",
+                  marginTop: 20,
+                  height: "100%",
+                  flexDirection: "row",
+                  gap: 4,
+
+                  borderStyle: "dashed",
+                  justifyContent: "center",
+                  borderWidth: 1,
+                  borderColor,
+                  borderRadius: 10,
+                  alignItems: "center",
                 }}
+                onPress={() => navigation.replace("Register")}
               >
-                Register Now
-              </Text>
+                <Text style={{ color, includeFontPadding: false }}>
+                  Don't have an account?
+                </Text>
+
+                <Text
+                  style={{
+                    color,
+                    fontFamily: "jakaraBold",
+                    includeFontPadding: false,
+                  }}
+                >
+                  Register
+                </Text>
+              </Pressable>
             </View>
           </View>
         </View>

@@ -8,7 +8,7 @@ export default function TestVideo() {
   const [playbackStatus, setPlaybackStatus] = useState<AVPlaybackStatus | null>(
     null
   );
-  console.log("🚀 ~ file: testVideo.tsx:11 ~ TestVideo ~ playbackStatus:", playbackStatus)
+
   const [sliderPosition, setSliderPosition] = useState(0);
 
   // A reference to the video component

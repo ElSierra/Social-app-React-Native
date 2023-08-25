@@ -34,10 +34,7 @@ export default function PickVideoButton({
             compressImageQuality: 0.5,
           })
             .then((video) => {
-              console.log(
-                "🚀 ~ file: PostContent.tsx:173 ~ PostContent ~ image:",
-                video
-              );
+              
 
               handleSetPhotoPost(video?.mime, video?.path, video?.size);
             })

@@ -2,26 +2,20 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { UserState } from "../slice/user";
 import { IPerson, IPost, IPostContent, IUSerData } from "../../types/api";
 import storage from "../storage";
+import { RootState } from "../store";
 
 interface loginResult {
   msg: string;
   token: string;
   data: IUSerData;
 }
-const persistedState = storage.getString("persist:root");
-console.log("🚀 ~ file: services.ts:12 ~ persistedState:", persistedState);
-const JSONpersistedState = persistedState ? JSON.parse(persistedState) : null;
-const tokenFromState = JSONpersistedState?.user
-  ? JSON.parse(JSONpersistedState?.user)?.token
-  : null;
-console.log("🚀 ~ file: auth.ts:9 ~ tokenFromState:", tokenFromState);
 
 export const servicesApi = createApi({
   reducerPath: "servicesApi",
   baseQuery: fetchBaseQuery({
     baseUrl: `${process.env.EXPO_PUBLIC_API_URL}/api/services`,
-    prepareHeaders: (headers) => {
-      const token = tokenFromState;
+    prepareHeaders: (headers, { getState }) => {
+      const token = (getState() as RootState).user.token;
       // If we have a token, set it in the header
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
@@ -60,7 +54,7 @@ export const servicesApi = createApi({
       { mimeType: string; uri: string; name: string }
     >({
       query: (payload) => {
-        console.log("🚀 ~ file: services.ts:60 ~ payloadAudio:", payload);
+
         const blob: any = {
           name: payload.name,
           type: payload.mimeType,
@@ -85,7 +79,7 @@ export const servicesApi = createApi({
       { mimeType: string; uri: string }
     >({
       query: (payload) => {
-        console.log("🚀 ~ file: services.ts:60 ~ payloadAudio:", payload);
+   
         const blob: any = {
           name: `${payload.uri.split("/").splice(-1)}`,
           type: payload.mimeType,
@@ -149,6 +143,10 @@ export const servicesApi = createApi({
       query: ({ id }) => `/unfollow?id=${id}`,
       extraOptions: { maxRetries: 0 },
     }),
+    likePost: builder.query<{ msg: string }, { id: string }>({
+      query: ({ id }) => `/like-post?id=${id}`,
+      extraOptions: { maxRetries: 2 },
+    }),
   }),
 });
 
@@ -164,6 +162,7 @@ export const {
   useGetRandomPeopleQuery,
   useLazyFollowUserQuery,
   useLazyUnfollowUserQuery,
+  useLazyLikePostQuery,
   useLazySearchPostsQuery,
   useLazyGetAllPostsQuery,
 } = servicesApi;

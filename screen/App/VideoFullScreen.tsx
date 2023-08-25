@@ -21,7 +21,7 @@ export default function VideoFull({ navigation, route }: VideoFullScreen) {
       .fetch("GET", route.params?.videoUri)
       .then((res) => {
         // the path should be dirs.DocumentDir + 'path-to-file.anything'
-        console.log("The file saved to ", res.path());
+       
       });
   };
   useLayoutEffect(() => {

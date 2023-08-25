@@ -1,12 +1,10 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { authApi } from "../../api/auth";
-import { IUSerData } from "../../../types/api";
+import { createSlice } from "@reduxjs/toolkit";
+
 import { userApi } from "../../api/user";
 
 export interface FollowerState {
   data: { following: string; followers: string } | null;
   error: any;
-  token: string | null;
   loading: boolean;
 }
 const followsCount = createSlice({
@@ -15,9 +13,14 @@ const followsCount = createSlice({
     data: null,
     error: null,
     loading: false,
-    token: null,
   } as FollowerState,
-  reducers: {},
+  reducers: {
+    resetFollowers: (state) => {
+      state.data = null;
+      state.error = null;
+      state.loading = false;
+    },
+  },
   extraReducers: (builder) => {
     builder.addMatcher(
       userApi.endpoints.getFollowDetails.matchFulfilled,
@@ -45,3 +48,4 @@ const followsCount = createSlice({
 });
 
 export default followsCount.reducer;
+export const {resetFollowers} = followsCount.actions

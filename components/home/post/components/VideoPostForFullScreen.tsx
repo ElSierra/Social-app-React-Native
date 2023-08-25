@@ -31,6 +31,7 @@ import useGetMode from "../../../../hooks/GetMode";
 
 import Slider from "@react-native-community/slider";
 import convertMsToHMS from "../../../../util/convert";
+import { StatusBar } from "expo-status-bar";
 
 export default function VideoPostFullScreen({
   videoTitle,
@@ -76,7 +77,7 @@ export default function VideoPostFullScreen({
   const handleOverlayDelay = () => {
     setTimeout(() => {
       setShowOverlay(false);
-    }, 2000);
+    }, 10000);
   };
 
   useFocusEffect(
@@ -152,7 +153,7 @@ export default function VideoPostFullScreen({
             style={{ flex: 1, width: "100%" }}
             onPress={() => {
               setShowOverlay(true);
-              console.log("pressed");
+     
             }}
           >
             <Video

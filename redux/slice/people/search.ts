@@ -23,7 +23,7 @@ const searchPeople = createSlice({
     builder.addMatcher(
       servicesApi.endpoints.getRandomPeople.matchFulfilled,
       (state, { payload }) => {
-        console.log("🚀 ~ file: search.ts:26 ~ payload:", payload)
+ 
         state.data = payload.people;
         state.error = null;
         state.loading = false;
@@ -49,7 +49,7 @@ const searchPeople = createSlice({
     builder.addMatcher(
         servicesApi.endpoints.searchPeople.matchFulfilled,
         (state, { payload }) => {
-          console.log("🚀 ~ file: search.ts:26 ~ payload:", payload)
+  
           state.data = payload.people;
           state.error = null;
           state.loading = false;

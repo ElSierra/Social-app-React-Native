@@ -84,7 +84,7 @@ export default function AudioPost({
   React.useEffect(() => {
     return sound
       ? () => {
-          console.log("Unloading Sound");
+      
           sound.unloadAsync();
         }
       : undefined;

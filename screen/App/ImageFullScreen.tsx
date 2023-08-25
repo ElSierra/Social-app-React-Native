@@ -46,7 +46,7 @@ export default function ImageFullScreen({
 }: ImageFullScreenProp) {
   const { photoUri,id} = route.params;
   const dispatch = useAppDispatch();
-  console.log("🚀 ~ file: ImageFullScreen.tsx:23 ~ route:", route);
+
   const handleDownload = () => {
     RNFetchBlob.config({
       addAndroidDownloads: {
@@ -68,7 +68,7 @@ export default function ImageFullScreen({
         );
       })
       .catch((e) => {
-        console.log("The file failed to ", e);
+    
       });
   };
   useLayoutEffect(() => {
