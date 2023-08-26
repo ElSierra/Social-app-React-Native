@@ -4,7 +4,7 @@ import { AVPlaybackStatus, Audio } from "expo-av";
 import { useCallback, useEffect, useRef, useState } from "react";
 import AnimatedRing from "./RingAudio";
 import Slider from "@react-native-community/slider";
-import { AudioPlayerState } from "../../../../types/audio";
+import { AudioPlayerState } from "../../../../types/app";
 import useGetMode from "../../../../hooks/GetMode";
 import RingAudio from "./RingAudio";
 import IconButton from "../../../global/Buttons/IconButton";

@@ -9,6 +9,7 @@ export default function Fab({ item }: { item: JSX.Element }) {
   const isDark = dark;
   const navigation = useNavigation<HomeNavigationProp>();
   const tint = isDark ? "dark" : "light";
+  const elevation = isDark ? 20 :1;
   return (
     <View
  
@@ -17,7 +18,12 @@ export default function Fab({ item }: { item: JSX.Element }) {
         bottom: 100,
         borderRadius: 999,
         right: 10,
+
+      
         alignItems: "center",
+        elevation,
+       
+      
         justifyContent: "center",
         width: 65,
         height: 65,
@@ -47,7 +53,6 @@ export default function Fab({ item }: { item: JSX.Element }) {
               height: "100%",
 
               position: "absolute",
-              backgroundColor: "#04511256",
               alignItems: "center",
               justifyContent: "center",
             }}

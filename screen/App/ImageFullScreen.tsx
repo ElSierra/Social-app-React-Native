@@ -1,4 +1,4 @@
-import { Pressable, View, StyleSheet } from "react-native";
+import { Pressable, View, StyleSheet, ImageBackground } from "react-native";
 import { ImageFullScreenProp } from "../../types/navigation";
 import { Image } from "expo-image";
 
@@ -44,7 +44,7 @@ export default function ImageFullScreen({
   route,
   navigation,
 }: ImageFullScreenProp) {
-  const { photoUri,id} = route.params;
+  const { photoUri, id } = route.params;
   const dispatch = useAppDispatch();
 
   const handleDownload = () => {
@@ -67,9 +67,7 @@ export default function ImageFullScreen({
           openToast({ text: "File saved in notification", type: "Info" })
         );
       })
-      .catch((e) => {
-    
-      });
+      .catch((e) => {});
   };
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -105,7 +103,7 @@ export default function ImageFullScreen({
   });
   return (
     <>
-      <StatusBar animated={true} style="light" backgroundColor="transparent" />
+      <StatusBar animated={true} style="light" backgroundColor="transparent"  />
       <Animated.View
         entering={FadeIn.duration(250)}
         exiting={FadeOut.duration(250)}
@@ -116,21 +114,30 @@ export default function ImageFullScreen({
           justifyContent: "center",
         }}
       >
-        <View
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            width: "100%",
-            height: "100%",
-          }}
+        <ImageBackground
+          source={{ uri: photoUri }}
+          blurRadius={20}
+          imageStyle={{opacity:0.5}}
+          style={{ height:"100%", width:"100%",justifyContent: "center", }}
+          resizeMode="cover"
         >
-          <SharedElement id={id} style={StyleSheet.absoluteFill}>
-          <Image
-            source={{ uri: photoUri }}
-            contentFit="contain"
-            style={{ width: "100%", height: "100%" }}
-          /></SharedElement>
-        </View>
+          <View
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            <SharedElement id={id} style={StyleSheet.absoluteFill}>
+              <Image
+                source={{ uri: photoUri }}
+                contentFit="contain"
+                style={{ width: "100%", height: "100%" }}
+              />
+            </SharedElement>
+          </View>
+        </ImageBackground>
       </Animated.View>
       {/* <View
         style={{

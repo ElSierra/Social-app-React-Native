@@ -5,29 +5,26 @@ import { Button } from "react-native-paper";
 import { BlurView } from "expo-blur";
 import Animated, { FadeInLeft } from "react-native-reanimated";
 import { useState } from "react";
-import { IPostBuilder } from "../../home/post/PostBuilder";
-import { AudioIcon } from "../../icons";
+
+import { AudioIcon, ProfileIcon } from "../../icons";
 import useGetMode from "../../../hooks/GetMode";
+import { SearchPostBuilder } from "../../../types/app";
 const { width } = Dimensions.get("screen");
 export default function PostsContainer({
   imageUri,
-  name,
+  id,
   userTag,
   photoUri,
   verified,
   videoUri,
   postText,
-  videoTitle,
-  videoViews,
-  title,
-  id,
-  audioUri,
-}: IPostBuilder) {
 
+  audioUri,
+}: SearchPostBuilder) {
   const [follow, setFollow] = useState(false);
   const dark = useGetMode();
   const color = dark ? "white" : "black";
-  const backgroundColor = !dark ? "#E5E9F899" :  "#25252599";
+  const backgroundColor = !dark ? "#E5E9F899" : "#25252599";
 
   const handleFollow = () => {
     setFollow(!follow);
@@ -45,7 +42,6 @@ export default function PostsContainer({
       );
     }
     if (audioUri) {
-  
       return (
         <View style={{ height: 50, width: 50 }}>
           <AudioIcon size={50} color={color} />
@@ -68,10 +64,14 @@ export default function PostsContainer({
       }}
     >
       <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-        <Image
-          source={{ uri: imageUri }}
-          style={{ height: 30, width: 30, borderRadius: 9999 }}
-        />
+        {imageUri ? (
+          <Image
+            source={{ uri: imageUri }}
+            style={{ height: 30, width: 30, borderRadius: 9999 }}
+          />
+        ) : (
+          <ProfileIcon size={34} color={color} />
+        )}
         <View>
           <Text style={{ fontFamily: "jakara", fontSize: 12, color }}>
             @{userTag}

@@ -19,25 +19,29 @@ import Animated, {
 import useGetMode from "../../../../hooks/GetMode";
 import LikeLottie from "../misc/Robot";
 import Lottie from "lottie-react-native";
-import { HeartUnfocused, HeartsFocused } from "../../../icons";
+import {
+  HeartUnfocused,
+  HeartsFocused,
+  MessageUnfocused,
+  MessagesIcon,
+} from "../../../icons";
 import MaterialIcons from "@expo/vector-icons/MaterialCommunityIcons";
-export default function LikeButton({
-  isLiked,
+export default function CommentButton({
+
   clicked,
-  text,
+
 
   setClicked,
 }: {
-  text?: string;
+
   setClicked: (isClicked: boolean) => void;
   clicked: boolean;
-  isLiked?: boolean;
 }) {
   const dark = useGetMode();
   const isDark = dark;
   const color = isDark ? "white" : "black";
 
-  const liked = useSharedValue(isLiked ? 1 : 0);
+  const liked = useSharedValue(0);
 
   const outlineStyle = useAnimatedStyle(() => {
     return {
@@ -85,20 +89,16 @@ export default function LikeButton({
               <Animated.View
                 style={[StyleSheet.absoluteFillObject, outlineStyle]}
               >
-                <HeartUnfocused size={18} color={color} />
+                <MessageUnfocused size={18} color={color} />
               </Animated.View>
 
               <Animated.View style={fillStyle}>
-                <HeartsFocused size={18} color={"red"} />
+                <MessagesIcon size={18} color={color} />
               </Animated.View>
             </>
           }
         </View>
-        <Text
-          style={{ color, fontFamily: "jakara", includeFontPadding: false }}
-        >
-          {text}
-        </Text>
+
       </Pressable>
     </View>
   );

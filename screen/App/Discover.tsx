@@ -27,41 +27,40 @@ export default function Discover() {
 
   return (
     <AnimatedScreen>
-      <View style={{ flex: 1, paddingTop: 100, padding: 10 }}>
+      <View style={{ flex: 1 }}>
         {people ? <People people={persons} /> : <Posts posts={posts} />}
-        <View
-          style={{
-            flexDirection: "row",
-            gap: 5,
-            position: "absolute",
-            top: 86,
-            height: 60,
-            alignItems: "center",
-            borderBottomLeftRadius:30,
-            borderBottomRightRadius:30,
-            overflow:"hidden",
-            width,
-            paddingHorizontal: 20,
+      </View>
+      <View
+        style={{
+          flexDirection: "row",
+          gap: 5,
+          top: 90,
+          position: "absolute",
+          borderColor: "black",
+          borderStyle: "dashed",
+          borderWidth: 1,
+          marginBottom: 14,
+       
+          alignItems: "center",
+          borderRadius: 90,
+          overflow: "hidden",
+          marginLeft: 15,
+          padding: 10,
 
-            backgroundColor: "transparent",
-          }}
-        >
-          <BlurView
-            tint={tint}
-            style={{ position: "absolute", width, height: "100%",}}
-            intensity={200}
-          />
-          <HeaderTag
-            onPress={() => setPeople(true)}
-            text="People"
-            selected={people}
-          />
-          <HeaderTag
-            onPress={() => setPeople(false)}
-            text="Posts"
-            selected={!people}
-          />
-        </View>
+          backgroundColor: "transparent",
+        }}
+      >
+        <BlurView tint={tint}  style={{position:"absolute",height:80,width:150,}}/>
+        <HeaderTag
+          onPress={() => setPeople(true)}
+          text="People"
+          selected={people}
+        />
+        <HeaderTag
+          onPress={() => setPeople(false)}
+          text="Posts"
+          selected={!people}
+        />
       </View>
     </AnimatedScreen>
   );

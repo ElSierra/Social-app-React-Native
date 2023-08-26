@@ -71,7 +71,7 @@ export default function PostContent({ navigation }: PostContentProp) {
   }
   const [fileToServer, setFTServer] = useState<string | undefined>(undefined);
   const [postText, setPostText] = useState<string | undefined>(undefined);
-  const [done, setDone] = useState(false);
+  const [done, setDone] = useState(true);
   const [videoTitle, setVideoTitle] = useState<string | undefined>(undefined);
 
   function handleSetAudioPost(
@@ -80,7 +80,6 @@ export default function PostContent({ navigation }: PostContentProp) {
     size: number,
     name: string
   ) {
-
     setPostAudio({
       mimeType,
       uri,
@@ -166,33 +165,31 @@ export default function PostContent({ navigation }: PostContentProp) {
       animationRef.current?.pause;
     };
   }, [postAudio]);
- 
+
   const [photo] = useUploadPhotoMutation();
   const [audio] = useUploadAudioMutation();
   const [video] = useUploadVideoMutation();
   const [postContent] = usePostContentMutation();
   useMemo(() => {
-    setDone(false);
     if (postPhoto?.mimeType.startsWith("image/")) {
+      setDone(false);
       photo(postPhoto)
         .unwrap()
         .then((r) => {
-       
           setDone(true);
           setFTServer(r.photo);
         })
         .catch((e) => {
           setDone(true);
-         
+
           dispatch(openToast({ text: "Photo didn't upload", type: "Failed" }));
         });
     }
     if (postAudio) {
-   
+      setDone(false);
       audio(postAudio)
         .unwrap()
         .then((r) => {
-    
           setDone(true);
           setFTServer(r.audio);
         })
@@ -203,10 +200,10 @@ export default function PostContent({ navigation }: PostContentProp) {
         });
     }
     if (postPhoto?.mimeType.startsWith("video/")) {
+      setDone(false);
       video(postPhoto)
         .unwrap()
         .then((r) => {
-       
           setDone(true);
           setFTServer(r.video);
         })
@@ -261,8 +258,6 @@ export default function PostContent({ navigation }: PostContentProp) {
             dispatch(closeLoadingModal());
           })
           .catch((e) => {
-        
-          
             dispatch(openToast({ text: "Post failed ", type: "Failed" }));
             dispatch(closeLoadingModal());
           });

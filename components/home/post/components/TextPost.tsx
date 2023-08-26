@@ -14,8 +14,11 @@ export default function TextPost({
   const dark = useGetMode();
   const isDark = dark;
   const color = isDark ? "white" : "black";
+  const selectionColor = isDark ? "#C5C5C591" : "#0000007A"
   return (
     <Text
+    selectable
+    selectionColor={selectionColor}
     numberOfLines={2}
       style={{
         

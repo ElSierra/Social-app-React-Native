@@ -36,8 +36,8 @@ export default function PostButton({
       <Pressable
         disabled={isLoading || isDisabled}
         onPress={() => {
+          dispatch(resetPost());
           onPress();
-          dispatch(resetPost())
         }}
         android_ripple={{ color: rippleColor, foreground: true }}
         style={{

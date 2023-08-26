@@ -1,8 +1,5 @@
-import { View, Dimensions } from "react-native";
+import { View, Dimensions, Pressable } from "react-native";
 
-import { useRef, useState } from "react";
-
-import { Video, ResizeMode } from "expo-av";
 import ProfileImage from "./components/ProfileImage";
 import NameAndTag from "./components/NameAndTag";
 import TextPost from "./components/TextPost";
@@ -11,29 +8,15 @@ import VideoPost from "./components/VideoPost";
 import Engagements from "./components/Engagements";
 import useGetMode from "../../../hooks/GetMode";
 import AudioPost from "./components/AudioPost";
-
-export type IPostBuilder = {
-  imageUri: string;
-  name: string;
-  userTag: string;
-  comments?: number;
-  
-  isLiked: boolean;
-  verified: boolean;
-  photoUri: string[];
-  videoUri?: string;
-  videoTitle?: string;
-  postText: string;
-  videoViews?: string;
-  repost?: string;
-  title?: string;
-  like: number;
-  id: string;
-  audioUri?: string;
-};
+import { IPostBuilder } from "../../../types/app";
+import { ProfileIcon } from "../../icons";
+import { useNavigation } from "@react-navigation/native";
+import { HomeNavigationProp } from "../../../types/navigation";
+import { dateAgo } from "../../../util/date";
 export default function PostBuilder({
   imageUri,
   name,
+  date,
   isLiked,
   userTag,
   photoUri,
@@ -48,54 +31,113 @@ export default function PostBuilder({
   id,
   audioUri,
 }: IPostBuilder) {
-
   const width = Dimensions.get("screen").width;
-
+  const navigation = useNavigation<HomeNavigationProp>();
   const dark = useGetMode();
   const isDark = dark;
   const borderBottomColor = isDark ? "#252222" : "#CCC9C9";
+  const color = isDark ? "#FFFFFF" : "#000000";
+  const rColor = isDark ? "#FFFFFF2A" : "#0000001B";
+
+  console.log(dateAgo(new Date(date)))
   return (
     <View
       style={{
         borderBottomWidth: 0.5,
         borderBottomColor,
-        paddingHorizontal: 10,
-        paddingVertical: 10,
       }}
     >
-      <View
-        style={{
-          flexDirection: "row",
-          width: "100%",
+      <Pressable
+        onPress={() => {
+          navigation.navigate("ViewPost", {
+            id,
+            date,
+            imageUri,
+            name,
+            isLiked,
+            userTag,
+            photoUri,
+            verified,
+            videoUri,
+            postText,
+            videoTitle,
+            comments,
+            videoViews,
+            title,
+            like,
+            audioUri,
+          });
         }}
+        android_ripple={{ color: rColor, foreground: true }}
+        style={{ paddingHorizontal: 10, paddingVertical: 10 }}
       >
-        <ProfileImage imageUri={imageUri} />
-        <View style={{ width: "85%", justifyContent: "flex-start" }}>
-          <NameAndTag name={name} verified={verified} userTag={userTag} />
-          <TextPost
-            postText={postText}
-            photoUri={photoUri}
-            videoUri={videoUri}
-          />
-          <View>
-            {photoUri.length > 0 && (
-              <PhotoPost id={id} photoUri={photoUri} width={width} />
-            )}
+        <View
+          style={{
+            flexDirection: "row",
+            width: "100%",
+            gap: 10,
+          }}
+        >
+          <View
+            style={{
+              height: 50,
+              width: 50,
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 9999,
+              overflow: "hidden",
+            }}
+          >
+            <Pressable
+              onPress={() => {}}
+              android_ripple={{ color: rColor, foreground: true }}
+              style={{
+                height: 50,
+                width: 50,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {imageUri ? (
+                <ProfileImage imageUri={imageUri} />
+              ) : (
+                <ProfileIcon color={color} size={58} />
+              )}
+            </Pressable>
           </View>
-          {videoUri && (
-            <VideoPost
-              videoTitle={videoTitle}
-              imageUri={imageUri}
-              name={name}
-              userTag={userTag}
+          <View style={{ width: "85%", justifyContent: "flex-start" }}>
+            <NameAndTag name={name} verified={verified} userTag={userTag} dateAgo = {dateAgo(new Date(date))} />
+           {postText &&<TextPost
+              postText={postText}
+              photoUri={photoUri}
               videoUri={videoUri}
-              videoViews={videoViews}
+            />}
+            <View>
+              {photoUri.length > 0 && (
+                <PhotoPost id={id} photoUri={photoUri} width={width} />
+              )}
+            </View>
+            {videoUri && (
+              <VideoPost
+                videoTitle={videoTitle}
+                imageUri={imageUri}
+                name={name}
+                userTag={userTag}
+                videoUri={videoUri}
+                videoViews={videoViews}
+              />
+            )}
+            {audioUri && <AudioPost uri={audioUri} photoUri={imageUri} />}
+            <Engagements
+              title={title}
+              comments={comments}
+              like={like}
+              isLiked={isLiked}
+              id={id}
             />
-          )}
-          {audioUri && <AudioPost uri={audioUri} photoUri={imageUri} />}
-          <Engagements title={title} comments={comments} like={like} isLiked={isLiked}  id={id} />
+          </View>
         </View>
-      </View>
+      </Pressable>
     </View>
   );
 }

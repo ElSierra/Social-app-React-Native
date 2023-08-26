@@ -41,7 +41,7 @@ export default function People({ people }: { people: personState }) {
       )}
       <FlatList
         data={people.data}
-        contentContainerStyle={{ paddingTop: 30, paddingBottom: 100, gap: 5 }}
+        contentContainerStyle={{ paddingTop: 140, paddingBottom: 100, gap: 5 }}
         renderItem={({ item }) => <PeopleContainer {...item} />}
         keyExtractor={(item) => item.id.toString()}
       />

@@ -45,4 +45,5 @@ export interface IPost {
   postText: string;
   videoViews: number | null;
   user: User;
+  createdAt: Date;
 }

@@ -10,3 +10,4 @@ export default function convertMsToHMS(ms: number) {
   }
   return `${hours}:${minutes.toString()}:${seconds}`;
 }
+

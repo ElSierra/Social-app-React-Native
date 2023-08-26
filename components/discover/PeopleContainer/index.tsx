@@ -68,7 +68,7 @@ export default function PeopleContainer({
         {imageUri?<Image
           source={{ uri: imageUri }}
           style={{ height: 30, width: 30, borderRadius: 9999 }}
-        />: <ProfileIcon color={color} size={30}/>}
+        />: <ProfileIcon color={color} size={34}/>}
         <View>
           <Text style={{ fontSize: 16, fontFamily: "mulishBold", color }}>
             {name}

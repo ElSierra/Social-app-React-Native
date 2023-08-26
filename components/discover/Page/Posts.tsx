@@ -28,17 +28,17 @@ export default function Posts({ posts }: { posts: postState }) {
     runOnJS(handleStopLoading)();
   }
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <Animated.View
         entering={FadeInLeft.withCallback(callback)
           .springify()
           .delay(posts?.data?.length > 8 ? 400 : 0)}
-        style={{ gap: 5, height: "100%" }}
+        style={{ flex: 1 ,}}
       >
         {posts.loading && (
           <Animated.View
             entering={FadeIn.springify()}
-            style={{ gap: 5 ,marginTop:60}}
+            style={{ gap: 5, marginTop: 60 }}
             exiting={FadeOut.springify()}
           >
             {[0, 1, 2].map((idx) => (
@@ -50,17 +50,16 @@ export default function Posts({ posts }: { posts: postState }) {
           data={posts.data}
           showsVerticalScrollIndicator={false}
           estimatedItemSize={100}
-          contentContainerStyle={{ paddingTop: 50, paddingBottom: 100 }}
+          contentContainerStyle={{ paddingTop: 160, paddingBottom: 100,paddingHorizontal:10 }}
           renderItem={({ item }) => (
             <PostsContainer
               id={item.id}
               imageUri={item.user?.imageUri}
-              name={item.user?.name}
+  
               userTag={item.user?.userName}
               verified={item.user?.verified}
               audioUri={item.audioUri || undefined}
               photoUri={item.photoUri}
-              videoTitle={item.videoTitle || undefined}
               videoUri={item.videoUri || undefined}
               postText={item.postText}
             />

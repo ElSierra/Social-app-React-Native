@@ -96,7 +96,7 @@ export default function Home({ navigation }: DrawerHomeProp) {
     dispatch(resetPost());
     setSkip(0);
     setNoMore(false);
-    setRefreshing(true),
+    setRefreshing(false),
       getLazyPost({ take: 20, skip })
         .unwrap()
         .then((e) => {
@@ -221,6 +221,7 @@ export default function Home({ navigation }: DrawerHomeProp) {
   const renderItem = ({ item }: { item: IPost }) => (
     <PostBuilder
       id={item.id}
+      date = {item.createdAt}
       comments={item._count.comments}
       like={item._count.like}
       isLiked={item.isLiked}

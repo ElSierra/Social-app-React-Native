@@ -47,6 +47,7 @@ import SearchBar from "../components/discover/SearchBar";
 import VideoFullScreen from "../screen/App/VideoFullScreen";
 import { useAppSelector } from "../redux/hooks/hooks";
 import { useLazyGetFollowDetailsQuery } from "../redux/api/user";
+import PostScreen from "../screen/App/PostScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<BottomRootStackParamList>();
@@ -123,6 +124,7 @@ export default function Main() {
   const isDark = dark;
   const tint = isDark ? "dark" : "light";
   const backgroundColor = isDark ? "black" : "white";
+  const color = !isDark ? "black" : "white";
   return (
     <BottomSheetModalProvider>
       <BottomSheetContainer>
@@ -160,9 +162,7 @@ export default function Main() {
             options={{
               title: "",
               animation: "fade",
-
-              presentation: "transparentModal",
-              headerStyle: { backgroundColor: "black" },
+              headerTransparent: true,
               headerShadowVisible: false,
               headerTintColor: "white",
             }}
@@ -194,6 +194,30 @@ export default function Main() {
               headerTintColor: "white",
             }}
             component={VideoFullScreen}
+          />
+          <Stack.Screen
+            name="ViewPost"
+            options={{
+              headerBackground: () => (
+                <BlurView
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    top: 0,
+                    right: 0,
+                  }}
+                  tint={tint}
+                  intensity={200}
+                />
+              ),
+              title: "Post",
+              animation:"fade",
+
+              headerShadowVisible: false,
+              headerTintColor: color,
+            }}
+            component={PostScreen}
           />
         </Stack.Navigator>
       </BottomSheetContainer>

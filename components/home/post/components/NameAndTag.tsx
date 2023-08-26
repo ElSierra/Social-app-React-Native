@@ -6,15 +6,18 @@ import useGetMode from "../../../../hooks/GetMode";
 export default function NameAndTag({
   name,
   verified,
+  dateAgo,
   userTag,
 }: {
   name: string;
+  dateAgo?:string;
   verified: boolean;
   userTag: string;
 }) {
   const dark = useGetMode();
   const isDark = dark;
   const color = isDark ? "white" : "black";
+  const backgroundColor = isDark ? "white" : "black";
   return (
     <View>
       <View style={{ flexDirection: "row", gap: 2, alignItems: "center" }}>
@@ -40,6 +43,11 @@ export default function NameAndTag({
         >
           @{userTag}
         </Text>
+        <View style={{flexDirection:"row",justifyContent:"center",alignItems:"center",gap:2}}>
+          <View style={{backgroundColor:  "#7a868f", height:4,width:4, borderRadius:9999}}/>
+          <Text style={{color:  "#7a868f"}}>{dateAgo}</Text>
+          
+        </View>
       </View>
     </View>
   );

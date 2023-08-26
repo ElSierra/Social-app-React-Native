@@ -4,6 +4,7 @@ import { NotFunction } from "./../node_modules/@reduxjs/toolkit/src/createReduce
 import { NavigationProp } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { DrawerScreenProps } from "@react-navigation/drawer";
+import { IPostBuilder } from "./app";
 
 export type RootStackParamList = {
   Main: undefined;
@@ -19,6 +20,7 @@ export type RootStackParamList = {
     userTag: string;
     name: string;
   };
+  ViewPost: IPostBuilder;
   Profile: undefined;
   PostContent: undefined;
 };
@@ -69,11 +71,12 @@ export type VideoFullScreen = NativeStackScreenProps<
   RootStackParamList,
   "VideoFullScreen"
 >;
-export type LoginScreen =  NativeStackScreenProps<
-AuthRootStackParamList,
-"Login"
+export type LoginScreen = NativeStackScreenProps<
+  AuthRootStackParamList,
+  "Login"
 >;
-export type RegisterScreen =  NativeStackScreenProps<
-AuthRootStackParamList,
-"Register"
+export type ViewPost = NativeStackScreenProps<RootStackParamList, "ViewPost">;
+export type RegisterScreen = NativeStackScreenProps<
+  AuthRootStackParamList,
+  "Register"
 >;

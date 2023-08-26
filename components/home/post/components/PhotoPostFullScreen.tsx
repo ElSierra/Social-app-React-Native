@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { HomeNavigationProp } from "../../../../types/navigation";
 import { SharedElement } from "react-navigation-shared-element";
 
-export default function PhotoPost({
+export default function PhotoPostFullScreen({
   photoUri,
   width,
   id,
@@ -21,19 +21,18 @@ export default function PhotoPost({
       data={photoUri}
       style={{ marginVertical: 10 }}
       showsHorizontalScrollIndicator={false}
-      snapToInterval={width * 0.8}
+      snapToInterval={width}
       snapToAlignment={"center"}
       decelerationRate={"fast"}
       renderItem={({ item }) => (
         <View
           style={{
-            width: width * 0.8,
+            width: width * 0.95,
             height: 150,
             borderRadius: 15,
-            overflow: "hidden",
             justifyContent:"center",
             alignItems:"center",
-        
+            overflow: "hidden",
           }}
         >
           <Pressable
@@ -42,7 +41,7 @@ export default function PhotoPost({
               navigation.navigate("ImageFullScreen", { photoUri: item,id });
             }}
             style={{
-              width: width,
+              width: width  ,
               height: 150,
               paddingHorizontal: 4,
               borderRadius: 15,
