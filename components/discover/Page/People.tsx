@@ -19,7 +19,7 @@ export default function People({ people }: { people: personState }) {
       {people.loading && (
         <Animated.View
           entering={FadeIn.springify()}
-          style={{ gap: 5, marginTop: 40 }}
+          style={{ gap: 5, marginTop: 150 }}
           exiting={FadeOut.springify()}
         >
           {[0, 1, 2].map((idx) => (
@@ -31,7 +31,11 @@ export default function People({ people }: { people: personState }) {
         <Animated.View
           entering={FadeInUp.springify()}
           exiting={FadeOutDown.springify()}
-          style={{ justifyContent: "center", alignItems: "center" }}
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }}
         >
           <Image
             style={{ height: 300, width: 300 }}
@@ -41,7 +45,12 @@ export default function People({ people }: { people: personState }) {
       )}
       <FlatList
         data={people.data}
-        contentContainerStyle={{ paddingTop: 140, paddingBottom: 100, gap: 5 }}
+        contentContainerStyle={{
+          paddingTop: 140,
+          paddingBottom: 100,
+          gap: 5,
+          paddingHorizontal: 10,
+        }}
         renderItem={({ item }) => <PeopleContainer {...item} />}
         keyExtractor={(item) => item.id.toString()}
       />

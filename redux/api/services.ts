@@ -1,6 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { UserState } from "../slice/user";
-import { IPerson, IPost, IPostContent, IUSerData } from "../../types/api";
+import {
+  IComment,
+  IPerson,
+  IPost,
+  IPostContent,
+  IUSerData,
+} from "../../types/api";
 import storage from "../storage";
 import { RootState } from "../store";
 
@@ -54,7 +60,6 @@ export const servicesApi = createApi({
       { mimeType: string; uri: string; name: string }
     >({
       query: (payload) => {
-
         const blob: any = {
           name: payload.name,
           type: payload.mimeType,
@@ -79,7 +84,6 @@ export const servicesApi = createApi({
       { mimeType: string; uri: string }
     >({
       query: (payload) => {
-   
         const blob: any = {
           name: `${payload.uri.split("/").splice(-1)}`,
           type: payload.mimeType,
@@ -147,6 +151,32 @@ export const servicesApi = createApi({
       query: ({ id }) => `/like-post?id=${id}`,
       extraOptions: { maxRetries: 2 },
     }),
+    postComment: builder.mutation<
+      { msg: string },
+      { id: string; comment: string }
+    >({
+      query: (payload) => ({
+        url: "/post-comment",
+        method: "POST",
+
+        body: payload,
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }),
+    }),
+    getCommentByPost: builder.query<{ comment: IComment[] }, { id: string }>({
+      query: ({ id }) => `/get-postComment?id=${id}`,
+      extraOptions: { maxRetries: 2 },
+    }),
+    getFollowedPosts: builder.query<
+      { posts: IPost[] },
+      { take: number; skip: number }
+    >({
+      query: ({ take, skip }) => `/followed-posts?take=${take}&skip=${skip}`,
+
+      extraOptions: { maxRetries: 2 },
+    }),
   }),
 });
 
@@ -159,10 +189,14 @@ export const {
   useGetRandomPostsQuery,
   useLazyGetRandomPostsQuery,
   useGetAllPostsQuery,
+  useLazyGetFollowedPostsQuery,
   useGetRandomPeopleQuery,
   useLazyFollowUserQuery,
   useLazyUnfollowUserQuery,
   useLazyLikePostQuery,
+  usePostCommentMutation,
   useLazySearchPostsQuery,
+  useGetCommentByPostQuery,
+  useLazyGetCommentByPostQuery,
   useLazyGetAllPostsQuery,
 } = servicesApi;

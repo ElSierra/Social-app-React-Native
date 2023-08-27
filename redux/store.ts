@@ -29,6 +29,7 @@ import { servicesApi } from "./api/services";
 import loadingModal, { LoadingModal } from "./slice/modal/loading";
 import searchPeople, { personState } from "./slice/people/search";
 import followers, { FollowerState } from "./slice/user/followers";
+import followedPost from "./slice/post/followed";
 
 const persistConfig: PersistConfig<
   CombinedState<{
@@ -42,6 +43,7 @@ const persistConfig: PersistConfig<
     followers: FollowerState;
     searchPeople: personState;
     loadingModal: LoadingModal;
+    followedPost: postState;
     [authApi.reducerPath]: any;
     [userApi.reducerPath]: any;
     [servicesApi.reducerPath]: any;
@@ -66,6 +68,7 @@ const reducer = combineReducers({
   [servicesApi.reducerPath]: servicesApi.reducer,
   user,
   searchPeople,
+  followedPost,
 });
 const persistedReducer = persistReducer(persistConfig, reducer);
 
@@ -74,6 +77,8 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
+        immutableCheck: false,
+        serializableCheck: false,
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     })

@@ -45,9 +45,15 @@ import CustomToast from "../components/global/Toast";
 import InputText from "../screen/Auth/components/InputText";
 import SearchBar from "../components/discover/SearchBar";
 import VideoFullScreen from "../screen/App/VideoFullScreen";
-import { useAppSelector } from "../redux/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../redux/hooks/hooks";
 import { useLazyGetFollowDetailsQuery } from "../redux/api/user";
 import PostScreen from "../screen/App/PostScreen";
+import { useEffect } from "react";
+import socket from "../util/socket";
+import {
+  updateFollowers,
+  updateFollowing,
+} from "../redux/slice/user/followers";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<BottomRootStackParamList>();
@@ -106,7 +112,6 @@ function DrawerNavigator() {
                 style={{ paddingLeft: 20 }}
                 size={40}
                 onPress={() => {
-                  getCurrentFollowData(null);
                   navigation.toggleDrawer();
                 }}
               />
@@ -125,6 +130,26 @@ export default function Main() {
   const tint = isDark ? "dark" : "light";
   const backgroundColor = isDark ? "black" : "white";
   const color = !isDark ? "black" : "white";
+  const dispatch = useAppDispatch();
+  const userAuthenticated = useAppSelector((state) => state.user.token);
+  useEffect(() => {
+    socket.connect();
+    console.log(`⚡: ${socket.id} user just connected!`);
+    socket.emit("auth", userAuthenticated);
+  }, []);
+
+  useEffect(() => {
+    socket.on("following", (following: number) => {
+      console.log("🚀 ~ file: App.tsx:160 ~ socket.on ~ following:", following);
+      if (following) dispatch(updateFollowing({ following }));
+    });
+    socket.on("followers", (followers: number) => {
+      console.log("🚀 ~ file: App.tsx:160 ~ socket.on ~ following:", followers);
+
+      if (followers) dispatch(updateFollowers({ followers }));
+    });
+  }, [socket]);
+
   return (
     <BottomSheetModalProvider>
       <BottomSheetContainer>
@@ -187,8 +212,6 @@ export default function Main() {
               title: "",
               contentStyle: { backgroundColor: "black" },
               animation: "fade",
-
-              presentation: "transparentModal",
               headerTransparent: true,
               headerShadowVisible: false,
               headerTintColor: "white",
@@ -212,7 +235,7 @@ export default function Main() {
                 />
               ),
               title: "Post",
-              animation:"fade",
+              animation: "fade",
 
               headerShadowVisible: false,
               headerTintColor: color,

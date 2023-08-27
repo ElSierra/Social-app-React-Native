@@ -13,10 +13,14 @@ export default function HeaderDrawer() {
   const follows = useAppSelector((state) => state.followers);
   return (
     <View style={{ paddingLeft: 14, flex: 1 }}>
-      {user?.imageUri ?<Image
-        style={{ height: 50, width: 50, borderRadius: 9999 }}
-        source={{ uri: user?.imageUri }}
-      />: <ProfileIcon color={color} size={50}/>}
+      {user?.imageUri ? (
+        <Image
+          style={{ height: 50, width: 50, borderRadius: 9999 }}
+          source={{ uri: user?.imageUri }}
+        />
+      ) : (
+        <ProfileIcon color={color} size={50} />
+      )}
       <View style={{ marginTop: 10 }}>
         <Text
           style={{
@@ -43,7 +47,7 @@ export default function HeaderDrawer() {
               includeFontPadding: false,
             }}
           >
-            {follows.data?.following || 0}
+            {follows.following || 0}
           </Text>
           <Text
             style={{ fontFamily: "jakara", color, includeFontPadding: false }}
@@ -59,7 +63,7 @@ export default function HeaderDrawer() {
               includeFontPadding: false,
             }}
           >
-            {follows.data?.followers || 0}
+            {follows.followers || 0}
           </Text>
           <Text
             style={{ fontFamily: "jakara", color, includeFontPadding: false }}

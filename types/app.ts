@@ -1,7 +1,7 @@
 export type IPostBuilder = {
   imageUri: string;
   name: string;
-  date : Date;
+  date: Date;
   userTag: string;
   comments?: number;
   isLiked: boolean;
@@ -28,4 +28,21 @@ export type SearchPostBuilder = {
   title?: string;
   id: string;
   audioUri?: string;
+};
+
+export type ICommentBuilder = {
+  imageUri: string;
+  name: string;
+  comment: string;
+  date: string;
+  userTag: string;
+  verified: boolean;
+  photoUri: string[];
+  id: string;
+};
+
+export type ICommentContent = {
+  name: string;
+  id: string;
+  comment: string;
 };

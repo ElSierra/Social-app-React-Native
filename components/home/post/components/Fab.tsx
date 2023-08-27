@@ -3,27 +3,30 @@ import { View, Pressable } from "react-native";
 import useGetMode from "../../../../hooks/GetMode";
 import { useNavigation } from "@react-navigation/native";
 import { HomeNavigationProp } from "../../../../types/navigation";
-import Animated, { BounceIn, BounceOut, FadeIn, FadeOut, ZoomIn, ZoomOut } from "react-native-reanimated";
+import Animated, {
+  BounceIn,
+  BounceOut,
+  FadeIn,
+  FadeOut,
+  ZoomIn,
+  ZoomOut,
+} from "react-native-reanimated";
 export default function Fab({ item }: { item: JSX.Element }) {
   const dark = useGetMode();
   const isDark = dark;
   const navigation = useNavigation<HomeNavigationProp>();
   const tint = isDark ? "dark" : "light";
-  const elevation = isDark ? 20 :1;
+  const backgroundColor = !isDark ? "#DEDEDE" :"#303030"
   return (
     <View
- 
       style={{
         position: "absolute",
         bottom: 100,
         borderRadius: 999,
         right: 10,
 
-      
         alignItems: "center",
-        elevation,
-       
-      
+
         justifyContent: "center",
         width: 65,
         height: 65,
@@ -35,7 +38,6 @@ export default function Fab({ item }: { item: JSX.Element }) {
         android_ripple={{ color: "white", foreground: true }}
         onPress={() => {
           navigation.navigate("PostContent");
-   
         }}
         style={{
           height: "100%",
@@ -51,7 +53,7 @@ export default function Fab({ item }: { item: JSX.Element }) {
             style={{
               width: "100%",
               height: "100%",
-
+           backgroundColor,
               position: "absolute",
               alignItems: "center",
               justifyContent: "center",

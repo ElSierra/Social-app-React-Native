@@ -40,7 +40,7 @@ export default function Discover() {
           borderStyle: "dashed",
           borderWidth: 1,
           marginBottom: 14,
-       
+          zIndex: 999,
           alignItems: "center",
           borderRadius: 90,
           overflow: "hidden",
@@ -50,7 +50,10 @@ export default function Discover() {
           backgroundColor: "transparent",
         }}
       >
-        <BlurView tint={tint}  style={{position:"absolute",height:80,width:150,}}/>
+        <BlurView
+          tint={tint}
+          style={{ position: "absolute", height: 80, width: 150 }}
+        />
         <HeaderTag
           onPress={() => setPeople(true)}
           text="People"

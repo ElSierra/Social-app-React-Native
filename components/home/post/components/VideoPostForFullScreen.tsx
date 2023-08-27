@@ -4,6 +4,7 @@ import {
   Pressable,
   ActivityIndicator,
   TouchableWithoutFeedback,
+  Dimensions,
 } from "react-native";
 import React, {
   useCallback,
@@ -14,7 +15,7 @@ import React, {
 } from "react";
 
 import { AVPlaybackStatus, ResizeMode, Video } from "expo-av";
-import { PauseIcon, PlayIcon } from "../../../icons";
+import { PauseIcon, PlayIcon, ProfileIcon } from "../../../icons";
 
 import Animated, {
   FadeIn,
@@ -25,7 +26,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { Image } from "expo-image";
+import { Image, ImageBackground } from "expo-image";
 import { useFocusEffect } from "@react-navigation/native";
 import useGetMode from "../../../../hooks/GetMode";
 
@@ -33,6 +34,8 @@ import Slider from "@react-native-community/slider";
 import convertMsToHMS from "../../../../util/convert";
 import { StatusBar } from "expo-status-bar";
 
+
+const {height} = Dimensions.get("screen")
 export default function VideoPostFullScreen({
   videoTitle,
 
@@ -51,7 +54,7 @@ export default function VideoPostFullScreen({
   videoViews?: string;
 }) {
   const video = useRef<null | Video>(null);
-
+ 
   const [status, setStatus] = useState<any>(null);
 
   const [play, setPlay] = useState(true);
@@ -143,17 +146,20 @@ export default function VideoPostFullScreen({
     <View
       style={{
         flex: 1,
-        marginBottom: 10,
-        marginTop: 10,
       }}
     >
-      <View style={{ width: "100%", height: "100%" }}>
+      <ImageBackground
+        source={{ uri: videoUri }}
+        blurRadius={20}
+        contentFit="cover"
+        imageStyle={{ opacity: 0.5 }}
+        style={{ height: "100%", width: "100%", justifyContent: "center" }}
+      >
         {
           <TouchableWithoutFeedback
             style={{ flex: 1, width: "100%" }}
             onPress={() => {
               setShowOverlay(true);
-     
             }}
           >
             <Video
@@ -169,7 +175,7 @@ export default function VideoPostFullScreen({
             />
           </TouchableWithoutFeedback>
         }
-      </View>
+      </ImageBackground>
 
       {overlay && (
         <TouchableWithoutFeedback
@@ -182,11 +188,12 @@ export default function VideoPostFullScreen({
             exiting={FadeOutDown.springify()}
             style={{
               position: "absolute",
-              bottom: 40,
+              bottom: 0,
               width: "100%",
+              paddingBottom: 50,
               justifyContent: "flex-end",
               backgroundColor: "#00000062",
-              height: "100%",
+              height: height + 100,
               padding: 20,
             }}
           >
@@ -234,10 +241,14 @@ export default function VideoPostFullScreen({
             </View>
 
             <View style={{ flexDirection: "row", gap: 10 }}>
-              <Image
-                source={imageUri}
-                style={{ height: 40, width: 40, borderRadius: 10 }}
-              />
+              {imageUri ? (
+                <Image
+                  source={imageUri}
+                  style={{ height: 40, width: 40, borderRadius: 10 }}
+                />
+              ) : (
+                <ProfileIcon size={45} color={"white"} />
+              )}
               <View style={{ justifyContent: "space-between" }}>
                 <Text
                   style={{

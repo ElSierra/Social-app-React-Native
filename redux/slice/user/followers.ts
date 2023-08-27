@@ -1,51 +1,40 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 import { userApi } from "../../api/user";
 
 export interface FollowerState {
-  data: { following: string; followers: string } | null;
-  error: any;
-  loading: boolean;
+  following: number | null;
+  followers: number | null;
 }
 const followsCount = createSlice({
   name: "followsCount",
   initialState: {
-    data: null,
-    error: null,
-    loading: false,
+    followers: 0,
+    following: 0,
   } as FollowerState,
   reducers: {
     resetFollowers: (state) => {
-      state.data = null;
-      state.error = null;
-      state.loading = false;
+      state.following = 0;
+      state.followers = 0;
+    },
+    updateFollowing: (state, action: PayloadAction<{ following: number }>) => {
+      state.following = action.payload.following;
+    },
+    updateFollowers: (state, action: PayloadAction<{ followers: number }>) => {
+      state.followers = action.payload.followers;
     },
   },
   extraReducers: (builder) => {
     builder.addMatcher(
       userApi.endpoints.getFollowDetails.matchFulfilled,
       (state, { payload }) => {
-        state.data = payload;
-        state.error = null;
-        state.loading = false;
-      }
-    );
-    builder.addMatcher(
-      userApi.endpoints.getFollowDetails.matchPending,
-      (state) => {
-        state.error = null;
-        state.loading = true;
-      }
-    );
-    builder.addMatcher(
-      userApi.endpoints.getFollowDetails.matchRejected,
-      (state, { error }) => {
-        state.error = error;
-        state.loading = true;
+        state.followers = Number(payload.followers);
+        state.following = Number(payload.following);
       }
     );
   },
 });
 
 export default followsCount.reducer;
-export const {resetFollowers} = followsCount.actions
+export const { resetFollowers, updateFollowers, updateFollowing } =
+  followsCount.actions;

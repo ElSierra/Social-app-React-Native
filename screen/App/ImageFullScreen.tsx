@@ -103,7 +103,8 @@ export default function ImageFullScreen({
   });
   return (
     <>
-      <StatusBar animated={true} style="light" backgroundColor="transparent"  />
+      <StatusBar animated={true} style="light" backgroundColor="transparent" />
+
       <Animated.View
         entering={FadeIn.duration(250)}
         exiting={FadeOut.duration(250)}
@@ -117,8 +118,8 @@ export default function ImageFullScreen({
         <ImageBackground
           source={{ uri: photoUri }}
           blurRadius={20}
-          imageStyle={{opacity:0.5}}
-          style={{ height:"100%", width:"100%",justifyContent: "center", }}
+          imageStyle={{ opacity: 0.5 }}
+          style={{ height: "100%", width: "100%", justifyContent: "center" }}
           resizeMode="cover"
         >
           <View

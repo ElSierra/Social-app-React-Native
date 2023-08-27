@@ -27,6 +27,7 @@ export interface IPerson {
 
 export interface User {
   imageUri: string;
+  id: string;
   name: string;
   userName: string;
   verified: boolean;
@@ -46,4 +47,11 @@ export interface IPost {
   videoViews: number | null;
   user: User;
   createdAt: Date;
+}
+
+export interface IComment {
+  id: string;
+  comment: string;
+  User: User;
+  createdAt: string;
 }

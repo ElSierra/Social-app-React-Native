@@ -31,14 +31,17 @@ import {
   useGetRandomPeopleQuery,
   useGetRandomPostsQuery,
   useLazyGetAllPostsQuery,
+  useLazyGetFollowedPostsQuery,
 } from "../../redux/api/services";
 import { openToast } from "../../redux/slice/toast/toast";
 import Animated, {
   FadeIn,
   FadeInDown,
+  FadeInRight,
   FadeInUp,
   FadeOut,
   FadeOutDown,
+  FadeOutRight,
   ZoomIn,
 } from "react-native-reanimated";
 import EmptyLottie from "../../components/home/post/components/EmptyLottie";
@@ -48,6 +51,8 @@ import { resetPost } from "../../redux/slice/post";
 import { DrawerHomeProp, HomeProp } from "../../types/navigation";
 import storage from "../../redux/storage";
 import Robot from "../../components/home/post/misc/Robot";
+import HomeAll from "./HomeAll";
+import HomeFollowed from "./HomeFollowed";
 
 export default function Home({ navigation }: DrawerHomeProp) {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -67,13 +72,53 @@ export default function Home({ navigation }: DrawerHomeProp) {
   const [noMore, setNoMore] = useState(false);
 
   const userAuthValidate = useTokenValidQuery(null);
-
+  const [isAll, setIsAll] = useState(true);
   useGetUserQuery(null);
   useGetRandomPostsQuery(null);
   useGetRandomPeopleQuery(null);
   const ref = useRef<any>(null);
   useLayoutEffect(() => {
     navigation.setOptions({
+      headerRight: () => {
+        return (
+          <Pressable
+            onPress={() => {
+              setIsAll(!isAll);
+            }}
+            style={{
+              marginRight: 20,
+              borderColor: color,
+              borderWidth: 1,
+              padding: 2,
+              borderRadius: 999,
+
+              borderStyle: "dotted",
+            }}
+          >
+            {isAll ? (
+              <Animated.View
+                key={"all"}
+                entering={FadeInRight.springify()}
+                exiting={FadeOutRight.springify()}
+              >
+                <Text style={{ fontFamily: "uberBold", fontSize: 12, color }}>
+                  {"All Posts"}
+                </Text>
+              </Animated.View>
+            ) : (
+              <Animated.View
+                key={"followed"}
+                entering={FadeInRight.springify()}
+                exiting={FadeOutRight.springify()}
+              >
+                <Text style={{ fontFamily: "uberBold", fontSize: 12, color }}>
+                  {"Followed Posts"}
+                </Text>
+              </Animated.View>
+            )}
+          </Pressable>
+        );
+      },
       headerTitle: () => {
         return (
           <Pressable
@@ -88,191 +133,9 @@ export default function Home({ navigation }: DrawerHomeProp) {
         );
       },
     });
-  }, [color]);
-  const [getLazyPost, postRes] = useLazyGetAllPostsQuery();
-  const [refreshing, setRefreshing] = React.useState(false);
-  const [fab, showFab] = useState(true);
-  const onRefresh = useCallback(() => {
-    dispatch(resetPost());
-    setSkip(0);
-    setNoMore(false);
-    setRefreshing(false),
-      getLazyPost({ take: 20, skip })
-        .unwrap()
-        .then((e) => {
-          setSkip(skip + e.posts.length);
-          console.log(
-            "🚀 ~ file: Home.tsx:178 ~ .then ~ length:",
-            e.posts.length
-          );
-          if (e.posts.length === 0) {
-            setNoMore(true);
-          }
-        })
-        .catch((e) => {
-          dispatch(
-            openToast({ text: "couldn't get recent posts", type: "Failed" })
-          );
-        });
-  }, []);
+  }, [color, isAll]);
 
-  const renderFooter = () => {
-    if (noMore) {
-      return (
-        <View
-          style={{
-            width: "100%",
-            marginTop: 20,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Robot />
-        </View>
-      );
-    } else if (posts.loading) {
-      return (
-        <Animated.View
-          exiting={FadeOut.duration(50)}
-          entering={FadeIn.duration(50)}
-          style={{
-            marginTop: 20,
-            width: "100%",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <ActivityIndicator color={color} size={20} />
-        </Animated.View>
-      );
-    }
-  };
-
-  // useEffect(() => {
-  //   if (skip !== 0 && !noMore && !posts.loading)
-  //     getLazyPost({ take: 10, skip })
-  //       .unwrap()
-  //       .then((r) => {
-  //         setSkip(r.posts?.length || 0);
-  //         setNoMore(r.posts?.length === 0);
-  //       })
-  //       .catch((e) => {
-  //         dispatch(
-  //           openToast({ text: "couldn't get recent posts", type: "Failed" })
-  //         );
-  //       });
-  // }, [skip, noMore]);
-
-  useEffect(() => {
-    getLazyPost({ take: 20, skip })
-      .unwrap()
-      .then((e) => {
-        setSkip(e.posts?.length);
-      })
-      .catch((e) => {
-        dispatch(
-          openToast({ text: "couldn't get recent posts", type: "Failed" })
-        );
-      });
-  }, []);
-
-  const fetchMoreData = () => {
-    if (!noMore)
-      getLazyPost({ take: 20, skip })
-        .unwrap()
-        .then((e) => {
-          setSkip(skip + e.posts.length);
-          console.log(
-            "🚀 ~ file: Home.tsx:178 ~ .then ~ length:",
-            e.posts.length
-          );
-          if (e.posts.length === 0) {
-            setNoMore(true);
-          }
-        })
-        .catch((e) => {
-          dispatch(
-            openToast({ text: "couldn't get recent posts", type: "Failed" })
-          );
-        });
-  };
-  const handleRefetch = () => {
-    setSkip(0);
-    setNoMore(false);
-    getLazyPost({ take: 10, skip: 0 })
-      .unwrap()
-      .then((r) => {
-        setRefreshing(false);
-      })
-      .catch((e) => {
-        setRefreshing(false);
-        dispatch(
-          openToast({ text: "couldn't get recent posts", type: "Failed" })
-        );
-      });
-  };
-
-  useEffect(() => {
-    //@ts-ignore
-    if (userAuthValidate.error?.data?.msg === "invalid token") {
-      dispatch(signOut());
-    }
-  }, [userAuthValidate.data?.msg]);
-  const renderItem = ({ item }: { item: IPost }) => (
-    <PostBuilder
-      id={item.id}
-      date = {item.createdAt}
-      comments={item._count.comments}
-      like={item._count.like}
-      isLiked={item.isLiked}
-      imageUri={item.user?.imageUri}
-      name={item.user?.name}
-      userTag={item.user?.userName}
-      verified={item.user?.verified}
-      audioUri={item.audioUri || undefined}
-      photoUri={item.photoUri}
-      videoTitle={item.videoTitle || undefined}
-      videoUri={item.videoUri || undefined}
-      postText={item.postText}
-      videoViews={item.videoViews?.toString()}
-    />
-  );
-  const keyExtractor = (item: IPost) => item.id?.toString();
   return (
-    <AnimatedScreen>
-      {posts.loading && posts.data.length === 0 ? (
-        <SkeletonGroupPost />
-      ) : posts.data.length === 0 ? (
-        <EmptyList handleRefetch={handleRefetch} />
-      ) : (
-        <Animated.View
-          style={{ flex: 1 }}
-          entering={FadeInDown.springify().duration(400)}
-          exiting={FadeOutDown.springify()}
-        >
-          <FlashList
-            ref={ref}
-            data={posts.data}
-            decelerationRate={0.991}
-            estimatedItemSize={300}
-            ListFooterComponent={renderFooter}
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-                colors={["red", "blue"]}
-              />
-            }
-            keyExtractor={keyExtractor}
-            onEndReachedThreshold={0.6}
-            onEndReached={fetchMoreData}
-            estimatedListSize={{ width, height }}
-            renderItem={renderItem}
-            contentContainerStyle={{ paddingTop: 100, paddingBottom: 100 }}
-          />
-        </Animated.View>
-      )}
-      <Fab item={<AddIcon size={30} color={color} />} />
-    </AnimatedScreen>
+    <AnimatedScreen>{isAll ? <HomeAll /> : <HomeFollowed />}</AnimatedScreen>
   );
 }
