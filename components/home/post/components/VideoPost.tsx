@@ -24,23 +24,27 @@ import { useFocusEffect } from "@react-navigation/native";
 import useGetMode from "../../../../hooks/GetMode";
 import { current } from "@reduxjs/toolkit";
 import { HomeNavigationProp } from "../../../../types/navigation";
+import FastImage from "react-native-fast-image";
 
 function VideoPost({
   videoTitle,
-
+  thumbNail,
   videoUri,
   imageUri,
   userTag,
   name,
+
   videoViews,
 }: {
   videoTitle?: string;
   imageUri: string;
   videoUri: string;
+  thumbNail: string | null;
   name: string;
   userTag: string;
   videoViews?: string;
 }) {
+
   const imageScreenShot = videoUri
     .replace(".mp4", ".jpg")
     .replace("video", "pic");
@@ -74,16 +78,17 @@ function VideoPost({
                 userTag,
                 name,
                 imageUri,
+                thumbNail,
               });
             }}
           >
             <PlayIcon size={50} color="white" />
           </Pressable>
         </View>
-        <Image
-          source={videoUri}
+        <FastImage
+          source={{uri:thumbNail ? thumbNail : videoUri}}
           style={{ flex: 1, opacity: 0.6 }}
-          contentFit="scale-down"
+          resizeMode="contain"
         />
       </View>
     </View>

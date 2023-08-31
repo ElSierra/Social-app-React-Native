@@ -51,31 +51,27 @@ import { resetPost } from "../../redux/slice/post";
 import { DrawerHomeProp, HomeProp } from "../../types/navigation";
 import storage from "../../redux/storage";
 import Robot from "../../components/home/post/misc/Robot";
-import HomeAll from "./HomeAll";
-import HomeFollowed from "./HomeFollowed";
+import HomeAll from "./HomeScreens/HomeAll";
+import HomeFollowed from "./HomeScreens/HomeFollowed";
 
 export default function Home({ navigation }: DrawerHomeProp) {
-  const apiUrl = process.env.EXPO_PUBLIC_API_URL;
-
   const dark = useGetMode();
-  const dispatch = useAppDispatch();
-  const posts = useAppSelector((state) => state.post);
+
   const isDark = dark;
   const color = isDark ? "white" : "black";
-  const backgroundColor = !isDark ? "white" : "black";
-  const height = Dimensions.get("screen").height;
-  const width = Dimensions.get("screen").width;
-
-  const [skip, setSkip] = useState(0);
-  console.log("🚀 ~ file: Home.tsx:64 ~ Home ~ skip:", skip);
-
-  const [noMore, setNoMore] = useState(false);
-
-  const userAuthValidate = useTokenValidQuery(null);
+  const dispatch = useAppDispatch();
   const [isAll, setIsAll] = useState(true);
   useGetUserQuery(null);
-  useGetRandomPostsQuery(null);
-  useGetRandomPeopleQuery(null);
+  // useGetRandomPostsQuery(null);
+  // useGetRandomPeopleQuery(null);
+
+  const userAuthValidate = useTokenValidQuery(null);
+  useEffect(() => {
+    //@ts-ignore
+    if (userAuthValidate.error?.data?.msg === "invalid token") {
+      dispatch(signOut());
+    }
+  }, [userAuthValidate.data?.msg]);
   const ref = useRef<any>(null);
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -119,23 +115,10 @@ export default function Home({ navigation }: DrawerHomeProp) {
           </Pressable>
         );
       },
-      headerTitle: () => {
-        return (
-          <Pressable
-            onPress={() => {
-              ref.current.scrollToOffset({ animated: true, offset: 0 });
-            }}
-          >
-            <Text style={{ fontFamily: "uberBold", fontSize: 20, color }}>
-              Qui
-            </Text>
-          </Pressable>
-        );
-      },
     });
   }, [color, isAll]);
 
   return (
-    <AnimatedScreen>{isAll ? <HomeAll /> : <HomeFollowed />}</AnimatedScreen>
+    <AnimatedScreen >{isAll ? <HomeAll /> : <HomeFollowed />}</AnimatedScreen>
   );
 }

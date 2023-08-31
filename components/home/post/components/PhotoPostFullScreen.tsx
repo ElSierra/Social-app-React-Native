@@ -1,8 +1,9 @@
 import { View, Text, FlatList, Pressable, Button } from "react-native";
-import { Image } from "expo-image";
+
 import { useNavigation } from "@react-navigation/native";
 import { HomeNavigationProp } from "../../../../types/navigation";
 import { SharedElement } from "react-navigation-shared-element";
+import FastImage from "react-native-fast-image";
 
 export default function PhotoPostFullScreen({
   photoUri,
@@ -48,11 +49,10 @@ export default function PhotoPostFullScreen({
             }}
           >
             <SharedElement id={id} style={{flex:1}}>
-              <Image
-                placeholderContentFit="cover"
-                placeholder={require("../../../../assets/images/placeholder.png")}
+              <FastImage
+               
                 style={{ flex: 1, width: "100%", borderRadius: 15 }}
-                contentFit="cover"
+                resizeMode="cover"
                 source={{ uri: item }}
               />
             </SharedElement>

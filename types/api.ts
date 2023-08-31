@@ -5,6 +5,7 @@ export interface IUSerData {
   followersCount: string;
   followingCount: string;
   imageUri: string;
+  verified: boolean;
   emailIsVerified: boolean;
 }
 
@@ -15,6 +16,7 @@ export interface IPostContent {
   videoUri?: string;
   videoTitle?: string;
   postText?: string;
+  videoThumbnail?: string;
 }
 
 export interface IPerson {
@@ -44,6 +46,7 @@ export interface IPost {
   videoTitle: string | null;
   photoUri: string[];
   postText: string;
+  videoThumbnail: string | null;
   videoViews: number | null;
   user: User;
   createdAt: Date;

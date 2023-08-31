@@ -15,7 +15,7 @@ import {
   useColorScheme,
 } from "react-native";
 import useGetMode from "../../../hooks/GetMode";
-
+import FastImage from "react-native-fast-image";
 export default function AnimatedScreen({ children }: { children: ReactNode }) {
   const opacity = useSharedValue(0);
   const animatedStyle = useAnimatedStyle(() => {
@@ -28,7 +28,10 @@ export default function AnimatedScreen({ children }: { children: ReactNode }) {
     useCallback(() => {
       opacity.value = withTiming(1, { duration: 250 });
 
-      return () => (opacity.value = withTiming(0, { duration: 250 }));
+      return () => {
+        FastImage.clearMemoryCache();
+        opacity.value = withTiming(0, { duration: 250 });
+      };
     }, [opacity])
   );
   return (
@@ -36,14 +39,7 @@ export default function AnimatedScreen({ children }: { children: ReactNode }) {
       <Animated.View
         style={[{ flex: 1, backgroundColor: "transparent" }, animatedStyle]}
       >
-        <ImageBackground
-          resizeMode="cover"
-          style={{ flex: 1 }} 
-          imageStyle={{ opacity: 0.1 }}
-          source={require("../../../assets/images/bg.webp")}
-        >
-          {children}
-        </ImageBackground>
+        {children}
       </Animated.View>
     </View>
   );

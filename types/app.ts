@@ -13,6 +13,7 @@ export type IPostBuilder = {
   videoViews?: string;
   repost?: string;
   title?: string;
+  thumbNail: string | null;
   like: number;
   id: string;
   audioUri?: string;

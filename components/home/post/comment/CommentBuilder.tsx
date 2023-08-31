@@ -28,7 +28,7 @@ export default function CommentBuilder({
   const color = isDark ? "#FFFFFF" : "#000000";
   const rColor = isDark ? "#FFFFFF2A" : "#0000001B";
   const selectionColor = isDark ? "#C5C5C591" : "#0000007A";
-  console.log(dateAgo(new Date(date)));
+
   return (
     <Animated.View
       entering={FadeInLeft.springify()}

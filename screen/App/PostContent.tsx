@@ -20,7 +20,7 @@ import {
   PhotoIdentifier,
 } from "@react-native-camera-roll/camera-roll";
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
-import { Image } from "expo-image";
+
 import PickImageButton from "../../components/postContent/PickImageButton";
 import VideoTextArea from "../../components/postContent/VideoTextArea";
 import RingAudio from "../../components/home/post/components/RingAudio";
@@ -42,6 +42,7 @@ import {
 } from "../../redux/slice/modal/loading";
 import PickVideoButton from "../../components/postContent/PickVideoButton";
 import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated";
+import FastImage from "react-native-fast-image";
 const width = Dimensions.get("screen").width;
 export default function PostContent({ navigation }: PostContentProp) {
   const dark = useGetMode();
@@ -70,6 +71,9 @@ export default function PostContent({ navigation }: PostContentProp) {
     setPostAudio(null);
   }
   const [fileToServer, setFTServer] = useState<string | undefined>(undefined);
+  const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>(
+    undefined
+  );
   const [postText, setPostText] = useState<string | undefined>(undefined);
   const [done, setDone] = useState(true);
   const [videoTitle, setVideoTitle] = useState<string | undefined>(undefined);
@@ -206,6 +210,7 @@ export default function PostContent({ navigation }: PostContentProp) {
         .then((r) => {
           setDone(true);
           setFTServer(r.video);
+          setVideoThumbnail(r.thumbNail);
         })
         .catch((e) => {
           setDone(true);
@@ -276,6 +281,7 @@ export default function PostContent({ navigation }: PostContentProp) {
         postContent({
           videoUri: fileToServer,
           videoTitle: videoTitle || "🎥",
+          videoThumbnail,
           postText,
         })
           .then((e) => {
@@ -414,7 +420,7 @@ export default function PostContent({ navigation }: PostContentProp) {
             <></>
           )}
           {postPhoto && (
-            <Image
+            <FastImage
               style={{
                 width: "100%",
                 height: "100%",
@@ -422,8 +428,8 @@ export default function PostContent({ navigation }: PostContentProp) {
                 paddingHorizontal: 20,
               }}
               source={{ uri: postPhoto?.uri }}
-              contentFit="contain"
-              transition={1000}
+              resizeMode="contain"
+             
             />
           )}
           {postAudio && <RingAudio animationRef={animationRef} />}
@@ -482,7 +488,7 @@ export default function PostContent({ navigation }: PostContentProp) {
                       });
                     }}
                   >
-                    <Image
+                    <FastImage
                       style={{ height: 100, width: 100, borderRadius: 10 }}
                       source={{ uri: item?.node?.image?.uri }}
                     />

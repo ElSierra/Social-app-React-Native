@@ -1,26 +1,54 @@
 import { View, Text, FlatList } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import PeopleContainer from "../PeopleContainer";
 import { personState } from "../../../redux/slice/people/search";
 import Animated, {
   BounceIn,
   FadeIn,
   FadeInDown,
+  FadeInRight,
   FadeInUp,
   FadeOut,
   FadeOutDown,
+  FadeOutRight,
+  cancelAnimation,
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
 } from "react-native-reanimated";
 import { SearchSkeleton } from "../Skeleton/SearchSkeleton";
-import { Image } from "expo-image";
+
+import FastImage from "react-native-fast-image";
 
 export default function People({ people }: { people: personState }) {
+  const opacity = useSharedValue(0);
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: interpolate(opacity.value, [0, 1], [1, 0]),
+    };
+  });
+
+  useEffect(() => {
+    opacity.value = withRepeat(withTiming(1, { duration: 900 }), -1, true);
+    return () => {
+      cancelAnimation(opacity);
+    };
+  }, []);
+
   return (
-    <View style={{ gap: 5, marginVertical: 20, height: "100%" }}>
+    <Animated.View
+      entering={FadeInRight.springify()}
+      exiting={FadeOutRight.springify()}
+      style={{ gap: 5, marginVertical: 20, height: "100%" }}
+    >
       {people.loading && (
         <Animated.View
-          entering={FadeIn.springify()}
-          style={{ gap: 5, marginTop: 150 }}
-          exiting={FadeOut.springify()}
+          style={[
+            { gap: 5, marginTop: 150, paddingHorizontal: 10 },
+            animatedStyle,
+          ]}
         >
           {[0, 1, 2].map((idx) => (
             <SearchSkeleton key={idx} />
@@ -37,7 +65,7 @@ export default function People({ people }: { people: personState }) {
             height: "100%",
           }}
         >
-          <Image
+          <FastImage
             style={{ height: 300, width: 300 }}
             source={require("../../../assets/images/emptySearch.png")}
           />
@@ -54,6 +82,6 @@ export default function People({ people }: { people: personState }) {
         renderItem={({ item }) => <PeopleContainer {...item} />}
         keyExtractor={(item) => item.id.toString()}
       />
-    </View>
+    </Animated.View>
   );
 }

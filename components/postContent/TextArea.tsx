@@ -1,10 +1,11 @@
 import { View, Text, TextInput, Dimensions } from "react-native";
 import React, { useState } from "react";
-import { Image } from "expo-image";
+
 import InputText from "../../screen/Auth/components/InputText";
 import useGetMode from "../../hooks/GetMode";
 import { useAppSelector } from "../../redux/hooks/hooks";
 import { ProfileIcon } from "../icons";
+import FastImage from "react-native-fast-image";
 const heightFromScreen = Dimensions.get("screen").height;
 export default function TextArea({
   handlePostText,
@@ -18,10 +19,14 @@ export default function TextArea({
   return (
     <View>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
-        {userDetails?.imageUri?<Image
-          style={{ height: 50, width: 50, borderRadius: 9999 }}
-          source={{ uri: userDetails?.imageUri }}
-        />:<ProfileIcon color={color} size={55}/>}
+        {userDetails?.imageUri ? (
+          <FastImage
+            style={{ height: 50, width: 50, borderRadius: 9999 }}
+            source={{ uri: userDetails?.imageUri }}
+          />
+        ) : (
+          <ProfileIcon color={color} size={55} />
+        )}
         <Text
           style={{
             fontSize: 20,
@@ -49,6 +54,7 @@ export default function TextArea({
             minHeight: height,
             alignItems: "flex-start",
           }}
+          placeholderTextColor={"grey"}
           placeholder="What's happening?"
         />
       </View>

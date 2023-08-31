@@ -1,6 +1,6 @@
 import { View, Text, Dimensions, Pressable } from "react-native";
 
-import { Image } from "expo-image";
+
 import { Button } from "react-native-paper";
 import { BlurView } from "expo-blur";
 import Animated, { FadeInLeft } from "react-native-reanimated";
@@ -17,6 +17,7 @@ import {
 import { useAppSelector } from "../../../redux/hooks/hooks";
 import useGetMode from "../../../hooks/GetMode";
 import { ProfileIcon } from "../../icons";
+import FastImage from "react-native-fast-image";
 
 const { width } = Dimensions.get("screen");
 export default function PeopleContainer({
@@ -26,9 +27,8 @@ export default function PeopleContainer({
   imageUri,
   isFollowed,
 }: IPerson) {
-
   const [follow, setFollow] = useState(() => isFollowed);
-  const followState = useAppSelector((state) => state.followers);
+  const user = useAppSelector((state) => state.user);
 
   const [followUser] = useLazyFollowUserQuery();
   const [unfollowUser] = useLazyUnfollowUserQuery();
@@ -45,11 +45,10 @@ export default function PeopleContainer({
     if (!follow) {
       followUser({ id }).then((e) => {});
     } else {
-      unfollowUser({ id }).then((e) => {
-      
-      });
+      unfollowUser({ id }).then((e) => {});
     }
   };
+  const isMe = user.data?.userName === userName;
   return (
     <Animated.View
       entering={FadeInLeft.springify()}
@@ -65,10 +64,14 @@ export default function PeopleContainer({
       }}
     >
       <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-        {imageUri?<Image
-          source={{ uri: imageUri }}
-          style={{ height: 30, width: 30, borderRadius: 9999 }}
-        />: <ProfileIcon color={color} size={34}/>}
+        {imageUri ? (
+          <FastImage
+            source={{ uri: imageUri }}
+            style={{ height: 30, width: 30, borderRadius: 9999 }}
+          />
+        ) : (
+          <ProfileIcon color={color} size={34} />
+        )}
         <View>
           <Text style={{ fontSize: 16, fontFamily: "mulishBold", color }}>
             {name}
@@ -78,31 +81,33 @@ export default function PeopleContainer({
           </Text>
         </View>
       </View>
-      <View
-        style={{
-          borderRadius: 999,
-          borderWidth: 1,
-          backgroundColor: follow ? fbuttonBackgroundColor : "transparent",
-          overflow: "hidden",
-          borderColor: fbuttonBackgroundColor,
-        }}
-      >
-        <Pressable
-          android_ripple={{ color: "white" }}
-          onPress={handleFollow}
-          style={{ paddingHorizontal: 10, paddingVertical: 6 }}
+      {!isMe && (
+        <View
+          style={{
+            borderRadius: 999,
+            borderWidth: 1,
+            backgroundColor: follow ? fbuttonBackgroundColor : "transparent",
+            overflow: "hidden",
+            borderColor: fbuttonBackgroundColor,
+          }}
         >
-          <Text
-            style={{
-              fontFamily: "jakara",
-              color: !follow ? fBColor : nBColor,
-              includeFontPadding: false,
-            }}
+          <Pressable
+            android_ripple={{ color: "white" }}
+            onPress={handleFollow}
+            style={{ paddingHorizontal: 10, paddingVertical: 6 }}
           >
-            {follow ? "Following" : "Follow"}
-          </Text>
-        </Pressable>
-      </View>
+            <Text
+              style={{
+                fontFamily: "jakara",
+                color: !follow ? fBColor : nBColor,
+                includeFontPadding: false,
+              }}
+            >
+              {follow ? "Following" : "Follow"}
+            </Text>
+          </Pressable>
+        </View>
+      )}
     </Animated.View>
   );
 }

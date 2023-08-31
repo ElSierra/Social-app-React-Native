@@ -2,9 +2,7 @@ import * as React from "react";
 import { Text, View, StyleSheet, Button, Pressable } from "react-native";
 import { AVPlaybackStatus, Audio } from "expo-av";
 import { useCallback, useEffect, useRef, useState } from "react";
-import AnimatedRing from "./RingAudio";
-import Slider from "@react-native-community/slider";
-import { AudioPlayerState } from "../../../../types/app";
+
 import useGetMode from "../../../../hooks/GetMode";
 import RingAudio from "./RingAudio";
 import IconButton from "../../../global/Buttons/IconButton";
@@ -17,8 +15,9 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { Image } from "expo-image";
+
 import AudioPlayLottie from "./AudioPlayLottie";
+import FastImage from "react-native-fast-image";
 export default function AudioPost({
   uri,
   photoUri,
@@ -168,8 +167,8 @@ export default function AudioPost({
                 picAnimatedStyle,
               ]}
             >
-              <Image
-                source={photoUri}
+              <FastImage
+                source={{uri:photoUri}}
                 style={{ width: 80, height: 80, borderRadius: 9999 }}
               />
             </Animated.View>

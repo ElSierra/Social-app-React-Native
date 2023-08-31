@@ -11,7 +11,7 @@ import {
   Pressable,
 } from "react-native";
 import AnimatedScreen from "../../components/global/AnimatedScreen";
-import { Image } from "expo-image";
+
 import InputText from "./components/InputText";
 import InputPassword from "./components/InputPassword";
 import Button from "../../components/global/Buttons/Button";
@@ -33,6 +33,7 @@ import { useForm, Controller } from "react-hook-form";
 import { LoginScreen } from "../../types/navigation";
 import { servicesApi } from "../../redux/api/services";
 import { userApi } from "../../redux/api/user";
+import FastImage from "react-native-fast-image";
 
 const width = Dimensions.get("screen").width;
 export default function Login({ navigation }: LoginScreen) {
@@ -154,9 +155,9 @@ export default function Login({ navigation }: LoginScreen) {
           >
             <View style={{ alignItems: "center" }}>
               <View>
-                <Image
+                <FastImage
                   source={require("../../assets/images/auth.png")}
-                  contentFit="contain"
+                  resizeMode="contain"
                   style={{ height: 200, width }}
                 />
               </View>

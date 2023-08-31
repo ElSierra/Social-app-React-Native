@@ -32,10 +32,10 @@ export default function FullScreenPost({
   videoViews,
   title,
   like,
+  thumbNail,
   id,
   audioUri,
 }: IPostBuilder) {
-  console.log("🚀 ~ file: FullScreenPost.tsx:36 ~ date:", date);
   const width = Dimensions.get("screen").width;
   const navigation = useNavigation<HomeNavigationProp>();
   const dark = useGetMode();
@@ -49,7 +49,7 @@ export default function FullScreenPost({
       style={{
         borderBottomWidth: 0.5,
         borderBottomColor,
-   
+
         paddingHorizontal: 10,
         paddingVertical: 10,
       }}
@@ -109,6 +109,7 @@ export default function FullScreenPost({
           </View>
           {videoUri && (
             <VideoPost
+              thumbNail={thumbNail}
               videoTitle={videoTitle}
               imageUri={imageUri}
               name={name}
@@ -150,7 +151,7 @@ export default function FullScreenPost({
             style={{
               flexDirection: "row",
               gap: 5,
-              marginVertical:10,
+              marginVertical: 10,
               paddingVertical: 10,
               borderTopColor: "#7a868f",
               borderTopWidth: 0.3,

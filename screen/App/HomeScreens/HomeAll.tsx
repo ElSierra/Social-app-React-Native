@@ -13,26 +13,26 @@ import React, {
   useRef,
   useState,
 } from "react";
-import Fab from "../../components/home/post/components/Fab";
-import { AddIcon, ReloadIcon } from "../../components/icons";
-import PostBuilder from "../../components/home/post/PostBuilder";
-import { postLists } from "../../data/test";
+import Fab from "../../../components/home/post/components/Fab";
+import { AddIcon, ReloadIcon } from "../../../components/icons";
+import PostBuilder from "../../../components/home/post/PostBuilder";
+import { postLists } from "../../../data/test";
 import { useNetInfo } from "@react-native-community/netinfo";
 import { FlashList } from "@shopify/flash-list";
-import AnimatedScreen from "../../components/global/AnimatedScreen";
-import useGetMode from "../../hooks/GetMode";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
-import { useGetUserQuery, useTokenValidQuery } from "../../redux/api/user";
-import { signOut } from "../../redux/slice/user";
+import AnimatedScreen from "../../../components/global/AnimatedScreen";
+import useGetMode from "../../../hooks/GetMode";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks/hooks";
+import { useGetUserQuery, useTokenValidQuery } from "../../../redux/api/user";
+import { signOut } from "../../../redux/slice/user";
 import { ActivityIndicator } from "react-native-paper";
-import { IPost } from "../../types/api";
+import { IPost } from "../../../types/api";
 import {
   useGetAllPostsQuery,
   useGetRandomPeopleQuery,
   useGetRandomPostsQuery,
   useLazyGetAllPostsQuery,
-} from "../../redux/api/services";
-import { openToast } from "../../redux/slice/toast/toast";
+} from "../../../redux/api/services";
+import { openToast } from "../../../redux/slice/toast/toast";
 import Animated, {
   FadeIn,
   FadeInDown,
@@ -41,16 +41,16 @@ import Animated, {
   FadeOutDown,
   ZoomIn,
 } from "react-native-reanimated";
-import EmptyLottie from "../../components/home/post/components/EmptyLottie";
-import SkeletonGroupPost from "../../components/home/misc/SkeletonGroupPost";
-import EmptyList from "../../components/home/misc/EmptyList";
-import { resetPost } from "../../redux/slice/post";
-import { DrawerHomeProp, HomeProp } from "../../types/navigation";
-import storage from "../../redux/storage";
-import Robot from "../../components/home/post/misc/Robot";
+import EmptyLottie from "../../../components/home/post/components/EmptyLottie";
+import SkeletonGroupPost from "../../../components/home/misc/SkeletonGroupPost";
+import EmptyList from "../../../components/home/misc/EmptyList";
+import { resetPost } from "../../../redux/slice/post";
+import { resetPost as resetFollowedPosts } from "../../../redux/slice/post/followed";
+import { DrawerHomeProp, HomeProp } from "../../../types/navigation";
+import storage from "../../../redux/storage";
+import Robot from "../../../components/home/post/misc/Robot";
 
 export default function HomeAll() {
-  const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
   const dark = useGetMode();
   const dispatch = useAppDispatch();
@@ -62,17 +62,11 @@ export default function HomeAll() {
   const width = Dimensions.get("screen").width;
 
   const [skip, setSkip] = useState(0);
-  console.log("🚀 ~ file: Home.tsx:64 ~ Home ~ skip:", skip);
 
   const [noMore, setNoMore] = useState(false);
-
-  const userAuthValidate = useTokenValidQuery(null);
-
-  useGetUserQuery(null);
-  useGetRandomPostsQuery(null);
-  useGetRandomPeopleQuery(null);
-
-  const ref = useRef<any>(null);
+  useEffect(() => {
+    dispatch(resetFollowedPosts());
+  }, []);
   const [getLazyPost, postRes] = useLazyGetAllPostsQuery();
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = useCallback(() => {
@@ -84,10 +78,7 @@ export default function HomeAll() {
         .unwrap()
         .then((e) => {
           setSkip(skip + e.posts.length);
-          console.log(
-            "🚀 ~ file: Home.tsx:178 ~ .then ~ length:",
-            e.posts.length
-          );
+
           if (e.posts.length === 0) {
             setNoMore(true);
           }
@@ -165,10 +156,7 @@ export default function HomeAll() {
         .unwrap()
         .then((e) => {
           setSkip(skip + e.posts.length);
-          console.log(
-            "🚀 ~ file: Home.tsx:178 ~ .then ~ length:",
-            e.posts.length
-          );
+
           if (e.posts.length === 0) {
             setNoMore(true);
           }
@@ -195,12 +183,6 @@ export default function HomeAll() {
       });
   };
 
-  useEffect(() => {
-    //@ts-ignore
-    if (userAuthValidate.error?.data?.msg === "invalid token") {
-      dispatch(signOut());
-    }
-  }, [userAuthValidate.data?.msg]);
   const renderItem = ({ item }: { item: IPost }) => (
     <PostBuilder
       id={item.id}
@@ -208,6 +190,7 @@ export default function HomeAll() {
       comments={item._count.comments}
       like={item._count.like}
       isLiked={item.isLiked}
+      thumbNail={item.videoThumbnail}
       imageUri={item.user?.imageUri}
       name={item.user?.name}
       userTag={item.user?.userName}
@@ -222,7 +205,7 @@ export default function HomeAll() {
   );
   const keyExtractor = (item: IPost) => item.id?.toString();
   return (
-    <AnimatedScreen>
+    <View style={{flex:1}}>
       {posts.loading && posts.data.length === 0 ? (
         <SkeletonGroupPost />
       ) : posts.data.length === 0 ? (
@@ -234,10 +217,10 @@ export default function HomeAll() {
           exiting={FadeOutDown.springify()}
         >
           <FlashList
-            ref={ref}
+     
             data={posts.data}
             decelerationRate={0.991}
-            estimatedItemSize={300}
+            estimatedItemSize={100}
             ListFooterComponent={renderFooter}
             refreshControl={
               <RefreshControl
@@ -247,7 +230,7 @@ export default function HomeAll() {
               />
             }
             keyExtractor={keyExtractor}
-            onEndReachedThreshold={0.6}
+            onEndReachedThreshold={0.3}
             onEndReached={fetchMoreData}
             estimatedListSize={{ width, height }}
             renderItem={renderItem}
@@ -256,6 +239,6 @@ export default function HomeAll() {
         </Animated.View>
       )}
       <Fab item={<AddIcon size={30} color={color} />} />
-    </AnimatedScreen>
+    </View>
   );
 }

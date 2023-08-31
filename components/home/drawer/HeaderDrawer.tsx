@@ -1,8 +1,9 @@
 import { View, Text, useColorScheme } from "react-native";
-import { Image } from "expo-image";
+
 import useGetMode from "../../../hooks/GetMode";
 import { useAppSelector } from "../../../redux/hooks/hooks";
-import { ProfileIcon } from "../../icons";
+import { ProfileIcon, VerifiedIcon } from "../../icons";
+import FastImage from "react-native-fast-image";
 
 export default function HeaderDrawer() {
   const dark = useGetMode();
@@ -14,7 +15,7 @@ export default function HeaderDrawer() {
   return (
     <View style={{ paddingLeft: 14, flex: 1 }}>
       {user?.imageUri ? (
-        <Image
+        <FastImage
           style={{ height: 50, width: 50, borderRadius: 9999 }}
           source={{ uri: user?.imageUri }}
         />
@@ -32,11 +33,18 @@ export default function HeaderDrawer() {
         >
           {user?.name}
         </Text>
-        <Text
-          style={{ fontFamily: "jakara", color, includeFontPadding: false }}
-        >
-          @{user?.userName}
-        </Text>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Text
+            style={{ fontFamily: "jakara", color, includeFontPadding: false }}
+          >
+            @{user?.userName}
+          </Text>
+          {user?.verified && (
+            <View>
+              <VerifiedIcon size={20} color="green" />
+            </View>
+          )}
+        </View>
       </View>
       <View style={{ flexDirection: "row", gap: 8 }}>
         <View style={{ marginTop: 16, flexDirection: "row", gap: 4 }}>

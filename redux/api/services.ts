@@ -55,6 +55,7 @@ export const servicesApi = createApi({
       },
       invalidatesTags: ["post"],
     }),
+
     uploadAudio: builder.mutation<
       { audio: string },
       { mimeType: string; uri: string; name: string }
@@ -80,7 +81,7 @@ export const servicesApi = createApi({
       invalidatesTags: ["post"],
     }),
     uploadVideo: builder.mutation<
-      { video: "video.mp4" },
+      { video: string; thumbNail: string },
       { mimeType: string; uri: string }
     >({
       query: (payload) => {
@@ -177,6 +178,14 @@ export const servicesApi = createApi({
 
       extraOptions: { maxRetries: 2 },
     }),
+    getMyPosts: builder.query<
+      { posts: IPost[] },
+      { take: number; skip: number }
+    >({
+      query: ({ take, skip }) => `/my-posts?take=${take}&skip=${skip}`,
+
+      extraOptions: { maxRetries: 2 },
+    }),
   }),
 });
 
@@ -193,6 +202,8 @@ export const {
   useGetRandomPeopleQuery,
   useLazyFollowUserQuery,
   useLazyUnfollowUserQuery,
+
+  useLazyGetMyPostsQuery,
   useLazyLikePostQuery,
   usePostCommentMutation,
   useLazySearchPostsQuery,

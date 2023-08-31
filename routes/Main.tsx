@@ -132,20 +132,18 @@ export default function Main() {
   const color = !isDark ? "black" : "white";
   const dispatch = useAppDispatch();
   const userAuthenticated = useAppSelector((state) => state.user.token);
+  const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
   useEffect(() => {
     socket.connect();
-    console.log(`⚡: ${socket.id} user just connected!`);
+
     socket.emit("auth", userAuthenticated);
   }, []);
 
   useEffect(() => {
     socket.on("following", (following: number) => {
-      console.log("🚀 ~ file: App.tsx:160 ~ socket.on ~ following:", following);
       if (following) dispatch(updateFollowing({ following }));
     });
     socket.on("followers", (followers: number) => {
-      console.log("🚀 ~ file: App.tsx:160 ~ socket.on ~ following:", followers);
-
       if (followers) dispatch(updateFollowers({ followers }));
     });
   }, [socket]);
@@ -166,19 +164,10 @@ export default function Main() {
           <Stack.Screen
             name="Profile"
             options={{
-              headerBackground: () => (
-                <BlurView
-                  style={{
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    top: 0,
-                    right: 0,
-                  }}
-                  tint={tint}
-                  intensity={200}
-                />
-              ),
+              headerTitle:"",
+              animation: "slide_from_bottom",
+              headerTransparent: true,
+              headerTintColor: "white",
             }}
             component={Profile}
           />
@@ -229,6 +218,8 @@ export default function Main() {
                     left: 0,
                     top: 0,
                     right: 0,
+                    borderColor,
+                    borderBottomWidth: 0.5,
                   }}
                   tint={tint}
                   intensity={200}
@@ -236,9 +227,15 @@ export default function Main() {
               ),
               title: "Post",
               animation: "fade",
-
+              headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
               headerShadowVisible: false,
+
+              headerTransparent: true,
+              headerTitleAlign: "center",
               headerTintColor: color,
+              headerStyle: {
+                backgroundColor: "transparent",
+              },
             }}
             component={PostScreen}
           />

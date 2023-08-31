@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   TouchableWithoutFeedback,
   Dimensions,
+  ImageBackground,
 } from "react-native";
 import React, {
   useCallback,
@@ -26,21 +27,21 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { Image, ImageBackground } from "expo-image";
+
 import { useFocusEffect } from "@react-navigation/native";
 import useGetMode from "../../../../hooks/GetMode";
 
 import Slider from "@react-native-community/slider";
 import convertMsToHMS from "../../../../util/convert";
 import { StatusBar } from "expo-status-bar";
+import FastImage from "react-native-fast-image";
 
-
-const {height} = Dimensions.get("screen")
+const { height } = Dimensions.get("screen");
 export default function VideoPostFullScreen({
   videoTitle,
 
   videoUri,
-
+  thumbNail,
   imageUri,
   name,
   userTag,
@@ -50,11 +51,12 @@ export default function VideoPostFullScreen({
   name: string;
   userTag: string;
   videoUri: string;
+  thumbNail: string | null;
 
   videoViews?: string;
 }) {
   const video = useRef<null | Video>(null);
- 
+
   const [status, setStatus] = useState<any>(null);
 
   const [play, setPlay] = useState(true);
@@ -149,11 +151,11 @@ export default function VideoPostFullScreen({
       }}
     >
       <ImageBackground
-        source={{ uri: videoUri }}
-        blurRadius={20}
-        contentFit="cover"
-        imageStyle={{ opacity: 0.5 }}
-        style={{ height: "100%", width: "100%", justifyContent: "center" }}
+        source={{ uri: thumbNail ? thumbNail : videoUri }}
+        blurRadius={10}
+        imageStyle={{opacity:0.5 }}
+        resizeMode="cover"
+        style={{ height: "100%", width: "100%", justifyContent: "center",}}
       >
         {
           <TouchableWithoutFeedback
@@ -202,7 +204,6 @@ export default function VideoPostFullScreen({
                 style={{ width: "100%" }}
                 minimumValue={0}
                 thumbTintColor="transparent"
-                thumbImage={require("../../../../assets/images/seek.png")}
                 upperLimit={status?.durationMillis}
                 disabled={status === null || status.loaded === false}
                 value={status?.playableDurationMillis}
@@ -213,7 +214,7 @@ export default function VideoPostFullScreen({
               <Slider
                 style={{ width: "100%", position: "absolute" }}
                 minimumValue={0}
-                thumbImage={require("../../../../assets/images/seek.png")}
+                thumbTintColor="white"
                 upperLimit={status?.durationMillis}
                 disabled={status === null || status.loaded === false}
                 value={status?.positionMillis}
@@ -235,15 +236,15 @@ export default function VideoPostFullScreen({
               <Text
                 style={{ color: "white", fontFamily: "jakara", fontSize: 14 }}
               >
-                {convertMsToHMS(status?.positionMillis)} /{" "}
-                {convertMsToHMS(status?.durationMillis)}
+                {convertMsToHMS(status?.positionMillis || 0)} /{" "}
+                {convertMsToHMS(status?.durationMillis || 0)}
               </Text>
             </View>
 
             <View style={{ flexDirection: "row", gap: 10 }}>
               {imageUri ? (
-                <Image
-                  source={imageUri}
+                <FastImage
+                  source={{ uri: imageUri }}
                   style={{ height: 40, width: 40, borderRadius: 10 }}
                 />
               ) : (
@@ -275,6 +276,7 @@ export default function VideoPostFullScreen({
             justifyContent: "center",
             width: "100%",
             height: "100%",
+            pointerEvents: "none",
             alignItems: "center",
           }}
         >

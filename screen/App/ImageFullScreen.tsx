@@ -1,6 +1,6 @@
 import { Pressable, View, StyleSheet, ImageBackground } from "react-native";
 import { ImageFullScreenProp } from "../../types/navigation";
-import { Image } from "expo-image";
+
 
 import Animated, {
   Easing,
@@ -19,6 +19,7 @@ import { BlurView } from "expo-blur";
 import { useAppDispatch } from "../../redux/hooks/hooks";
 import { openToast } from "../../redux/slice/toast/toast";
 import { SharedElement } from "react-navigation-shared-element";
+import FastImage from "react-native-fast-image";
 
 //Hero Transition
 
@@ -131,9 +132,9 @@ export default function ImageFullScreen({
             }}
           >
             <SharedElement id={id} style={StyleSheet.absoluteFill}>
-              <Image
+              <FastImage
                 source={{ uri: photoUri }}
-                contentFit="contain"
+                resizeMode="contain"
                 style={{ width: "100%", height: "100%" }}
               />
             </SharedElement>

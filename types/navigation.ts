@@ -19,6 +19,7 @@ export type RootStackParamList = {
     imageUri: string;
     userTag: string;
     name: string;
+    thumbNail: string | null;
   };
   ViewPost: IPostBuilder;
   Profile: undefined;

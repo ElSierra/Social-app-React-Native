@@ -3,6 +3,7 @@ import { ProfileIcon } from "../../icons";
 import { ViewProps } from "react-native-svg/lib/typescript/fabric/utils";
 import { useAppSelector } from "../../../redux/hooks/hooks";
 import { Image } from "expo-image";
+import FastImage from "react-native-fast-image";
 
 type ProfileButtonType = {
   onPress: () => void;
@@ -22,12 +23,8 @@ export default function ProfileButton({
     <View style={style}>
       <Pressable onPress={onPress}>
         {imageUri ? (
-          <Image
-            placeholder={{
-              uri: "../../../assets/images/place-dark.svg"
-            }}
+          <FastImage
             source={{ uri: imageUri }}
-            transition={1000}
             style={{ height: size, width: size, borderRadius: 9999 }}
           />
         ) : (

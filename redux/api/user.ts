@@ -43,6 +43,30 @@ export const userApi = createApi({
       providesTags: ["user"],
       extraOptions: { maxRetries: 0 },
     }),
+    uploadProfilePicture: builder.mutation<
+      { photo: string },
+      { mimeType: string; uri: string }
+    >({
+      query: (payload) => {
+        const blob: any = {
+          name: `${payload.uri.split("/").splice(-1)}`,
+          type: payload.mimeType,
+          uri: payload.uri,
+        };
+        const formData = new FormData();
+
+        formData.append("photo", blob);
+        return {
+          url: "/update-photo",
+          method: "POST",
+          body: formData,
+          headers: {
+            "Content-type": "multipart/form-data",
+          },
+        };
+      },
+      invalidatesTags: ["user"],
+    }),
   }),
 });
 
@@ -50,6 +74,7 @@ export const {
   useGetUserQuery,
   useTokenValidQuery,
   useLazyGetUserQuery,
+  useUploadProfilePictureMutation,
   useGetFollowDetailsQuery,
   useLazyGetFollowDetailsQuery,
 } = userApi;

@@ -38,7 +38,7 @@ import { useGetFollowDetailsQuery } from "./redux/api/user";
 
 Sentry.init({
   dsn: "https://a5db1485b6b50a45db57917521128254@o4505750037725184.ingest.sentry.io/4505750586195968",
-  enabled: process.env.NODE_ENV !== "development",
+  enabled: true
 });
 
 const persistor = persistStore(store);

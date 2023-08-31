@@ -239,7 +239,7 @@ export const ProfileIcon = ({
   size,
   color,
 }: {
-  size: number;
+  size: number | string;
   color: string;
 }) => (
   <Svg width={size} height={size} fill="none" viewBox="0 0 24 24">

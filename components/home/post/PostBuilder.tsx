@@ -13,6 +13,7 @@ import { ProfileIcon } from "../../icons";
 import { useNavigation } from "@react-navigation/native";
 import { HomeNavigationProp } from "../../../types/navigation";
 import { dateAgo } from "../../../util/date";
+import FastImage from 'react-native-fast-image'
 export default function PostBuilder({
   imageUri,
   name,
@@ -30,7 +31,9 @@ export default function PostBuilder({
   like,
   id,
   audioUri,
+  thumbNail
 }: IPostBuilder) {
+
   const width = Dimensions.get("screen").width;
   const navigation = useNavigation<HomeNavigationProp>();
   const dark = useGetMode();
@@ -39,7 +42,7 @@ export default function PostBuilder({
   const color = isDark ? "#FFFFFF" : "#000000";
   const rColor = isDark ? "#FFFFFF2A" : "#0000001B";
 
-  console.log(dateAgo(new Date(date)))
+
   return (
     <View
       style={{
@@ -66,6 +69,7 @@ export default function PostBuilder({
             title,
             like,
             audioUri,
+            thumbNail,
           });
         }}
         android_ripple={{ color: rColor, foreground: true }}
@@ -124,6 +128,7 @@ export default function PostBuilder({
                 name={name}
                 userTag={userTag}
                 videoUri={videoUri}
+                thumbNail = {thumbNail}
                 videoViews={videoViews}
               />
             )}

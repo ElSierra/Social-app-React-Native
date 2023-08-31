@@ -81,10 +81,7 @@ export default function CustomDrawerContent(
             "my-custom-header": "my custom header value",
           },
         });
-        console.log(
-          "🚀 ~ file: CustomDrawer.tsx:77 ~ openLink ~ result:",
-          result
-        );
+        
       } else Linking.openURL(url);
     } catch (error) {}
   };

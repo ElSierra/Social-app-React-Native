@@ -11,7 +11,7 @@ import {
   Pressable,
 } from "react-native";
 import AnimatedScreen from "../../components/global/AnimatedScreen";
-import { Image } from "expo-image";
+
 import InputText from "./components/InputText";
 import InputPassword from "./components/InputPassword";
 import Button from "../../components/global/Buttons/Button";
@@ -32,6 +32,7 @@ import { signOut } from "../../redux/slice/user";
 import { useForm, Controller } from "react-hook-form";
 import { RegisterScreen } from "../../types/navigation";
 import ReAnimated, { FadeIn, FadeOut } from "react-native-reanimated";
+import FastImage from "react-native-fast-image";
 
 const width = Dimensions.get("screen").width;
 export default function Register({ navigation }: RegisterScreen) {
@@ -190,9 +191,9 @@ export default function Register({ navigation }: RegisterScreen) {
           >
             <View style={{ alignItems: "center", marginTop: 50 }}>
               <View>
-                <Image
+                <FastImage
                   source={require("../../assets/images/q.png")}
-                  contentFit="contain"
+                  resizeMode="contain"
                   style={{ height: 50, width }}
                 />
               </View>
