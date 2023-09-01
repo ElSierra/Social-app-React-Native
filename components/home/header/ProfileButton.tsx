@@ -24,7 +24,7 @@ export default function ProfileButton({
       <Pressable onPress={onPress}>
         {imageUri ? (
           <FastImage
-            source={{ uri: imageUri }}
+            source={{ uri: imageUri,priority: "high", cache:"immutable" }}
             style={{ height: size, width: size, borderRadius: 9999 }}
           />
         ) : (

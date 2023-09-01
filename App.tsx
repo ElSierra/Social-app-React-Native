@@ -20,6 +20,8 @@ import CustomToast from "./components/global/Toast";
 import { PaperProvider } from "react-native-paper";
 
 import { LoadingModal } from "./components/global/Modal/LoadingOverlay";
+import { enableFreeze } from 'react-native-screens';
+
 
 import Animated, {
   BounceOutDown,
@@ -35,7 +37,9 @@ import * as Sentry from "@sentry/react-native";
 import socket from "./util/socket";
 import { updateFollowing } from "./redux/slice/user/followers";
 import { useGetFollowDetailsQuery } from "./redux/api/user";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
+enableFreeze(true);
 Sentry.init({
   dsn: "https://a5db1485b6b50a45db57917521128254@o4505750037725184.ingest.sentry.io/4505750586195968",
   enabled: true
@@ -51,7 +55,8 @@ export default function App() {
         <PaperProvider>
           <CustomToast />
           <LoadingModal />
-          <Navigation />
+          <SafeAreaProvider>
+          <Navigation /></SafeAreaProvider>
         </PaperProvider>
       </PersistGate>
     </Provider>
@@ -137,6 +142,7 @@ const Navigation = () => {
   useGetFollowDetailsQuery(null);
   const { route } = useAppSelector((state) => state.routes);
   const userAuthenticated = useAppSelector((state) => state.user.token);
+
   const netInfo = useNetInfo();
 
   useEffect(() => {

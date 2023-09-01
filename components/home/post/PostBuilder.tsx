@@ -13,7 +13,8 @@ import { ProfileIcon } from "../../icons";
 import { useNavigation } from "@react-navigation/native";
 import { HomeNavigationProp } from "../../../types/navigation";
 import { dateAgo } from "../../../util/date";
-import FastImage from 'react-native-fast-image'
+import { useAppSelector } from "../../../redux/hooks/hooks";
+
 export default function PostBuilder({
   imageUri,
   name,
@@ -29,20 +30,19 @@ export default function PostBuilder({
   videoViews,
   title,
   like,
+  userId,
   id,
   audioUri,
-  thumbNail
+  thumbNail,
 }: IPostBuilder) {
-
   const width = Dimensions.get("screen").width;
   const navigation = useNavigation<HomeNavigationProp>();
   const dark = useGetMode();
   const isDark = dark;
   const borderBottomColor = isDark ? "#252222" : "#CCC9C9";
   const color = isDark ? "#FFFFFF" : "#000000";
-  const rColor = isDark ? "#FFFFFF2A" : "#0000001B";
-
-
+  const rColor = isDark ? "#00000014" : "#BBBBBB";
+  const user = useAppSelector((state) => state.user.data);
   return (
     <View
       style={{
@@ -68,6 +68,7 @@ export default function PostBuilder({
             videoViews,
             title,
             like,
+            userId,
             audioUri,
             thumbNail,
           });
@@ -93,7 +94,19 @@ export default function PostBuilder({
             }}
           >
             <Pressable
-              onPress={() => {}}
+              onPress={() => {
+                userId && userId !== user?.id
+                  ? navigation.navigate("ProfilePeople", {
+                      id: userId,
+                      imageUri,
+                      userTag,
+                      verified,
+                      name,
+                    })
+                  : userId && userId === user?.id
+                  ? navigation.navigate("Profile")
+                  : null;
+              }}
               android_ripple={{ color: rColor, foreground: true }}
               style={{
                 height: 50,
@@ -110,15 +123,26 @@ export default function PostBuilder({
             </Pressable>
           </View>
           <View style={{ width: "85%", justifyContent: "flex-start" }}>
-            <NameAndTag name={name} verified={verified} userTag={userTag} dateAgo = {dateAgo(new Date(date))} />
-           {postText &&<TextPost
-              postText={postText}
-              photoUri={photoUri}
-              videoUri={videoUri}
-            />}
+            <NameAndTag
+              name={name}
+              verified={verified}
+              userTag={userTag}
+              dateAgo={dateAgo(new Date(date))}
+            />
+            {postText && (
+              <TextPost
+                postText={postText}
+                photoUri={photoUri}
+                videoUri={videoUri}
+              />
+            )}
             <View>
               {photoUri.length > 0 && (
-                <PhotoPost id={id} photoUri={photoUri} width={width} />
+                <PhotoPost
+                  id={userId as string}
+                  photoUri={photoUri}
+                  width={width}
+                />
               )}
             </View>
             {videoUri && (
@@ -128,7 +152,7 @@ export default function PostBuilder({
                 name={name}
                 userTag={userTag}
                 videoUri={videoUri}
-                thumbNail = {thumbNail}
+                thumbNail={thumbNail}
                 videoViews={videoViews}
               />
             )}

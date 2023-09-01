@@ -1,6 +1,5 @@
 import { View, Text, Dimensions, Pressable } from "react-native";
 
-
 import { Button } from "react-native-paper";
 import { BlurView } from "expo-blur";
 import Animated, { FadeInLeft } from "react-native-reanimated";
@@ -8,7 +7,7 @@ import { useState } from "react";
 import { IPerson } from "../../../types/api";
 import {
   useLazyFollowUserQuery,
-  useLazyUnfollowUserQuery,
+
 } from "../../../redux/api/services";
 import {
   useLazyGetFollowDetailsQuery,
@@ -31,7 +30,7 @@ export default function PeopleContainer({
   const user = useAppSelector((state) => state.user);
 
   const [followUser] = useLazyFollowUserQuery();
-  const [unfollowUser] = useLazyUnfollowUserQuery();
+
   const dark = useGetMode();
   const color = dark ? "white" : "black";
   const backgroundColor = !dark ? "#E5E9F899" : "#25252599";
@@ -42,11 +41,8 @@ export default function PeopleContainer({
 
   const handleFollow = () => {
     setFollow(!follow);
-    if (!follow) {
-      followUser({ id }).then((e) => {});
-    } else {
-      unfollowUser({ id }).then((e) => {});
-    }
+
+    followUser({ id }).then((e) => {});
   };
   const isMe = user.data?.userName === userName;
   return (

@@ -23,6 +23,13 @@ export type RootStackParamList = {
   };
   ViewPost: IPostBuilder;
   Profile: undefined;
+  ProfilePeople: {
+    id: string;
+    imageUri: string;
+    userTag: string;
+    name:string;
+    verified: boolean;
+  };
   PostContent: undefined;
 };
 
@@ -44,7 +51,7 @@ export type AuthRootStackParamList = {
 };
 
 export type HomeNavigationProp = NavigationProp<RootStackParamList, "Main">;
-
+export type PeopleProfileNavigationProp = NavigationProp<RootStackParamList, "ProfilePeople">;
 export type ImageFullScreenProp = NativeStackScreenProps<
   RootStackParamList,
   "ImageFullScreen"
@@ -52,6 +59,10 @@ export type ImageFullScreenProp = NativeStackScreenProps<
 export type PostContentProp = NativeStackScreenProps<
   RootStackParamList,
   "PostContent"
+>;
+export type ProfilePeopleProp = NativeStackScreenProps<
+  RootStackParamList,
+  "ProfilePeople"
 >;
 export type HomeProp = NativeStackScreenProps<RootStackParamList, "Main">;
 export type DrawerHomeProp = DrawerScreenProps<

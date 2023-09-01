@@ -17,6 +17,8 @@ import NameAndTagFullScreen from "./components/NameAndTagFullScreen";
 import PhotoPostFullScreen from "./components/PhotoPostFullScreen";
 import { dateFormatted } from "../../../util/date";
 import EngagementsText from "./misc/EngagementText";
+import { useAppSelector } from "../../../redux/hooks/hooks";
+
 export default function FullScreenPost({
   imageUri,
   name,
@@ -29,6 +31,7 @@ export default function FullScreenPost({
   videoTitle,
   comments,
   date,
+  userId,
   videoViews,
   title,
   like,
@@ -43,6 +46,7 @@ export default function FullScreenPost({
   const borderBottomColor = isDark ? "#252222" : "#CCC9C9";
   const color = isDark ? "#FFFFFF" : "#000000";
   const rColor = isDark ? "#FFFFFF2A" : "#0000001B";
+  const user = useAppSelector((state) => state.user.data);
   const [dateString, timeString] = dateFormatted(new Date(date)).split(",");
   return (
     <View
@@ -72,7 +76,19 @@ export default function FullScreenPost({
             }}
           >
             <Pressable
-              onPress={() => {}}
+              onPress={() => {
+                userId && userId !== user?.id
+                  ? navigation.navigate("ProfilePeople", {
+                      id: userId,
+                      imageUri,
+                      userTag,
+                      verified,
+                      name,
+                    })
+                  : userId && userId === user?.id
+                  ? navigation.navigate("Profile")
+                  : null;
+              }}
               android_ripple={{ color: rColor, foreground: true }}
               style={{
                 height: 50,

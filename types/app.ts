@@ -1,6 +1,7 @@
 export type IPostBuilder = {
   imageUri: string;
   name: string;
+  userId?:string;
   date: Date;
   userTag: string;
   comments?: number;
@@ -17,6 +18,8 @@ export type IPostBuilder = {
   like: number;
   id: string;
   audioUri?: string;
+
+
 };
 
 export type SearchPostBuilder = {

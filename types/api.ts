@@ -5,8 +5,13 @@ export interface IUSerData {
   followersCount: string;
   followingCount: string;
   imageUri: string;
+  id: string;
   verified: boolean;
   emailIsVerified: boolean;
+}
+
+export interface IGuestData extends IUSerData {
+  isFollowed: boolean;
 }
 
 export interface IPostContent {

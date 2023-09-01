@@ -1,56 +1,16 @@
-import {
-  View,
-  Dimensions,
-  RefreshControl,
-  Text,
-  Pressable,
-} from "react-native";
-import React, {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import Fab from "../../components/home/post/components/Fab";
-import { AddIcon, ReloadIcon } from "../../components/icons";
-import PostBuilder from "../../components/home/post/PostBuilder";
-import { postLists } from "../../data/test";
-import { useNetInfo } from "@react-native-community/netinfo";
-import { FlashList } from "@shopify/flash-list";
+import { Text, Pressable } from "react-native";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+
 import AnimatedScreen from "../../components/global/AnimatedScreen";
 import useGetMode from "../../hooks/GetMode";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
 import { useGetUserQuery, useTokenValidQuery } from "../../redux/api/user";
 import { signOut } from "../../redux/slice/user";
-import { ActivityIndicator } from "react-native-paper";
-import { IPost } from "../../types/api";
-import {
-  useGetAllPostsQuery,
-  useGetRandomPeopleQuery,
-  useGetRandomPostsQuery,
-  useLazyGetAllPostsQuery,
-  useLazyGetFollowedPostsQuery,
-} from "../../redux/api/services";
-import { openToast } from "../../redux/slice/toast/toast";
-import Animated, {
-  FadeIn,
-  FadeInDown,
-  FadeInRight,
-  FadeInUp,
-  FadeOut,
-  FadeOutDown,
-  FadeOutRight,
-  ZoomIn,
-} from "react-native-reanimated";
-import EmptyLottie from "../../components/home/post/components/EmptyLottie";
-import SkeletonGroupPost from "../../components/home/misc/SkeletonGroupPost";
-import EmptyList from "../../components/home/misc/EmptyList";
-import { resetPost } from "../../redux/slice/post";
-import { DrawerHomeProp, HomeProp } from "../../types/navigation";
-import storage from "../../redux/storage";
-import Robot from "../../components/home/post/misc/Robot";
+
+import Animated, { FadeInRight, FadeOutRight } from "react-native-reanimated";
+
+import { DrawerHomeProp } from "../../types/navigation";
+
 import HomeAll from "./HomeScreens/HomeAll";
 import HomeFollowed from "./HomeScreens/HomeFollowed";
 
@@ -119,6 +79,6 @@ export default function Home({ navigation }: DrawerHomeProp) {
   }, [color, isAll]);
 
   return (
-    <AnimatedScreen >{isAll ? <HomeAll /> : <HomeFollowed />}</AnimatedScreen>
+    <AnimatedScreen>{isAll ? <HomeAll /> : <HomeFollowed />}</AnimatedScreen>
   );
 }

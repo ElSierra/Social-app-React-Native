@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { UserState } from "../slice/user";
-import { IUSerData } from "../../types/api";
+import { IGuestData, IUSerData } from "../../types/api";
 import storage from "../storage";
 import { RootState } from "../store";
 
@@ -23,12 +23,18 @@ export const userApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["user"],
+  tagTypes: ["user", "guest"],
   endpoints: (builder) => ({
     getUser: builder.query<{ data: IUSerData }, null>({
       query: () => "/get-user",
       providesTags: ["user"],
       extraOptions: { maxRetries: 2 },
+    }),
+    getGuest: builder.query<{ data: IGuestData }, { id: string }>({
+      query: ({ id }) => `/get-guest?id=${id}`,
+      providesTags: ["guest"],
+      keepUnusedDataFor: 10,
+
     }),
     getFollowDetails: builder.query<
       { following: string; followers: string },
@@ -74,6 +80,8 @@ export const {
   useGetUserQuery,
   useTokenValidQuery,
   useLazyGetUserQuery,
+  useGetGuestQuery,
+  useLazyGetGuestQuery,
   useUploadProfilePictureMutation,
   useGetFollowDetailsQuery,
   useLazyGetFollowDetailsQuery,

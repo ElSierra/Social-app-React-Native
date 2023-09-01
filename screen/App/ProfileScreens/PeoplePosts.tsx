@@ -8,25 +8,44 @@ import { useAppDispatch, useAppSelector } from "../../../redux/hooks/hooks";
 
 import { ActivityIndicator } from "react-native-paper";
 import { IPost } from "../../../types/api";
-import { useLazyGetMyPostsQuery } from "../../../redux/api/services";
+import {
+  useLazyGetGuestPostsQuery,
+  useLazyGetMyPostsQuery,
+} from "../../../redux/api/services";
 import { openToast } from "../../../redux/slice/toast/toast";
 
-import Bio from "../../../components/profile/Bio";
 
-export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
+import Bio from "../../../components/profilePeople/Bio";
+
+export default function PeoplePosts({
+  offset,
+  imageUri,
+  userTag,
+  name,
+  verified,
+  id,
+}: {
+  offset: NativeAnimated.Value;
+  imageUri: string;
+  userTag: string;
+  name: string;
+  verified: boolean;
+  id: string;
+}) {
   const dark = useGetMode();
   const dispatch = useAppDispatch();
-  const [posts, setPosts] = useState<IPost[]>([]);
 
   const isDark = dark;
   const color = isDark ? "white" : "black";
 
   const [skip, setSkip] = useState(0);
-
+  const [posts, setPosts] = useState<IPost[]>([]);
   const [noMore, setNoMore] = useState(false);
 
+ 
+
   const ref = useRef<any>(null);
-  const [getLazyPost, postRes] = useLazyGetMyPostsQuery();
+  const [getLazyPost, postRes] = useLazyGetGuestPostsQuery();
 
   const renderFooter = () => {
     if (postRes.isLoading) {
@@ -46,14 +65,13 @@ export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
   };
 
   useEffect(() => {
-    getLazyPost({ take: 20, skip })
+    getLazyPost({ id, take: 20, skip })
       .unwrap()
       .then((e) => {
         setPosts(e.posts);
         setSkip(e.posts?.length);
       })
       .catch((e) => {
-        console.log("🚀 ~ file: MyPosts.tsx:61 ~ useEffect ~ e:", e.status);
         dispatch(
           openToast({ text: "couldn't get recent posts", type: "Failed" })
         );
@@ -62,7 +80,7 @@ export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
 
   const fetchMoreData = () => {
     if (!noMore && !postRes.error)
-      getLazyPost({ take: 20, skip })
+      getLazyPost({ take: 20, skip, id })
         .unwrap()
         .then((e) => {
           setSkip(skip + e.posts.length);
@@ -108,7 +126,7 @@ export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
           ref={ref}
           data={posts.length === 0 ? postRes.data?.posts : posts}
           decelerationRate={0.991}
-          ListHeaderComponent={<Bio />}
+          ListHeaderComponent={<Bio name={name} userTag={userTag} id={id} />}
           ListFooterComponent={renderFooter}
           scrollEventThrottle={16}
           onScroll={NativeAnimated.event(

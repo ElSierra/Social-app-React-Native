@@ -1,8 +1,8 @@
-import { View, Text, Dimensions, useColorScheme } from "react-native";
+import { View, Text, Dimensions, useColorScheme, Image } from "react-native";
 
 import Animated, { FadeInLeft } from "react-native-reanimated";
 import useGetMode from "../../../hooks/GetMode";
-import FastImage from "react-native-fast-image";
+import FastImage, { Source } from "react-native-fast-image";
 
 const height = Dimensions.get("screen").height;
 const width = Dimensions.get("screen").width;
@@ -14,10 +14,10 @@ export default function OnboardBuilder({
 }: {
   header: string;
   subText: string;
-  imageUri: string;
+  imageUri: Source;
   quote: string;
 }) {
-  const dark = useGetMode()
+  const dark = useGetMode();
   const color = !dark ? "black" : "white";
 
   return (
@@ -30,7 +30,7 @@ export default function OnboardBuilder({
           height: height / 2.5,
         }}
       >
-        <FastImage style={{ flex: 1 }} resizeMode="contain" source={{uri:imageUri}} />
+        <FastImage style={{ flex: 1 }} resizeMode="contain" source={imageUri} />
       </Animated.View>
       <Text
         style={{ fontFamily: "mulishBold", fontSize: 36, width: 300, color }}
@@ -40,7 +40,14 @@ export default function OnboardBuilder({
       <Text style={{ fontSize: 26, fontFamily: "mulish", color: "#929292" }}>
         {subText}
       </Text>
-      <Text style={{ fontSize: 12, fontFamily: "mulish", color: "#929292",width: "70%" }}>
+      <Text
+        style={{
+          fontSize: 12,
+          fontFamily: "mulish",
+          color: "#929292",
+          width: "70%",
+        }}
+      >
         {quote}
       </Text>
     </View>

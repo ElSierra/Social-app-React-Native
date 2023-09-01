@@ -144,10 +144,7 @@ export const servicesApi = createApi({
       query: ({ id }) => `/follow?id=${id}`,
       extraOptions: { maxRetries: 0 },
     }),
-    unfollowUser: builder.query<{ msg: string }, { id: string }>({
-      query: ({ id }) => `/unfollow?id=${id}`,
-      extraOptions: { maxRetries: 0 },
-    }),
+
     likePost: builder.query<{ msg: string }, { id: string }>({
       query: ({ id }) => `/like-post?id=${id}`,
       extraOptions: { maxRetries: 2 },
@@ -186,6 +183,15 @@ export const servicesApi = createApi({
 
       extraOptions: { maxRetries: 2 },
     }),
+    getGuestPosts: builder.query<
+      { posts: IPost[] },
+      { take: number; skip: number; id: string }
+    >({
+      query: ({ take, skip, id }) =>
+        `/guest-posts?id=${id}&take=${take}&skip=${skip}`,
+
+      extraOptions: { maxRetries: 2 },
+    }),
   }),
 });
 
@@ -195,14 +201,14 @@ export const {
   useUploadAudioMutation,
   useUploadVideoMutation,
   useLazySearchPeopleQuery,
+  useLazyGetGuestPostsQuery,
   useGetRandomPostsQuery,
   useLazyGetRandomPostsQuery,
   useGetAllPostsQuery,
   useLazyGetFollowedPostsQuery,
   useGetRandomPeopleQuery,
   useLazyFollowUserQuery,
-  useLazyUnfollowUserQuery,
-
+  useGetMyPostsQuery,
   useLazyGetMyPostsQuery,
   useLazyLikePostQuery,
   usePostCommentMutation,

@@ -54,6 +54,7 @@ import {
   updateFollowers,
   updateFollowing,
 } from "../redux/slice/user/followers";
+import ProfilePeople from "../screen/App/ProfilePeople";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<BottomRootStackParamList>();
@@ -158,18 +159,28 @@ export default function Main() {
         >
           <Stack.Screen
             name="Main"
-            options={{ headerShown: false }}
+            options={{ headerShown: false, freezeOnBlur: true }}
             component={BottomTabNavigator}
           />
           <Stack.Screen
             name="Profile"
             options={{
-              headerTitle:"",
-              animation: "slide_from_bottom",
+              headerTitle: "",
+              animation: "fade_from_bottom",
               headerTransparent: true,
               headerTintColor: "white",
             }}
             component={Profile}
+          />
+          <Stack.Screen
+            name="ProfilePeople"
+            options={{
+              headerTitle: "",
+              animation: "fade_from_bottom",
+              headerTransparent: true,
+              headerTintColor: "white",
+            }}
+            component={ProfilePeople}
           />
           <Stack.Screen
             name="ImageFullScreen"
@@ -254,6 +265,7 @@ export function BottomTabNavigator() {
   const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
   return (
     <Tab.Navigator
+      detachInactiveScreens
       tabBar={(props) => (
         <BlurView
           style={{

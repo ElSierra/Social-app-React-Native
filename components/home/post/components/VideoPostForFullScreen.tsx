@@ -150,14 +150,17 @@ export default function VideoPostFullScreen({
         flex: 1,
       }}
     >
-      <ImageBackground
-        source={{ uri: thumbNail ? thumbNail : videoUri }}
-        blurRadius={10}
-        imageStyle={{opacity:0.5 }}
-        resizeMode="cover"
-        style={{ height: "100%", width: "100%", justifyContent: "center",}}
-      >
-        {
+      <View>
+        <ImageBackground
+          source={{ uri: thumbNail ? thumbNail : videoUri }}
+          blurRadius={80}
+          imageStyle={{ opacity: 0.5 }}
+          resizeMode="cover"
+          style={{ height: "100%", width: "100%", justifyContent: "center" }}
+        ></ImageBackground>
+      </View>
+      {
+        <View style={{ height: "100%", width: "100%", position: "absolute" }}>
           <TouchableWithoutFeedback
             style={{ flex: 1, width: "100%" }}
             onPress={() => {
@@ -176,8 +179,8 @@ export default function VideoPostFullScreen({
               onPlaybackStatusUpdate={(status) => setStatus(() => status)}
             />
           </TouchableWithoutFeedback>
-        }
-      </ImageBackground>
+        </View>
+      }
 
       {overlay && (
         <TouchableWithoutFeedback

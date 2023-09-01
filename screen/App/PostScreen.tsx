@@ -63,6 +63,10 @@ export default function PostScreen({ navigation, route }: ViewPost) {
         setKeyboardVisible(false); // or some other action
       }
     );
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
   }, []);
 
   const handleCommentPost = () => {
@@ -92,7 +96,6 @@ export default function PostScreen({ navigation, route }: ViewPost) {
     <AnimatedScreen>
       <View style={{ flex: 1, marginTop: 100 }}>
         <FlatList
-       
           ListHeaderComponent={<FullScreenPost {...params} />}
           data={comments}
           ListEmptyComponent={
@@ -129,7 +132,12 @@ export default function PostScreen({ navigation, route }: ViewPost) {
           <BlurView
             intensity={200}
             tint={tint}
-            style={{ position: "absolute", width: "150%", height: "150%" ,opacity:0.1}}
+            style={{
+              position: "absolute",
+              width: "150%",
+              height: "150%",
+              opacity: 0.1,
+            }}
           />
           <TextInput
             placeholder="Post comment"
@@ -142,7 +150,7 @@ export default function PostScreen({ navigation, route }: ViewPost) {
               fontFamily: "jakara",
               height: 50,
               color,
-              
+
               width: "100%",
               includeFontPadding: false,
               fontSize: 16,

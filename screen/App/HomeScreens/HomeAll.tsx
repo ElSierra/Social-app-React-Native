@@ -193,6 +193,7 @@ export default function HomeAll() {
       thumbNail={item.videoThumbnail}
       imageUri={item.user?.imageUri}
       name={item.user?.name}
+      userId={item.user.id}
       userTag={item.user?.userName}
       verified={item.user?.verified}
       audioUri={item.audioUri || undefined}

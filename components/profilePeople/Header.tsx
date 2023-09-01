@@ -10,17 +10,25 @@ import {
 import { useAppSelector } from "../../redux/hooks/hooks";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Button from "../global/Buttons/Button";
-import ButtonOutlined from "./EditProfile";
+import ButtonOutlined from "./FollowerUser";
 import { ProfileIcon } from "../icons";
 import useGetMode from "../../hooks/GetMode";
-import { UploadPhotoModal } from "./UploadPhotoModal";
+
 import { useState } from "react";
 import FastImage from "react-native-fast-image";
 
 export default function Header({
   animatedValue,
+  imageUri,
+  userTag,
+  name,
+  verified,
 }: {
   animatedValue: Animated.Value;
+  imageUri: string;
+  userTag: string;
+  name: string;
+  verified: boolean;
 }) {
   const user = useAppSelector((state) => state.user);
   const follow = useAppSelector((state) => state.followers);
@@ -60,7 +68,6 @@ export default function Header({
   };
   return (
     <>
-      <UploadPhotoModal isOpen={isOpen} closeModal={handleSetOpen} />
       <Animated.View
         style={[
           { height: 300, width: "100%" },
@@ -76,7 +83,7 @@ export default function Header({
             <ImageBackground
               style={{ flex: 1, opacity: 0.3 }}
               blurRadius={10}
-              source={{ uri: user.data?.imageUri }}
+              source={{ uri: imageUri }}
             />
           )}
           <View
@@ -96,7 +103,7 @@ export default function Header({
                 { opacity: opacityText },
               ]}
             >
-              {user.data?.name}
+              {name}
             </Animated.Text>
           </View>
         </View>
@@ -136,14 +143,14 @@ export default function Header({
           }}
           onPress={() => {
             handleSetOpen();
-   
+            console.log("hello");
           }}
         >
           {user.data?.imageUri ? (
             <FastImage
               resizeMode="cover"
               style={{ height: "100%", width: "100%", borderRadius: 999 }}
-              source={{ uri: user.data?.imageUri }}
+              source={{ uri: imageUri }}
             />
           ) : (
             <ProfileIcon color={color} size={"115%"} />
