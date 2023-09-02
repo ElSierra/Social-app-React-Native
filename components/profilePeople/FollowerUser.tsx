@@ -2,29 +2,24 @@ import { View, Text, Pressable } from "react-native";
 import React, { useState } from "react";
 import useGetMode from "../../hooks/GetMode";
 import { getBackgroundColorAsync } from "expo-system-ui";
-import Animated, {
-  BounceIn,
-  BounceOut,
- 
-} from "react-native-reanimated";
+import Animated, { BounceIn, BounceOut } from "react-native-reanimated";
 import { useLazyFollowUserQuery } from "../../redux/api/services";
 import { useAppSelector } from "../../redux/hooks/hooks";
 
 export default function FollowUser({
   id,
-  isFollowed,
+  followed,
+  handleFollow,
 }: {
   id: string;
-  isFollowed?: boolean;
+  followed: boolean;
+  handleFollow: () => void;
 }) {
-
-
   const dark = useGetMode();
   const color = !dark ? "white" : "black";
   const color2 = dark ? "white" : "black";
-  const [followed, setFollowed] = useState(() => isFollowed);
 
-  const [followUser] = useLazyFollowUserQuery()
+
 
   return (
     <Animated.View
@@ -34,10 +29,7 @@ export default function FollowUser({
       key={followed ? "i" : "j"}
     >
       <Pressable
-        onPress={() => {
-          setFollowed(!followed);
-          followUser({id}).then((e)=>{console.log(e)}).catch((e)=>{})
-        }}
+        onPress={handleFollow}
         style={{
           paddingHorizontal: 15,
           paddingVertical: 10,

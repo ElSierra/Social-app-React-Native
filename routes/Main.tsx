@@ -1,4 +1,10 @@
-import { View, Text, useColorScheme, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  useColorScheme,
+  Dimensions,
+  SafeAreaView,
+} from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   BottomTabBar,
@@ -55,6 +61,7 @@ import {
   updateFollowing,
 } from "../redux/slice/user/followers";
 import ProfilePeople from "../screen/App/ProfilePeople";
+import ChatScreen from "../screen/App/ChatScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<BottomRootStackParamList>();
@@ -148,7 +155,10 @@ export default function Main() {
       if (followers) dispatch(updateFollowers({ followers }));
     });
   }, [socket]);
-
+  const animationConfig = {
+    animation: "timing",
+    config: { duration: 0 },
+  };
   return (
     <BottomSheetModalProvider>
       <BottomSheetContainer>
@@ -205,6 +215,18 @@ export default function Main() {
               headerTintColor: "white",
             }}
             component={PostContent}
+          />
+          <Stack.Screen
+            name="ChatScreen"
+            options={{
+              title: "",
+
+              animation: "fade_from_bottom",
+              headerTransparent: true,
+              headerShadowVisible: false,
+             
+            }}
+            component={ChatScreen}
           />
           <Stack.Screen
             name="VideoFullScreen"
@@ -292,6 +314,7 @@ export function BottomTabNavigator() {
             elevation: 0,
             height: 60,
             borderTopWidth: 0.2,
+            
             borderColor,
           },
           headerBackgroundContainerStyle: {
@@ -402,7 +425,12 @@ export function BottomTabNavigator() {
         name="Messages"
         component={Messages}
         options={{
-          title: "Discover",
+          headerBackground: undefined,
+          headerTitleAlign: "left",
+          headerTitleStyle: { fontFamily: "uberBold", fontSize: 30, color },
+          title: "Messages",
+          headerTransparent: true,
+          headerBackgroundContainerStyle: undefined,
         }}
       />
     </Tab.Navigator>

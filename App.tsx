@@ -20,8 +20,7 @@ import CustomToast from "./components/global/Toast";
 import { PaperProvider } from "react-native-paper";
 
 import { LoadingModal } from "./components/global/Modal/LoadingOverlay";
-import { enableFreeze } from 'react-native-screens';
-
+import { enableFreeze } from "react-native-screens";
 
 import Animated, {
   BounceOutDown,
@@ -42,7 +41,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 enableFreeze(true);
 Sentry.init({
   dsn: "https://a5db1485b6b50a45db57917521128254@o4505750037725184.ingest.sentry.io/4505750586195968",
-  enabled: true
+  enabled: true,
 });
 
 const persistor = persistStore(store);
@@ -55,8 +54,8 @@ export default function App() {
         <PaperProvider>
           <CustomToast />
           <LoadingModal />
-          <SafeAreaProvider>
-          <Navigation /></SafeAreaProvider>
+
+          <Navigation />
         </PaperProvider>
       </PersistGate>
     </Provider>
@@ -153,7 +152,6 @@ const Navigation = () => {
     }
   }, [netInfo]);
 
-  
   const [fontsLoaded] = useFonts({
     mulish: require("./assets/fonts/Mulish-Light.ttf"),
     mulishBold: require("./assets/fonts/Mulish-Black.ttf"),

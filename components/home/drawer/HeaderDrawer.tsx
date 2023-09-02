@@ -13,7 +13,7 @@ export default function HeaderDrawer() {
   const color = isDark ? "white" : "black";
   const user = useAppSelector((state) => state.user.data);
   const follows = useAppSelector((state) => state.followers);
-  const [showIcon, setShowIcon] = useState(false);
+
   return (
     <View style={{ paddingLeft: 14, flex: 1 }}>
       {user?.imageUri ? (

@@ -47,6 +47,7 @@ export default function Discover() {
       >
         <BlurView
           tint={tint}
+          intensity={100}
           style={{ position: "absolute", height: 80, width: 150 }}
         />
         <HeaderTag

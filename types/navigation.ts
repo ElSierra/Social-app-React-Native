@@ -27,8 +27,13 @@ export type RootStackParamList = {
     id: string;
     imageUri: string;
     userTag: string;
-    name:string;
+    name: string;
     verified: boolean;
+  };
+  ChatScreen: {
+    id: string;
+    name: string;
+    imageUri: string;
   };
   PostContent: undefined;
 };
@@ -51,7 +56,10 @@ export type AuthRootStackParamList = {
 };
 
 export type HomeNavigationProp = NavigationProp<RootStackParamList, "Main">;
-export type PeopleProfileNavigationProp = NavigationProp<RootStackParamList, "ProfilePeople">;
+export type PeopleProfileNavigationProp = NavigationProp<
+  RootStackParamList,
+  "ProfilePeople"
+>;
 export type ImageFullScreenProp = NativeStackScreenProps<
   RootStackParamList,
   "ImageFullScreen"
@@ -63,6 +71,10 @@ export type PostContentProp = NativeStackScreenProps<
 export type ProfilePeopleProp = NativeStackScreenProps<
   RootStackParamList,
   "ProfilePeople"
+>;
+export type ChatScreenProp = NativeStackScreenProps<
+  RootStackParamList,
+  "ChatScreen"
 >;
 export type HomeProp = NativeStackScreenProps<RootStackParamList, "Main">;
 export type DrawerHomeProp = DrawerScreenProps<

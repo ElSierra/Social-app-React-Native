@@ -15,31 +15,12 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useEffect, useLayoutEffect } from "react";
 import axios from "axios";
 import RNFetchBlob from "rn-fetch-blob";
-import { BlurView } from "expo-blur";
+
 import { useAppDispatch } from "../../redux/hooks/hooks";
 import { openToast } from "../../redux/slice/toast/toast";
-import { SharedElement } from "react-navigation-shared-element";
+
 import FastImage from "react-native-fast-image";
 
-//Hero Transition
-
-export const transition = SharedTransition.custom((values) => {
-  "worklet";
-  return {
-    width: withTiming(values.targetWidth, {
-      easing: Easing.quad,
-    }),
-    height: withTiming(values.targetHeight, {
-      easing: Easing.quad,
-    }),
-    originX: withTiming(values.targetOriginX, {
-      easing: Easing.quad,
-    }),
-    originY: withTiming(values.targetOriginY, {
-      easing: Easing.quad,
-    }),
-  };
-});
 
 export default function ImageFullScreen({
   route,
@@ -131,13 +112,13 @@ export default function ImageFullScreen({
               height: "100%",
             }}
           >
-            <SharedElement id={id} style={StyleSheet.absoluteFill}>
+         
               <FastImage
                 source={{ uri: photoUri }}
                 resizeMode="contain"
                 style={{ width: "100%", height: "100%" }}
               />
-            </SharedElement>
+         
           </View>
         </ImageBackground>
       </Animated.View>

@@ -13,9 +13,10 @@ import Button from "../global/Buttons/Button";
 import ButtonOutlined from "./FollowerUser";
 import { ProfileIcon } from "../icons";
 import useGetMode from "../../hooks/GetMode";
-
+import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import FastImage from "react-native-fast-image";
+import { PeopleProfileNavigationProp } from "../../types/navigation";
 
 export default function Header({
   animatedValue,
@@ -31,9 +32,9 @@ export default function Header({
   verified: boolean;
 }) {
   const user = useAppSelector((state) => state.user);
-  const follow = useAppSelector((state) => state.followers);
+  const navigation = useNavigation<PeopleProfileNavigationProp>();
   const HEADER_HEIGHT = 100;
-  const Header_Min_Height = 70;
+
   const insets = useSafeAreaInsets();
 
   const headerHeight = animatedValue.interpolate({
@@ -63,9 +64,6 @@ export default function Header({
   const backgroundColor = !dark ? "white" : "black";
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleSetOpen = () => {
-    setIsOpen(!isOpen);
-  };
   return (
     <>
       <Animated.View
@@ -142,8 +140,10 @@ export default function Header({
             alignItems: "center",
           }}
           onPress={() => {
-            handleSetOpen();
-            console.log("hello");
+            navigation.navigate("ImageFullScreen", {
+              photoUri: imageUri,
+              id: "",
+            });
           }}
         >
           {user.data?.imageUri ? (

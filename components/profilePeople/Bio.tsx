@@ -1,9 +1,16 @@
 import { View, Text } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import FollowerUser from "./FollowerUser";
 import { useAppSelector } from "../../redux/hooks/hooks";
 import useGetMode from "../../hooks/GetMode";
 import { useGetGuestQuery, useLazyGetGuestQuery } from "../../redux/api/user";
+import Animated, {
+  FadeInDown,
+  FadeInUp,
+  FadeOutDown,
+  FadeOutUp,
+} from "react-native-reanimated";
+import { useLazyFollowUserQuery } from "../../redux/api/services";
 
 export default function Bio({
   name,
@@ -16,25 +23,49 @@ export default function Bio({
 }) {
   const dark = useGetMode();
   const color = dark ? "white" : "black";
-  const user = useAppSelector((state)=>state.user.data)
+  const user = useAppSelector((state) => state.user.data);
   const [getGuestData, guestData] = useLazyGetGuestQuery();
-
+  const [followers, setFollowers] = useState<number | null>(null);
+  const [followed, setFollowed] = useState(false);
   useEffect(() => {
     getGuestData({ id })
       .unwrap()
       .then((r) => {
+        setFollowed(r?.data?.isFollowed);
+        setFollowers(Number(r?.data?.followersCount));
       })
       .catch((e) => {});
   }, []);
-  
+
+  const [followUser] = useLazyFollowUserQuery();
+  const handleFollow = () => {
+    setFollowed(!followed);
+    followUser({ id })
+      .then((e) => {
+        console.log(e);
+      })
+      .catch((e) => {});
+    if (followed) {
+      if (followers) {
+        setFollowers(followers - 1);
+      }
+    }
+    if (!followed) {
+      if (followers) {
+        setFollowers(followers + 1);
+      }
+    }
+  };
+
   return (
     <View style={{ borderBottomWidth: 1, borderColor: "#B4B4B4D1" }}>
       <View style={{ paddingHorizontal: 15, paddingVertical: 10 }}>
-        <View style={{ alignItems: "flex-end", width: "100%" ,height:60}}>
+        <View style={{ alignItems: "flex-end", width: "100%", height: 60 }}>
           {guestData.data?.data.isFollowed !== undefined && user?.id !== id && (
             <FollowerUser
+              handleFollow={handleFollow}
               id={id}
-              isFollowed={guestData.data?.data.isFollowed}
+              followed={followed}
             />
           )}
         </View>
@@ -65,9 +96,14 @@ export default function Bio({
             <View
               style={{ flexDirection: "row", alignItems: "center", gap: 5 }}
             >
-              <Text style={{ color, fontFamily: "jakaraBold", fontSize: 16 }}>
+              <Animated.Text
+                entering={FadeInDown.springify()}
+                exiting={FadeOutUp.springify()}
+                key={guestData.data?.data.followingCount || "followingCount"}
+                style={{ color, fontFamily: "jakaraBold", fontSize: 16 }}
+              >
                 {guestData.data?.data.followingCount}
-              </Text>
+              </Animated.Text>
               <Text
                 style={{ fontFamily: "jakara", fontSize: 16, color: "grey" }}
               >
@@ -77,9 +113,14 @@ export default function Bio({
             <View
               style={{ flexDirection: "row", alignItems: "center", gap: 5 }}
             >
-              <Text style={{ color, fontFamily: "jakaraBold", fontSize: 16 }}>
-                {guestData.data?.data.followersCount}
-              </Text>
+              <Animated.Text
+                entering={FadeInDown.springify()}
+                exiting={FadeOutUp.springify()}
+                key={followers || guestData.data?.data.followersCount}
+                style={{ color, fontFamily: "jakaraBold", fontSize: 16 }}
+              >
+                {!followers ? guestData.data?.data.followersCount : followers}
+              </Animated.Text>
               <Text
                 style={{ fontFamily: "jakara", fontSize: 16, color: "grey" }}
               >

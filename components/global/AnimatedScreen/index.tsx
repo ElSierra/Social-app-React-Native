@@ -16,7 +16,13 @@ import {
 } from "react-native";
 import useGetMode from "../../../hooks/GetMode";
 import FastImage from "react-native-fast-image";
-export default function AnimatedScreen({ children }: { children: ReactNode }) {
+export default function AnimatedScreen({
+  children,
+  style,
+}: {
+  children: ReactNode;
+  style?: ViewStyle;
+}) {
   const opacity = useSharedValue(0);
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -37,7 +43,11 @@ export default function AnimatedScreen({ children }: { children: ReactNode }) {
   return (
     <View style={{ flex: 1, backgroundColor: "transparent" }}>
       <Animated.View
-        style={[{ flex: 1, backgroundColor: "transparent" }, animatedStyle]}
+        style={[
+          { flex: 1, backgroundColor: "transparent" },
+          animatedStyle,
+          style,
+        ]}
       >
         {children}
       </Animated.View>
