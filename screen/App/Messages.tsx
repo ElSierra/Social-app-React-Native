@@ -6,20 +6,23 @@ import Recent from "../../components/messages/Recent";
 import ChatList from "../../components/messages/ChatList";
 import Fab from "../../components/messages/ChatList/Fab";
 import { MessagesIcon } from "../../components/icons";
+import useGetMode from "../../hooks/GetMode";
 
 export default function Messages() {
   const offset = useRef(new Animated.Value(0)).current;
-
+  const dark = useGetMode();
+  const color = dark ? "#FFFFFF" : "#000000";
+  
   useEffect(() => {
     return () => {
       offset.removeAllListeners();
     };
   }, []);
   return (
-    <View style={{ marginTop: 80, flex: 1 }}>
+    <AnimatedScreen style={{ marginTop: 80, flex: 1 }}>
       <Recent offset={offset} />
       <ChatList offset={offset} />
-      <Fab item={<MessagesIcon size={20} color="black" />} />
-    </View>
+      <Fab item={<MessagesIcon size={20} color={color} />} />
+    </AnimatedScreen>
   );
 }

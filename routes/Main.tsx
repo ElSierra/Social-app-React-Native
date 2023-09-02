@@ -155,10 +155,7 @@ export default function Main() {
       if (followers) dispatch(updateFollowers({ followers }));
     });
   }, [socket]);
-  const animationConfig = {
-    animation: "timing",
-    config: { duration: 0 },
-  };
+
   return (
     <BottomSheetModalProvider>
       <BottomSheetContainer>
@@ -222,9 +219,9 @@ export default function Main() {
               title: "",
 
               animation: "fade_from_bottom",
-              headerTransparent: true,
+              headerStyle: { backgroundColor },
+
               headerShadowVisible: false,
-             
             }}
             component={ChatScreen}
           />
@@ -287,7 +284,6 @@ export function BottomTabNavigator() {
   const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
   return (
     <Tab.Navigator
-      detachInactiveScreens
       tabBar={(props) => (
         <BlurView
           style={{
@@ -314,7 +310,7 @@ export function BottomTabNavigator() {
             elevation: 0,
             height: 60,
             borderTopWidth: 0.2,
-            
+
             borderColor,
           },
           headerBackgroundContainerStyle: {
@@ -425,7 +421,20 @@ export function BottomTabNavigator() {
         name="Messages"
         component={Messages}
         options={{
-          headerBackground: undefined,
+          headerBackground: () => (
+            <BlurView
+              style={{
+                opacity: 0,
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                top: 0,
+                right: 0,
+              }}
+              tint={tint}
+              intensity={100}
+            />
+          ),
           headerTitleAlign: "left",
           headerTitleStyle: { fontFamily: "uberBold", fontSize: 30, color },
           title: "Messages",

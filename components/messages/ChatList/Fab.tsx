@@ -11,12 +11,13 @@ import Animated, {
   ZoomIn,
   ZoomOut,
 } from "react-native-reanimated";
+import { HomeNavigationProp } from "../../../types/navigation";
 export default function Fab({ item }: { item: JSX.Element }) {
   const dark = useGetMode();
   const isDark = dark;
 
-  const tint = isDark ? "dark" : "light";
-  const backgroundColor = !isDark ? "#DEDEDE" : "#303030";
+  const backgroundColor = !isDark ? "#FFFFFF" : "#000000";
+  const color = isDark ? "#FFFFFF" : "#000000";
   return (
     <View
       style={{
@@ -24,7 +25,7 @@ export default function Fab({ item }: { item: JSX.Element }) {
         bottom: 100,
         borderRadius: 999,
         right: 10,
-        backgroundColor: "white",
+        backgroundColor,
         alignItems: "center",
 
         justifyContent: "center",
@@ -35,7 +36,7 @@ export default function Fab({ item }: { item: JSX.Element }) {
       }}
     >
       <Pressable
-        android_ripple={{ color: "white", foreground: true }}
+        android_ripple={{ color, foreground: true }}
         onPress={() => {}}
         style={{
           height: "100%",
