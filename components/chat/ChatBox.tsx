@@ -7,7 +7,7 @@ import useGetMode from "../../hooks/GetMode";
 export default function ChatBox() {
   const dark = useGetMode();
   const color = dark ? "white" : "black";
-  const backgroundColor = !dark ? "#F3F2F2" : "#404040";
+  const tint = dark ? "dark" : "light";
   const rippleColor = dark ? "#000000" : "#A1A0A0";
   return (
     <View
@@ -17,11 +17,17 @@ export default function ChatBox() {
         overflow: "hidden",
         borderRadius: 20,
         minHeight: 50,
+        borderWidth: 0.5,
+        borderColor: "#B4B4B488",
         justifyContent: "space-between",
         alignItems: "center",
-        backgroundColor,
       }}
     >
+      <BlurView
+        tint={tint}
+        intensity={40}
+        style={{ width: "100%", height: "100%", position: "absolute" }}
+      />
       <TextInput
         multiline
         placeholder="Type Message 😒"

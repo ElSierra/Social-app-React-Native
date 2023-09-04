@@ -11,14 +11,21 @@ import ChatBuilderText from "../../components/chat/ChatBuilderText";
 import { useAppSelector } from "../../redux/hooks/hooks";
 import useGetMode from "../../hooks/GetMode";
 
-export default function ChatScreen({ navigation }: ChatScreenProp) {
+export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   const userId = useAppSelector((state) => state.user?.data?.id);
+  const chatState = useAppSelector((state) => state?.chatlist.data);
+  const chatData = chatState.find((chats) => chats.id === route.params.id);
+  console.log(
+    "🚀 ~ file: ChatScreen.tsx:19 ~ ChatScreen ~ chatData:",
+    chatData
+  );
+
   const dark = useGetMode();
   const color = dark ? "#FFFFFF" : "#000000";
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "@hojoisaac",
+      headerTitle: route.params.name,
 
       headerTitleStyle: { fontFamily: "jakaraBold", color },
       headerLeft: () => {
@@ -39,7 +46,7 @@ export default function ChatScreen({ navigation }: ChatScreenProp) {
               <FastImage
                 style={{ height: 40, width: 40, borderRadius: 9999 }}
                 source={{
-                  uri: "https://quick-chop.nyc3.digitaloceanspaces.com/ead02f5af07c418086c82b925db0f257.gif",
+                  uri: route.params.imageUri,
                 }}
               />
             </View>
@@ -54,14 +61,27 @@ export default function ChatScreen({ navigation }: ChatScreenProp) {
         <FlatList
           inverted
           fadingEdgeLength={100}
-          data={dummyChat}
-          contentContainerStyle={{ gap: 15, padding: 20 }}
+          data={chatData?.messages}
+          contentContainerStyle={{ gap: 15, padding: 20, paddingTop: 80 }}
           renderItem={({ item }) => (
-            <ChatBuilderText isMe={item.userId === userId} text={item.text} />
+            <ChatBuilderText
+              isMe={item.userId === userId}
+              text={item.text}
+              time={item.time}
+            />
           )}
         />
       </View>
-      <View style={{ padding: 10 }}>
+      <View
+        style={{
+          padding: 10,
+          position: "absolute",
+          bottom: 0,
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+        }}
+      >
         <ChatBox />
       </View>
     </View>

@@ -54,3 +54,27 @@ export const dateFormatted = (date: Date) => {
     return `${hours}:${minutesStr} ${ampm}`;
   }
 };
+
+export function formatDateForChat(inputDateStr: string) {
+  const inputDate = new Date(inputDateStr);
+  const currentDate = new Date();
+
+  // Check if the input date is today
+  if (
+    inputDate.getDate() === currentDate.getDate() &&
+    inputDate.getMonth() === currentDate.getMonth() &&
+    inputDate.getFullYear() === currentDate.getFullYear()
+  ) {
+    // If it's today, format as HH:mm
+    const hours = String(inputDate.getHours()).padStart(2, "0");
+    const minutes = String(inputDate.getMinutes()).padStart(2, "0");
+    return `${hours}:${minutes}`;
+  } else {
+    // If it's not today, format as dd/mm HH:mm
+    const day = String(inputDate.getDate()).padStart(2, "0");
+    const month = String(inputDate.getMonth() + 1).padStart(2, "0"); // Month is zero-based
+    const hours = String(inputDate.getHours()).padStart(2, "0");
+    const minutes = String(inputDate.getMinutes()).padStart(2, "0");
+    return `${day}/${month} ${hours}:${minutes}`;
+  }
+}

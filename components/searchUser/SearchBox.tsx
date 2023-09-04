@@ -6,34 +6,25 @@ import {
   ViewStyle,
   Dimensions,
 } from "react-native";
-import useGetMode from "../../../hooks/GetMode";
+import useGetMode from "../../hooks/GetMode";
 import Animated, { FadeInRight } from "react-native-reanimated";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useDebounce } from "../../../hooks/Debounce";
-import {
-  useLazySearchPeopleQuery,
-  useLazySearchPostsQuery,
-} from "../../../redux/api/services";
+import { useDebounce } from "../../hooks/Debounce";
+import { BlurView } from "expo-blur";
 
 const { width } = Dimensions.get("screen");
-export default function SearchBar() {
+export default function SearchBox({
+  setSearchParam,
+}: {
+  setSearchParam: (text: string) => void;
+}) {
   const dark = useGetMode();
-  const [searchParam, setSearchParam] = useState("");
+
   const color = dark ? "white" : "black";
   const placeholderColor = !dark ? "grey" : "grey";
   const borderColor = dark ? "#FFFFFF" : "#DAD9D9";
+  const tint = dark ? "dark" : "light";
   const backgroundColor = dark ? "#383838" : "#EAEBEB";
-  const query = useDebounce(searchParam, 1000);
-  const [getSearchPosts, res] = useLazySearchPostsQuery();
-  const [getSearchPeople] = useLazySearchPeopleQuery();
-
-  useEffect(() => {
-    if (query) {
-      getSearchPosts({ q: query });
-      getSearchPeople({ q: query });
-    }
-  }, [query]);
-
   return (
     <Animated.View
       entering={FadeInRight.springify()}
@@ -41,18 +32,19 @@ export default function SearchBar() {
         {
           width: width * 0.7,
           height: 40,
-          borderColor: borderColor,
-         
+      
+          backgroundColor,
+          overflow: "hidden",
           paddingVertical: 10,
           paddingHorizontal: 20,
           borderRadius: 10,
-          backgroundColor,
         },
       ]}
     >
+   
       <TextInput
         cursorColor={color}
-        placeholder="Search Qui"
+        placeholder="@someone"
         onChangeText={(text) => setSearchParam(text)}
         placeholderTextColor={placeholderColor}
         style={{

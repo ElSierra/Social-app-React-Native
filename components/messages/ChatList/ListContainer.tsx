@@ -4,8 +4,10 @@ import FastImage from "react-native-fast-image";
 import { useNavigation } from "@react-navigation/native";
 import { HomeNavigationProp } from "../../../types/navigation";
 import useGetMode from "../../../hooks/GetMode";
+import { ChatType } from "../../../types/app";
+import { formatDateForChat } from "../../../util/date";
 
-export default function ListContainer() {
+export default function ListContainer({ data }: { data: ChatType }) {
   const dark = useGetMode();
   const color = dark ? "#FFFFFF" : "#000000";
   const rColor = !dark ? "#FFFFFF" : "#000000";
@@ -16,9 +18,9 @@ export default function ListContainer() {
       android_ripple={{ color: rColor }}
       onPress={() =>
         navigation.navigate("ChatScreen", {
-          id: "",
-          name: "ojo isaac",
-          imageUri: "",
+          id: data.id.toString(),
+          name: data.user.name,
+          imageUri: data.user.imageUri,
         })
       }
     >
@@ -32,11 +34,11 @@ export default function ListContainer() {
         <View style={{ flexDirection: "row", gap: 10 }}>
           <FastImage
             style={{ borderRadius: 999, height: 50, width: 50 }}
-            source={require("../../../assets/avatar/placeholder.png")}
+            source={{ uri: data.user?.imageUri }}
           />
           <View style={{}}>
             <Text style={{ fontFamily: "jakaraBold", fontSize: 16, color }}>
-              @hojoisaac
+              @{data.user.userName}
             </Text>
             <Text
               style={{
@@ -45,12 +47,12 @@ export default function ListContainer() {
                 color: "grey",
               }}
             >
-              Please help me{" "}
+              {data.messages[0].text}
             </Text>
           </View>
         </View>
         <Text style={{ fontFamily: "jakara", fontSize: 14, color: "grey" }}>
-          08:43
+          {formatDateForChat(data.messages[0].time)}
         </Text>
       </View>
     </Pressable>

@@ -62,6 +62,7 @@ export default function CustomDrawerContent(
           enableBarCollapsing: false,
           // Android Properties
           showTitle: true,
+          
           toolbarColor: toolbarColor,
           secondaryToolbarColor: toolbarColor,
           navigationBarColor: toolbarColor,
@@ -81,6 +82,7 @@ export default function CustomDrawerContent(
             "my-custom-header": "my custom header value",
           },
         });
+     
         
       } else Linking.openURL(url);
     } catch (error) {}

@@ -1,6 +1,6 @@
 import { View, Text, FlatList } from "react-native";
 import React, { useEffect } from "react";
-import PeopleContainer from "../PeopleContainer";
+
 import { personState } from "../../../redux/slice/people/search";
 import Animated, {
   BounceIn,
@@ -18,11 +18,14 @@ import Animated, {
   withRepeat,
   withTiming,
 } from "react-native-reanimated";
-import { SearchSkeleton } from "../Skeleton/SearchSkeleton";
 
 import FastImage from "react-native-fast-image";
+import { SearchSkeleton } from "../../../components/discover/Skeleton/SearchSkeleton";
+import PeopleContainer from "../../../components/discover/PeopleContainer";
+import { useAppSelector } from "../../../redux/hooks/hooks";
 
-export default function People({ people }: { people: personState }) {
+export default function Users() {
+  const people = useAppSelector((state) => state.searchPeople);
   const opacity = useSharedValue(0);
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -43,10 +46,10 @@ export default function People({ people }: { people: personState }) {
       exiting={FadeOutRight.springify()}
       style={{ gap: 5, marginVertical: 20, height: "100%" }}
     >
-      {people.loading && (
+      {people?.loading && (
         <Animated.View
           style={[
-            { gap: 5, marginTop: 150, paddingHorizontal: 10 },
+            { gap: 5,  paddingHorizontal: 10 },
             animatedStyle,
           ]}
         >
@@ -55,14 +58,14 @@ export default function People({ people }: { people: personState }) {
           ))}
         </Animated.View>
       )}
-      {people.data.length === 0 && !people.loading && (
+      {people?.data?.length === 0 && !people?.loading && (
         <Animated.View
           entering={FadeInUp.springify()}
           exiting={FadeOutDown.springify()}
           style={{
             justifyContent: "center",
             alignItems: "center",
-            height: "100%",
+            height: "70%",
           }}
         >
           <FastImage
@@ -74,7 +77,7 @@ export default function People({ people }: { people: personState }) {
       <FlatList
         data={people.data}
         contentContainerStyle={{
-          paddingTop: 140,
+        
           paddingBottom: 100,
           gap: 5,
           paddingHorizontal: 10,

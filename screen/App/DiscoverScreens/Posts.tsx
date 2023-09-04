@@ -12,16 +12,18 @@ import Animated, {
   withRepeat,
   withTiming,
 } from "react-native-reanimated";
-import PostsContainer from "../PostsContainer";
-import { SearchSkeleton } from "../Skeleton/SearchSkeleton";
-import { IPostContent } from "../../../types/api";
+
 import { postState } from "../../../redux/slice/post";
 import { FlashList } from "@shopify/flash-list";
 import { ActivityIndicator } from "react-native-paper";
 import useGetMode from "../../../hooks/GetMode";
-import { PostSearchSkeleton } from "../Skeleton/PostSearchSkeleton";
+import { PostSearchSkeleton } from "../../../components/discover/Skeleton/PostSearchSkeleton";
+import PostsContainer from "../../../components/discover/PostsContainer";
+import { useLazySearchPostsQuery } from "../../../redux/api/services";
+import { useAppSelector } from "../../../redux/hooks/hooks";
 
-export default function Posts({ posts }: { posts: postState }) {
+export default function Posts() {
+  const posts = useAppSelector((state) => state.searchPost);
   const [showLoading, setShowLoading] = useState(posts?.data?.length > 8);
   const dark = useGetMode();
   const color = dark ? "white" : "black";
@@ -59,7 +61,7 @@ export default function Posts({ posts }: { posts: postState }) {
       >
         {posts.loading && (
           <Animated.View
-            style={[{ gap: 5, marginTop: 160, padding: 10 }, animatedStyle]}
+            style={[{ gap: 5, padding: 10 }, animatedStyle]}
           >
             {[0, 1, 2].map((idx) => (
               <PostSearchSkeleton key={idx} />
@@ -71,7 +73,7 @@ export default function Posts({ posts }: { posts: postState }) {
           showsVerticalScrollIndicator={false}
           estimatedItemSize={100}
           contentContainerStyle={{
-            paddingTop: 160,
+          paddingTop:20,
             paddingBottom: 100,
             paddingHorizontal: 10,
           }}

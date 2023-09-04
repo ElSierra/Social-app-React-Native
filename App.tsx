@@ -81,7 +81,9 @@ function AnimatedSplashScreen({
       setAppReady(true);
     }
   }, []);
-
+  const dark = useGetMode();
+  const backgroundColor = dark ? "black" : "white";
+  const color = !dark ? "black" : "white";
   return (
     <View style={{ flex: 1 }}>
       {isAppReady && children}
@@ -92,7 +94,7 @@ function AnimatedSplashScreen({
           style={[
             StyleSheet.absoluteFill,
             {
-              backgroundColor: "black",
+              backgroundColor,
             },
           ]}
         >
@@ -120,8 +122,9 @@ function AnimatedSplashScreen({
           >
             <Text
               style={{
+                color,
                 fontFamily: "mulish",
-                color: "white",
+        
                 fontSize: 14,
               }}
             >
@@ -190,7 +193,13 @@ const Navigation = () => {
   }
 
   return (
-    <AnimatedSplashScreen image={require("./assets/splash.png")}>
+    <AnimatedSplashScreen
+      image={
+        dark
+          ? require("./assets/splash.png")
+          : require("./assets/splash-lightmode.png")
+      }
+    >
       <NavigationContainer onReady={onLayoutRootView}>
         <StatusBar
           animated={true}

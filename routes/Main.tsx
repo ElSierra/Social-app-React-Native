@@ -62,11 +62,33 @@ import {
 } from "../redux/slice/user/followers";
 import ProfilePeople from "../screen/App/ProfilePeople";
 import ChatScreen from "../screen/App/ChatScreen";
+import SearchUsers from "../screen/App/SearchUsers";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<BottomRootStackParamList>();
 const Drawer = createDrawerNavigator<DrawerRootStackParamList>();
+const TopBar = createMaterialTopTabNavigator();
 const width = Dimensions.get("screen").width;
+
+function SearchTabs() {
+  return (
+    <TopBar.Navigator
+      screenOptions={{
+        tabBarStyle: {
+          height: 50,
+  
+          elevation: 0,
+        },
+
+        tabBarBounces: true,
+      }}
+    >
+      <TopBar.Screen name="Users" options={{}} component={Discover} />
+      <TopBar.Screen name="Posts" component={Discover} />
+    </TopBar.Navigator>
+  );
+}
 
 function DrawerNavigator() {
   const dark = useGetMode();
@@ -269,6 +291,15 @@ export default function Main() {
             }}
             component={PostScreen}
           />
+          <Stack.Screen
+            name="SearchUser"
+            component={SearchUsers}
+            options={{
+              headerStyle: { backgroundColor },
+              headerTitle: "",
+              headerShadowVisible: false,
+            }}
+          />
         </Stack.Navigator>
       </BottomSheetContainer>
     </BottomSheetModalProvider>
@@ -396,6 +427,26 @@ export function BottomTabNavigator() {
             headerTitle: () => {
               return <SearchBar />;
             },
+            headerShown: true,
+            headerTransparent: true,
+            headerBackgroundContainerStyle: {
+              borderBottomWidth: 0,
+              borderColor,
+            },
+            headerBackground: () => (
+              <BlurView
+                style={{
+                  opacity: 0,
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  top: 0,
+                  right: 0,
+                }}
+                tint={tint}
+                intensity={100}
+              />
+            ),
             headerLeft: () => (
               <ProfileButton
                 color={color}

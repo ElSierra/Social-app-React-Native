@@ -28,7 +28,7 @@ export default function IconButtons({
     >
       <Pressable
         android_ripple={{
-          color: "#0000004B",
+          color: "#5B545427",
           borderless: true,
           foreground: true,
         }}

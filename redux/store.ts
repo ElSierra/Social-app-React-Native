@@ -23,14 +23,13 @@ import {
   REGISTER,
   PersistConfig,
 } from "redux-persist";
-import { postLists } from "../data/test";
+import chatList, { ChatList } from "./slice/chat/chatlist";
 import { userApi } from "./api/user";
 import { servicesApi } from "./api/services";
 import loadingModal, { LoadingModal } from "./slice/modal/loading";
 import searchPeople, { personState } from "./slice/people/search";
 import followers, { FollowerState } from "./slice/user/followers";
 import followedPost from "./slice/post/followed";
-
 
 const persistConfig: PersistConfig<
   CombinedState<{
@@ -45,6 +44,7 @@ const persistConfig: PersistConfig<
     searchPeople: personState;
     loadingModal: LoadingModal;
     followedPost: postState;
+    chatlist: ChatList;
     [authApi.reducerPath]: any;
     [userApi.reducerPath]: any;
     [servicesApi.reducerPath]: any;
@@ -64,13 +64,13 @@ const reducer = combineReducers({
   loadingModal,
   searchPost,
   followers,
+  chatlist: chatList,
   [authApi.reducerPath]: authApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
   [servicesApi.reducerPath]: servicesApi.reducer,
   user,
   searchPeople,
   followedPost,
-
 });
 const persistedReducer = persistReducer(persistConfig, reducer);
 

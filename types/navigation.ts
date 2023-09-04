@@ -35,6 +35,7 @@ export type RootStackParamList = {
     name: string;
     imageUri: string;
   };
+  SearchUser: undefined;
   PostContent: undefined;
 };
 
@@ -76,6 +77,11 @@ export type ChatScreenProp = NativeStackScreenProps<
   RootStackParamList,
   "ChatScreen"
 >;
+export type SearchUserProp = NativeStackScreenProps<
+  RootStackParamList,
+  "SearchUser"
+>;
+
 export type HomeProp = NativeStackScreenProps<RootStackParamList, "Main">;
 export type DrawerHomeProp = DrawerScreenProps<
   DrawerRootStackParamList,

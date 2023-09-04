@@ -1,23 +1,14 @@
-import { BlurView } from "expo-blur";
 import { View, Pressable } from "react-native";
 import useGetMode from "../../../hooks/GetMode";
 import { useNavigation } from "@react-navigation/native";
-
-import Animated, {
-  BounceIn,
-  BounceOut,
-  FadeIn,
-  FadeOut,
-  ZoomIn,
-  ZoomOut,
-} from "react-native-reanimated";
 import { HomeNavigationProp } from "../../../types/navigation";
+
 export default function Fab({ item }: { item: JSX.Element }) {
   const dark = useGetMode();
   const isDark = dark;
-
+  const navigation = useNavigation<HomeNavigationProp>();
   const backgroundColor = !isDark ? "#FFFFFF" : "#000000";
-  const color = isDark ? "#FFFFFF" : "#000000";
+  const color = isDark ? "#42424260" : "#BABABA64";
   return (
     <View
       style={{
@@ -37,7 +28,9 @@ export default function Fab({ item }: { item: JSX.Element }) {
     >
       <Pressable
         android_ripple={{ color, foreground: true }}
-        onPress={() => {}}
+        onPress={() => {
+          navigation.navigate("SearchUser");
+        }}
         style={{
           height: "100%",
           width: "100%",
