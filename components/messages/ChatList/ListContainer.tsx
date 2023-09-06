@@ -6,11 +6,15 @@ import { HomeNavigationProp } from "../../../types/navigation";
 import useGetMode from "../../../hooks/GetMode";
 import { ChatType } from "../../../types/app";
 import { formatDateForChat } from "../../../util/date";
+import { IChatList } from "../../../types/api";
+import { useAppSelector } from "../../../redux/hooks/hooks";
 
-export default function ListContainer({ data }: { data: ChatType }) {
+export default function ListContainer({ data }: { data: IChatList }) {
+  console.log("🚀 ~ file: ListContainer.tsx:13 ~ ListContainer ~ data:", data)
   const dark = useGetMode();
   const color = dark ? "#FFFFFF" : "#000000";
   const rColor = !dark ? "#FFFFFF" : "#000000";
+  const userId = useAppSelector((state) => state.user?.data?.id);
   const navigation = useNavigation<HomeNavigationProp>();
   return (
     <Pressable
@@ -18,9 +22,15 @@ export default function ListContainer({ data }: { data: ChatType }) {
       android_ripple={{ color: rColor }}
       onPress={() =>
         navigation.navigate("ChatScreen", {
-          id: data.id.toString(),
-          name: data.user.name,
-          imageUri: data.user.imageUri,
+          id: data.id,
+          name:
+            data.users[0]?.id === userId
+              ? data.users[1].name
+              : data.users[0].name,
+          imageUri:
+            data.users[0]?.id === userId
+              ? data.users[1].imageUri
+              : data.users[0].imageUri,
         })
       }
     >
@@ -34,11 +44,19 @@ export default function ListContainer({ data }: { data: ChatType }) {
         <View style={{ flexDirection: "row", gap: 10 }}>
           <FastImage
             style={{ borderRadius: 999, height: 50, width: 50 }}
-            source={{ uri: data.user?.imageUri }}
+            source={{
+              uri:
+                data.users[0]?.id === userId
+                  ? data.users[1].imageUri
+                  : data.users[0].imageUri,
+            }}
           />
           <View style={{}}>
             <Text style={{ fontFamily: "jakaraBold", fontSize: 16, color }}>
-              @{data.user.userName}
+              @
+              {data.users[0]?.id === userId
+                ? data.users[1].name
+                : data.users[0].name}
             </Text>
             <Text
               style={{
@@ -47,12 +65,13 @@ export default function ListContainer({ data }: { data: ChatType }) {
                 color: "grey",
               }}
             >
-              {data.messages[0].text}
+              {data.messages[0]?.text}
             </Text>
           </View>
         </View>
         <Text style={{ fontFamily: "jakara", fontSize: 14, color: "grey" }}>
-          {formatDateForChat(data.messages[0].time)}
+          {data.messages[0]?.createdAt &&
+            formatDateForChat(data.messages[0]?.createdAt)}
         </Text>
       </View>
     </Pressable>

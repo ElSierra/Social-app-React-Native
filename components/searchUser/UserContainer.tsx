@@ -5,10 +5,13 @@ import { BlurView } from "expo-blur";
 import Animated, { FadeInLeft } from "react-native-reanimated";
 import { useState } from "react";
 import { IPerson } from "../../types/api";
-
+import { useNavigation } from "@react-navigation/native";
 import useGetMode from "../../hooks/GetMode";
 import { ProfileIcon } from "../icons";
 import FastImage from "react-native-fast-image";
+import socket from "../../util/socket";
+import { useAppSelector } from "../../redux/hooks/hooks";
+import { SearchUserNavigation } from "../../types/navigation";
 
 const { width } = Dimensions.get("screen");
 export default function UserContainer({
@@ -21,11 +24,17 @@ export default function UserContainer({
   const dark = useGetMode();
   const color = dark ? "white" : "black";
   const backgroundColor = !dark ? "#E5E9F899" : "#25252599";
-  const nbuttonBackgroundColor = !dark ? "#FFFFFF" : "#000000";
+
   const fbuttonBackgroundColor = dark ? "#FFFFFF" : "#000000";
   const nBColor = !dark ? "white" : "black";
   const fBColor = dark ? "white" : "black";
-
+  const navigation = useNavigation<SearchUserNavigation>();
+  const user = useAppSelector((state) => state.user.data);
+  const handleMessage = () => {
+    console.log("pressed");
+    socket.emit("startChat", id);
+    navigation.navigate("ChatScreen", { id, name, imageUri });
+  };
   return (
     <Animated.View
       entering={FadeInLeft.springify()}
@@ -70,7 +79,7 @@ export default function UserContainer({
       >
         <Pressable
           android_ripple={{ color: "white" }}
-          onPress={() => {}}
+          onPress={handleMessage}
           style={{ paddingHorizontal: 10, paddingVertical: 6 }}
         >
           <Text

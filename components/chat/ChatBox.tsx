@@ -1,10 +1,17 @@
-import { View, Text, TextInput, Pressable } from "react-native";
+import { View, Text, TextInput, Pressable, TextInputProps } from "react-native";
 import React from "react";
 import { BlurView } from "expo-blur";
 import { SendIcon } from "../icons";
 import useGetMode from "../../hooks/GetMode";
+import { IChatMessage } from "../../types/api";
 
-export default function ChatBox() {
+export default function ChatBox({
+  props,
+  onPress,
+}: {
+  props: TextInputProps;
+  onPress: () => void;
+}) {
   const dark = useGetMode();
   const color = dark ? "white" : "black";
   const tint = dark ? "dark" : "light";
@@ -41,6 +48,7 @@ export default function ChatBox() {
           paddingLeft: 20,
           paddingVertical: 10,
         }}
+        {...props}
       />
       <View style={{ paddingHorizontal: 20 }}>
         <View
@@ -53,6 +61,7 @@ export default function ChatBox() {
           }}
         >
           <Pressable
+            onPress={onPress}
             style={{
               height: 40,
               width: 40,

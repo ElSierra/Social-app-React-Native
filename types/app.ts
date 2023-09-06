@@ -60,7 +60,10 @@ export type ChatType = {
   messages: {
     id: string | number;
     text: string;
-    time: string;
-    userId: string;
+    createdAt: string;
+    sender: {
+      id:string,
+      userName:string
+    }
   }[];
 };

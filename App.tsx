@@ -84,8 +84,10 @@ function AnimatedSplashScreen({
   const dark = useGetMode();
   const backgroundColor = dark ? "black" : "white";
   const color = !dark ? "black" : "white";
+  const style = dark ? "light" : "dark";
   return (
     <View style={{ flex: 1 }}>
+      <StatusBar animated={true} style={style} backgroundColor="transparent" />
       {isAppReady && children}
       {!isAppReady && (
         <Animated.View
@@ -124,7 +126,7 @@ function AnimatedSplashScreen({
               style={{
                 color,
                 fontFamily: "mulish",
-        
+
                 fontSize: 14,
               }}
             >

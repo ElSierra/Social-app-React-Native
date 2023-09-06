@@ -13,6 +13,8 @@ import { DrawerHomeProp } from "../../types/navigation";
 
 import HomeAll from "./HomeScreens/HomeAll";
 import HomeFollowed from "./HomeScreens/HomeFollowed";
+import { useGetAllChatsQuery } from "../../redux/api/chat";
+import socket from "../../util/socket";
 
 export default function Home({ navigation }: DrawerHomeProp) {
   const dark = useGetMode();
@@ -22,6 +24,7 @@ export default function Home({ navigation }: DrawerHomeProp) {
   const dispatch = useAppDispatch();
   const [isAll, setIsAll] = useState(true);
   useGetUserQuery(null);
+  useGetAllChatsQuery(null);
   // useGetRandomPostsQuery(null);
   // useGetRandomPeopleQuery(null);
 
@@ -32,6 +35,8 @@ export default function Home({ navigation }: DrawerHomeProp) {
       dispatch(signOut());
     }
   }, [userAuthValidate.data?.msg]);
+
+
   const ref = useRef<any>(null);
   useLayoutEffect(() => {
     navigation.setOptions({

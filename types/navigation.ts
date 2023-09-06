@@ -81,6 +81,10 @@ export type SearchUserProp = NativeStackScreenProps<
   RootStackParamList,
   "SearchUser"
 >;
+export type SearchUserNavigation = NavigationProp<
+  RootStackParamList,
+  "SearchUser"
+>;
 
 export type HomeProp = NativeStackScreenProps<RootStackParamList, "Main">;
 export type DrawerHomeProp = DrawerScreenProps<

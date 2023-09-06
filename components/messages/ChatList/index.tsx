@@ -27,7 +27,7 @@ export default function ChatList({ offset }: { offset: Animated.Value }) {
           [{ nativeEvent: { contentOffset: { y: offset } } }],
           { useNativeDriver: false }
         )}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item?.id?.toString()}
         renderItem={({ item }) => <ListContainer data= {item} />}
       />
     </View>

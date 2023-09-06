@@ -30,6 +30,7 @@ import loadingModal, { LoadingModal } from "./slice/modal/loading";
 import searchPeople, { personState } from "./slice/people/search";
 import followers, { FollowerState } from "./slice/user/followers";
 import followedPost from "./slice/post/followed";
+import { chatApi } from "./api/chat";
 
 const persistConfig: PersistConfig<
   CombinedState<{
@@ -45,6 +46,7 @@ const persistConfig: PersistConfig<
     loadingModal: LoadingModal;
     followedPost: postState;
     chatlist: ChatList;
+    [chatApi.reducerPath]: any;
     [authApi.reducerPath]: any;
     [userApi.reducerPath]: any;
     [servicesApi.reducerPath]: any;
@@ -61,10 +63,12 @@ const reducer = combineReducers({
   bottomSheet,
   post,
   toast,
+
   loadingModal,
   searchPost,
   followers,
   chatlist: chatList,
+  [chatApi.reducerPath]: chatApi.reducer,
   [authApi.reducerPath]: authApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
   [servicesApi.reducerPath]: servicesApi.reducer,
@@ -86,7 +90,7 @@ export const store = configureStore({
     })
       .concat(authApi.middleware)
       .concat(userApi.middleware)
-      .concat(servicesApi.middleware),
+      .concat(servicesApi.middleware).concat(chatApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

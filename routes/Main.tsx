@@ -64,6 +64,7 @@ import ProfilePeople from "../screen/App/ProfilePeople";
 import ChatScreen from "../screen/App/ChatScreen";
 import SearchUsers from "../screen/App/SearchUsers";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { addNewChat } from "../redux/slice/chat/chatlist";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<BottomRootStackParamList>();
@@ -77,7 +78,7 @@ function SearchTabs() {
       screenOptions={{
         tabBarStyle: {
           height: 50,
-  
+
           elevation: 0,
         },
 
@@ -161,12 +162,11 @@ export default function Main() {
   const backgroundColor = isDark ? "black" : "white";
   const color = !isDark ? "black" : "white";
   const dispatch = useAppDispatch();
-  const userAuthenticated = useAppSelector((state) => state.user.token);
+
   const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
   useEffect(() => {
     socket.connect();
-
-    socket.emit("auth", userAuthenticated);
+    socket.emit("followedStatus");
   }, []);
 
   useEffect(() => {
@@ -175,6 +175,26 @@ export default function Main() {
     });
     socket.on("followers", (followers: number) => {
       if (followers) dispatch(updateFollowers({ followers }));
+    });
+    return () => {
+      socket.off("following");
+      socket.off("followers");
+    };
+  }, [socket]);
+  const chatList = useAppSelector((state) => state.chatlist.data);
+  useEffect(() => {
+    for (let i in chatList) {
+      socket.emit("chat", chatList[i]?.id);
+    }
+  }, [chatList]);
+
+  useEffect(() => {
+    socket.on("message", (message) => {
+      console.log(
+        "🚀 ~ file: ChatScreen.tsx:58 ~ socket.on ~ message🚀🚀🚀:",
+        message
+      );
+      dispatch(addNewChat(message));
     });
   }, [socket]);
 
@@ -238,12 +258,32 @@ export default function Main() {
           <Stack.Screen
             name="ChatScreen"
             options={{
-              title: "",
-
+              headerBackground: () => (
+                <BlurView
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    top: 0,
+                    right: 0,
+                    borderColor,
+                    borderBottomWidth: 0.5,
+                  }}
+                  tint={tint}
+                  intensity={200}
+                />
+              ),
+              title: "Chat",
               animation: "fade_from_bottom",
-              headerStyle: { backgroundColor },
-
+              headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
               headerShadowVisible: false,
+
+              headerTransparent: true,
+              headerTitleAlign: "center",
+              headerTintColor: color,
+              headerStyle: {
+                backgroundColor: "transparent",
+              },
             }}
             component={ChatScreen}
           />

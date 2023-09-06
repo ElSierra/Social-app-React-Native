@@ -29,6 +29,10 @@ export default function SearchUsers({ navigation }: SearchUserProp) {
   const tint = dark ? "dark" : "light";
 
   const [getPersons, persons] = useLazySearchPeopleQuery();
+  console.log(
+    "🚀 ~ file: SearchUsers.tsx:32 ~ SearchUsers ~ persons:",
+    persons.data?.people
+  );
 
   const opacity = useSharedValue(0);
   const animatedStyle = useAnimatedStyle(() => {
@@ -91,6 +95,7 @@ export default function SearchUsers({ navigation }: SearchUserProp) {
         </Animated.View>
       )}
       <FlatList
+        keyboardShouldPersistTaps="always"
         data={persons.data?.people}
         contentContainerStyle={{
           paddingTop: 10,

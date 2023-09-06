@@ -55,6 +55,7 @@ export default function HomeAll() {
   const dark = useGetMode();
   const dispatch = useAppDispatch();
   const posts = useAppSelector((state) => state.post);
+
   const isDark = dark;
   const color = isDark ? "white" : "black";
   const backgroundColor = !isDark ? "white" : "black";
@@ -193,7 +194,7 @@ export default function HomeAll() {
       thumbNail={item.videoThumbnail}
       imageUri={item.user?.imageUri}
       name={item.user?.name}
-      userId={item.user.id}
+      userId={item.user?.id}
       userTag={item.user?.userName}
       verified={item.user?.verified}
       audioUri={item.audioUri || undefined}
@@ -204,7 +205,7 @@ export default function HomeAll() {
       videoViews={item.videoViews?.toString()}
     />
   );
-  const keyExtractor = (item: IPost) => item.id?.toString();
+  const keyExtractor = (item: IPost) => item?.id?.toString();
   return (
     <View style={{flex:1}}>
       {posts.loading && posts.data.length === 0 ? (
@@ -230,7 +231,7 @@ export default function HomeAll() {
                 colors={["red", "blue"]}
               />
             }
-            keyExtractor={keyExtractor}
+        
             onEndReachedThreshold={0.3}
             onEndReached={fetchMoreData}
             estimatedListSize={{ width, height }}

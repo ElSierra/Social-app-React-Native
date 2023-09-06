@@ -63,3 +63,23 @@ export interface IComment {
   User: User;
   createdAt: string;
 }
+export interface IChatUser {
+  userName: string;
+  name: string;
+  imageUri: string;
+  id: string;
+}
+export interface IChatMessage {
+  text: string;
+  id: string;
+  sender: {
+    userName: string;
+    id: string;
+  };
+  createdAt: string;
+}
+export interface IChatList {
+  id: string;
+  users: IChatUser[];
+  messages: IChatMessage[];
+}
