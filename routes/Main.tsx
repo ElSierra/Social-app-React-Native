@@ -65,31 +65,12 @@ import ChatScreen from "../screen/App/ChatScreen";
 import SearchUsers from "../screen/App/SearchUsers";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { addNewChat } from "../redux/slice/chat/chatlist";
+import BackgroundFetch from "react-native-background-fetch";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<BottomRootStackParamList>();
 const Drawer = createDrawerNavigator<DrawerRootStackParamList>();
-const TopBar = createMaterialTopTabNavigator();
 const width = Dimensions.get("screen").width;
-
-function SearchTabs() {
-  return (
-    <TopBar.Navigator
-      screenOptions={{
-        tabBarStyle: {
-          height: 50,
-
-          elevation: 0,
-        },
-
-        tabBarBounces: true,
-      }}
-    >
-      <TopBar.Screen name="Users" options={{}} component={Discover} />
-      <TopBar.Screen name="Posts" component={Discover} />
-    </TopBar.Navigator>
-  );
-}
 
 function DrawerNavigator() {
   const dark = useGetMode();
@@ -156,6 +137,56 @@ function DrawerNavigator() {
   );
 }
 export default function Main() {
+  const chatList = useAppSelector((state) => state.chatlist.data);
+  const initBackgroundFetch = async () => {
+    const status: number = await BackgroundFetch.configure(
+      {
+        minimumFetchInterval: 15, // <-- minutes (15 is minimum allowed)
+        stopOnTerminate: false,
+        startOnBoot: true,
+        // Android options
+        forceAlarmManager: false, // <-- Set true to bypass JobScheduler.
+        requiredNetworkType: BackgroundFetch.NETWORK_TYPE_NONE, // Default
+        requiresCharging: false, // Default
+        requiresDeviceIdle: false, // Default
+        requiresBatteryNotLow: false, // Default
+        requiresStorageNotLow: false, // Default
+      },
+      async (taskId: string) => {
+        console.log("[BackgroundFetch] taskId", taskId);
+
+        for (let i in chatList) {
+          socket.emit("chat", chatList[i]?.id);
+        }
+
+        // Finish.
+        BackgroundFetch.finish(taskId);
+      },
+      (taskId: string) => {
+        // Oh No!  Our task took too long to complete and the OS has signalled
+        // that this task must be finished immediately.
+        console.log("[Fetch] TIMEOUT taskId:", taskId);
+        BackgroundFetch.finish(taskId);
+      }
+    );
+    console.log(
+      "🚀 ~ file: Main.tsx:190 ~ initBackgroundFetch ~ status:",
+      status
+    );
+  };
+
+  /// Load persisted events from AsyncStorage.
+  ///
+  const loadEvents = () => {
+    console.log("YES");
+  };
+  const scheduleTask = async () => {
+    await BackgroundFetch.scheduleTask({
+      taskId: "socket",
+      delay: 0,
+      forceAlarmManager: true,
+    });
+  };
   const dark = useGetMode();
   const isDark = dark;
   const tint = isDark ? "dark" : "light";
@@ -165,11 +196,18 @@ export default function Main() {
 
   const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
   useEffect(() => {
-    socket.connect();
-    socket.emit("followedStatus");
-  }, []);
+    initBackgroundFetch();
+  }, [chatList]);
 
   useEffect(() => {
+    socket.on("connected", (connected) => {
+      console.log(`Socket ${connected.id}!`);
+      scheduleTask();
+    });
+  }, [socket]);
+
+  useEffect(() => {
+    socket.emit("followedStatus");
     socket.on("following", (following: number) => {
       if (following) dispatch(updateFollowing({ following }));
     });
@@ -181,12 +219,8 @@ export default function Main() {
       socket.off("followers");
     };
   }, [socket]);
-  const chatList = useAppSelector((state) => state.chatlist.data);
-  useEffect(() => {
-    for (let i in chatList) {
-      socket.emit("chat", chatList[i]?.id);
-    }
-  }, [chatList]);
+
+  useEffect(() => {}, [chatList]);
 
   useEffect(() => {
     socket.on("message", (message) => {
@@ -197,7 +231,11 @@ export default function Main() {
       dispatch(addNewChat(message));
     });
   }, [socket]);
-
+  useEffect(() => {
+    socket.on("online", (online) => {
+      console.log(online);
+    });
+  }, [socket]);
   return (
     <BottomSheetModalProvider>
       <BottomSheetContainer>

@@ -25,8 +25,8 @@ export default function ListContainer({ data }: { data: IChatList }) {
           id: data.id,
           name:
             data.users[0]?.id === userId
-              ? data.users[1].name
-              : data.users[0].name,
+              ? data.users[1].userName
+              : data.users[0].userName,
           imageUri:
             data.users[0]?.id === userId
               ? data.users[1].imageUri
@@ -55,8 +55,8 @@ export default function ListContainer({ data }: { data: IChatList }) {
             <Text style={{ fontFamily: "jakaraBold", fontSize: 16, color }}>
               @
               {data.users[0]?.id === userId
-                ? data.users[1].name
-                : data.users[0].name}
+                ? data.users[1].userName
+                : data.users[0].userName}
             </Text>
             <Text
               style={{

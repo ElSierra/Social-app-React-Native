@@ -19,18 +19,25 @@ export default function ChatBuilderText({
   const color = dark ? "white" : "black";
   return (
     <View
-      style={{ width: "100%", alignItems: isMe ? "flex-end" : "flex-start" }}
+      style={{
+        width: "100%",
+        alignItems: isMe ? "flex-end" : "flex-start",
+     
+      }}
     >
-      <View>
+      <View
+    
+      >
         <View
           style={{
             padding: 10,
             borderRadius: 15,
             maxWidth: width / 1.5,
+
             borderBottomLeftRadius: !isMe ? 0 : undefined,
             borderBottomRightRadius: isMe ? 0 : undefined,
-            alignSelf: "flex-start",
-
+            alignSelf: !isMe?"flex-start":"flex-end",
+            justifyContent: "flex-start",
             backgroundColor: isMe ? backgroundColorForMe : backgroundColor,
           }}
         >
@@ -45,10 +52,11 @@ export default function ChatBuilderText({
         </View>
         <View
           style={{
-            alignItems: isMe ? "flex-end" : "flex-start",
+           
+            justifyContent:"flex-end",
           }}
         >
-          <Text style={{ fontFamily: "jakara", fontSize: 12, color }}>
+          <Text style={{ fontFamily: "jakara", fontSize: 12, color, textAlign:"left" }}>
             {formatDateForChat(time)}
           </Text>
         </View>

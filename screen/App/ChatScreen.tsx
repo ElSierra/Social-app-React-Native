@@ -13,6 +13,7 @@ import useGetMode from "../../hooks/GetMode";
 import socket from "../../util/socket";
 import { addNewChat, addToChatList } from "../../redux/slice/chat/chatlist";
 import uuid from "react-native-uuid";
+import TypingBox from "../../components/chat/TypingBox";
 
 export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   const user = useAppSelector((state) => state.user?.data);
@@ -24,21 +25,27 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
     userChats?.messages
   );
   const [messageText, setMessageText] = useState("");
-  const [isTyping, setIstyping] = useState();
+
+  const [isTyping, setIstyping] = useState(false);
   console.log(
-    "🚀 ~ file: ChatScreen.tsx:28 ~ ChatScreen ~ isTyping:",
+    "🚀 ~ file: ChatScreen.tsx:29 ~ ChatScreen ~ isTyping:",
     isTyping
   );
 
+  const [iamTyping, setIamTyping] = useState(false);
   useLayoutEffect(() => {
     socket.emit("chat", route.params.id);
   }, []);
-  useMemo(() => {
-    if (messageText.length > 0) {
-      socket.emit("isTyping", route.params.id, true);
-    } else if (messageText.length === 0) {
-      socket.emit("isTyping", route.params.id, false);
-    }
+  useEffect(() => {
+    socket.emit(
+      "isTyping",
+      route.params.id,
+      messageText.length > 0 ? true : false
+    );
+    console.log(
+      "🚀 ~ file: ChatScreen.tsx:42 ~ useEffect ~ iamTyping:",
+      iamTyping
+    );
   }, [messageText]);
 
   useEffect(() => {
@@ -64,9 +71,12 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
       }
     });
 
-    socket.on("isTyping", (isTyping) => {
-      if (isTyping.id !== user?.id) {
-        setIstyping(isTyping.isTyping);
+    socket.on("isTyping", (data) => {
+      if (data) {
+        console.log(data.isTyping, isTyping);
+        if (data.id !== user?.id) {
+          setIstyping(data.isTyping);
+        }
       }
     });
   }, [socket]);
@@ -76,9 +86,40 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: route.params.name,
-
+      headerTitle: () => {
+        return (
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              gap:4
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: "jakaraBold",
+                includeFontPadding: false,
+             
+                justifyContent: "center",
+                paddingBottom:4,
+              }}
+            >
+              @{route.params.name}
+            </Text>
+            <View
+              style={{
+                width: 10,
+                height: 10,
+                backgroundColor: "green",
+                borderRadius: 9999,
+              }}
+            />
+          </View>
+        );
+      },
       headerTitleStyle: { fontFamily: "jakaraBold", color },
+      headerBackVisible: false,
       headerLeft: () => {
         return (
           <Pressable
@@ -139,10 +180,20 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
           inverted
           fadingEdgeLength={100}
           ListHeaderComponent={() => {
-            return <View>{isTyping && <Text>is Typing</Text>}</View>;
+            return (
+              <View
+                style={{
+                  height: 90,
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                }}
+              >
+                {isTyping && messageText.length < 1 && <TypingBox />}
+              </View>
+            );
           }}
           data={userChats?.messages}
-          contentContainerStyle={{ gap: 15, padding: 20, paddingTop: 80 }}
+          contentContainerStyle={{ gap: 15, padding: 20 }}
           renderItem={({ item }) => (
             <ChatBuilderText
               isMe={item?.sender?.id === user?.id}
@@ -155,6 +206,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
       <View
         style={{
           padding: 10,
+          paddingBottom: 20,
           position: "absolute",
           bottom: 0,
           alignItems: "center",
@@ -163,7 +215,18 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
         }}
       >
         <ChatBox
-          props={{ value: messageText, onChangeText: setMessageText }}
+          props={{
+            value: messageText,
+            onChangeText: (text) => {
+              setMessageText(text);
+            },
+            onFocus: (e) => {
+              console.log("focused");
+            },
+            onBlur: (e) => {
+              console.log("unfocused");
+            },
+          }}
           onPress={handleSendMessage}
         />
       </View>

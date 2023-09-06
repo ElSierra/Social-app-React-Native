@@ -20,3 +20,4 @@
   **[] $VALUES;
   public *;
 }
+-keep class com.transistorsoft.rnbackgroundfetch.HeadlessTask { *; }
