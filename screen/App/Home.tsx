@@ -31,7 +31,7 @@ export default function Home({ navigation }: DrawerHomeProp) {
   const userAuthValidate = useTokenValidQuery(null);
   useEffect(() => {
     //@ts-ignore
-    if (userAuthValidate.error?.data?.msg === "invalid token") {
+    if (userAuthValidate.isError) {
       dispatch(signOut());
     }
   }, [userAuthValidate.data?.msg]);

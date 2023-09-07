@@ -38,7 +38,7 @@ export const ChatModal = ({
 
   return (
    
-      <>
+      <Portal>
         <View style={styles.centeredView}>
           <Modal
             statusBarTranslucent
@@ -80,7 +80,7 @@ export const ChatModal = ({
                   pointerEvents: "box-none",
                 }}
                 entering={FadeInRight.springify()}
-                exiting={FadeOutRight.springify()}
+                
               >
                 <ChatBuilderText
                   isMe={true}
@@ -124,7 +124,7 @@ export const ChatModal = ({
             </View>
           </Modal>
         </View>
-      </>
+      </Portal>
     
   );
 };

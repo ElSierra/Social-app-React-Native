@@ -28,6 +28,7 @@ import { findChatById } from "../../util/chatSearch";
 import socket from "../../util/socket";
 import Animated from "react-native-reanimated";
 import { ChatModal } from "../../components/messages/ChatList/ChatModal";
+import { Portal } from "react-native-paper";
 
 export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   const user = useAppSelector((state) => state.user?.data);
@@ -235,7 +236,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
             contentContainerStyle={{ gap: 15, padding: 20, paddingBottom: 100 }}
             renderItem={({ item }) => (
               <Pressable
-                onPress={() => {
+                onLongPress={() => {
                   console.log('prssed')
                   setText({id:item.id,text:item.text});
                   item?.sender?.id === user?.id && setIsOpen(true)
