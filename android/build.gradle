@@ -32,10 +32,6 @@ allprojects {
             // Android JSC is installed from npm
             url(new File(['node', '--print', "require.resolve('jsc-android/package.json')"].execute(null, rootDir).text.trim(), '../dist'))
         }
-    maven {
-           // react-native-background-fetch
-           url("${project(':react-native-background-fetch').projectDir}/libs")
-      }
 
         google()
         mavenCentral()

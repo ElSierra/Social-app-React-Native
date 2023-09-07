@@ -54,8 +54,8 @@ import VideoFullScreen from "../screen/App/VideoFullScreen";
 import { useAppDispatch, useAppSelector } from "../redux/hooks/hooks";
 import { useLazyGetFollowDetailsQuery } from "../redux/api/user";
 import PostScreen from "../screen/App/PostScreen";
-import { useEffect } from "react";
-import socket from "../util/socket";
+import { useEffect, useRef, useState } from "react";
+
 import {
   updateFollowers,
   updateFollowing,
@@ -65,17 +65,43 @@ import ChatScreen from "../screen/App/ChatScreen";
 import SearchUsers from "../screen/App/SearchUsers";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { addNewChat } from "../redux/slice/chat/chatlist";
-import BackgroundFetch from "react-native-background-fetch";
+import * as BackgroundFetch from "expo-background-fetch";
+import * as TaskManager from "expo-task-manager";
+import { AppState } from "react-native";
+import { store } from "../redux/store";
 
+import socket from "../util/socket";
+import { updateOnlineIds } from "../redux/slice/chat/online";
+console.log("🚀 ~ file: Main.tsx:71 ~ AppState:", AppState);
+
+const BACKGROUND_FETCH_TASK = "background-fetch";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<BottomRootStackParamList>();
 const Drawer = createDrawerNavigator<DrawerRootStackParamList>();
 const width = Dimensions.get("screen").width;
 
+TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
+  const now = Date.now();
+  const chats = store.getState().chatlist;
+  if (chats.data) {
+    for (let i in chats.data) {
+      socket.emit("chat", chats.data[i].id);
+    }
+  }
+
+  console.log(
+    `Got background fetch call at date: ${new Date(now).toISOString()}`
+  );
+
+  // Be sure to return the successful result type!
+  return BackgroundFetch.BackgroundFetchResult.NewData;
+});
+
 function DrawerNavigator() {
   const dark = useGetMode();
   const isDark = dark;
   const tint = isDark ? "dark" : "light";
+
   const color = isDark ? "white" : "black";
   const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
   const backgroundColor = isDark ? "black" : "white";
@@ -138,55 +164,7 @@ function DrawerNavigator() {
 }
 export default function Main() {
   const chatList = useAppSelector((state) => state.chatlist.data);
-  const initBackgroundFetch = async () => {
-    const status: number = await BackgroundFetch.configure(
-      {
-        minimumFetchInterval: 15, // <-- minutes (15 is minimum allowed)
-        stopOnTerminate: false,
-        startOnBoot: true,
-        // Android options
-        forceAlarmManager: false, // <-- Set true to bypass JobScheduler.
-        requiredNetworkType: BackgroundFetch.NETWORK_TYPE_NONE, // Default
-        requiresCharging: false, // Default
-        requiresDeviceIdle: false, // Default
-        requiresBatteryNotLow: false, // Default
-        requiresStorageNotLow: false, // Default
-      },
-      async (taskId: string) => {
-        console.log("[BackgroundFetch] taskId", taskId);
 
-        for (let i in chatList) {
-          socket.emit("chat", chatList[i]?.id);
-        }
-
-        // Finish.
-        BackgroundFetch.finish(taskId);
-      },
-      (taskId: string) => {
-        // Oh No!  Our task took too long to complete and the OS has signalled
-        // that this task must be finished immediately.
-        console.log("[Fetch] TIMEOUT taskId:", taskId);
-        BackgroundFetch.finish(taskId);
-      }
-    );
-    console.log(
-      "🚀 ~ file: Main.tsx:190 ~ initBackgroundFetch ~ status:",
-      status
-    );
-  };
-
-  /// Load persisted events from AsyncStorage.
-  ///
-  const loadEvents = () => {
-    console.log("YES");
-  };
-  const scheduleTask = async () => {
-    await BackgroundFetch.scheduleTask({
-      taskId: "socket",
-      delay: 0,
-      forceAlarmManager: true,
-    });
-  };
   const dark = useGetMode();
   const isDark = dark;
   const tint = isDark ? "dark" : "light";
@@ -195,45 +173,43 @@ export default function Main() {
   const dispatch = useAppDispatch();
 
   const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
-  useEffect(() => {
-    initBackgroundFetch();
-  }, [chatList]);
 
   useEffect(() => {
-    socket.on("connected", (connected) => {
+    socket?.on("connected", (connected) => {
       console.log(`Socket ${connected.id}!`);
-      scheduleTask();
     });
-  }, [socket]);
+  }, []);
 
   useEffect(() => {
-    socket.emit("followedStatus");
-    socket.on("following", (following: number) => {
+    socket?.emit("followedStatus");
+    socket?.on("following", (following: number) => {
       if (following) dispatch(updateFollowing({ following }));
     });
-    socket.on("followers", (followers: number) => {
+    socket?.on("followers", (followers: number) => {
       if (followers) dispatch(updateFollowers({ followers }));
     });
     return () => {
-      socket.off("following");
-      socket.off("followers");
+      socket?.off("following");
+      socket?.off("followers");
     };
   }, [socket]);
 
-  useEffect(() => {}, [chatList]);
+  useEffect(() => {
+    for (let i in chatList) {
+      socket?.emit("chat", chatList[i].id);
+    }
+  }, [chatList]);
 
   useEffect(() => {
-    socket.on("message", (message) => {
-      console.log(
-        "🚀 ~ file: ChatScreen.tsx:58 ~ socket.on ~ message🚀🚀🚀:",
-        message
-      );
+    socket?.on("message", (message) => {
+      console.log("🚀 ~ file: Main.tsx:210 ~ socket?.on ~ message:", message);
       dispatch(addNewChat(message));
     });
   }, [socket]);
   useEffect(() => {
-    socket.on("online", (online) => {
-      console.log(online);
+    socket?.on("online", (online) => {
+      console.log("🚀 ~ file: Main.tsx:212 ~ socket?.on ~ online:", online);
+      dispatch(updateOnlineIds({ ids: online }));
     });
   }, [socket]);
   return (

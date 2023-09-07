@@ -1,7 +1,7 @@
 import { io } from "socket.io-client";
 import storage from "../redux/storage";
 
-console.log(storage.getString("persist:root"));
+console.log("called");
 const persistRoot = storage.getString("persist:root");
 const userId = (): string | undefined => {
   if (persistRoot) {

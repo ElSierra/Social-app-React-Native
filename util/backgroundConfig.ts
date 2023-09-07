@@ -1,1 +1,0 @@
-import BackgroundFetch from "react-native-background-fetch";

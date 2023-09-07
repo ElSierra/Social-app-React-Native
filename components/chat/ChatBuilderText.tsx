@@ -7,10 +7,12 @@ const { width } = Dimensions.get("screen");
 export default function ChatBuilderText({
   isMe,
   time,
+  isModal,
   text,
 }: {
   isMe: boolean;
   text: string;
+  isModal?: boolean;
   time: string;
 }) {
   const dark = useGetMode();
@@ -22,12 +24,9 @@ export default function ChatBuilderText({
       style={{
         width: "100%",
         alignItems: isMe ? "flex-end" : "flex-start",
-     
       }}
     >
-      <View
-    
-      >
+      <View>
         <View
           style={{
             padding: 10,
@@ -36,7 +35,7 @@ export default function ChatBuilderText({
 
             borderBottomLeftRadius: !isMe ? 0 : undefined,
             borderBottomRightRadius: isMe ? 0 : undefined,
-            alignSelf: !isMe?"flex-start":"flex-end",
+            alignSelf: !isMe ? "flex-start" : "flex-end",
             justifyContent: "flex-start",
             backgroundColor: isMe ? backgroundColorForMe : backgroundColor,
           }}
@@ -50,16 +49,24 @@ export default function ChatBuilderText({
             {text}
           </Text>
         </View>
-        <View
-          style={{
-           
-            justifyContent:"flex-end",
-          }}
-        >
-          <Text style={{ fontFamily: "jakara", fontSize: 12, color, textAlign:"left" }}>
-            {formatDateForChat(time)}
-          </Text>
-        </View>
+        {!isModal && (
+          <View
+            style={{
+              justifyContent: "flex-end",
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: "jakara",
+                fontSize: 12,
+                color,
+                textAlign: "left",
+              }}
+            >
+              {formatDateForChat(time)}
+            </Text>
+          </View>
+        )}
       </View>
     </View>
   );

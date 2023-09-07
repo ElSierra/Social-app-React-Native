@@ -1,11 +1,19 @@
 import "react-native-gesture-handler";
+import 'react-native-get-random-values'
 import { StatusBar } from "expo-status-bar";
-import { Text, ImageURISource, StyleSheet, View } from "react-native";
+import { Text, ImageURISource, StyleSheet, View, AppState } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import Main from "./routes/Main";
-import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 
@@ -48,6 +56,31 @@ const persistor = persistStore(store);
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+  console.log(
+    "🚀 ~ file: Main.tsx:159 ~ Main ~ appStateVisible:",
+    appStateVisible
+  );
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === "active"
+      ) {
+        console.log("App has come to the foreground!");
+      }
+
+      appState.current = nextAppState;
+      setAppStateVisible(appState.current);
+      console.log("AppState", appState.current);
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>

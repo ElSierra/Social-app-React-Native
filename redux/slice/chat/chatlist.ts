@@ -20,6 +20,7 @@ const chatList = createSlice({
   } as ChatList,
   reducers: {
     addToChatList: (state, action: PayloadAction<IChatList>) => {
+      console.log("🚀 ~ file: chatlist.ts:23 ~ action:", action)
       state.data.unshift(action.payload);
     },
     addNewChat: (

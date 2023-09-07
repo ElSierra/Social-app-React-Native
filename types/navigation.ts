@@ -34,6 +34,7 @@ export type RootStackParamList = {
     id: string;
     name: string;
     imageUri: string;
+    receiverId:string;
   };
   SearchUser: undefined;
   PostContent: undefined;

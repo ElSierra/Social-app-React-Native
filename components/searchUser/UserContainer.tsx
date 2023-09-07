@@ -9,9 +9,10 @@ import { useNavigation } from "@react-navigation/native";
 import useGetMode from "../../hooks/GetMode";
 import { ProfileIcon } from "../icons";
 import FastImage from "react-native-fast-image";
-import socket from "../../util/socket";
+import useSocket from "../../hooks/Socket";
 import { useAppSelector } from "../../redux/hooks/hooks";
 import { SearchUserNavigation } from "../../types/navigation";
+import socket from "../../util/socket";
 
 const { width } = Dimensions.get("screen");
 export default function UserContainer({
@@ -22,6 +23,7 @@ export default function UserContainer({
   isFollowed,
 }: IPerson) {
   const dark = useGetMode();
+ 
   const color = dark ? "white" : "black";
   const backgroundColor = !dark ? "#E5E9F899" : "#25252599";
 
@@ -32,7 +34,7 @@ export default function UserContainer({
   const user = useAppSelector((state) => state.user.data);
   const handleMessage = () => {
     console.log("pressed");
-    socket.emit("startChat", id);
+    socket?.emit("startChat", id);
     navigation.navigate("ChatScreen", { id, name, imageUri });
   };
   return (
