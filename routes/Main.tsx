@@ -348,10 +348,13 @@ export default function Main() {
           <Stack.Screen
             name="SearchUser"
             component={SearchUsers}
+            
             options={{
+              animation:"fade_from_bottom",
               headerStyle: { backgroundColor },
               headerTitle: "",
               headerShadowVisible: false,
+              
             }}
           />
         </Stack.Navigator>
