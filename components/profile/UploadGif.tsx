@@ -45,7 +45,7 @@ export default function PickGifButton({
             cropperChooseColor: "#FFFFFF",
           })
             .then((image) => {
-              console.log("🚀 ~ file: UploadGif.tsx:48 ~ .then ~ image:", image)
+           
               if (image.size > 1200000 || image.mime !== "image/gif") {
                 ToastAndroid.showWithGravityAndOffset(
                   'Gif of 1MB only!',

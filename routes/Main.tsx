@@ -4,6 +4,7 @@ import {
   useColorScheme,
   Dimensions,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
@@ -64,7 +65,7 @@ import ProfilePeople from "../screen/App/ProfilePeople";
 import ChatScreen from "../screen/App/ChatScreen";
 import SearchUsers from "../screen/App/SearchUsers";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { addNewChat } from "../redux/slice/chat/chatlist";
+import { addNewChat, addToChatList } from "../redux/slice/chat/chatlist";
 import * as BackgroundFetch from "expo-background-fetch";
 import * as TaskManager from "expo-task-manager";
 import { AppState } from "react-native";
@@ -72,7 +73,9 @@ import { store } from "../redux/store";
 
 import socket from "../util/socket";
 import { updateOnlineIds } from "../redux/slice/chat/online";
-console.log("🚀 ~ file: Main.tsx:71 ~ AppState:", AppState);
+import { openToast } from "../redux/slice/toast/toast";
+import { IMessageSocket } from "../types/socket";
+import { useNavigationState } from "@react-navigation/native";
 
 const BACKGROUND_FETCH_TASK = "background-fetch";
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -164,7 +167,7 @@ function DrawerNavigator() {
 }
 export default function Main() {
   const chatList = useAppSelector((state) => state.chatlist.data);
-
+  const id = useAppSelector((state) => state.user?.data?.id);
   const dark = useGetMode();
   const isDark = dark;
   const tint = isDark ? "dark" : "light";
@@ -172,11 +175,13 @@ export default function Main() {
   const color = !isDark ? "black" : "white";
   const dispatch = useAppDispatch();
 
+
   const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
 
   useEffect(() => {
     socket?.on("connected", (connected) => {
       console.log(`Socket ${connected.id}!`);
+      dispatch(openToast({text:"Connected", type:"Success"}))
     });
   }, []);
 
@@ -193,6 +198,9 @@ export default function Main() {
       socket?.off("followers");
     };
   }, [socket]);
+  useEffect(() => {
+    socket.emit("joinMyRoom");
+  }, []);
 
   useEffect(() => {
     for (let i in chatList) {
@@ -201,9 +209,52 @@ export default function Main() {
   }, [chatList]);
 
   useEffect(() => {
-    socket?.on("message", (message) => {
-      console.log("🚀 ~ file: Main.tsx:210 ~ socket?.on ~ message:", message);
-      dispatch(addNewChat(message));
+    socket?.on("newChat", (chatMessages) => {
+      if (chatMessages) {
+        console.log(
+          "🚀 ~ file: Main.tsx:213 ~ socket?.on ~ chatMessages:",
+          chatMessages
+        );
+        //TODO: CONFIRM IF DATA MATCHES
+
+        if (chatMessages?.isNew) {
+          dispatch(
+            addToChatList({
+              id: chatMessages?.id,
+              messages: chatMessages?.messages,
+              users: chatMessages?.users,
+            })
+          );
+        }
+      }
+    });
+  }, [socket]);
+
+  useEffect(() => {
+    socket?.on("message", (message: IMessageSocket) => {
+      console.log("🚀 ~ file: Main.tsx:231 ~ socket?.on ~ message:", message);
+      if (message) {
+        console.log(
+          "🚀 ~ file: ChatScreen.tsx:43 ~ socket.on ~ message:",
+          message
+        );
+ 
+        if (message.message?.sender?.id !== id) {
+          console.log(
+            "🚀 ~ file: Main.tsx:239 ~ socket?.on ~ message.senderId:",
+            message.message?.sender?.id,
+            id
+          );
+          dispatch(addNewChat(message));
+          dispatch(
+            openToast({
+              type: "Message",
+              text: message?.message.text,
+              imageUri : message.imageUri,
+            })
+          );
+        }
+      }
     });
   }, [socket]);
   useEffect(() => {
@@ -348,13 +399,12 @@ export default function Main() {
           <Stack.Screen
             name="SearchUser"
             component={SearchUsers}
-            
             options={{
-              animation:"fade_from_bottom",
+              headerTintColor: color,
+              animation: "fade_from_bottom",
               headerStyle: { backgroundColor },
               headerTitle: "",
               headerShadowVisible: false,
-              
             }}
           />
         </Stack.Navigator>
@@ -369,6 +419,7 @@ export function BottomTabNavigator() {
   const tint = !isDark ? "light" : "dark";
   const color = isDark ? "white" : "black";
   const backgroundColor = isDark ? "black" : "white";
+
   const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
   return (
     <Tab.Navigator
@@ -396,7 +447,8 @@ export function BottomTabNavigator() {
           tabBarStyle: {
             backgroundColor: "transparent",
             elevation: 0,
-            height: 60,
+            height: 65,
+            paddingBottom: 10,
             borderTopWidth: 0.2,
 
             borderColor,

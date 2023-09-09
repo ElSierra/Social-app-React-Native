@@ -11,17 +11,20 @@ import { useAppSelector } from "../../../redux/hooks/hooks";
 import Animated, { BounceIn, BounceOut } from "react-native-reanimated";
 const { width } = Dimensions.get("screen");
 export default function ListContainer({ data }: { data: IChatList }) {
-  console.log("🚀 ~ file: ListContainer.tsx:13 ~ ListContainer ~ data:", data);
   const dark = useGetMode();
   const color = dark ? "#FFFFFF" : "#000000";
   const rColor = !dark ? "#FFFFFF" : "#000000";
   const userId = useAppSelector((state) => state.user?.data?.id);
-  const onlineIds = useAppSelector((state)=> state.online.ids)
+  const onlineIds = useAppSelector((state) => state?.online?.ids);
   const receiverId =
-    data.users[0].id === userId ? data.users[1].id : data.users[0].id;
+    data.users?.length === 1
+      ? data.users[0]?.id
+      : data.users[0]?.id === userId
+      ? data.users[1].id
+      : data.users[0].id;
 
-  const isOnline = onlineIds.some((ids)=> ids === receiverId)
-  console.log("🚀 ~ file: ListContainer.tsx:23 ~ ListContainer ~ isOnline:", isOnline)
+  const isOnline = onlineIds?.some((ids) => ids === receiverId);
+
   const navigation = useNavigation<HomeNavigationProp>();
   return (
     <Pressable
@@ -30,13 +33,17 @@ export default function ListContainer({ data }: { data: IChatList }) {
       onPress={() =>
         navigation.navigate("ChatScreen", {
           id: data.id,
-          receiverId ,
+          receiverId,
           name:
-            data.users[0]?.id === userId
+            data.users?.length === 1
+              ? data.users[0]?.userName
+              : data.users[0]?.id === userId
               ? data.users[1].userName
               : data.users[0].userName,
           imageUri:
-            data.users[0]?.id === userId
+            data.users?.length === 1
+              ? data.users[0]?.imageUri
+              : data.users[0]?.id === userId
               ? data.users[1].imageUri
               : data.users[0].imageUri,
         })
@@ -54,7 +61,9 @@ export default function ListContainer({ data }: { data: IChatList }) {
             style={{ borderRadius: 999, height: 50, width: 50 }}
             source={{
               uri:
-                data.users[0]?.id === userId
+                data.users?.length === 1
+                  ? data.users[0]?.imageUri
+                  : data.users[0]?.id === userId
                   ? data.users[1].imageUri
                   : data.users[0].imageUri,
             }}
@@ -74,19 +83,19 @@ export default function ListContainer({ data }: { data: IChatList }) {
                   color,
                 }}
               >
-                @
-                {data.users[0]?.id === userId
-                  ? data.users[1].userName
-                  : data.users[0].userName}
+                {data.users?.length === 1
+                  ? ` Me`
+                  : data.users[0]?.id === userId
+                  ? `@ ${data.users[1].userName}`
+                  : `@ ${data.users[0].userName}`}
               </Text>
-              <Animated.View 
-              key = {isOnline?`${receiverId}online`: `${receiverId}offline`}
-              entering={BounceIn.duration(400)}
-            
+              <Animated.View
+                key={isOnline ? `${receiverId}online` : `${receiverId}offline`}
+                entering={BounceIn.duration(400)}
                 style={{
                   width: 10,
                   height: 10,
-                  backgroundColor: isOnline ? "green": "red",
+                  backgroundColor: isOnline ? "green" : "red",
                   borderRadius: 9999,
                 }}
               />

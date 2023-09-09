@@ -1,5 +1,6 @@
 import { io } from "socket.io-client";
 import storage from "../redux/storage";
+import { store } from "../redux/store";
 
 console.log("called");
 const persistRoot = storage.getString("persist:root");

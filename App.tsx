@@ -1,7 +1,7 @@
 import "react-native-gesture-handler";
-import 'react-native-get-random-values'
+import "react-native-get-random-values";
 import { StatusBar } from "expo-status-bar";
-import { Text, ImageURISource, StyleSheet, View, AppState } from "react-native";
+import { Text, ImageURISource, StyleSheet, View, AppState, useColorScheme } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
@@ -45,7 +45,7 @@ import socket from "./util/socket";
 import { updateFollowing } from "./redux/slice/user/followers";
 import { useGetFollowDetailsQuery } from "./redux/api/user";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-
+import * as NavigationBar from "expo-navigation-bar";
 enableFreeze(true);
 Sentry.init({
   dsn: "https://a5db1485b6b50a45db57917521128254@o4505750037725184.ingest.sentry.io/4505750586195968",
@@ -56,6 +56,8 @@ const persistor = persistStore(store);
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
+ 
+ 
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
   console.log(
@@ -118,6 +120,7 @@ function AnimatedSplashScreen({
   const backgroundColor = dark ? "black" : "white";
   const color = !dark ? "black" : "white";
   const style = dark ? "light" : "dark";
+
   return (
     <View style={{ flex: 1 }}>
       <StatusBar animated={true} style={style} backgroundColor="transparent" />
@@ -181,6 +184,15 @@ const Navigation = () => {
   const userAuthenticated = useAppSelector((state) => state.user.token);
 
   const netInfo = useNetInfo();
+
+
+  const barColor = !dark ? "black" : "white"
+  useEffect(() => {
+    const navBehavior = async () => {
+      await NavigationBar.setBackgroundColorAsync(barColor);
+    };
+    navBehavior();
+  }, [NavigationBar]);
 
   useEffect(() => {
     if (netInfo.isConnected !== null) {

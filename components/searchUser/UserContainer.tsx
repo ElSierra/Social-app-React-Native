@@ -1,9 +1,9 @@
-import { View, Text, Dimensions, Pressable } from "react-native";
+import { View, Text, Dimensions, Pressable, Modal } from "react-native";
 
-import { Button } from "react-native-paper";
+import { ActivityIndicator, Button, Portal } from "react-native-paper";
 import { BlurView } from "expo-blur";
 import Animated, { FadeInLeft } from "react-native-reanimated";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IPerson } from "../../types/api";
 import { useNavigation } from "@react-navigation/native";
 import useGetMode from "../../hooks/GetMode";
@@ -23,78 +23,134 @@ export default function UserContainer({
   isFollowed,
 }: IPerson) {
   const dark = useGetMode();
- 
+  const { height, width } = Dimensions.get("screen");
   const color = dark ? "white" : "black";
   const backgroundColor = !dark ? "#E5E9F899" : "#25252599";
 
   const fbuttonBackgroundColor = dark ? "#FFFFFF" : "#000000";
-  const nBColor = !dark ? "white" : "black";
+  const tint = dark ? "dark" : "light";
   const fBColor = dark ? "white" : "black";
-  const navigation = useNavigation<SearchUserNavigation>();
+  const navigation = useNavigation<any>();
   const user = useAppSelector((state) => state.user.data);
-  const handleMessage = () => {
-    console.log("pressed");
-    socket?.emit("startChat", id);
-    navigation.navigate("ChatScreen", { id, name, imageUri });
-  };
-  return (
-    <Animated.View
-      entering={FadeInLeft.springify()}
-      style={{
-        width: "100%",
-        overflow: "hidden",
-        justifyContent: "space-between",
-        padding: 6,
-        alignItems: "center",
-        flexDirection: "row",
-        backgroundColor,
-        borderRadius: 20,
-      }}
-    >
-      <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-        {imageUri ? (
-          <FastImage
-            source={{ uri: imageUri }}
-            style={{ height: 30, width: 30, borderRadius: 9999 }}
-          />
-        ) : (
-          <ProfileIcon color={color} size={34} />
-        )}
-        <View>
-          <Text style={{ fontSize: 16, fontFamily: "mulishBold", color }}>
-            {name}
-          </Text>
-          <Text style={{ fontFamily: "jakara", fontSize: 12, color }}>
-            @{userName}
-          </Text>
-        </View>
-      </View>
+  const [isOpen, setIsOpen] = useState(false);
 
-      <View
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
+  const handleMessage = () => {
+    socket?.emit("startChat", id);
+    setIsOpen(true);
+  };
+
+  useEffect(() => {
+    socket.on("newChat", (data) => {
+      if (data?.senderId === user?.id) {
+        navigation.replace("ChatScreen", {
+          id: data.id,
+          receiverId: id,
+          name:
+            data.users[0]?.id === user?.id
+              ? data.users[1].userName
+              : data.users[0].userName,
+          imageUri:
+            data.users[0]?.id === user?.id
+              ? data.users[1].imageUri
+              : data.users[0].imageUri,
+        });
+      }
+    });
+  }, [socket]);
+
+  return (
+    <>
+      <Portal>
+        <>
+          <View style={{ flex: 1 }}>
+            <Modal
+              statusBarTranslucent
+              animationType="fade"
+              transparent={true}
+              visible={isOpen}
+              style={{ justifyContent: "center", alignItems: "center" }}
+              onRequestClose={closeModal}
+            >
+              <BlurView
+                tint={tint}
+                style={{ position: "absolute", height, width }}
+                intensity={10}
+              />
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <ActivityIndicator color="black" />
+              </View>
+            </Modal>
+          </View>
+        </>
+      </Portal>
+      <Animated.View
+        entering={FadeInLeft.springify()}
         style={{
-          borderRadius: 999,
-          borderWidth: 1,
-          backgroundColor: "transparent",
+          width: "100%",
           overflow: "hidden",
-          borderColor: fbuttonBackgroundColor,
+          justifyContent: "space-between",
+          padding: 6,
+          alignItems: "center",
+          flexDirection: "row",
+          backgroundColor,
+          borderRadius: 20,
         }}
       >
-        <Pressable
-          android_ripple={{ color: "white" }}
-          onPress={handleMessage}
-          style={{ paddingHorizontal: 10, paddingVertical: 6 }}
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+          {imageUri ? (
+            <FastImage
+              source={{ uri: imageUri }}
+              style={{ height: 30, width: 30, borderRadius: 9999 }}
+            />
+          ) : (
+            <ProfileIcon color={color} size={34} />
+          )}
+          <View>
+            <Text style={{ fontSize: 16, fontFamily: "mulishBold", color }}>
+              {name}
+            </Text>
+            <Text style={{ fontFamily: "jakara", fontSize: 12, color }}>
+              @{userName}
+            </Text>
+          </View>
+        </View>
+
+        <View
+          style={{
+            borderRadius: 999,
+            borderWidth: 1,
+            backgroundColor: "transparent",
+            overflow: "hidden",
+            borderColor: fbuttonBackgroundColor,
+          }}
         >
-          <Text
-            style={{
-              fontFamily: "jakara",
-              color: fBColor,
-              includeFontPadding: false,
-            }}
+          <Pressable
+            android_ripple={{ color: "white" }}
+            onPress={handleMessage}
+            style={{ paddingHorizontal: 10, paddingVertical: 6 }}
           >
-            {"Message"}
-          </Text>
-        </Pressable>
-      </View>
-    </Animated.View>
+            <Text
+              style={{
+                fontFamily: "jakara",
+                color: fBColor,
+                includeFontPadding: false,
+              }}
+            >
+              {"Message"}
+            </Text>
+          </Pressable>
+        </View>
+      </Animated.View>
+    </>
   );
 }

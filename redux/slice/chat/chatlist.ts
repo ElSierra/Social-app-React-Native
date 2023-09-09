@@ -20,21 +20,25 @@ const chatList = createSlice({
   } as ChatList,
   reducers: {
     addToChatList: (state, action: PayloadAction<IChatList>) => {
-      console.log("🚀 ~ file: chatlist.ts:23 ~ action:", action)
-      state.data.unshift(action.payload);
+      console.log("🚀 ~ file: chatlist.ts:23 ~ action:", action.payload);
+
+      state.data = [action.payload, ...state.data];
+      console.log("🚀 ~ file: chatlist.ts:23 ~ action:", state.data);
     },
     addNewChat: (
       state,
       action: PayloadAction<{ message: IChatMessage; chatId: string }>
     ) => {
-      console.log("🚀 ~ file: chatlist.ts:28 ~ message:", action.payload.message)
-      console.log("🚀 ~ file: chatlist.ts:28 ~ chatId:", action.payload.chatId)
-      const index = state.data.findIndex(
+      const chatIndex = state.data.findIndex(
         (chats) => chats.id === action.payload.chatId
       );
-      console.log("🚀 ~ file: chatlist.ts:31 ~ index:", index)
 
-      state?.data[index]?.messages.unshift(action.payload.message);
+      if (chatIndex !== -1) {
+        state.data[chatIndex].messages = [
+          action.payload.message,
+          ...state.data[chatIndex].messages,
+        ];
+      }
     },
   },
   extraReducers: (builder) => {

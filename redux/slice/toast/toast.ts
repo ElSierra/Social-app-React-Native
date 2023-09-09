@@ -1,6 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-
 import * as Haptics from "expo-haptics";
 import { Platform } from "react-native";
 const ONE_SECOND_IN_MS = 1000;
@@ -16,8 +15,9 @@ const PATTERN_DESC =
     : "wait 1s, vibrate, wait 2s, vibrate, wait 3s";
 export type ToastState = {
   text: string | null;
+  imageUri?: string;
   open: boolean;
-  type: "Failed" | "Success" | "Info" | null;
+  type: "Failed" | "Success" | "Info" | "Message" | null;
 };
 
 const toastSlice = createSlice({
@@ -32,11 +32,12 @@ const toastSlice = createSlice({
       state,
       action: PayloadAction<{
         text: string;
-        type: "Failed" | "Success" | "Info";
+        imageUri?: string;
+        type: "Failed" | "Success" | "Info" | "Message";
       }>
     ) => {
-      
       state.open = true;
+      state.imageUri = action.payload.imageUri;
       state.text = action.payload.text;
       state.type = action.payload.type;
     },

@@ -4,6 +4,7 @@ import AvatarName from "./AvatarName";
 import { FlatList } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import useGetMode from "../../../hooks/GetMode";
+import { useAppSelector } from "../../../redux/hooks/hooks";
 
 export default function Recent({ offset }: { offset: Animated.Value }) {
   const HEADER_HEIGHT = 300;
@@ -22,6 +23,21 @@ export default function Recent({ offset }: { offset: Animated.Value }) {
   });
   const dark = useGetMode();
   const color = dark ? "#FFFFFF" : "#000000";
+  const userId = useAppSelector((state) => state.user?.data?.id);
+  const onlineIds = useAppSelector((state) => state.online?.ids);
+
+  const chatList = useAppSelector((state) => state.chatlist.data);
+  console.log("🚀 ~ file: index.tsx:28 ~ Recent ~ onlineIds:", onlineIds);
+
+  const onlineUsers = chatList.filter((item) => {
+    if (item.users.length === 1) {
+      return item.users[0].id;
+    }
+    return onlineIds.includes(
+      item.users[0]?.id === userId ? item.users[1]?.id : item.users[0]?.id
+    );
+  });
+  console.log("🚀 ~ file: index.tsx:30 ~ Recent ~ onlineUsers:", onlineUsers);
 
   return (
     <Animated.View
@@ -30,17 +46,42 @@ export default function Recent({ offset }: { offset: Animated.Value }) {
         opacity,
       }}
     >
-      <View style={{ paddingHorizontal: 14, paddingTop: 0, paddingBottom: 0 }}>
+      <View style={{ paddingHorizontal: 14, paddingTop: 0, paddingBottom: 20 }}>
         <Text style={{ fontFamily: "jakara", letterSpacing: 4, color }}>
-          RECENT
+          ONLINE
         </Text>
       </View>
       <FlatList
         horizontal={true}
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ gap: 20, paddingLeft: 20 }}
-        renderItem={({ item }) => <AvatarName />}
-        data={[0, 1, 2, 3, 4, 5, 6]}
+        contentContainerStyle={{ gap: 20 }}
+        renderItem={({ item }) => (
+          <AvatarName
+            id={item.id}
+            receiverId={
+              item.users.length === 1
+                ? item.users[0].id
+                : item.users[0].id === userId
+                ? item.users[1].id
+                : item.users[0].id
+            }
+            userName={
+              item.users.length === 1
+                ? item.users[0].userName
+                : item.users[0].id === userId
+                ? item.users[1].userName
+                : item.users[0].userName
+            }
+            imageUri={
+              item.users.length === 1
+                ? item.users[0].imageUri
+                : item.users[0].id === userId
+                ? item.users[1].imageUri
+                : item.users[0].imageUri
+            }
+          />
+        )}
+        data={onlineUsers}
       />
     </Animated.View>
   );

@@ -29,18 +29,23 @@ import socket from "../../util/socket";
 import Animated from "react-native-reanimated";
 import { ChatModal } from "../../components/messages/ChatList/ChatModal";
 import { Portal } from "react-native-paper";
+import { useNavigation, useNavigationState } from "@react-navigation/native";
+import { openToast } from "../../redux/slice/toast/toast";
 
 export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   const user = useAppSelector((state) => state.user?.data);
   const chatState = useAppSelector((state) => state?.chatlist.data);
+  const state = useNavigationState((state) => state);
   const dispatch = useAppDispatch();
+  console.log("👺");
   const onlineIds = useAppSelector((state) => state.online.ids);
-  const isOnline = onlineIds.some((ids) => ids === route.params.receiverId);
+  const isOnline = onlineIds?.some((ids) => ids === route.params.receiverId);
 
   const [userChats, setChats] = useState<IChatList | undefined>(undefined);
   const dark = useGetMode();
   const color = dark ? "#FFFFFF" : "#000000";
   const [messageText, setMessageText] = useState("");
+  const [sentSuccess, setSentSuccess] = useState(true);
 
   const [isTyping, setIstyping] = useState(false);
   console.log(
@@ -48,7 +53,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
     isTyping
   );
 
-  useEffect(() => {
+  useMemo(() => {
     findChatById(route.params.id, chatState)
       .then((chat) => {
         if (chat) {
@@ -61,9 +66,12 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
         console.error("Error:", error);
       });
   }, [chatState]);
-  const MenuItems = [
-    { text: "Actions", icon: "home", isTitle: true, onPress: () => {} },
-  ];
+
+  useEffect(() => {
+    socket.on("sent", (sent) => {
+      setSentSuccess(sent);
+    });
+  }, [socket]);
   useLayoutEffect(() => {
     socket?.emit("chat", route.params.id);
   }, []);
@@ -76,32 +84,9 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   }, [messageText]);
 
   useEffect(() => {
-    socket?.on("newChat", (chatMessages) => {
-      if (chatMessages) {
-        //TODO: CONFIRM IF DATA MATCHES
-        console.log(
-          "🚀 ~ file: ChatScreen.tsx:29 ~ socket.on ~ chatMessages:",
-          chatMessages
-        );
-        if (chatMessages?.isNew) {
-          dispatch(addToChatList(chatMessages));
-        }
-      }
-    });
-    socket?.on("newMessage", (message) => {
-      if (message) {
-        console.log(
-          "🚀 ~ file: ChatScreen.tsx:43 ~ socket.on ~ message:",
-          message
-        );
-        dispatch(addNewChat(message));
-      }
-    });
-
-    socket?.on("isTyping", (data) => {
+    socket?.on("isTyping", (data: { isTyping: boolean; id: string }) => {
       console.log("🚀 ~ file: ChatScreen.tsx:91 ~ socket?.on ~ data:", data);
       if (data) {
-        console.log(data.isTyping, isTyping);
         if (data.id !== user?.id) {
           setIstyping(data.isTyping);
         }
@@ -176,8 +161,20 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   }, [color, isOnline]);
 
   const handleSendMessage = () => {
-    console.log("pressed");
+    setSentSuccess(false);
     const id = new BSON.ObjectId();
+
+    dispatch(
+      addNewChat({
+        message: {
+          sender: { userName: user?.userName || "", id: user?.id as string },
+          text: messageText,
+          id: uuid.v4().toString(),
+          createdAt: `${new Date()}`,
+        },
+        chatId: route?.params?.id as string,
+      })
+    );
 
     setMessageText("");
     socket?.emit("newMessage", {
@@ -187,29 +184,23 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
         id,
         createdAt: `${new Date()}`,
       },
+      imageUri: route.params.imageUri,
       chatId: route?.params?.id as string,
     });
 
-    // dispatch(
-    //   addNewChat({
-    //     message: {
-    //       sender: { userName: user?.userName || "", id: user?.id as string },
-    //       text: messageText,
-    //       id: uuid.v4().toString(),
-    //       createdAt: `${new Date()}`,
-    //     },
-    //     chatId: route?.params?.id as string,
-    //   })
-    // );
+    setTimeout(() => {
+      if (!sentSuccess) {
+        dispatch(openToast({ text: "Message didnot Send", type: "Failed" }));
+      }
+    }, 10000);
   };
   const [isOpen, setIsOpen] = useState(false);
-  console.log("🚀 ~ file: ChatScreen.tsx:205 ~ ChatScreen ~ isOpen:", isOpen)
 
   const openModal = () => {
     setIsOpen(false);
   };
 
-  const [text, setText] = useState({id:"", text:""});
+  const [text, setText] = useState({ id: "", text: "" });
 
   return (
     <>
@@ -237,15 +228,20 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
             renderItem={({ item }) => (
               <Pressable
                 onLongPress={() => {
-                  console.log('prssed')
-                  setText({id:item.id,text:item.text});
-                  item?.sender?.id === user?.id && setIsOpen(true)
+                  console.log("prssed");
+                  setText({ id: item.id, text: item.text });
+                  item?.sender?.id === user?.id && setIsOpen(true);
                 }}
               >
                 <ChatBuilderText
                   isMe={item?.sender?.id === user?.id}
                   text={item?.text}
                   time={item?.createdAt}
+                  sent={
+                    userChats?.messages[0]?.id === item?.id &&
+                    userChats?.messages[0]?.sender?.id === user?.id &&
+                    sentSuccess
+                  }
                 />
               </Pressable>
             )}

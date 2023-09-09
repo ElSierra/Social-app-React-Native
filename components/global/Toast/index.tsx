@@ -12,6 +12,7 @@ import { ForbiddenIcon, InfoIcon, VerifyIcon } from "../../icons";
 import useGetMode from "../../../hooks/GetMode";
 import { Portal } from "react-native-paper";
 import { useForm } from "react-hook-form";
+import FastImage from "react-native-fast-image";
 
 const width = Dimensions.get("screen").width;
 export default function CustomToast() {
@@ -36,8 +37,15 @@ export default function CustomToast() {
       return <ForbiddenIcon size={20} color={colorForbidden} />;
     } else if (toastState.type === "Success") {
       return <VerifyIcon size={20} color={"green"} />;
-    } else {
+    } else if (toastState.type === "Info") {
       return <InfoIcon size={20} color={color} />;
+    } else if (toastState.type === "Message") {
+      return (
+        <FastImage
+          style={{ height: 20, width: 20, borderRadius: 999 }}
+          source={{ uri: toastState.imageUri }}
+        />
+      );
     }
   };
   return (
@@ -56,8 +64,7 @@ export default function CustomToast() {
             justifyContent: "flex-end",
             alignItems: "center",
           }}
-          entering={FadeInUp.springify()
-            .withCallback(callback)}
+          entering={FadeInUp.springify().withCallback(callback)}
           exiting={FadeOutUp.springify().delay(2000)}
         >
           <BlurView
@@ -76,6 +83,7 @@ export default function CustomToast() {
           >
             {renderIcon()}
             <Text
+            
               style={{
                 color,
                 fontFamily: "mulishMedium",

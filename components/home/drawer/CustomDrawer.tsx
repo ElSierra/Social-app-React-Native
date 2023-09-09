@@ -31,6 +31,7 @@ import { signOut } from "../../../redux/slice/user";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
 import { resetPost } from "../../../redux/slice/post";
 import { resetFollowers } from "../../../redux/slice/user/followers";
+import socket from "../../../util/socket";
 
 export default function CustomDrawerContent(
   props: DrawerContentComponentProps
@@ -62,7 +63,7 @@ export default function CustomDrawerContent(
           enableBarCollapsing: false,
           // Android Properties
           showTitle: true,
-          
+
           toolbarColor: toolbarColor,
           secondaryToolbarColor: toolbarColor,
           navigationBarColor: toolbarColor,
@@ -82,8 +83,6 @@ export default function CustomDrawerContent(
             "my-custom-header": "my custom header value",
           },
         });
-     
-        
       } else Linking.openURL(url);
     } catch (error) {}
   };
@@ -221,6 +220,7 @@ export default function CustomDrawerContent(
               props.navigation.closeDrawer();
               dispatch(resetPost());
               dispatch(signOut());
+         
               dispatch(resetFollowers());
             }}
             android_ripple={{ color: pressColor, foreground: true }}
