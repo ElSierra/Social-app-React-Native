@@ -11,8 +11,6 @@ import { ProfileIcon } from "../icons";
 import FastImage from "react-native-fast-image";
 import useSocket from "../../hooks/Socket";
 import { useAppSelector } from "../../redux/hooks/hooks";
-import { SearchUserNavigation } from "../../types/navigation";
-import socket from "../../util/socket";
 
 const { width } = Dimensions.get("screen");
 export default function UserContainer({
@@ -31,6 +29,7 @@ export default function UserContainer({
   const tint = dark ? "dark" : "light";
   const fBColor = dark ? "white" : "black";
   const navigation = useNavigation<any>();
+  const socket = useSocket();
   const user = useAppSelector((state) => state.user.data);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -44,7 +43,7 @@ export default function UserContainer({
   };
 
   useEffect(() => {
-    socket.on("newChat", (data) => {
+    socket?.on("newChat", (data) => {
       if (data?.senderId === user?.id) {
         navigation.replace("ChatScreen", {
           id: data.id,

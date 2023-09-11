@@ -71,11 +71,12 @@ import * as TaskManager from "expo-task-manager";
 import { AppState } from "react-native";
 import { store } from "../redux/store";
 
-import socket from "../util/socket";
+
 import { updateOnlineIds } from "../redux/slice/chat/online";
 import { openToast } from "../redux/slice/toast/toast";
 import { IMessageSocket } from "../types/socket";
 import { useNavigationState } from "@react-navigation/native";
+import useSocket from "../hooks/Socket";
 
 const BACKGROUND_FETCH_TASK = "background-fetch";
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -85,12 +86,6 @@ const width = Dimensions.get("screen").width;
 
 TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
   const now = Date.now();
-  const chats = store.getState().chatlist;
-  if (chats.data) {
-    for (let i in chats.data) {
-      socket.emit("chat", chats.data[i].id);
-    }
-  }
 
   console.log(
     `Got background fetch call at date: ${new Date(now).toISOString()}`
@@ -174,7 +169,7 @@ export default function Main() {
   const backgroundColor = isDark ? "black" : "white";
   const color = !isDark ? "black" : "white";
   const dispatch = useAppDispatch();
-
+  const socket = useSocket();
   const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
 
   useEffect(() => {
@@ -206,7 +201,6 @@ export default function Main() {
   useEffect(() => {
     socket?.on("newChat", (chatMessages) => {
       if (chatMessages) {
-   
         //TODO: CONFIRM IF DATA MATCHES
 
         if (chatMessages?.isNew) {
@@ -224,11 +218,8 @@ export default function Main() {
 
   useEffect(() => {
     socket?.on("message", (message: IMessageSocket) => {
-
       if (message) {
-       
         if (message.message?.sender?.id !== id) {
-         
           dispatch(addNewChat(message));
           dispatch(
             openToast({
@@ -243,7 +234,6 @@ export default function Main() {
   }, [socket]);
   useEffect(() => {
     socket?.on("online", (online) => {
-     
       dispatch(updateOnlineIds({ ids: online }));
     });
   }, [socket]);

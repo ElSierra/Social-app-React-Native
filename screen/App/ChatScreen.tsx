@@ -25,19 +25,21 @@ import ContextMenu from "react-native-context-menu-view";
 import { HoldItem, HoldMenuProvider } from "react-native-hold-menu";
 import { IChatList } from "../../types/api";
 import { findChatById } from "../../util/chatSearch";
-import socket from "../../util/socket";
+
 import Animated from "react-native-reanimated";
 import { ChatModal } from "../../components/messages/ChatList/ChatModal";
 import { Portal } from "react-native-paper";
 import { useNavigation, useNavigationState } from "@react-navigation/native";
 import { openToast } from "../../redux/slice/toast/toast";
 import { useUploadPhotoMutation } from "../../redux/api/services";
+import useSocket from "../../hooks/Socket";
 
 export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   const user = useAppSelector((state) => state.user?.data);
   const chatState = useAppSelector((state) => state?.chatlist.data);
   const state = useNavigationState((state) => state);
   const dispatch = useAppDispatch();
+  const socket = useSocket();
 
   const onlineIds = useAppSelector((state) => state.online.ids);
   const isOnline = onlineIds?.some((ids) => ids === route.params.receiverId);
@@ -49,14 +51,14 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   const [sentSuccess, setSentSuccess] = useState(true);
 
   const [isTyping, setIstyping] = useState(false);
- 
+
   useMemo(() => {
     findChatById(route.params.id, chatState)
       .then((chat) => {
         if (chat) {
           setChats(chat);
         } else {
-          console.log("Chat not found");
+          ("Chat not found");
         }
       })
       .catch((error) => {
@@ -65,7 +67,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   }, [chatState]);
 
   useEffect(() => {
-    socket.on("sent", (sent) => {
+    socket?.on("sent", (sent) => {
       setSentSuccess(sent);
     });
   }, [socket]);
@@ -80,15 +82,15 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
     );
   }, [messageText]);
 
-  useMemo(() => {
-    socket?.on("isTyping", (data: { isTyping: boolean; id: string }) => {
-     
-      if (data) {
-        if (data.id !== user?.id) {
-          setIstyping(data.isTyping);
+  useEffect(() => {
+      socket?.on("isTyping", (data: { isTyping: boolean; id: string }) => {
+        console.log("🚀 ~ file: ChatScreen.tsx:87 ~ socket?.on ~ data:", data);
+        if (data) {
+          if (data.id !== user?.id) {
+            setIstyping(data.isTyping);
+          }
         }
-      }
-    });
+      });
   }, [socket]);
 
   useLayoutEffect(() => {
@@ -240,7 +242,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
       })
     );
     photo({ mimeType, uri })
-      .then((r:any) => {
+      .then((r: any) => {
         socket?.emit("newPhoto", {
           message: {
             sender: { userName: user?.userName || "", id: user?.id as string },
@@ -253,7 +255,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
         });
       })
       .catch((e) => {
-        console.log(e);
+        e;
       });
   }
 
@@ -336,7 +338,6 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
               onChangeText: (text) => {
                 setMessageText(text);
               },
-             
             }}
             onPress={handleSendMessage}
           />

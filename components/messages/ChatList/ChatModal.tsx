@@ -15,9 +15,9 @@ import useGetMode from "../../../hooks/GetMode";
 import ChatBuilderText from "../../chat/ChatBuilderText";
 import Animated, { FadeInRight, FadeOutRight } from "react-native-reanimated";
 import ModalChatText from "../../chat/ModalChatText";
-import socket from "../../../util/socket";
 import { useAppDispatch } from "../../../redux/hooks/hooks";
 import { deleteMessage } from "../../../redux/slice/chat/chatlist";
+import useSocket from "../../../hooks/Socket";
 
 const { height, width } = Dimensions.get("screen");
 export const ChatModal = ({
@@ -41,7 +41,7 @@ export const ChatModal = ({
   };
   chatId: string;
 }) => {
-
+  const socket = useSocket();
   const dark = useGetMode();
 
   const color = !dark ? "black" : "white";
@@ -49,9 +49,9 @@ export const ChatModal = ({
   const dispatch = useAppDispatch();
 
   const deleteMessageHandler = () => {
-    socket.emit("deleteMessage", text.id);
-    dispatch(deleteMessage({id:text.id, chatId}));
-    closeModal()
+    socket?.emit("deleteMessage", text.id);
+    dispatch(deleteMessage({ id: text.id, chatId }));
+    closeModal();
   };
 
   return (
@@ -127,7 +127,7 @@ export const ChatModal = ({
                   borderStyle: "dashed",
                 }}
               >
-                <Text style={{color}}>Delete</Text>
+                <Text style={{ color }}>Delete</Text>
               </Pressable>
               <Pressable
                 onPress={closeModal}
@@ -142,7 +142,7 @@ export const ChatModal = ({
                   borderStyle: "dashed",
                 }}
               >
-                <Text  style={{color}}>Cancel</Text>
+                <Text style={{ color }}>Cancel</Text>
               </Pressable>
             </Animated.View>
           </Animated.View>
