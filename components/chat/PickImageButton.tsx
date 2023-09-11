@@ -29,17 +29,15 @@ export default function PickImageButton({
       <Pressable
         onPress={() => {
           ImagePicker.openPicker({
-            cropping: true,
             cropperStatusBarColor: "#000000",
             cropperToolbarColor: "#000000",
             showCropGuidelines: false,
             cropperTintColor: "red",
             cropperActiveWidgetColor: "red",
-
+            mediaType: "photo",
             cropperToolbarWidgetColor: "#FFFFFF",
             cropperCancelText: "#FFFFFF",
             cropperChooseColor: "#FFFFFF",
-            compressImageQuality: 0.5,
           })
             .then((image) => {
               handleSetPhotoPost(image?.mime, image?.path, image?.size);

@@ -42,7 +42,7 @@ export default function Bio({
     setFollowed(!followed);
     followUser({ id })
       .then((e) => {
-        console.log(e);
+  
       })
       .catch((e) => {});
     if (followed) {

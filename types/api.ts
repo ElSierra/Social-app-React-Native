@@ -71,6 +71,7 @@ export interface IChatUser {
 }
 export interface IChatMessage {
   text: string;
+  photoUri?: string;
   id: string;
   sender: {
     userName: string;

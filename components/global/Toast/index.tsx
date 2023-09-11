@@ -13,6 +13,7 @@ import useGetMode from "../../../hooks/GetMode";
 import { Portal } from "react-native-paper";
 import { useForm } from "react-hook-form";
 import FastImage from "react-native-fast-image";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const width = Dimensions.get("screen").width;
 export default function CustomToast() {
@@ -48,12 +49,13 @@ export default function CustomToast() {
       );
     }
   };
+  const insets = useSafeAreaInsets();
   return (
     <Portal>
       {toastState.open && (
         <Animated.View
           style={{
-            height: 85,
+            height: 60 + insets.top ,
             width: width,
             backgroundColor:
               toastState.type === "Failed"
@@ -69,7 +71,7 @@ export default function CustomToast() {
         >
           <BlurView
             tint={tint}
-            style={{ position: "absolute", width, height: 100 }}
+            style={{ position: "absolute", width, height: 60 + insets.top }}
             intensity={50}
           />
           <View

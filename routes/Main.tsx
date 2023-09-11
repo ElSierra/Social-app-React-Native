@@ -196,9 +196,6 @@ export default function Main() {
       socket?.off("followers");
     };
   }, [socket]);
-  useEffect(() => {
-    socket.emit("joinMyRoom");
-  }, []);
 
   useEffect(() => {
     for (let i in chatList) {
@@ -209,10 +206,7 @@ export default function Main() {
   useEffect(() => {
     socket?.on("newChat", (chatMessages) => {
       if (chatMessages) {
-        console.log(
-          "🚀 ~ file: Main.tsx:213 ~ socket?.on ~ chatMessages:",
-          chatMessages
-        );
+   
         //TODO: CONFIRM IF DATA MATCHES
 
         if (chatMessages?.isNew) {
@@ -230,19 +224,11 @@ export default function Main() {
 
   useEffect(() => {
     socket?.on("message", (message: IMessageSocket) => {
-      console.log("🚀 ~ file: Main.tsx:231 ~ socket?.on ~ message:", message);
-      if (message) {
-        console.log(
-          "🚀 ~ file: ChatScreen.tsx:43 ~ socket.on ~ message:",
-          message
-        );
 
+      if (message) {
+       
         if (message.message?.sender?.id !== id) {
-          console.log(
-            "🚀 ~ file: Main.tsx:239 ~ socket?.on ~ message.senderId:",
-            message.message?.sender?.id,
-            id
-          );
+         
           dispatch(addNewChat(message));
           dispatch(
             openToast({
@@ -257,7 +243,7 @@ export default function Main() {
   }, [socket]);
   useEffect(() => {
     socket?.on("online", (online) => {
-      console.log("🚀 ~ file: Main.tsx:212 ~ socket?.on ~ online:", online);
+     
       dispatch(updateOnlineIds({ ids: online }));
     });
   }, [socket]);

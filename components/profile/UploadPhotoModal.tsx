@@ -46,14 +46,10 @@ export const UploadPhotoModal = ({
   const [uploadPhoto, response] = useUploadProfilePictureMutation();
 
   const handleSetPostPhoto = (mimeType: string, uri: string, size: number) => {
-    console.log(
-      "🚀 ~ file: UploadPhotoModal.tsx:46 ~ handleSetPostPhoto ~ uri:",
-      uri,
-      mimeType
-    );
+  
     uploadPhoto({ mimeType, uri });
   };
-  console.log("🚀 ~ file: UploadPhotoModal.tsx:38 ~ postPhoto:", postPhoto);
+
   return (
     <Portal>
       <>

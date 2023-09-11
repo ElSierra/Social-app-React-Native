@@ -41,7 +41,7 @@ export const ChatModal = ({
   };
   chatId: string;
 }) => {
-  console.log("🚀 ~ file: ChatModal.tsx:29 ~ text:", text);
+
   const dark = useGetMode();
 
   const color = !dark ? "black" : "white";

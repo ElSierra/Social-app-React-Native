@@ -1,4 +1,4 @@
-import { View, Text, Dimensions } from "react-native";
+import { View, Text, Dimensions, Pressable } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import useGetMode from "../../hooks/GetMode";
 import { formatDateForChat } from "../../util/date";
@@ -10,6 +10,9 @@ import Animated, {
   FadeOutDown,
 } from "react-native-reanimated";
 import { CheckIcon } from "../icons";
+import FastImage from "react-native-fast-image";
+import { useNavigation } from "@react-navigation/native";
+import { ChatNavigation } from "../../types/navigation";
 
 const { width } = Dimensions.get("screen");
 export default function ChatBuilderText({
@@ -20,6 +23,7 @@ export default function ChatBuilderText({
   text,
   isClicked,
   sent,
+  photoUri,
 }: {
   isMe: boolean;
   text: string;
@@ -28,13 +32,14 @@ export default function ChatBuilderText({
   time: string;
   sent: boolean;
   id: string;
+  photoUri?: string;
 }) {
   const dark = useGetMode();
   const backgroundColorForMe = dark ? "#35383A" : "#0c81f8";
   const backgroundColor = dark ? "#181B1D" : "#e8e8eb";
   const color = dark ? "white" : "black";
   const [height, setHeight] = useState(0);
-  console.log("🚀 ~ file: ChatBuilderText.tsx:35 ~ height:", id !== isClicked);
+  const navigate = useNavigation<ChatNavigation>();
   const chatTextRef = useRef<Animated.View>(null);
   useEffect(() => {
     chatTextRef.current?.measure((x, y, width, height, pageX, pageY) => {
@@ -67,14 +72,30 @@ export default function ChatBuilderText({
                 backgroundColor: isMe ? backgroundColorForMe : backgroundColor,
               }}
             >
-              <Text
-                style={{
-                  fontFamily: "jakara",
-                  color: isMe ? "white" : dark ? "white" : "black",
-                }}
-              >
-                {text}
-              </Text>
+              {!photoUri ? (
+                <Text
+                  style={{
+                    fontFamily: "jakara",
+                    color: isMe ? "white" : dark ? "white" : "black",
+                  }}
+                >
+                  {text}
+                </Text>
+              ) : (
+                <Pressable
+                  onPress={() => {
+                    navigate.navigate("ImageFullScreen", {
+                      photoUri,
+                      id,
+                    });
+                  }}
+                >
+                  <FastImage
+                    source={{ uri: photoUri, priority: "high" }}
+                    style={{ width: 200, height: 100, borderRadius: 10 }}
+                  />
+                </Pressable>
+              )}
               {sent && (
                 <Animated.View
                   entering={FadeIn.duration(400)}

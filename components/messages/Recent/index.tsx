@@ -28,7 +28,7 @@ export default function Recent({ offset }: { offset: Animated.Value }) {
   const onlineIds = useAppSelector((state) => state.online?.ids);
 
   const chatList = useAppSelector((state) => state.chatlist.data);
-  console.log("🚀 ~ file: index.tsx:28 ~ Recent ~ onlineIds:", onlineIds);
+
 
   const onlineUsers = chatList.filter((item) => {
     if (item.users.length === 1) {
@@ -38,7 +38,7 @@ export default function Recent({ offset }: { offset: Animated.Value }) {
       item.users[0]?.id === userId ? item.users[1]?.id : item.users[0]?.id
     );
   });
-  console.log("🚀 ~ file: index.tsx:30 ~ Recent ~ onlineUsers:", onlineUsers);
+
 
   return (
     <Animated.View

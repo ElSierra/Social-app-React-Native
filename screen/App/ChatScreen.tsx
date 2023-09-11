@@ -38,7 +38,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   const chatState = useAppSelector((state) => state?.chatlist.data);
   const state = useNavigationState((state) => state);
   const dispatch = useAppDispatch();
-  console.log("👺");
+
   const onlineIds = useAppSelector((state) => state.online.ids);
   const isOnline = onlineIds?.some((ids) => ids === route.params.receiverId);
 
@@ -49,11 +49,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   const [sentSuccess, setSentSuccess] = useState(true);
 
   const [isTyping, setIstyping] = useState(false);
-  console.log(
-    "🚀 ~ file: ChatScreen.tsx:29 ~ ChatScreen ~ isTyping:",
-    isTyping
-  );
-
+ 
   useMemo(() => {
     findChatById(route.params.id, chatState)
       .then((chat) => {
@@ -86,7 +82,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
 
   useMemo(() => {
     socket?.on("isTyping", (data: { isTyping: boolean; id: string }) => {
-      console.log("🚀 ~ file: ChatScreen.tsx:91 ~ socket?.on ~ data:", data);
+     
       if (data) {
         if (data.id !== user?.id) {
           setIstyping(data.isTyping);
@@ -229,11 +225,36 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   const [photo] = useUploadPhotoMutation();
 
   function handleSetPhotoPost(mimeType: string, uri: string, size: number) {
-    photo({ mimeType, uri }).then((e)=>{
-      console.log(e)
-    }).catch((e)=>{
-      console.log(e)
-    })
+    const id = new BSON.ObjectId();
+
+    dispatch(
+      addNewChat({
+        message: {
+          sender: { userName: user?.userName || "", id: user?.id as string },
+          text: "",
+          photoUri: uri,
+          id: uuid.v4().toString(),
+          createdAt: `${new Date()}`,
+        },
+        chatId: route?.params?.id as string,
+      })
+    );
+    photo({ mimeType, uri })
+      .then((r:any) => {
+        socket?.emit("newPhoto", {
+          message: {
+            sender: { userName: user?.userName || "", id: user?.id as string },
+            photoUri: r.data?.photo,
+            id,
+            createdAt: `${new Date()}`,
+          },
+          imageUri: route.params.imageUri,
+          chatId: route?.params?.id as string,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
 
   return (
@@ -281,6 +302,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
                 {
                   <ChatBuilderText
                     id={item.id}
+                    photoUri={item.photoUri}
                     isClicked={visibleId}
                     isMe={item?.sender?.id === user?.id}
                     text={item?.text}
@@ -314,12 +336,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
               onChangeText: (text) => {
                 setMessageText(text);
               },
-              onFocus: (e) => {
-                console.log("focused");
-              },
-              onBlur: (e) => {
-                console.log("unfocused");
-              },
+             
             }}
             onPress={handleSendMessage}
           />

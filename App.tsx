@@ -1,7 +1,14 @@
 import "react-native-gesture-handler";
 import "react-native-get-random-values";
 import { StatusBar } from "expo-status-bar";
-import { Text, ImageURISource, StyleSheet, View, AppState, useColorScheme } from "react-native";
+import {
+  Text,
+  ImageURISource,
+  StyleSheet,
+  View,
+  AppState,
+  useColorScheme,
+} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
@@ -56,8 +63,6 @@ const persistor = persistStore(store);
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
- 
- 
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
   console.log(
@@ -185,8 +190,7 @@ const Navigation = () => {
 
   const netInfo = useNetInfo();
 
-
-  const barColor = !dark ? "black" : "white"
+  const barColor = !dark ? "black" : "white";
   useEffect(() => {
     const navBehavior = async () => {
       await NavigationBar.setBackgroundColorAsync(barColor);

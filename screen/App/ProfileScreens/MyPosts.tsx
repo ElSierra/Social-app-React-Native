@@ -53,7 +53,7 @@ export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
         setSkip(e.posts?.length);
       })
       .catch((e) => {
-        console.log("🚀 ~ file: MyPosts.tsx:61 ~ useEffect ~ e:", e.status);
+      
         dispatch(
           openToast({ text: "couldn't get recent posts", type: "Failed" })
         );
