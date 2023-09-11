@@ -25,17 +25,17 @@ export default function Recent({ offset }: { offset: Animated.Value }) {
   const dark = useGetMode();
   const color = dark ? "#FFFFFF" : "#000000";
   const userId = useAppSelector((state) => state.user?.data?.id);
-  const onlineIds = useAppSelector((state) => state.online?.ids);
+  const onlineIds = useAppSelector((state) => state?.online?.ids);
 
-  const chatList = useAppSelector((state) => state.chatlist.data);
+  const chatList = useAppSelector((state) => state?.chatlist?.data);
 
 
   const onlineUsers = chatList.filter((item) => {
-    if (item.users.length === 1) {
-      return item.users[0].id;
+    if (item?.users?.length === 1) {
+      return item?.users[0]?.id;
     }
     return onlineIds.includes(
-      item.users[0]?.id === userId ? item.users[1]?.id : item.users[0]?.id
+      item?.users[0]?.id === userId ? item?.users[1]?.id : item?.users[0]?.id
     );
   });
 
@@ -54,7 +54,7 @@ export default function Recent({ offset }: { offset: Animated.Value }) {
       </View>
       <FlatList
         horizontal={true}
-        ListHeaderComponent={onlineUsers.length === 0 ? <Me /> : undefined}
+        ListHeaderComponent={onlineUsers?.length === 0 ? <Me /> : undefined}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ gap: 20 }}
         renderItem={({ item }) => (
@@ -62,24 +62,24 @@ export default function Recent({ offset }: { offset: Animated.Value }) {
             id={item.id}
             receiverId={
               item.users.length === 1
-                ? item.users[0].id
-                : item.users[0].id === userId
-                ? item.users[1].id
-                : item.users[0].id
+                ? item?.users[0]?.id
+                : item?.users[0]?.id === userId
+                ? item?.users[1]?.id
+                : item?.users[0]?.id
             }
             userName={
               item.users.length === 1
-                ? item.users[0].userName
-                : item.users[0].id === userId
-                ? item.users[1].userName
-                : item.users[0].userName
+                ? item?.users[0]?.userName
+                : item?.users[0]?.id === userId
+                ? item?.users[1]?.userName
+                : item?.users[0]?.userName
             }
             imageUri={
-              item.users.length === 1
-                ? item.users[0].imageUri
-                : item.users[0].id === userId
-                ? item.users[1].imageUri
-                : item.users[0].imageUri
+              item.users?.length === 1
+                ? item.users[0]?.imageUri
+                : item.users[0]?.id === userId
+                ? item.users[1]?.imageUri
+                : item.users[0]?.imageUri
             }
           />
         )}

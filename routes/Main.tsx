@@ -71,13 +71,12 @@ import * as TaskManager from "expo-task-manager";
 import { AppState } from "react-native";
 import { store } from "../redux/store";
 
-
 import { updateOnlineIds } from "../redux/slice/chat/online";
 import { openToast } from "../redux/slice/toast/toast";
 import { IMessageSocket } from "../types/socket";
 import { useNavigationState } from "@react-navigation/native";
 import useSocket from "../hooks/Socket";
-
+import oldSocket from '../util/socket'
 const BACKGROUND_FETCH_TASK = "background-fetch";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<BottomRootStackParamList>();
@@ -199,21 +198,25 @@ export default function Main() {
   }, [chatList]);
 
   useEffect(() => {
-    socket?.on("newChat", (chatMessages) => {
-      if (chatMessages) {
-        //TODO: CONFIRM IF DATA MATCHES
+    if (socket) {
 
-        if (chatMessages?.isNew) {
-          dispatch(
-            addToChatList({
-              id: chatMessages?.id,
-              messages: chatMessages?.messages,
-              users: chatMessages?.users,
-            })
-          );
+      socket?.on("newChat", (chatMessages, ) => {
+        console.log("🚀 ~ file: Main.tsx:203 ~ socket?.on ~ chatMessages:", chatMessages)
+        if (chatMessages) {
+          //TODO: CONFIRM IF DATA MATCHES
+
+          if (chatMessages?.isNew) {
+            dispatch(
+              addToChatList({
+                id: chatMessages?.id,
+                messages: chatMessages?.messages,
+                users: chatMessages?.users,
+              })
+            );
+          }
         }
-      }
-    });
+      });
+    }
   }, [socket]);
 
   useEffect(() => {

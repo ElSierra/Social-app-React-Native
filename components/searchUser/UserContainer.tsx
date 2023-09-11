@@ -10,7 +10,8 @@ import useGetMode from "../../hooks/GetMode";
 import { ProfileIcon } from "../icons";
 import FastImage from "react-native-fast-image";
 import useSocket from "../../hooks/Socket";
-import { useAppSelector } from "../../redux/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
+import { addToChatList } from "../../redux/slice/chat/chatlist";
 
 const { width } = Dimensions.get("screen");
 export default function UserContainer({
@@ -24,7 +25,7 @@ export default function UserContainer({
   const { height, width } = Dimensions.get("screen");
   const color = dark ? "white" : "black";
   const backgroundColor = !dark ? "#E5E9F899" : "#25252599";
-
+const dispatch = useAppDispatch()
   const fbuttonBackgroundColor = dark ? "#FFFFFF" : "#000000";
   const tint = dark ? "dark" : "light";
   const fBColor = dark ? "white" : "black";
@@ -43,8 +44,21 @@ export default function UserContainer({
   };
 
   useEffect(() => {
+    socket?.on("hello", (hello)=>{
+      console.log("😒", hello)
+    })
+  }, [socket]);
+
+  useEffect(() => {
     socket?.on("newChat", (data) => {
       if (data?.senderId === user?.id) {
+        dispatch(
+          addToChatList({
+            id: data?.id,
+            messages: data?.messages,
+            users: data?.users,
+          })
+        );
         navigation.replace("ChatScreen", {
           id: data.id,
           receiverId: id,
