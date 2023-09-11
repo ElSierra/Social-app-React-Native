@@ -4,13 +4,16 @@ import { BlurView } from "expo-blur";
 import { SendIcon } from "../icons";
 import useGetMode from "../../hooks/GetMode";
 import { IChatMessage } from "../../types/api";
+import PickImageButton from "./PickImageButton";
 
 export default function ChatBox({
   props,
   onPress,
+  handleSetPhotoPost,
 }: {
   props: TextInputProps;
   onPress: () => void;
+  handleSetPhotoPost: (mimeType: string, uri: string, size: number) => void;
 }) {
   const dark = useGetMode();
   const color = dark ? "white" : "black";
@@ -32,16 +35,17 @@ export default function ChatBox({
     >
       <BlurView
         tint={tint}
-        intensity={40}
+        intensity={100}
         style={{ width: "100%", height: "100%", position: "absolute" }}
       />
+      <PickImageButton handleSetPhotoPost={handleSetPhotoPost} />
       <TextInput
         multiline
         placeholder="Type Message 😒"
         placeholderTextColor={"grey"}
         cursorColor={color}
         style={{
-          width: "82%",
+          width: "73%",
           height: "100%",
           maxHeight: 100,
           color,

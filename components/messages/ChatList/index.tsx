@@ -28,17 +28,35 @@ export default function ChatList({ offset }: { offset: Animated.Value }) {
       }}
     >
       {!chatList.loading ? (
-        <Animated.FlatList
-          scrollEventThrottle={16}
-          contentContainerStyle={{ gap: 0, paddingBottom: 100, paddingTop: 20 }}
-          data={chatList.data}
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { y: offset } } }],
-            { useNativeDriver: false }
+        <>
+          {chatList.data.length === 0 ? (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{fontFamily:"jakaraBold"}}>Start Chatting Now!</Text>
+            </View>
+          ) : (
+            <Animated.FlatList
+              scrollEventThrottle={16}
+              contentContainerStyle={{
+                gap: 0,
+                paddingBottom: 100,
+                paddingTop: 20,
+              }}
+              data={chatList.data}
+              onScroll={Animated.event(
+                [{ nativeEvent: { contentOffset: { y: offset } } }],
+                { useNativeDriver: false }
+              )}
+              keyExtractor={(item) => item?.id?.toString()}
+              renderItem={({ item }) => <ListContainer data={item} />}
+            />
           )}
-          keyExtractor={(item) => item?.id?.toString()}
-          renderItem={({ item }) => <ListContainer data={item} />}
-        />
+        </>
       ) : (
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}

@@ -40,6 +40,20 @@ const chatList = createSlice({
         ];
       }
     },
+    deleteMessage: (
+      state,
+      action: PayloadAction<{ id: string; chatId: string }>
+    ) => {
+      const chatIndex = state.data.findIndex(
+        (chats) => chats.id === action.payload.chatId
+      );
+
+      if (chatIndex !== -1) {
+        state.data[chatIndex].messages = state.data[chatIndex].messages.filter(
+          (msg) => msg.id !== action.payload.id
+        );
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addMatcher(
@@ -69,4 +83,4 @@ const chatList = createSlice({
 });
 
 export default chatList.reducer;
-export const { addToChatList, addNewChat } = chatList.actions;
+export const { addToChatList, addNewChat, deleteMessage} = chatList.actions;

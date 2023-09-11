@@ -5,6 +5,7 @@ import { FlatList } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import useGetMode from "../../../hooks/GetMode";
 import { useAppSelector } from "../../../redux/hooks/hooks";
+import Me from "./Me";
 
 export default function Recent({ offset }: { offset: Animated.Value }) {
   const HEADER_HEIGHT = 300;
@@ -53,6 +54,7 @@ export default function Recent({ offset }: { offset: Animated.Value }) {
       </View>
       <FlatList
         horizontal={true}
+        ListHeaderComponent={onlineUsers.length === 0 ? <Me /> : undefined}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ gap: 20 }}
         renderItem={({ item }) => (

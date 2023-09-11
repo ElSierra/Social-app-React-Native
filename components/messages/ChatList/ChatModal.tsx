@@ -14,125 +14,148 @@ import useGetMode from "../../../hooks/GetMode";
 
 import ChatBuilderText from "../../chat/ChatBuilderText";
 import Animated, { FadeInRight, FadeOutRight } from "react-native-reanimated";
+import ModalChatText from "../../chat/ModalChatText";
+import socket from "../../../util/socket";
+import { useAppDispatch } from "../../../redux/hooks/hooks";
+import { deleteMessage } from "../../../redux/slice/chat/chatlist";
 
 const { height, width } = Dimensions.get("screen");
 export const ChatModal = ({
   isOpen,
   closeModal,
   text,
+  chatId,
 }: {
   isOpen: boolean;
   closeModal: () => void;
-  text: { id: string; text: string };
+  text: {
+    id: string;
+    text: string;
+    x: number;
+    y: number;
+    sent: boolean;
+    width: number;
+    height: number;
+    pageX: number;
+    pageY: number;
+  };
+  chatId: string;
 }) => {
+  console.log("🚀 ~ file: ChatModal.tsx:29 ~ text:", text);
   const dark = useGetMode();
 
   const color = !dark ? "black" : "white";
   const tint = dark ? "dark" : "light";
+  const dispatch = useAppDispatch();
 
-  const [postPhoto, setPostPhoto] = useState<{
-    mimeType: string;
-    uri: string;
-    size: number;
-  } | null>(null);
+  const deleteMessageHandler = () => {
+    socket.emit("deleteMessage", text.id);
+    dispatch(deleteMessage({id:text.id, chatId}));
+    closeModal()
+  };
 
   return (
-   
-      <Portal>
-        <View style={styles.centeredView}>
-          <Modal
-            statusBarTranslucent
-            animationType="fade"
-            transparent={true}
-            visible={isOpen}
-            onRequestClose={closeModal}
+    <View style={styles.centeredView}>
+      <Modal
+        statusBarTranslucent
+        animationType="fade"
+        transparent={true}
+        visible={isOpen}
+        onRequestClose={closeModal}
+      >
+        <BlurView
+          tint={tint}
+          style={{ position: "absolute", height, width }}
+          intensity={40}
+        />
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "flex-end",
+
+            height,
+            width,
+          }}
+        >
+          <Pressable
+            onPress={closeModal}
+            style={{ height: "100%", width: "100%" }}
           >
-            <BlurView
-              tint={tint}
-              style={{ position: "absolute", height, width }}
-              intensity={15}
-            />
             <View
               style={{
+                height: "100%",
+                width: "100%",
+                backgroundColor: "transparent",
+              }}
+            ></View>
+          </Pressable>
+
+          <Animated.View
+            style={{
+              gap: 10,
+              paddingRight: 20,
+              position: "absolute",
+              top: text.pageY,
+              pointerEvents: "box-none",
+            }}
+          >
+            <ModalChatText
+              isMe={true}
+              sent={text.sent}
+              text={text.text}
+              isModal
+              time={`${new Date()}`}
+            />
+            <Animated.View
+              entering={FadeInRight.springify()}
+              style={{
                 justifyContent: "center",
-                alignItems: "center",
-                height,
-                width,
+                alignItems: "flex-end",
+                gap: 3,
               }}
             >
               <Pressable
-                onPress={closeModal}
-                style={{ height: "100%", width: "100%" }}
-              >
-                <View
-                  style={{
-                    height: "100%",
-                    width: "100%",
-                    backgroundColor: "transparent",
-                  }}
-                ></View>
-              </Pressable>
-
-              <Animated.View
+                onPress={deleteMessageHandler}
                 style={{
-                  gap: 10,
-                  position: "absolute",
-                  pointerEvents: "box-none",
+                  paddingVertical: 10,
+                  borderWidth: 1,
+                  width: 70,
+                  alignItems: "center",
+                  borderColor: color,
+                  borderTopRightRadius: 10,
+                  borderTopLeftRadius: 10,
+                  borderStyle: "dashed",
                 }}
-                entering={FadeInRight.springify()}
-                
               >
-                <ChatBuilderText
-                  isMe={true}
-                  text={text.text}
-                  isModal
-                  time={`${new Date()}`}
-                />
-                <View
-                  style={{
-                    justifyContent: "center",
-                    alignItems: "center",
-                    gap: 3,
-                  }}
-                >
-                  <Pressable
-                    style={{
-                      paddingHorizontal: 20,
-                      paddingVertical: 10,
-                      borderWidth: 1,
-                      borderTopRightRadius: 10,
-                      borderTopLeftRadius: 10,
-                      borderStyle: "dashed",
-                    }}
-                  >
-                    <Text>Delete</Text>
-                  </Pressable>
-                  <Pressable
-                    style={{
-                      paddingHorizontal: 20,
-                      paddingVertical: 10,
-                      borderWidth: 1,
-                      borderBottomRightRadius: 10,
-                      borderBottomLeftRadius: 10,
-                      borderStyle: "dashed",
-                    }}
-                  >
-                    <Text>Cancel</Text>
-                  </Pressable>
-                </View>
-              </Animated.View>
-            </View>
-          </Modal>
+                <Text style={{color}}>Delete</Text>
+              </Pressable>
+              <Pressable
+                onPress={closeModal}
+                style={{
+                  width: 70,
+                  borderColor: color,
+                  paddingVertical: 10,
+                  borderWidth: 1,
+                  alignItems: "center",
+                  borderBottomRightRadius: 10,
+                  borderBottomLeftRadius: 10,
+                  borderStyle: "dashed",
+                }}
+              >
+                <Text  style={{color}}>Cancel</Text>
+              </Pressable>
+            </Animated.View>
+          </Animated.View>
         </View>
-      </Portal>
-    
+      </Modal>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    position:"absolute",
+    position: "absolute",
     justifyContent: "center",
     alignItems: "center",
   },

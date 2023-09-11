@@ -31,6 +31,7 @@ import { ChatModal } from "../../components/messages/ChatList/ChatModal";
 import { Portal } from "react-native-paper";
 import { useNavigation, useNavigationState } from "@react-navigation/native";
 import { openToast } from "../../redux/slice/toast/toast";
+import { useUploadPhotoMutation } from "../../redux/api/services";
 
 export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   const user = useAppSelector((state) => state.user?.data);
@@ -75,7 +76,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   useLayoutEffect(() => {
     socket?.emit("chat", route.params.id);
   }, []);
-  useEffect(() => {
+  useMemo(() => {
     socket?.emit(
       "isTyping",
       route.params.id,
@@ -83,7 +84,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
     );
   }, [messageText]);
 
-  useEffect(() => {
+  useMemo(() => {
     socket?.on("isTyping", (data: { isTyping: boolean; id: string }) => {
       console.log("🚀 ~ file: ChatScreen.tsx:91 ~ socket?.on ~ data:", data);
       if (data) {
@@ -196,20 +197,57 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   };
   const [isOpen, setIsOpen] = useState(false);
 
-  const openModal = () => {
+  const [visibleId, setVisibleId] = useState<string | null>(null);
+  const closeModal = () => {
     setIsOpen(false);
+    setVisibleId(null);
   };
 
-  const [text, setText] = useState({ id: "", text: "" });
+  const [text, setText] = useState({
+    id: "",
+    text: "",
+    x: 0,
+    y: 0,
+    width: 0,
+    sent: false,
+    height: 0,
+    pageX: 0,
+    pageY: 0,
+  });
+  const buttonRef = useRef<View>(null);
+  const measureItemPosition = (
+    id: string,
+    text: string,
+    sent: boolean,
+    isMe: boolean
+  ) => {
+    buttonRef?.current?.measure((x, y, width, height, pageX, pageY) => {
+      setText({ id, text, sent, x, y, width, height, pageX, pageY });
+      if (isMe) setIsOpen(true);
+    });
+  };
+  const [photo] = useUploadPhotoMutation();
+
+  function handleSetPhotoPost(mimeType: string, uri: string, size: number) {
+    photo({ mimeType, uri }).then((e)=>{
+      console.log(e)
+    }).catch((e)=>{
+      console.log(e)
+    })
+  }
 
   return (
     <>
-      <ChatModal isOpen={isOpen} closeModal={openModal} text={text} />
+      <ChatModal
+        isOpen={isOpen}
+        closeModal={closeModal}
+        text={text}
+        chatId={route.params.id}
+      />
       <View style={{ flex: 1 }}>
         <View style={{ flex: 1 }}>
           <FlatList
             inverted
-            fadingEdgeLength={100}
             ListHeaderComponent={() => {
               return (
                 <View
@@ -227,22 +265,33 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
             contentContainerStyle={{ gap: 15, padding: 20, paddingBottom: 100 }}
             renderItem={({ item }) => (
               <Pressable
-                onLongPress={() => {
-                  console.log("prssed");
-                  setText({ id: item.id, text: item.text });
-                  item?.sender?.id === user?.id && setIsOpen(true);
+                ref={buttonRef}
+                onLongPress={(e) => {
+                  measureItemPosition(
+                    item.id,
+                    item.text,
+                    userChats?.messages[0]?.id === item?.id &&
+                      userChats?.messages[0]?.sender?.id === user?.id &&
+                      sentSuccess,
+                    item?.sender?.id === user?.id
+                  );
+                  setVisibleId(item.id);
                 }}
               >
-                <ChatBuilderText
-                  isMe={item?.sender?.id === user?.id}
-                  text={item?.text}
-                  time={item?.createdAt}
-                  sent={
-                    userChats?.messages[0]?.id === item?.id &&
-                    userChats?.messages[0]?.sender?.id === user?.id &&
-                    sentSuccess
-                  }
-                />
+                {
+                  <ChatBuilderText
+                    id={item.id}
+                    isClicked={visibleId}
+                    isMe={item?.sender?.id === user?.id}
+                    text={item?.text}
+                    time={item?.createdAt}
+                    sent={
+                      userChats?.messages[0]?.id === item?.id &&
+                      userChats?.messages[0]?.sender?.id === user?.id &&
+                      sentSuccess
+                    }
+                  />
+                }
               </Pressable>
             )}
           />
@@ -259,6 +308,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
           }}
         >
           <ChatBox
+            handleSetPhotoPost={handleSetPhotoPost}
             props={{
               value: messageText,
               onChangeText: (text) => {

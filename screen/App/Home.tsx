@@ -15,9 +15,11 @@ import HomeAll from "./HomeScreens/HomeAll";
 import HomeFollowed from "./HomeScreens/HomeFollowed";
 import { useGetAllChatsQuery } from "../../redux/api/chat";
 import socket from "../../util/socket";
+import { useNavigationState } from "@react-navigation/native";
 
 export default function Home({ navigation }: DrawerHomeProp) {
   const dark = useGetMode();
+
 
   const isDark = dark;
   const color = isDark ? "white" : "black";

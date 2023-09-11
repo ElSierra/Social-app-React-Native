@@ -32,6 +32,7 @@ import followers, { FollowerState } from "./slice/user/followers";
 import followedPost from "./slice/post/followed";
 import { chatApi } from "./api/chat";
 import online from "./slice/chat/online";
+import currentPage from "./slice/currentPage";
 const persistConfig: PersistConfig<
   CombinedState<{
     routes: Route;
@@ -47,6 +48,9 @@ const persistConfig: PersistConfig<
     loadingModal: LoadingModal;
     followedPost: postState;
     chatlist: ChatList;
+    currentPage: {
+      page: string | null;
+    };
     [chatApi.reducerPath]: any;
     [authApi.reducerPath]: any;
     [userApi.reducerPath]: any;
@@ -77,6 +81,7 @@ const reducer = combineReducers({
   user,
   searchPeople,
   followedPost,
+  currentPage,
 });
 const persistedReducer = persistReducer(persistConfig, reducer);
 

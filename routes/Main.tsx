@@ -175,15 +175,13 @@ export default function Main() {
   const color = !isDark ? "black" : "white";
   const dispatch = useAppDispatch();
 
-
   const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
 
   useEffect(() => {
     socket?.on("connected", (connected) => {
-      console.log(`Socket ${connected.id}!`);
-      dispatch(openToast({text:"Connected", type:"Success"}))
+      dispatch(openToast({ text: "Connected", type: "Success" }));
     });
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
     socket?.emit("followedStatus");
@@ -238,7 +236,7 @@ export default function Main() {
           "🚀 ~ file: ChatScreen.tsx:43 ~ socket.on ~ message:",
           message
         );
- 
+
         if (message.message?.sender?.id !== id) {
           console.log(
             "🚀 ~ file: Main.tsx:239 ~ socket?.on ~ message.senderId:",
@@ -250,7 +248,7 @@ export default function Main() {
             openToast({
               type: "Message",
               text: message?.message.text,
-              imageUri : message.imageUri,
+              imageUri: message.imageUri,
             })
           );
         }
@@ -573,8 +571,18 @@ export function BottomTabNavigator() {
       <Tab.Screen
         name="Notifications"
         component={Notifications}
-        options={{
-          title: "Notification",
+        options={({ navigation }) => {
+          return {
+            title: "Notifications",
+            headerLeft: () => (
+              <ProfileButton
+                color={color}
+                style={{ paddingLeft: 20 }}
+                size={40}
+                onPress={() => {}}
+              />
+            ),
+          };
         }}
       />
       <Tab.Screen
