@@ -8,6 +8,7 @@ import {
   View,
   AppState,
   useColorScheme,
+  Platform,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
@@ -48,16 +49,50 @@ import { useNetInfo } from "@react-native-community/netinfo";
 import { openToast } from "./redux/slice/toast/toast";
 
 import * as Sentry from "@sentry/react-native";
-import socket from "./util/socket";
-import { updateFollowing } from "./redux/slice/user/followers";
 import { useGetFollowDetailsQuery } from "./redux/api/user";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+
 import * as NavigationBar from "expo-navigation-bar";
+import Notifications from "./util/notification";
+import Constants from "expo-constants";
+import * as Device from 'expo-device';
 enableFreeze(true);
 Sentry.init({
   dsn: "https://a5db1485b6b50a45db57917521128254@o4505750037725184.ingest.sentry.io/4505750586195968",
   enabled: true,
 });
+
+async function registerForPushNotificationsAsync() {
+  let token;
+  if (Device.isDevice) {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+    token = await Notifications.getExpoPushTokenAsync({
+      projectId: Constants?.expoConfig?.extra?.eas.projectId,
+    });
+    console.log(token);
+  } else {
+    alert('Must use physical device for Push Notifications');
+  }
+
+  if (Platform.OS === 'android') {
+    Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
+    });
+  }
+
+  return token;
+}
 
 const persistor = persistStore(store);
 SplashScreen.preventAutoHideAsync();
@@ -70,6 +105,9 @@ export default function App() {
     appStateVisible
   );
 
+  useEffect(() => {
+   registerForPushNotificationsAsync().then((e)=>console.log(e))
+  }, []);
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (nextAppState) => {
       if (
@@ -86,6 +124,22 @@ export default function App() {
 
     return () => {
       subscription.remove();
+    };
+  }, []);
+
+  useEffect(() => {
+    const subscription = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        console.log(notification.request.content.data);
+      }
+    );
+    const subscriptionResponse =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log("response", response);
+      });
+    return () => {
+      subscription.remove();
+      subscriptionResponse.remove();
     };
   }, []);
   return (

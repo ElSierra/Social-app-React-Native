@@ -43,7 +43,7 @@ import CustomDrawerContent from "../components/home/drawer/CustomDrawer";
 import ProfileButton from "../components/home/header/ProfileButton";
 import IconButtons from "../components/global/Buttons/BottomBarButtons";
 import Messages from "../screen/App/Messages";
-import Notifications from "../screen/App/Notifications";
+import NotificationsPage from "../screen/App/Notifications";
 import useGetMode from "../hooks/GetMode";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { BottomSheetContainer } from "../components/global/BottomSheetContainer";
@@ -76,11 +76,13 @@ import { openToast } from "../redux/slice/toast/toast";
 import { IMessageSocket } from "../types/socket";
 import { useNavigationState } from "@react-navigation/native";
 import useSocket from "../hooks/Socket";
-import oldSocket from '../util/socket'
+import oldSocket from "../util/socket";
+import Notifications from "../util/notification";
+import DrawerNavigator from "./Main/DrawerNavigation";
+import { BottomTabNavigator } from "./Main/BottomNavigation";
 const BACKGROUND_FETCH_TASK = "background-fetch";
 const Stack = createNativeStackNavigator<RootStackParamList>();
-const Tab = createBottomTabNavigator<BottomRootStackParamList>();
-const Drawer = createDrawerNavigator<DrawerRootStackParamList>();
+
 const width = Dimensions.get("screen").width;
 
 TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
@@ -93,72 +95,21 @@ TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
   // Be sure to return the successful result type!
   return BackgroundFetch.BackgroundFetchResult.NewData;
 });
-
-function DrawerNavigator() {
-  const dark = useGetMode();
-  const isDark = dark;
-  const tint = isDark ? "dark" : "light";
-
-  const color = isDark ? "white" : "black";
-  const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
-  const backgroundColor = isDark ? "black" : "white";
-  const [getCurrentFollowData] = useLazyGetFollowDetailsQuery();
-  return (
-    <Drawer.Navigator
-      drawerContent={CustomDrawerContent}
-      screenOptions={{
-        headerStatusBarHeight: 30,
-
-        drawerStyle: { backgroundColor: "transparent", width: width * 0.85 },
-        sceneContainerStyle: { backgroundColor },
-      }}
-    >
-      <Drawer.Screen
-        name="Home"
-        component={Home}
-        options={({ navigation }) => {
-          return {
-            headerBackground: () => (
-              <BlurView
-                style={{
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  top: 0,
-                  right: 0,
-                }}
-                tint={tint}
-                intensity={200}
-              />
-            ),
-
-            drawerItemStyle: { display: "none" },
-            headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
-            headerShadowVisible: false,
-            headerBackgroundContainerStyle: {
-              borderBottomWidth: 0.2,
-              borderColor,
-            },
-            headerTransparent: true,
-            headerTitleAlign: "center",
-            headerLeft: () => (
-              <ProfileButton
-                color={color}
-                style={{ paddingLeft: 20 }}
-                size={40}
-                onPress={() => {
-                  navigation.toggleDrawer();
-                }}
-              />
-            ),
-            headerStyle: { backgroundColor: "transparent" },
-            title: "Qui ",
-          };
-        }}
-      />
-    </Drawer.Navigator>
-  );
+function scheduleNoticationHandler() {
+  Notifications.scheduleNotificationAsync({
+    content: {
+      title: "Qui",
+      body: "Connected",
+      data: {
+        connected: true,
+      },
+    },
+    trigger: {
+      seconds: 1,
+    },
+  });
 }
+
 export default function Main() {
   const chatList = useAppSelector((state) => state.chatlist.data);
   const id = useAppSelector((state) => state.user?.data?.id);
@@ -173,6 +124,7 @@ export default function Main() {
 
   useEffect(() => {
     socket?.on("connected", (connected) => {
+      scheduleNoticationHandler();
       dispatch(openToast({ text: "Connected", type: "Success" }));
     });
   }, [socket]);
@@ -199,9 +151,11 @@ export default function Main() {
 
   useEffect(() => {
     if (socket) {
-
-      socket?.on("newChat", (chatMessages, ) => {
-        console.log("🚀 ~ file: Main.tsx:203 ~ socket?.on ~ chatMessages:", chatMessages)
+      socket?.on("newChat", (chatMessages) => {
+        console.log(
+          "🚀 ~ file: Main.tsx:203 ~ socket?.on ~ chatMessages:",
+          chatMessages
+        );
         if (chatMessages) {
           //TODO: CONFIRM IF DATA MATCHES
 
@@ -387,208 +341,5 @@ export default function Main() {
         </Stack.Navigator>
       </BottomSheetContainer>
     </BottomSheetModalProvider>
-  );
-}
-
-export function BottomTabNavigator() {
-  const dark = useGetMode();
-  const isDark = dark;
-  const tint = !isDark ? "light" : "dark";
-  const color = isDark ? "white" : "black";
-  const backgroundColor = isDark ? "black" : "white";
-
-  const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
-  return (
-    <Tab.Navigator
-      tabBar={(props) => (
-        <BlurView
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-          }}
-          tint={tint}
-          intensity={200}
-        >
-          <BottomTabBar {...props} />
-        </BlurView>
-      )}
-      sceneContainerStyle={{ backgroundColor }}
-      screenOptions={({ navigation, route }) => {
-        return {
-          tabBarHideOnKeyboard: true,
-          tabBarShowLabel: false,
-          headerStatusBarHeight: 30,
-
-          tabBarStyle: {
-            backgroundColor: "transparent",
-            elevation: 0,
-            height: 65,
-            paddingBottom: 10,
-            borderTopWidth: 0.2,
-
-            borderColor,
-          },
-          headerBackgroundContainerStyle: {
-            borderBottomWidth: 0.2,
-            borderColor,
-          },
-          headerBackground: () => (
-            <BlurView
-              style={{
-                position: "absolute",
-                bottom: 0,
-                left: 0,
-                top: 0,
-                right: 0,
-              }}
-              tint={tint}
-              intensity={200}
-            />
-          ),
-          tabBarIcon: ({ focused }) => {
-            const iconFocused = () => {
-              if (route.name === "BottomHome") {
-                return HomeIcon;
-              }
-              if (route.name === "Discover") {
-                return SearchIcon;
-              }
-              if (route.name === "Messages") {
-                return MessagesIcon;
-              } else {
-                return NotificationIcon;
-              }
-            };
-            const iconUnfocused = () => {
-              if (route.name === "BottomHome") {
-                return HomeIconUnfocused;
-              }
-              if (route.name === "Discover") {
-                return SearchUnfocused;
-              }
-              if (route.name === "Messages") {
-                return MessageUnfocused;
-              } else {
-                return NotificationUnfocused;
-              }
-            };
-            return (
-              <IconButtons
-                Icon={focused ? iconFocused() : iconUnfocused()}
-                onPress={() => navigation.navigate(route.name)}
-              />
-            );
-          },
-          headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
-          headerShadowVisible: false,
-          headerTransparent: true,
-          headerTitleAlign: "center",
-          headerStyle: { backgroundColor: "transparent" },
-        };
-      }}
-    >
-      <Tab.Screen
-        name="BottomHome"
-        options={({ navigation, route }: BottomProp) => {
-          return {
-            headerShown: false,
-
-            title: "Home",
-
-            headerTitleStyle: { fontFamily: "instaBold", fontSize: 24 },
-            headerTitleAlign: "center",
-          };
-        }}
-        component={DrawerNavigator}
-      />
-
-      <Tab.Screen
-        name="Discover"
-        component={Discover}
-        options={({ navigation, route }: DiscoverProp) => {
-          return {
-            title: "Discover",
-            headerTitle: () => {
-              return <SearchBar />;
-            },
-            headerShown: true,
-            headerTransparent: true,
-            headerBackgroundContainerStyle: {
-              borderBottomWidth: 0,
-              borderColor,
-            },
-            headerBackground: () => (
-              <BlurView
-                style={{
-                  opacity: 0,
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  top: 0,
-                  right: 0,
-                }}
-                tint={tint}
-                intensity={100}
-              />
-            ),
-            headerLeft: () => (
-              <ProfileButton
-                color={color}
-                style={{ paddingLeft: 20 }}
-                size={40}
-                onPress={() => {
-                  navigation.navigate("BottomHome");
-                }}
-              />
-            ),
-          };
-        }}
-      />
-
-      <Tab.Screen
-        name="Notifications"
-        component={Notifications}
-        options={({ navigation }) => {
-          return {
-            title: "Notifications",
-            headerLeft: () => (
-              <ProfileButton
-                color={color}
-                style={{ paddingLeft: 20 }}
-                size={40}
-                onPress={() => {}}
-              />
-            ),
-          };
-        }}
-      />
-      <Tab.Screen
-        name="Messages"
-        component={Messages}
-        options={{
-          headerBackground: () => (
-            <BlurView
-              style={{
-                opacity: 0,
-                position: "absolute",
-                bottom: 0,
-                left: 0,
-                top: 0,
-                right: 0,
-              }}
-              tint={tint}
-              intensity={100}
-            />
-          ),
-          headerTitleAlign: "left",
-          headerTitleStyle: { fontFamily: "uberBold", fontSize: 30, color },
-          title: "Messages",
-          headerTransparent: true,
-          headerBackgroundContainerStyle: undefined,
-        }}
-      />
-    </Tab.Navigator>
   );
 }

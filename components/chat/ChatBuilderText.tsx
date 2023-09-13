@@ -47,91 +47,85 @@ export default function ChatBuilderText({
     });
   }, []);
   return (
-    <>
-      {id !== isClicked ? (
-        <Animated.View
-          exiting={FadeOut.delay(20)}
-          ref={chatTextRef}
-          key={id}
+    <Animated.View
+      exiting={FadeOut.delay(20)}
+      ref={chatTextRef}
+      key={id}
+      style={{
+        width: "100%",
+        alignItems: isMe ? "flex-end" : "flex-start",
+      }}
+    >
+      <View>
+        <View
           style={{
-            width: "100%",
-            alignItems: isMe ? "flex-end" : "flex-start",
+            padding: 10,
+            borderRadius: 15,
+            maxWidth: width / 1.5,
+            flexDirection: "column",
+            borderBottomLeftRadius: !isMe ? 0 : undefined,
+            borderBottomRightRadius: isMe ? 0 : undefined,
+            alignSelf: !isMe ? "flex-start" : "flex-end",
+            justifyContent: "flex-start",
+            backgroundColor: isMe ? backgroundColorForMe : backgroundColor,
           }}
         >
-          <View>
-            <View
+          {!photoUri ? (
+            <Text
               style={{
-                padding: 10,
-                borderRadius: 15,
-                maxWidth: width / 1.5,
-                flexDirection: "column",
-                borderBottomLeftRadius: !isMe ? 0 : undefined,
-                borderBottomRightRadius: isMe ? 0 : undefined,
-                alignSelf: !isMe ? "flex-start" : "flex-end",
-                justifyContent: "flex-start",
-                backgroundColor: isMe ? backgroundColorForMe : backgroundColor,
+                fontFamily: "jakara",
+                color: isMe ? "white" : dark ? "white" : "black",
               }}
             >
-              {!photoUri ? (
-                <Text
-                  style={{
-                    fontFamily: "jakara",
-                    color: isMe ? "white" : dark ? "white" : "black",
-                  }}
-                >
-                  {text}
-                </Text>
-              ) : (
-                <Pressable
-                  onPress={() => {
-                    navigate.navigate("ImageFullScreen", {
-                      photoUri,
-                      id,
-                    });
-                  }}
-                >
-                  <FastImage
-                    source={{ uri: photoUri, priority: "high" }}
-                    style={{ width: 200, height: 100, borderRadius: 10 }}
-                  />
-                </Pressable>
-              )}
-              {sent && (
-                <Animated.View
-                  entering={FadeIn.duration(400)}
-                  exiting={isModal ? undefined : FadeOut.duration(400)}
-                  style={{
-                    alignSelf: !isMe ? "flex-start" : "flex-end",
-                    height: 13,
-                  }}
-                >
-                  <CheckIcon size={13} color={"white"} />
-                </Animated.View>
-              )}
-            </View>
-            {!isModal && (
-              <View
-                style={{
-                  alignSelf: !isMe ? "flex-start" : "flex-end",
-                  width: "100%",
-                }}
-              >
-                <Text
-                  style={{
-                    fontFamily: "jakara",
-                    fontSize: 12,
-                    color,
-                  }}
-                >
-                  {formatDateForChat(time)}
-                </Text>
-              </View>
-            )}
+              {text}
+            </Text>
+          ) : (
+            <Pressable
+              onPress={() => {
+                navigate.navigate("ImageFullScreen", {
+                  photoUri,
+                  id,
+                });
+              }}
+            >
+              <FastImage
+                source={{ uri: photoUri, priority: "high" }}
+                style={{ width: 200, height: 100, borderRadius: 10 }}
+              />
+            </Pressable>
+          )}
+          {sent && (
+            <Animated.View
+              entering={FadeIn.duration(400)}
+              exiting={isModal ? undefined : FadeOut.duration(400)}
+              style={{
+                alignSelf: !isMe ? "flex-start" : "flex-end",
+                height: 13,
+              }}
+            >
+              <CheckIcon size={13} color={"white"} />
+            </Animated.View>
+          )}
+        </View>
+        {!isModal && (
+          <View
+            style={{
+              alignSelf: !isMe ? "flex-start" : "flex-end",
+              width: "100%",
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: "jakara",
+                fontSize: 12,
+                color,
+              }}
+            >
+              {formatDateForChat(time)}
+            </Text>
           </View>
-        </Animated.View>
-      ) : (
-        <View style={{ height: height, width: 100 }} />
-      )}
-    </>
+        )}
+      </View>
+    </Animated.View>
   );
 }
