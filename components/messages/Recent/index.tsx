@@ -34,7 +34,7 @@ export default function Recent({ offset }: { offset: Animated.Value }) {
     if (item?.users?.length === 1) {
       return item?.users[0]?.id;
     }
-    return onlineIds.includes(
+    return onlineIds?.includes(
       item?.users[0]?.id === userId ? item?.users[1]?.id : item?.users[0]?.id
     );
   });

@@ -53,7 +53,10 @@ import InputText from "../screen/Auth/components/InputText";
 import SearchBar from "../components/discover/SearchBar";
 import VideoFullScreen from "../screen/App/VideoFullScreen";
 import { useAppDispatch, useAppSelector } from "../redux/hooks/hooks";
-import { useLazyGetFollowDetailsQuery } from "../redux/api/user";
+import {
+  useLazyGetFollowDetailsQuery,
+  useUpdateNotificationIdMutation,
+} from "../redux/api/user";
 import PostScreen from "../screen/App/PostScreen";
 import { useEffect, useRef, useState } from "react";
 
@@ -77,7 +80,9 @@ import { IMessageSocket } from "../types/socket";
 import { useNavigationState } from "@react-navigation/native";
 import useSocket from "../hooks/Socket";
 import oldSocket from "../util/socket";
-import Notifications from "../util/notification";
+import Notifications, {
+  registerForPushNotificationsAsync,
+} from "../util/notification";
 import DrawerNavigator from "./Main/DrawerNavigation";
 import { BottomTabNavigator } from "./Main/BottomNavigation";
 const BACKGROUND_FETCH_TASK = "background-fetch";
@@ -95,22 +100,10 @@ TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
   // Be sure to return the successful result type!
   return BackgroundFetch.BackgroundFetchResult.NewData;
 });
-function scheduleNoticationHandler() {
-  Notifications.scheduleNotificationAsync({
-    content: {
-      title: "Qui",
-      body: "Connected",
-      data: {
-        connected: true,
-      },
-    },
-    trigger: {
-      seconds: 1,
-    },
-  });
-}
+
 
 export default function Main() {
+  const [updateNotificationId] = useUpdateNotificationIdMutation();
   const chatList = useAppSelector((state) => state.chatlist.data);
   const id = useAppSelector((state) => state.user?.data?.id);
   const dark = useGetMode();
@@ -121,10 +114,16 @@ export default function Main() {
   const dispatch = useAppDispatch();
   const socket = useSocket();
   const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
+  useEffect(() => {
+    registerForPushNotificationsAsync()
+      .then((e) => updateNotificationId({ notificationId: e?.data as string })).then((e)=>{console.log('🚀', e)})
+      .catch((e) => {
+        console.log(e);
+      });
+  }, []);
 
   useEffect(() => {
     socket?.on("connected", (connected) => {
-      scheduleNoticationHandler();
       dispatch(openToast({ text: "Connected", type: "Success" }));
     });
   }, [socket]);

@@ -9,6 +9,7 @@ import {
   AppState,
   useColorScheme,
   Platform,
+  Linking,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
@@ -52,47 +53,16 @@ import * as Sentry from "@sentry/react-native";
 import { useGetFollowDetailsQuery } from "./redux/api/user";
 
 import * as NavigationBar from "expo-navigation-bar";
-import Notifications from "./util/notification";
+import Notifications, {
+  registerForPushNotificationsAsync,
+} from "./util/notification";
 import Constants from "expo-constants";
-import * as Device from 'expo-device';
+import * as Device from "expo-device";
 enableFreeze(true);
 Sentry.init({
   dsn: "https://a5db1485b6b50a45db57917521128254@o4505750037725184.ingest.sentry.io/4505750586195968",
   enabled: true,
 });
-
-async function registerForPushNotificationsAsync() {
-  let token;
-  if (Device.isDevice) {
-    const { status: existingStatus } = await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    if (existingStatus !== 'granted') {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-    if (finalStatus !== 'granted') {
-      alert('Failed to get push token for push notification!');
-      return;
-    }
-    token = await Notifications.getExpoPushTokenAsync({
-      projectId: Constants?.expoConfig?.extra?.eas.projectId,
-    });
-    console.log(token);
-  } else {
-    alert('Must use physical device for Push Notifications');
-  }
-
-  if (Platform.OS === 'android') {
-    Notifications.setNotificationChannelAsync('default', {
-      name: 'default',
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#FF231F7C',
-    });
-  }
-
-  return token;
-}
 
 const persistor = persistStore(store);
 SplashScreen.preventAutoHideAsync();
@@ -105,9 +75,6 @@ export default function App() {
     appStateVisible
   );
 
-  useEffect(() => {
-   registerForPushNotificationsAsync().then((e)=>console.log(e))
-  }, []);
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (nextAppState) => {
       if (
@@ -130,12 +97,12 @@ export default function App() {
   useEffect(() => {
     const subscription = Notifications.addNotificationReceivedListener(
       (notification) => {
-        console.log(notification.request.content.data);
+        console.log("🚀😒🚀", notification.request.content.data);
       }
     );
     const subscriptionResponse =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log("response", response);
+        console.log("response", response.notification.request.content);
       });
     return () => {
       subscription.remove();
@@ -158,9 +125,11 @@ export default function App() {
 function AnimatedSplashScreen({
   children,
   image,
+
 }: {
   children: ReactNode;
   image: ImageURISource;
+ 
 }) {
   const [isAppReady, setAppReady] = useState(false);
 
@@ -237,6 +206,8 @@ function AnimatedSplashScreen({
 const Navigation = () => {
   const dark = useGetMode();
   const dispatch = useAppDispatch();
+  const [canProceed, setCanProceed] = useState(false);
+  console.log("🚀 ~ file: App.tsx:208 ~ Navigation ~ canProceed:", canProceed);
   const style = dark ? "light" : "dark";
   useGetFollowDetailsQuery(null);
   const { route } = useAppSelector((state) => state.routes);
@@ -297,22 +268,81 @@ const Navigation = () => {
     return null;
   }
 
-  return (
-    <AnimatedSplashScreen
-      image={
-        dark
-          ? require("./assets/splash.png")
-          : require("./assets/splash-lightmode.png")
+  const linking = {
+    prefixes: ["https://qui.ojoisaac.me", "qui-ojo://"],
+    config: {
+      screens: {
+        Main: "/",
+        ChatScreen: "messages/:chatId",
+      },
+    },
+    async getInitialURL() {
+      // First, you may want to do the default deep link handling
+      // Check if app was opened from a deep link
+      const url = await Linking.getInitialURL();
+      console.log("🚀 ~ file: App.tsx:277 ~ getInitialURL ~ url:", url);
+
+      if (url != null) {
+        return url;
       }
-    >
-      <NavigationContainer onReady={onLayoutRootView}>
+
+      // Handle URL from expo push notifications
+      const response = await Notifications.getLastNotificationResponseAsync();
+      console.log(
+        "🚀 ~ file: App.tsx:285 ~ getInitialURL ~ response:",
+        response?.notification.request.content.data
+      );
+
+      return response?.notification.request.content.data.url;
+    },
+    subscribe(listener: any) {
+      const onReceiveURL = ({ url }: { url: string }) => listener(url);
+
+      // Listen to incoming links from deep linking
+      const eventListenerSubscription = Linking.addEventListener(
+        "url",
+        onReceiveURL
+      );
+
+      // Listen to expo push notifications
+      const subscription =
+        Notifications.addNotificationResponseReceivedListener((response) => {
+          console.log("here");
+          const url = response.notification.request.content.data.url;
+
+          // Any custom logic to see whether the URL needs to be handled
+          //...
+
+          // Let React Navigation handle the URL
+          listener(url);
+        });
+
+      return () => {
+        // Clean up the event listeners
+
+        eventListenerSubscription.remove();
+        subscription.remove();
+      };
+    },
+  };
+
+  return (
+    <NavigationContainer onReady={onLayoutRootView} linking={linking}>
+      <AnimatedSplashScreen
+      
+        image={
+          dark
+            ? require("./assets/splash.png")
+            : require("./assets/splash-lightmode.png")
+        }
+      >
         <StatusBar
           animated={true}
           style={style}
           backgroundColor="transparent"
         />
         {renderRoute()}
-      </NavigationContainer>
-    </AnimatedSplashScreen>
+      </AnimatedSplashScreen>
+    </NavigationContainer>
   );
 };

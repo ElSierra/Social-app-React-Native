@@ -34,7 +34,6 @@ export const userApi = createApi({
       query: ({ id }) => `/get-guest?id=${id}`,
       providesTags: ["guest"],
       keepUnusedDataFor: 10,
-
     }),
     getFollowDetails: builder.query<
       { following: string; followers: string },
@@ -73,6 +72,18 @@ export const userApi = createApi({
       },
       invalidatesTags: ["user"],
     }),
+    updateNotificationId: builder.mutation<any, { notificationId: string }>({
+      query: (payload) => {
+        return {
+          url: "/update-notification-id",
+          method: "PUT",
+          body: { notificationId: payload.notificationId },
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        };
+      },
+    }),
   }),
 });
 
@@ -82,6 +93,7 @@ export const {
   useLazyGetUserQuery,
   useGetGuestQuery,
   useLazyGetGuestQuery,
+  useUpdateNotificationIdMutation,
   useUploadProfilePictureMutation,
   useGetFollowDetailsQuery,
   useLazyGetFollowDetailsQuery,

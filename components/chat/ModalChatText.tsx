@@ -1,4 +1,4 @@
-import { View, Text, Dimensions } from "react-native";
+import { View, Text, Dimensions, Pressable } from "react-native";
 import React from "react";
 import useGetMode from "../../hooks/GetMode";
 import { formatDateForChat } from "../../util/date";
@@ -10,6 +10,9 @@ import Animated, {
   FadeOutDown,
 } from "react-native-reanimated";
 import { CheckIcon } from "../icons";
+import FastImage from "react-native-fast-image";
+import { useNavigation } from "@react-navigation/native";
+import { ChatNavigation } from "../../types/navigation";
 
 const { width } = Dimensions.get("screen");
 export default function ModalChatText({
@@ -18,14 +21,17 @@ export default function ModalChatText({
   isModal,
   text,
   sent,
+  photoUri,
 }: {
   isMe: boolean;
   text: string;
   isModal?: boolean;
   time: string;
   sent: boolean;
+  photoUri?: string;
 }) {
   const dark = useGetMode();
+  const navigate = useNavigation<ChatNavigation>();
   const backgroundColorForMe = dark ? "#35383A" : "#0c81f8";
   const backgroundColor = dark ? "#181B1D" : "#e8e8eb";
   const color = dark ? "white" : "black";
@@ -50,14 +56,30 @@ export default function ModalChatText({
             backgroundColor: isMe ? backgroundColorForMe : backgroundColor,
           }}
         >
-          <Text
-            style={{
-              fontFamily: "jakara",
-              color: isMe ? "white" : dark ? "white" : "black",
-            }}
-          >
-            {text}
-          </Text>
+          {!photoUri ? (
+            <Text
+              style={{
+                fontFamily: "jakara",
+                color: isMe ? "white" : dark ? "white" : "black",
+              }}
+            >
+              {text}
+            </Text>
+          ) : (
+            <Pressable
+              onPress={() => {
+                navigate.navigate("ImageFullScreen", {
+                  photoUri,
+                  id:"",
+                });
+              }}
+            >
+              <FastImage
+                source={{ uri: photoUri, priority: "high" }}
+                style={{ width: 200, height: 100, borderRadius: 10 }}
+              />
+            </Pressable>
+          )}
           {sent && (
             <Animated.View
               style={{

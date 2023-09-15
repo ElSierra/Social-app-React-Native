@@ -20,10 +20,23 @@ const chatList = createSlice({
   } as ChatList,
   reducers: {
     addToChatList: (state, action: PayloadAction<IChatList>) => {
-
-
       state.data = [action.payload, ...state.data];
-   
+    },
+
+    addToChatListStrict: (
+      state,
+      action: PayloadAction<{ chatList: IChatList; chatId: string }>
+    ) => {
+      const index = state.data.findIndex(
+        (item) => item.id === action.payload.chatId
+      );
+      if (index && index !== -1) {
+        state.data[index] = action.payload.chatList;
+        console.log("current chatList", state.data);
+      } else {
+        state.data = [action.payload.chatList, ...state.data];
+        console.log("current chatList", state.data);
+      }
     },
     addNewChat: (
       state,
@@ -83,4 +96,5 @@ const chatList = createSlice({
 });
 
 export default chatList.reducer;
-export const { addToChatList, addNewChat, deleteMessage} = chatList.actions;
+export const { addToChatList, addNewChat, deleteMessage, addToChatListStrict } =
+  chatList.actions;

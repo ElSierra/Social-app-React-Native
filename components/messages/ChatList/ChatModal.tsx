@@ -31,6 +31,7 @@ export const ChatModal = ({
   text: {
     id: string;
     text: string;
+    photoUri?: string;
     x: number;
     y: number;
     sent: boolean;
@@ -101,6 +102,7 @@ export const ChatModal = ({
           >
             <ModalChatText
               isMe={true}
+              photoUri={text?.photoUri}
               sent={text.sent}
               text={text.text}
               isModal

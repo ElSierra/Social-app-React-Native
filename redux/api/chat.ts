@@ -37,7 +37,11 @@ export const chatApi = createApi({
 
       extraOptions: { maxRetries: 2 },
     }),
+    getAllMessages: builder.query<{ chatList: IChatList }, { id: string }>({
+      query: ({id}) => `/get-all-messages?id=${id}`,
+      extraOptions: { maxRetries: 2 },
+    }),
   }),
 });
 
-export const { useGetAllChatsQuery } = chatApi;
+export const { useGetAllChatsQuery,useLazyGetAllMessagesQuery } = chatApi;
