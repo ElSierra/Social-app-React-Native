@@ -8,10 +8,11 @@ import { IPerson } from "../../types/api";
 import { useNavigation } from "@react-navigation/native";
 import useGetMode from "../../hooks/GetMode";
 import { ProfileIcon } from "../icons";
-import FastImage from "react-native-fast-image";
+
 import useSocket from "../../hooks/Socket";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
 import { addToChatList } from "../../redux/slice/chat/chatlist";
+import { Image } from "expo-image";
 
 const { width } = Dimensions.get("screen");
 export default function UserContainer({
@@ -121,7 +122,7 @@ const dispatch = useAppDispatch()
       >
         <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
           {imageUri ? (
-            <FastImage
+            <Image
               source={{ uri: imageUri }}
               style={{ height: 30, width: 30, borderRadius: 9999 }}
             />

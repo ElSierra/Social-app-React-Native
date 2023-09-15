@@ -3,8 +3,9 @@ import { View, Text, useColorScheme } from "react-native";
 import useGetMode from "../../../hooks/GetMode";
 import { useAppSelector } from "../../../redux/hooks/hooks";
 import { ProfileIcon, VerifiedIcon } from "../../icons";
-import FastImage from "react-native-fast-image";
+
 import { useState } from "react";
+import { Image } from "expo-image";
 
 export default function HeaderDrawer() {
   const dark = useGetMode();
@@ -17,9 +18,10 @@ export default function HeaderDrawer() {
   return (
     <View style={{ paddingLeft: 14, flex: 1 }}>
       {user?.imageUri ? (
-        <FastImage
+        <Image
+        priority={"high"}
           style={{ height: 50, width: 50, borderRadius: 9999 }}
-          source={{ uri: user?.imageUri, priority: "high" }}
+          source={{ uri: user?.imageUri, }}
         />
       ) : (
         <ProfileIcon color={color} size={50} />

@@ -16,13 +16,14 @@ import Animated, {
   withRepeat,
   withTiming,
 } from "react-native-reanimated";
-import FastImage from "react-native-fast-image";
+
 import PeopleContainer from "../../components/discover/PeopleContainer";
 import { SearchSkeleton } from "../../components/discover/Skeleton/SearchSkeleton";
 import { SearchUserProp } from "../../types/navigation";
 import SearchBox from "../../components/searchUser/SearchBox";
 import { useDebounce } from "../../hooks/Debounce";
 import UserContainer from "../../components/searchUser/UserContainer";
+import { Image } from "expo-image";
 
 export default function SearchUsers({ navigation }: SearchUserProp) {
   const dark = useGetMode();
@@ -85,7 +86,7 @@ export default function SearchUsers({ navigation }: SearchUserProp) {
             height: "100%",
           }}
         >
-          <FastImage
+          <Image
             style={{ height: 300, width: 300 }}
             source={require("../../assets/images/emptySearch.png")}
           />

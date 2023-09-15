@@ -24,7 +24,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import useGetMode from "../../../../hooks/GetMode";
 import { current } from "@reduxjs/toolkit";
 import { HomeNavigationProp } from "../../../../types/navigation";
-import FastImage from "react-native-fast-image";
+
 
 function VideoPost({
   videoTitle,
@@ -85,10 +85,10 @@ function VideoPost({
             <PlayIcon size={50} color="white" />
           </Pressable>
         </View>
-        <FastImage
+        <Image
           source={{uri:thumbNail ? thumbNail : videoUri}}
           style={{ flex: 1, opacity: 0.6 }}
-          resizeMode="contain"
+          contentFit="contain"
         />
       </View>
     </View>

@@ -9,7 +9,7 @@ import { useState } from "react";
 import { AudioIcon, ProfileIcon } from "../../icons";
 import useGetMode from "../../../hooks/GetMode";
 import { SearchPostBuilder } from "../../../types/app";
-import FastImage from "react-native-fast-image";
+
 const { width } = Dimensions.get("screen");
 export default function PostsContainer({
   imageUri,
@@ -35,7 +35,7 @@ export default function PostsContainer({
     if (photoUri[0] || videoUri) {
       return (
         <View style={{ height: 50, width: 50 }}>
-          <FastImage
+          <Image
             style={{ height: 50, width: 50, borderRadius: 16 }}
             source={{ uri: photoUri[0] || videoUri }}
           />

@@ -15,7 +15,8 @@ import {
   useColorScheme,
 } from "react-native";
 import useGetMode from "../../../hooks/GetMode";
-import FastImage from "react-native-fast-image";
+import { Image } from "expo-image";
+
 export default function AnimatedScreen({
   children,
   style,
@@ -35,7 +36,7 @@ export default function AnimatedScreen({
       opacity.value = withTiming(1, { duration: 250 });
 
       return () => {
-        FastImage.clearMemoryCache();
+        Image.clearMemoryCache();
         opacity.value = withTiming(0, { duration: 250 });
       };
     }, [opacity])

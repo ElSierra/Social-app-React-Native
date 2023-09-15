@@ -15,7 +15,7 @@ import { ProfileIcon } from "../icons";
 import useGetMode from "../../hooks/GetMode";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-import FastImage from "react-native-fast-image";
+
 import { PeopleProfileNavigationProp } from "../../types/navigation";
 
 export default function Header({
@@ -147,8 +147,8 @@ export default function Header({
           }}
         >
           {user.data?.imageUri ? (
-            <FastImage
-              resizeMode="cover"
+            <Image
+              contentFit="cover"
               style={{ height: "100%", width: "100%", borderRadius: 999 }}
               source={{ uri: imageUri }}
             />

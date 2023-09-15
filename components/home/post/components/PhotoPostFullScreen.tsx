@@ -3,7 +3,8 @@ import { View, Text, FlatList, Pressable, Button } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { HomeNavigationProp } from "../../../../types/navigation";
 import { SharedElement } from "react-navigation-shared-element";
-import FastImage from "react-native-fast-image";
+import { Image } from "expo-image";
+
 
 export default function PhotoPostFullScreen({
   photoUri,
@@ -49,10 +50,10 @@ export default function PhotoPostFullScreen({
             }}
           >
             <SharedElement id={id} style={{flex:1}}>
-              <FastImage
+              <Image
                
                 style={{ flex: 1, width: "100%", borderRadius: 15 }}
-                resizeMode="cover"
+                contentFit="cover"
                 source={{ uri: item }}
               />
             </SharedElement>

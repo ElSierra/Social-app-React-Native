@@ -2,7 +2,8 @@ import { useEffect, useRef } from "react";
 import Lottie from "lottie-react-native";
 import { View } from "react-native";
 import { useAppSelector } from "../../../../redux/hooks/hooks";
-import FastImage from "react-native-fast-image";
+import { Image } from "expo-image";
+
 
 
 export default function RingAudio({
@@ -33,7 +34,7 @@ export default function RingAudio({
           position: "absolute",
         }}
       >
-        <FastImage
+        <Image
           style={{ borderRadius: 999, height: 80, width: 80 }}
           source={{ uri: userImage }}
         />

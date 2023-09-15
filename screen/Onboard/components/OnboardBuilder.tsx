@@ -1,8 +1,9 @@
-import { View, Text, Dimensions, useColorScheme, Image } from "react-native";
+import { View, Text, Dimensions, useColorScheme } from "react-native";
+import { Image, ImageSource, } from "expo-image";
 
 import Animated, { FadeInLeft } from "react-native-reanimated";
 import useGetMode from "../../../hooks/GetMode";
-import FastImage, { Source } from "react-native-fast-image";
+
 
 const height = Dimensions.get("screen").height;
 const width = Dimensions.get("screen").width;
@@ -14,7 +15,7 @@ export default function OnboardBuilder({
 }: {
   header: string;
   subText: string;
-  imageUri: Source;
+  imageUri: ImageSource;
   quote: string;
 }) {
   const dark = useGetMode();
@@ -30,7 +31,7 @@ export default function OnboardBuilder({
           height: height / 2.5,
         }}
       >
-        <FastImage style={{ flex: 1 }} resizeMode="contain" source={imageUri} />
+        <Image style={{ flex: 1 }} contentFit="contain" source={imageUri} />
       </Animated.View>
       <Text
         style={{ fontFamily: "mulishBold", fontSize: 36, width: 300, color }}

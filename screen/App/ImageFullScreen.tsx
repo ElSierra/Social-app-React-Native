@@ -1,4 +1,4 @@
-import { Pressable, View, StyleSheet, ImageBackground } from "react-native";
+import { Pressable, View, StyleSheet} from "react-native";
 import { ImageFullScreenProp } from "../../types/navigation";
 
 
@@ -18,8 +18,8 @@ import RNFetchBlob from "rn-fetch-blob";
 
 import { useAppDispatch } from "../../redux/hooks/hooks";
 import { openToast } from "../../redux/slice/toast/toast";
+import { Image, ImageBackground } from "expo-image";
 
-import FastImage from "react-native-fast-image";
 
 
 export default function ImageFullScreen({
@@ -102,7 +102,7 @@ export default function ImageFullScreen({
           blurRadius={20}
           imageStyle={{ opacity: 0.5 }}
           style={{ height: "100%", width: "100%", justifyContent: "center" }}
-          resizeMode="cover"
+          contentFit="cover"
         >
           <View
             style={{
@@ -113,9 +113,9 @@ export default function ImageFullScreen({
             }}
           >
          
-              <FastImage
+              <Image
                 source={{ uri: photoUri }}
-                resizeMode="contain"
+                contentFit="contain"
                 style={{ width: "100%", height: "100%" }}
               />
          

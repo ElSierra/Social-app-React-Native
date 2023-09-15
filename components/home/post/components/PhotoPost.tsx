@@ -3,7 +3,7 @@ import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { HomeNavigationProp } from "../../../../types/navigation";
 
-import FastImage from "react-native-fast-image";
+
 export default function PhotoPost({
   photoUri,
   width,
@@ -47,9 +47,9 @@ export default function PhotoPost({
               borderRadius: 15,
             }}
           >
-            <FastImage
+            <Image
               style={{ flex: 1, width: "100%", borderRadius: 15 }}
-              resizeMode="cover"
+              contentFit="cover"
               source={{ uri: item }}
             />
           </Pressable>

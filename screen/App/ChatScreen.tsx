@@ -8,7 +8,6 @@ import React, {
 } from "react";
 import AnimatedScreen from "../../components/global/AnimatedScreen";
 import { ChatScreenProp } from "../../types/navigation";
-import FastImage from "react-native-fast-image";
 
 import { Entypo } from "@expo/vector-icons";
 import ChatBox from "../../components/chat/ChatBox";
@@ -38,6 +37,7 @@ import { openToast } from "../../redux/slice/toast/toast";
 import { useUploadPhotoMutation } from "../../redux/api/services";
 import useSocket from "../../hooks/Socket";
 import { useLazyGetAllMessagesQuery } from "../../redux/api/chat";
+import { Image } from "expo-image";
 
 export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   console.log(
@@ -62,6 +62,41 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   const [sentSuccess, setSentSuccess] = useState(true);
   const [isTyping, setIstyping] = useState(false);
   const [getAllMessages] = useLazyGetAllMessagesQuery();
+
+  const renderItem = (({ item }: any) => (
+    <Pressable
+      ref={buttonRef}
+      onLongPress={(e) => {
+        handleModalVariables(
+          item.id,
+          item.text,
+          userChats?.messages[0]?.id === item?.id &&
+            userChats?.messages[0]?.sender?.id === user?.id &&
+            sentSuccess,
+          item?.sender?.id === user?.id,
+          item.photoUri
+        );
+        setVisibleId(item.id);
+      }}
+    >
+      {
+        <ChatBuilderText
+          id={item.id}
+          photoUri={item.photoUri}
+          isClicked={visibleId}
+          isMe={item?.sender?.id === user?.id}
+          text={item?.text}
+          time={item?.createdAt}
+          sent={
+            userChats?.messages[0]?.id === item?.id &&
+            userChats?.messages[0]?.sender?.id === user?.id &&
+            sentSuccess
+          }
+        />
+      }
+    </Pressable>
+  ));
+
   useMemo(() => {
     if (route.params?.chatId) {
       socket?.emit("chat", route.params?.chatId);
@@ -175,7 +210,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
               {!route.params.chatId && (
                 <Entypo name="chevron-left" size={30} color={color} />
               )}
-              <FastImage
+              <Image
                 style={{ height: 40, width: 40, borderRadius: 9999 }}
                 source={{
                   uri: route.params.imageUri || userChats?.users[0].imageUri,
@@ -328,39 +363,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
             }}
             data={userChats?.messages}
             contentContainerStyle={{ gap: 15, padding: 20, paddingBottom: 100 }}
-            renderItem={({ item }) => (
-              <Pressable
-                ref={buttonRef}
-                onLongPress={(e) => {
-                  handleModalVariables(
-                    item.id,
-                    item.text,
-                    userChats?.messages[0]?.id === item?.id &&
-                      userChats?.messages[0]?.sender?.id === user?.id &&
-                      sentSuccess,
-                    item?.sender?.id === user?.id,
-                    item.photoUri,
-                  );
-                  setVisibleId(item.id);
-                }}
-              >
-                {
-                  <ChatBuilderText
-                    id={item.id}
-                    photoUri={item.photoUri}
-                    isClicked={visibleId}
-                    isMe={item?.sender?.id === user?.id}
-                    text={item?.text}
-                    time={item?.createdAt}
-                    sent={
-                      userChats?.messages[0]?.id === item?.id &&
-                      userChats?.messages[0]?.sender?.id === user?.id &&
-                      sentSuccess
-                    }
-                  />
-                }
-              </Pressable>
-            )}
+            renderItem={renderItem}
           />
         </View>
         <View

@@ -22,7 +22,7 @@ import { CameraIcon, ProfileIcon } from "../icons";
 import PickImageButton from "./UploadPic";
 import { useUploadProfilePictureMutation } from "../../redux/api/user";
 import PickGifButton from "./UploadGif";
-import FastImage from "react-native-fast-image";
+
 
 const { height, width } = Dimensions.get("screen");
 export const UploadPhotoModal = ({
@@ -109,9 +109,9 @@ export const UploadPhotoModal = ({
                   }}
                 >
                   {imageUri ? (
-                    <FastImage
+                    <Image
                       style={{ height: "100%", width: "100%" }}
-                      resizeMode="contain"
+                      contentFit="contain"
                       source={{ uri: imageUri }}
                     />
                   ) : (

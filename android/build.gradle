@@ -40,7 +40,3 @@ allprojects {
         maven { url 'https://www.jitpack.io' }
     }
 }
-
-project.ext {
-    excludeAppGlideModule = true
-}

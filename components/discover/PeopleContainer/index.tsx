@@ -16,7 +16,7 @@ import {
 import { useAppSelector } from "../../../redux/hooks/hooks";
 import useGetMode from "../../../hooks/GetMode";
 import { ProfileIcon } from "../../icons";
-import FastImage from "react-native-fast-image";
+
 
 const { width } = Dimensions.get("screen");
 export default function PeopleContainer({

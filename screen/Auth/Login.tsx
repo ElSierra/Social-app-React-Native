@@ -33,7 +33,8 @@ import { useForm, Controller } from "react-hook-form";
 import { LoginScreen } from "../../types/navigation";
 import { servicesApi } from "../../redux/api/services";
 import { userApi } from "../../redux/api/user";
-import FastImage from "react-native-fast-image";
+import { Image } from "expo-image";
+
 
 const width = Dimensions.get("screen").width;
 export default function Login({ navigation }: LoginScreen) {
@@ -155,9 +156,9 @@ export default function Login({ navigation }: LoginScreen) {
           >
             <View style={{ alignItems: "center" }}>
               <View>
-                <FastImage
+                <Image
                   source={require("../../assets/images/auth.png")}
-                  resizeMode="contain"
+                  contentFit="contain"
                   style={{ height: 200, width }}
                 />
               </View>

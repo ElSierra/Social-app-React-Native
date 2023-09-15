@@ -10,9 +10,10 @@ import Animated, {
   FadeOutDown,
 } from "react-native-reanimated";
 import { CheckIcon } from "../icons";
-import FastImage from "react-native-fast-image";
+
 import { useNavigation } from "@react-navigation/native";
 import { ChatNavigation } from "../../types/navigation";
+import { Image } from "expo-image";
 
 const { width } = Dimensions.get("screen");
 export default function ModalChatText({
@@ -74,8 +75,9 @@ export default function ModalChatText({
                 });
               }}
             >
-              <FastImage
-                source={{ uri: photoUri, priority: "high" }}
+              <Image
+                source={{ uri: photoUri,  }}
+                priority={"high"}
                 style={{ width: 200, height: 100, borderRadius: 10 }}
               />
             </Pressable>

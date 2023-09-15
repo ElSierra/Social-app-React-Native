@@ -12,8 +12,9 @@ import { ForbiddenIcon, InfoIcon, VerifyIcon } from "../../icons";
 import useGetMode from "../../../hooks/GetMode";
 import { Portal } from "react-native-paper";
 import { useForm } from "react-hook-form";
-import FastImage from "react-native-fast-image";
+
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Image } from "expo-image";
 
 const width = Dimensions.get("screen").width;
 export default function CustomToast() {
@@ -42,7 +43,7 @@ export default function CustomToast() {
       return <InfoIcon size={20} color={color} />;
     } else if (toastState.type === "Message") {
       return (
-        <FastImage
+        <Image
           style={{ height: 20, width: 20, borderRadius: 999 }}
           source={{ uri: toastState.imageUri }}
         />

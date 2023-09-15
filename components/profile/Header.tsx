@@ -15,7 +15,7 @@ import { ProfileIcon } from "../icons";
 import useGetMode from "../../hooks/GetMode";
 import { UploadPhotoModal } from "./UploadPhotoModal";
 import { useState } from "react";
-import FastImage from "react-native-fast-image";
+
 
 export default function Header({
   animatedValue,
@@ -140,8 +140,8 @@ export default function Header({
           }}
         >
           {user.data?.imageUri ? (
-            <FastImage
-              resizeMode="cover"
+            <Image
+              contentFit="cover"
               style={{ height: "100%", width: "100%", borderRadius: 999 }}
               source={{ uri: user.data?.imageUri }}
             />

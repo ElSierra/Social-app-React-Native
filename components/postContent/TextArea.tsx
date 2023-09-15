@@ -5,7 +5,8 @@ import InputText from "../../screen/Auth/components/InputText";
 import useGetMode from "../../hooks/GetMode";
 import { useAppSelector } from "../../redux/hooks/hooks";
 import { ProfileIcon } from "../icons";
-import FastImage from "react-native-fast-image";
+import { Image } from "expo-image";
+
 const heightFromScreen = Dimensions.get("screen").height;
 export default function TextArea({
   handlePostText,
@@ -20,7 +21,7 @@ export default function TextArea({
     <View>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
         {userDetails?.imageUri ? (
-          <FastImage
+          <Image
             style={{ height: 50, width: 50, borderRadius: 9999 }}
             source={{ uri: userDetails?.imageUri }}
           />

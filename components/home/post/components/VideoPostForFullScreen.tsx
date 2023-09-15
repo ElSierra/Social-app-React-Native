@@ -34,7 +34,7 @@ import useGetMode from "../../../../hooks/GetMode";
 import Slider from "@react-native-community/slider";
 import convertMsToHMS from "../../../../util/convert";
 import { StatusBar } from "expo-status-bar";
-import FastImage from "react-native-fast-image";
+import { Image } from "expo-image";
 
 const { height } = Dimensions.get("screen");
 export default function VideoPostFullScreen({
@@ -246,7 +246,7 @@ export default function VideoPostFullScreen({
 
             <View style={{ flexDirection: "row", gap: 10 }}>
               {imageUri ? (
-                <FastImage
+                <Image
                   source={{ uri: imageUri }}
                   style={{ height: 40, width: 40, borderRadius: 10 }}
                 />

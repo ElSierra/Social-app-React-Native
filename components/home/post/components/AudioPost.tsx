@@ -17,7 +17,8 @@ import Animated, {
 } from "react-native-reanimated";
 
 import AudioPlayLottie from "./AudioPlayLottie";
-import FastImage from "react-native-fast-image";
+import { Image } from "expo-image";
+
 export default function AudioPost({
   uri,
   photoUri,
@@ -167,7 +168,7 @@ export default function AudioPost({
                 picAnimatedStyle,
               ]}
             >
-              <FastImage
+              <Image
                 source={{uri:photoUri}}
                 style={{ width: 80, height: 80, borderRadius: 9999 }}
               />

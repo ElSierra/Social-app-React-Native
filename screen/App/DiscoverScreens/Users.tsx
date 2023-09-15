@@ -19,10 +19,10 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-import FastImage from "react-native-fast-image";
 import { SearchSkeleton } from "../../../components/discover/Skeleton/SearchSkeleton";
 import PeopleContainer from "../../../components/discover/PeopleContainer";
 import { useAppSelector } from "../../../redux/hooks/hooks";
+import { Image } from "expo-image";
 
 export default function Users() {
   const people = useAppSelector((state) => state.searchPeople);
@@ -68,7 +68,7 @@ export default function Users() {
             height: "70%",
           }}
         >
-          <FastImage
+          <Image
             style={{ height: 300, width: 300 }}
             source={require("../../../assets/images/emptySearch.png")}
           />

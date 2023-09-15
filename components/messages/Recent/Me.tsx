@@ -1,12 +1,13 @@
 import { View, Text, Pressable } from "react-native";
 import React from "react";
-import FastImage from "react-native-fast-image";
+
 import useGetMode from "../../../hooks/GetMode";
 import Animated, { FadeInLeft, FadeOutLeft } from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
 import { HomeNavigationProp } from "../../../types/navigation";
 import { ActivityIndicator } from "react-native-paper";
 import { useAppSelector } from "../../../redux/hooks/hooks";
+import { Image } from "expo-image";
 
 export default function Me() {
   const dark = useGetMode();
@@ -24,7 +25,7 @@ export default function Me() {
             alignItems: "center",
           }}
         >
-          <FastImage
+          <Image
             style={{ borderRadius: 9999, height: 65, width: 65 }}
             source={{ uri: user?.imageUri }}
           />

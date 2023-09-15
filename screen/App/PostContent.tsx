@@ -42,7 +42,8 @@ import {
 } from "../../redux/slice/modal/loading";
 import PickVideoButton from "../../components/postContent/PickVideoButton";
 import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated";
-import FastImage from "react-native-fast-image";
+import { Image } from "expo-image";
+
 const width = Dimensions.get("screen").width;
 export default function PostContent({ navigation }: PostContentProp) {
   const dark = useGetMode();
@@ -420,7 +421,7 @@ export default function PostContent({ navigation }: PostContentProp) {
             <></>
           )}
           {postPhoto && (
-            <FastImage
+            <Image
               style={{
                 width: "100%",
                 height: "100%",
@@ -428,7 +429,7 @@ export default function PostContent({ navigation }: PostContentProp) {
                 paddingHorizontal: 20,
               }}
               source={{ uri: postPhoto?.uri }}
-              resizeMode="contain"
+              contentFit="contain"
              
             />
           )}

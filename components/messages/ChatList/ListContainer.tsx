@@ -1,6 +1,6 @@
 import { View, Text, Pressable, Dimensions } from "react-native";
 import React from "react";
-import FastImage from "react-native-fast-image";
+
 import { useNavigation } from "@react-navigation/native";
 import { HomeNavigationProp } from "../../../types/navigation";
 import useGetMode from "../../../hooks/GetMode";
@@ -9,6 +9,7 @@ import { formatDateForChat } from "../../../util/date";
 import { IChatList } from "../../../types/api";
 import { useAppSelector } from "../../../redux/hooks/hooks";
 import Animated, { BounceIn, BounceOut } from "react-native-reanimated";
+import { Image } from "expo-image";
 const { width } = Dimensions.get("screen");
 export default function ListContainer({ data }: { data: IChatList }) {
   const dark = useGetMode();
@@ -57,7 +58,7 @@ export default function ListContainer({ data }: { data: IChatList }) {
         }}
       >
         <View style={{ flexDirection: "row", gap: 10 }}>
-          <FastImage
+          <Image
             style={{ borderRadius: 999, height: 50, width: 50 }}
             source={{
               uri:
