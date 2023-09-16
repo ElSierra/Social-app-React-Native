@@ -90,5 +90,5 @@ export interface Notifications {
   type: "Follow" | "Posts" | "Suggestions" | "Reminder";
   id: string;
   createdAt: string;
-  notifUser: User;
+  notifUser?: User;
 }

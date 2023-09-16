@@ -17,6 +17,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 
 import { PeopleProfileNavigationProp } from "../../types/navigation";
+import { ViewProfilePhoto } from "./ViewProfilePhoto";
 
 export default function Header({
   animatedValue,
@@ -63,9 +64,12 @@ export default function Header({
   const color = dark ? "white" : "black";
   const backgroundColor = !dark ? "white" : "black";
   const [isOpen, setIsOpen] = useState(false);
-
+  const handleSetOpen = () => {
+    setIsOpen(!isOpen);
+  };
   return (
     <>
+    <ViewProfilePhoto isOpen={isOpen} closeModal={handleSetOpen} imageUri={imageUri} />
       <Animated.View
         style={[
           { height: 300, width: "100%" },
@@ -140,10 +144,7 @@ export default function Header({
             alignItems: "center",
           }}
           onPress={() => {
-            navigation.navigate("ImageFullScreen", {
-              photoUri: imageUri,
-              id: "",
-            });
+            setIsOpen(true)
           }}
         >
           {user.data?.imageUri ? (
