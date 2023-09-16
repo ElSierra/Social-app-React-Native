@@ -23,7 +23,6 @@ import PickImageButton from "./UploadPic";
 import { useUploadProfilePictureMutation } from "../../redux/api/user";
 import PickGifButton from "./UploadGif";
 
-
 const { height, width } = Dimensions.get("screen");
 export const UploadPhotoModal = ({
   isOpen,
@@ -46,7 +45,6 @@ export const UploadPhotoModal = ({
   const [uploadPhoto, response] = useUploadProfilePictureMutation();
 
   const handleSetPostPhoto = (mimeType: string, uri: string, size: number) => {
-  
     uploadPhoto({ mimeType, uri });
   };
 
@@ -64,7 +62,7 @@ export const UploadPhotoModal = ({
             <BlurView
               tint={tint}
               style={{ position: "absolute", height, width }}
-              intensity={10}
+              intensity={40}
             />
 
             <View style={styles.centeredView}>
@@ -110,7 +108,7 @@ export const UploadPhotoModal = ({
                 >
                   {imageUri ? (
                     <Image
-                      style={{ height: "100%", width: "100%" }}
+                      style={{ height: 300, width: 300, borderRadius: 9999 }}
                       contentFit="contain"
                       source={{ uri: imageUri }}
                     />
@@ -124,7 +122,7 @@ export const UploadPhotoModal = ({
                   flexDirection: "row",
                   position: "absolute",
                   zIndex: 999,
-                  bottom: 10,
+                  bottom: 40,
                   borderRadius: 10,
                   overflow: "hidden",
                   gap: 10,

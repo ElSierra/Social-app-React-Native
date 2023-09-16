@@ -1,19 +1,27 @@
 import { BottomTabBar, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { BottomProp, BottomRootStackParamList, DiscoverProp } from "../../types/navigation";
 import { BlurView } from "expo-blur";
-import { SearchBar } from "react-native-screens";
+
 import IconButtons from "../../components/global/Buttons/BottomBarButtons";
 import ProfileButton from "../../components/home/header/ProfileButton";
-import { HomeIcon, SearchIcon, MessagesIcon, NotificationIcon, HomeIconUnfocused, SearchUnfocused, MessageUnfocused, NotificationUnfocused } from "../../components/icons";
+import { HomeIcon, SearchIcon, MessagesIcon, NotificationIcon, HomeIconUnfocused, SearchUnfocused, MessageUnfocused, NotificationUnfocused, MessageAvailableIcon } from "../../components/icons";
 import useGetMode from "../../hooks/GetMode";
 import Discover from "../../screen/App/Discover";
 import Messages from "../../screen/App/Messages";
 import DrawerNavigator from "./DrawerNavigation";
 import Notifications from "../../screen/App/Notifications";
+import { openToast } from "../../redux/slice/toast/toast";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
+import { useEffect } from "react";
+import socket from "../../util/socket";
+import { IMessageSocket } from "../../types/socket";
+import SearchBar from "../../components/discover/SearchBar";
 
 const Tab = createBottomTabNavigator<BottomRootStackParamList>();
 export function BottomTabNavigator() {
     const dark = useGetMode();
+    const dispatch = useAppDispatch()
+    const isNewMessage = useAppSelector((state)=>state.chatlist.new)
     const isDark = dark;
     const tint = !isDark ? "light" : "dark";
     const color = isDark ? "white" : "black";
@@ -91,7 +99,11 @@ export function BottomTabNavigator() {
                   return SearchUnfocused;
                 }
                 if (route.name === "Messages") {
-                  return MessageUnfocused;
+                if (!isNewMessage){
+                  return MessageUnfocused
+                }else {
+                  return MessageAvailableIcon
+                }
                 } else {
                   return NotificationUnfocused;
                 }

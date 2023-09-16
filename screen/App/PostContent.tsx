@@ -430,7 +430,6 @@ export default function PostContent({ navigation }: PostContentProp) {
               }}
               source={{ uri: postPhoto?.uri }}
               contentFit="contain"
-             
             />
           )}
           {postAudio && <RingAudio animationRef={animationRef} />}
@@ -489,7 +488,7 @@ export default function PostContent({ navigation }: PostContentProp) {
                       });
                     }}
                   >
-                    <FastImage
+                    <Image
                       style={{ height: 100, width: 100, borderRadius: 10 }}
                       source={{ uri: item?.node?.image?.uri }}
                     />

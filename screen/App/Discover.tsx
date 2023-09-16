@@ -27,6 +27,7 @@ const renderTabBar = (props: any) => {
     <TabBar
       {...props}
       indicatorStyle={{ backgroundColor }}
+      android_ripple={{color:"transparent"}}
       style={{ backgroundColor: "transparent", elevation: 0, marginTop: 80 }}
       labelStyle={{
         color,

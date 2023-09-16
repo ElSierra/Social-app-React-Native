@@ -1,5 +1,6 @@
 import { View, Text, Pressable, FlatList } from "react-native";
 import React, {
+  useCallback,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -38,14 +39,12 @@ import { useUploadPhotoMutation } from "../../redux/api/services";
 import useSocket from "../../hooks/Socket";
 import { useLazyGetAllMessagesQuery } from "../../redux/api/chat";
 import { Image } from "expo-image";
+import ChatListView from "../../components/messages/ChatList/ChatListView";
 
 export default function ChatScreen({ navigation, route }: ChatScreenProp) {
-  console.log(
-    "🚀 ~ file: ChatScreen.tsx:38 ~ ChatScreen ~ route:",
-    route.params
-  );
+ 
   const user = useAppSelector((state) => state.user?.data);
-  console.log("🚀 ~ file: ChatScreen.tsx:48 ~ ChatScreen ~ user:", user);
+
   const chatState = useAppSelector((state) => state?.chatlist.data);
   const state = useNavigationState((state) => state);
   const dispatch = useAppDispatch();
@@ -124,7 +123,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
         }
       })
       .catch((error) => {
-        console.error("Error:", error);
+    
       });
   }, [chatState]);
 
@@ -146,7 +145,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
 
   useEffect(() => {
     socket?.on("isTyping", (data: { isTyping: boolean; id: string }) => {
-      console.log("🚀 ~ file: ChatScreen.tsx:87 ~ socket?.on ~ data:", data);
+      
       if (data) {
         if (data.id !== user?.id) {
           setIstyping(data.isTyping);
@@ -223,7 +222,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
     });
   }, [color, isOnline, userChats]);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = useCallback(() => {
     setSentSuccess(false);
     const id = new BSON.ObjectId();
 
@@ -256,7 +255,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
         dispatch(openToast({ text: "Message didnot Send", type: "Failed" }));
       }
     }, 10000);
-  };
+  },[messageText])
   const [isOpen, setIsOpen] = useState(false);
 
   const [visibleId, setVisibleId] = useState<string | null>(null);
@@ -345,27 +344,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
         chatId={route.params.id}
       />
       <View style={{ flex: 1 }}>
-        <View style={{ flex: 1 }}>
-          <FlatList
-            inverted
-            ListHeaderComponent={() => {
-              return (
-                <View
-                  style={{
-                    height: 90,
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                  }}
-                >
-                  {isTyping && messageText.length < 1 && <TypingBox />}
-                </View>
-              );
-            }}
-            data={userChats?.messages}
-            contentContainerStyle={{ gap: 15, padding: 20, paddingBottom: 100 }}
-            renderItem={renderItem}
-          />
-        </View>
+        <ChatListView isTyping={isTyping} messageText={messageText} renderItem={renderItem} userChats={userChats}/>
         <View
           style={{
             padding: 10,

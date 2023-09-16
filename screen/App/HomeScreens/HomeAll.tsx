@@ -51,7 +51,6 @@ import storage from "../../../redux/storage";
 import Robot from "../../../components/home/post/misc/Robot";
 
 export default function HomeAll() {
-
   const dark = useGetMode();
   const dispatch = useAppDispatch();
   const posts = useAppSelector((state) => state.post);
@@ -207,7 +206,7 @@ export default function HomeAll() {
   );
   const keyExtractor = (item: IPost) => item?.id?.toString();
   return (
-    <View style={{flex:1}}>
+    <View style={{ flex: 1 }}>
       {posts.loading && posts.data.length === 0 ? (
         <SkeletonGroupPost />
       ) : posts.data.length === 0 ? (
@@ -215,11 +214,10 @@ export default function HomeAll() {
       ) : (
         <Animated.View
           style={{ flex: 1 }}
-          entering={FadeInDown.springify().duration(400)}
+          entering={FadeIn.springify().duration(400)}
           exiting={FadeOutDown.springify()}
         >
           <FlashList
-     
             data={posts.data}
             decelerationRate={0.991}
             estimatedItemSize={100}
@@ -231,7 +229,6 @@ export default function HomeAll() {
                 colors={["red", "blue"]}
               />
             }
-        
             onEndReachedThreshold={0.3}
             onEndReached={fetchMoreData}
             estimatedListSize={{ width, height }}

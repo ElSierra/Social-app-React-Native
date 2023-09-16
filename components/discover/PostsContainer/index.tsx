@@ -66,7 +66,7 @@ export default function PostsContainer({
     >
       <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
         {imageUri ? (
-          <FastImage
+          <Image
             source={{ uri: imageUri }}
             style={{ height: 30, width: 30, borderRadius: 9999 }}
           />

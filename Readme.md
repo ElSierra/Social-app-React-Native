@@ -11,6 +11,10 @@ Welcome to the Social Media App, a mobile application developed using React Nati
 - **User Authentication:** Users can create accounts, log in, and reset passwords securely.
 - **News Feed:** Users can view posts from friends and engage by liking and commenting.
 - **Post Creation:** Users can create and publish their own posts with text and images.
-- **Friends and Followers:** Users can connect with friends, follow/unfollow, and see their activities.
+- **Followers:** Users can connect with friends, follow/unfollow, and see their activities.
 - **Notifications:** Users receive real-time notifications for likes, comments, and friend requests.
 - **Profile:** Users can set up their profile, update information, and view their posts
+- **Video:** Users can upload and Play Videos
+- **Audio:** Users can upload and Play Audio
+- **Chat:** Users can Chat with other users
+- **Dwonload**  Users can download videos and images

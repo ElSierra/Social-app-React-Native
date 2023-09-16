@@ -5,7 +5,7 @@ import {
   ActivityIndicator,
   TouchableWithoutFeedback,
   Dimensions,
-  ImageBackground,
+
 } from "react-native";
 import React, {
   useCallback,
@@ -34,7 +34,7 @@ import useGetMode from "../../../../hooks/GetMode";
 import Slider from "@react-native-community/slider";
 import convertMsToHMS from "../../../../util/convert";
 import { StatusBar } from "expo-status-bar";
-import { Image } from "expo-image";
+import { Image, ImageBackground } from "expo-image";
 
 const { height } = Dimensions.get("screen");
 export default function VideoPostFullScreen({
@@ -155,7 +155,7 @@ export default function VideoPostFullScreen({
           source={{ uri: thumbNail ? thumbNail : videoUri }}
           blurRadius={80}
           imageStyle={{ opacity: 0.5 }}
-          resizeMode="cover"
+          contentFit="cover"
           style={{ height: "100%", width: "100%", justifyContent: "center" }}
         ></ImageBackground>
       </View>

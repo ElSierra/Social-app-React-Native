@@ -84,3 +84,11 @@ export interface IChatList {
   users: IChatUser[];
   messages: IChatMessage[];
 }
+
+export interface Notifications {
+  text: string;
+  type: "Follow" | "Posts" | "Suggestions" | "Reminder";
+  id: string;
+  createdAt: string;
+  notifUser: User;
+}

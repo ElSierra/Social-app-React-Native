@@ -6,6 +6,7 @@ import { VideoFullScreen } from "../../types/navigation";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import RNFetchBlob from "rn-fetch-blob";
 import { StatusBar } from "expo-status-bar";
+import { RadixIcon } from "radix-ui-react-native-icons";
 export default function VideoFull({ navigation, route }: VideoFullScreen) {
   const handleDownload = () => {
     RNFetchBlob.config({
@@ -41,11 +42,7 @@ export default function VideoFull({ navigation, route }: VideoFullScreen) {
               alignItems: "center",
             }}
           >
-            <MaterialCommunityIcons
-              name="download-box"
-              size={30}
-              color="white"
-            />
+            <RadixIcon name="download" size={25} color="white" />
           </View>
         </Pressable>
       ),

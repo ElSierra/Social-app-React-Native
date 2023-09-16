@@ -28,13 +28,12 @@ import {
 } from "react";
 import { openToast } from "../../redux/slice/toast/toast";
 import { useLoginMutation } from "../../redux/api/auth";
-import { signOut } from "../../redux/slice/user";
+import { clearUserData, signOut } from "../../redux/slice/user";
 import { useForm, Controller } from "react-hook-form";
 import { LoginScreen } from "../../types/navigation";
 import { servicesApi } from "../../redux/api/services";
 import { userApi } from "../../redux/api/user";
 import { Image } from "expo-image";
-
 
 const width = Dimensions.get("screen").width;
 export default function Login({ navigation }: LoginScreen) {
@@ -45,15 +44,16 @@ export default function Login({ navigation }: LoginScreen) {
   const buttonColor = !isDark ? "white" : "black";
   const dispatch = useAppDispatch();
   const borderColor = isDark ? "white" : "black";
-  const name = useAppSelector((state) => state.user.data?.name);
+  const user = useAppSelector((state) => state.user.data);
 
   const {
     control,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     defaultValues: {
-      userName: "",
+      userName: user?.userName ? user?.userName : "",
       password: "",
     },
   });
@@ -72,16 +72,19 @@ export default function Login({ navigation }: LoginScreen) {
     login({ userName: data.userName.trim(), password: data.password })
       .unwrap()
       .then((e) => {
-  
         Vibration.vibrate(5);
         userApi.util.resetApiState();
         servicesApi.util.resetApiState();
         dispatch(openToast({ text: "Successful Login", type: "Success" }));
       })
       .catch((e) => {
-
+        console.log(e);
         Vibration.vibrate(5);
-        dispatch(openToast({ text: "Network Error", type: "Failed" }));
+        if (e?.data?.status) {
+          dispatch(openToast({ text: `${e?.data?.msg}`, type: "Failed" }));
+        }else {
+          dispatch(openToast({ text: `Network Error`, type: "Failed" }));
+        }
       });
   };
   useEffect(() => {
@@ -156,18 +159,40 @@ export default function Login({ navigation }: LoginScreen) {
           >
             <View style={{ alignItems: "center" }}>
               <View>
-                <Image
-                  source={require("../../assets/images/auth.png")}
-                  contentFit="contain"
-                  style={{ height: 200, width }}
-                />
+                {!user ? (
+                  <Image
+                    source={require("../../assets/images/auth.png")}
+                    contentFit="contain"
+                    style={{ height: 200, width }}
+                  />
+                ) : (
+                  <View style={{ paddingTop: 100, paddingBottom: 10 }}>
+                    <Image
+                      style={{ height: 150, width: 150, borderRadius: 999 }}
+                      source={{ uri: user?.imageUri }}
+                    />
+                  </View>
+                )}
               </View>
               <Text style={{ color, fontFamily: "mulishBold", fontSize: 24 }}>
-                Welcome Back{name && `, ${name.split(" ")[0]}`}
+                Welcome Back{user?.name && `, ${user?.name?.split(" ")[0]}`}
               </Text>
               <Text style={{ color, fontFamily: "mulish", fontSize: 14 }}>
                 sign in to access your account
               </Text>
+              {user && (
+                <Pressable
+                  onPress={() => {
+                    dispatch(clearUserData());
+                    reset({
+                      userName: "",
+                      password: "",
+                    });
+                  }}
+                >
+                  <Text>Not you ?</Text>
+                </Pressable>
+              )}
               <View style={{ gap: 30, marginTop: 70 }}>
                 <Animated.View
                   style={{ transform: [{ translateX: animUser.current }] }}

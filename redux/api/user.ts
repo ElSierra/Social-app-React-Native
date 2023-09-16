@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { UserState } from "../slice/user";
-import { IGuestData, IUSerData } from "../../types/api";
+import { IGuestData, IUSerData, Notifications } from "../../types/api";
 import storage from "../storage";
 import { RootState } from "../store";
 
@@ -33,6 +33,10 @@ export const userApi = createApi({
     getGuest: builder.query<{ data: IGuestData }, { id: string }>({
       query: ({ id }) => `/get-guest?id=${id}`,
       providesTags: ["guest"],
+      keepUnusedDataFor: 10,
+    }),
+    getNotifications: builder.query<{ notifications: Notifications[] },null>({
+      query: () => `/get-notifications`,
       keepUnusedDataFor: 10,
     }),
     getFollowDetails: builder.query<
@@ -93,6 +97,7 @@ export const {
   useLazyGetUserQuery,
   useGetGuestQuery,
   useLazyGetGuestQuery,
+  useGetNotificationsQuery,
   useUpdateNotificationIdMutation,
   useUploadProfilePictureMutation,
   useGetFollowDetailsQuery,

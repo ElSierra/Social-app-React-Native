@@ -58,6 +58,7 @@ import Notifications, {
 } from "./util/notification";
 import Constants from "expo-constants";
 import * as Device from "expo-device";
+import useSocket from "./hooks/Socket";
 enableFreeze(true);
 Sentry.init({
   dsn: "https://a5db1485b6b50a45db57917521128254@o4505750037725184.ingest.sentry.io/4505750586195968",
@@ -68,32 +69,6 @@ const persistor = persistStore(store);
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const appState = useRef(AppState.currentState);
-  const [appStateVisible, setAppStateVisible] = useState(appState.current);
-  console.log(
-    "🚀 ~ file: Main.tsx:159 ~ Main ~ appStateVisible:",
-    appStateVisible
-  );
-
-  useEffect(() => {
-    const subscription = AppState.addEventListener("change", (nextAppState) => {
-      if (
-        appState.current.match(/inactive|background/) &&
-        nextAppState === "active"
-      ) {
-        console.log("App has come to the foreground!");
-      }
-
-      appState.current = nextAppState;
-      setAppStateVisible(appState.current);
-      console.log("AppState", appState.current);
-    });
-
-    return () => {
-      subscription.remove();
-    };
-  }, []);
-
   useEffect(() => {
     const subscription = Notifications.addNotificationReceivedListener(
       (notification) => {
@@ -125,11 +100,9 @@ export default function App() {
 function AnimatedSplashScreen({
   children,
   image,
-
 }: {
   children: ReactNode;
   image: ImageURISource;
- 
 }) {
   const [isAppReady, setAppReady] = useState(false);
 
@@ -329,7 +302,6 @@ const Navigation = () => {
   return (
     <NavigationContainer onReady={onLayoutRootView} linking={linking}>
       <AnimatedSplashScreen
-      
         image={
           dark
             ? require("./assets/splash.png")

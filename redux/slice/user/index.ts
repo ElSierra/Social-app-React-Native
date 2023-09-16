@@ -23,8 +23,13 @@ const user = createSlice({
       state.error = null;
       state.loading = false;
       state.token = null;
-      socket.disconnect()
-      
+      socket.disconnect();
+    },
+    clearUserData: (state) => {
+      state.data = null;
+      state.error = null;
+      state.loading = false;
+      state.token = null;
     },
   },
   extraReducers: (builder) => {
@@ -77,4 +82,4 @@ const user = createSlice({
 
 export default user.reducer;
 
-export const { signOut } = user.actions;
+export const { signOut, clearUserData } = user.actions;

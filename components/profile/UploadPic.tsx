@@ -44,7 +44,7 @@ export default function PickImageButton({
             cropperToolbarWidgetColor: "#FFFFFF",
             cropperCancelText: "#FFFFFF",
             cropperChooseColor: "#FFFFFF",
-            compressImageQuality: 0.5,
+            compressImageQuality: 0.3,
           })
             .then((image) => {
               handleSetPhotoPost(image?.mime, image?.path, image?.size);

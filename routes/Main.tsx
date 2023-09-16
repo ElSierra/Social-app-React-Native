@@ -68,7 +68,11 @@ import ProfilePeople from "../screen/App/ProfilePeople";
 import ChatScreen from "../screen/App/ChatScreen";
 import SearchUsers from "../screen/App/SearchUsers";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { addNewChat, addToChatList } from "../redux/slice/chat/chatlist";
+import {
+  addNewChat,
+  addNewIndication,
+  addToChatList,
+} from "../redux/slice/chat/chatlist";
 import * as BackgroundFetch from "expo-background-fetch";
 import * as TaskManager from "expo-task-manager";
 import { AppState } from "react-native";
@@ -101,7 +105,6 @@ TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
   return BackgroundFetch.BackgroundFetchResult.NewData;
 });
 
-
 export default function Main() {
   const [updateNotificationId] = useUpdateNotificationIdMutation();
   const chatList = useAppSelector((state) => state.chatlist.data);
@@ -116,7 +119,7 @@ export default function Main() {
   const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
   useEffect(() => {
     registerForPushNotificationsAsync()
-      .then((e) => updateNotificationId({ notificationId: e?.data as string })).then((e)=>{console.log('🚀', e)})
+      .then((e) => updateNotificationId({ notificationId: e?.data as string }))
       .catch((e) => {
         console.log(e);
       });
@@ -156,8 +159,6 @@ export default function Main() {
           chatMessages
         );
         if (chatMessages) {
-          //TODO: CONFIRM IF DATA MATCHES
-
           if (chatMessages?.isNew) {
             dispatch(
               addToChatList({
@@ -166,6 +167,7 @@ export default function Main() {
                 users: chatMessages?.users,
               })
             );
+            dispatch(addNewIndication());
           }
         }
       });
@@ -173,15 +175,16 @@ export default function Main() {
   }, [socket]);
 
   useEffect(() => {
-    socket?.on("message", (message: IMessageSocket) => {
-      if (message) {
-        if (message.message?.sender?.id !== id) {
-          dispatch(addNewChat(message));
+    socket?.on("message", (data: IMessageSocket) => {
+      if (data) {
+        if (data.message?.sender?.id !== id) {
+          dispatch(addNewChat(data));
+          dispatch(addNewIndication());
           dispatch(
             openToast({
               type: "Message",
-              text: message?.message.text,
-              imageUri: message.imageUri,
+              text: data?.message.text,
+              imageUri: data.imageUri,
             })
           );
         }
@@ -193,6 +196,37 @@ export default function Main() {
       dispatch(updateOnlineIds({ ids: online }));
     });
   }, [socket]);
+
+  const appState = useRef(AppState.currentState);
+
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+  console.log(
+    "🚀 ~ file: Main.tsx:159 ~ Main ~ appStateVisible:",
+    appStateVisible
+  );
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === "active"
+      ) {
+        socket?.emit("online");
+        console.log("App has come to the foreground!");
+      }
+
+      appState.current = nextAppState;
+      setAppStateVisible(appState.current);
+      console.log("AppState", appState.current);
+      if (appState.current === "background") {
+        socket?.emit("away");
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
   return (
     <BottomSheetModalProvider>
       <BottomSheetContainer>

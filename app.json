@@ -14,6 +14,7 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    
     "ios": {
       "supportsTablet": true
     },
@@ -33,6 +34,16 @@
         "projectId": "e618bb47-6149-4585-8cc8-884c5992795e"
       }
     },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification.png",
+          "color": "#ffffff"
+         
+        }
+      ]
+    ],
     "owner": "hojoisaac"
   }
 }

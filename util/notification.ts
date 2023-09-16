@@ -11,6 +11,7 @@ Notifications.setNotificationHandler({
 });
 
 export async function registerForPushNotificationsAsync() {
+  try{
   let token;
 
     const { status: existingStatus } = await Notifications.getPermissionsAsync();
@@ -38,7 +39,10 @@ export async function registerForPushNotificationsAsync() {
     });
   }
 
-  return token;
+  return token;}
+  catch(e){
+    
+  }
 }
 
 export default Notifications

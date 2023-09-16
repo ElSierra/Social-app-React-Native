@@ -1,5 +1,5 @@
 import { View, Text, Dimensions, Pressable } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import useGetMode from "../../hooks/GetMode";
 import { formatDateForChat } from "../../util/date";
 import Animated, {
@@ -16,7 +16,7 @@ import { ChatNavigation } from "../../types/navigation";
 import { Image } from "expo-image";
 
 const { width } = Dimensions.get("screen");
-export default function ChatBuilderText({
+ function ChatBuilderText({
   isMe,
   time,
   id,
@@ -131,3 +131,4 @@ export default function ChatBuilderText({
     </Animated.View>
   );
 }
+export default memo(ChatBuilderText)

@@ -1,4 +1,4 @@
-import { View, Text, Dimensions } from "react-native";
+import { View, Text, Dimensions , TouchableWithoutFeedback} from "react-native";
 import React, { useEffect, useState } from "react";
 import Animated, {
   FadeInUp,
@@ -15,6 +15,7 @@ import { useForm } from "react-hook-form";
 
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Image } from "expo-image";
+
 
 const width = Dimensions.get("screen").width;
 export default function CustomToast() {
@@ -54,49 +55,54 @@ export default function CustomToast() {
   return (
     <Portal>
       {toastState.open && (
-        <Animated.View
-          style={{
-            height: 60 + insets.top ,
-            width: width,
-            backgroundColor:
-              toastState.type === "Failed"
-                ? "#D8000061"
-                : toastState.type === "Success"
-                ? "#4CF10062"
-                : "#00000058",
-            justifyContent: "flex-end",
-            alignItems: "center",
+        <TouchableWithoutFeedback
+          onPress={() => {
+            console.log("pressed");
           }}
-          entering={FadeInUp.springify().withCallback(callback)}
-          exiting={FadeOutUp.springify().delay(2000)}
         >
-          <BlurView
-            tint={tint}
-            style={{ position: "absolute", width, height: 60 + insets.top }}
-            intensity={50}
-          />
-          <View
+          <Animated.View
             style={{
-              flexDirection: "row",
+              height: 60 + insets.top,
+              width: width,
+              backgroundColor:
+                toastState.type === "Failed"
+                  ? "#D8000061"
+                  : toastState.type === "Success"
+                  ? "#4CF10062"
+                  : "#00000058",
+              justifyContent: "flex-end",
               alignItems: "center",
-              gap: 10,
-              justifyContent: "center",
-              paddingBottom: 20,
             }}
+            entering={FadeInUp.springify().withCallback(callback)}
+            exiting={FadeOutUp.springify().delay(2000)}
           >
-            {renderIcon()}
-            <Text
-            
+            <BlurView
+              tint={tint}
+              style={{ position: "absolute", width, height: 60 + insets.top }}
+              intensity={50}
+            />
+            <View
               style={{
-                color,
-                fontFamily: "mulishMedium",
-                fontSize: 16,
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 10,
+                justifyContent: "center",
+                paddingBottom: 20,
               }}
             >
-              {toastState.text}
-            </Text>
-          </View>
-        </Animated.View>
+              {renderIcon()}
+              <Text
+                style={{
+                  color,
+                  fontFamily: "mulishMedium",
+                  fontSize: 16,
+                }}
+              >
+                {toastState.text}
+              </Text>
+            </View>
+          </Animated.View>
+        </TouchableWithoutFeedback>
       )}
     </Portal>
   );

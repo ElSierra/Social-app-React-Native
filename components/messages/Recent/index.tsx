@@ -1,5 +1,5 @@
 import { View, Text, Animated } from "react-native";
-import React from "react";
+import React, { useMemo } from "react";
 import AvatarName from "./AvatarName";
 import { FlatList } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -30,14 +30,18 @@ export default function Recent({ offset }: { offset: Animated.Value }) {
   const chatList = useAppSelector((state) => state?.chatlist?.data);
 
 
-  const onlineUsers = chatList.filter((item) => {
-    if (item?.users?.length === 1) {
-      return item?.users[0]?.id;
-    }
-    return onlineIds?.includes(
-      item?.users[0]?.id === userId ? item?.users[1]?.id : item?.users[0]?.id
-    );
-  });
+  const onlineUsers = useMemo(() => {
+    return chatList.filter((item) => {
+      if (item?.users?.length === 1) {
+        return item?.users[0]?.id;
+      }
+      return onlineIds?.includes(
+        item?.users[0]?.id === userId ? item?.users[1]?.id : item?.users[0]?.id
+      );
+    });
+  }, [chatList, onlineIds, userId]);
+
+
 
 
   return (

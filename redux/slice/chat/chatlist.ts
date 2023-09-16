@@ -8,6 +8,7 @@ import socket from "../../../util/socket";
 export type ChatList = {
   data: IChatList[];
   error: any;
+  new: boolean;
   loading: boolean;
 };
 
@@ -15,12 +16,19 @@ const chatList = createSlice({
   name: "chatList",
   initialState: {
     data: [],
+    new: false,
     error: null,
     loading: false,
   } as ChatList,
   reducers: {
     addToChatList: (state, action: PayloadAction<IChatList>) => {
       state.data = [action.payload, ...state.data];
+    },
+    clearNewFromChatList: (state) => {
+      state.new = false;
+    },
+    addNewIndication: (state) => {
+      state.new = true;
     },
 
     addToChatListStrict: (
@@ -32,10 +40,8 @@ const chatList = createSlice({
       );
       if (index && index !== -1) {
         state.data[index] = action.payload.chatList;
-        console.log("current chatList", state.data);
       } else {
         state.data = [action.payload.chatList, ...state.data];
-        console.log("current chatList", state.data);
       }
     },
     addNewChat: (
@@ -53,6 +59,7 @@ const chatList = createSlice({
         ];
       }
     },
+
     deleteMessage: (
       state,
       action: PayloadAction<{ id: string; chatId: string }>
@@ -96,5 +103,11 @@ const chatList = createSlice({
 });
 
 export default chatList.reducer;
-export const { addToChatList, addNewChat, deleteMessage, addToChatListStrict } =
-  chatList.actions;
+export const {
+  addToChatList,
+  addNewChat,
+  deleteMessage,
+  addToChatListStrict,
+  clearNewFromChatList,
+  addNewIndication,
+} = chatList.actions;

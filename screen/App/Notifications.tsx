@@ -9,7 +9,7 @@ export default function Notifications() {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <View style={{ flexDirection: "row" }}>
-        <NotificationIcon size={40} color={color} />
+        <NotificationIcon size={30} color={color} />
         <Text style={{ fontFamily: "jakaraBold", color }}>
           No New Notifications
         </Text>

@@ -1,6 +1,5 @@
-import { Pressable, View, StyleSheet} from "react-native";
+import { Pressable, View, StyleSheet } from "react-native";
 import { ImageFullScreenProp } from "../../types/navigation";
-
 
 import Animated, {
   Easing,
@@ -15,12 +14,11 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useEffect, useLayoutEffect } from "react";
 import axios from "axios";
 import RNFetchBlob from "rn-fetch-blob";
+import { RadixIcon } from "radix-ui-react-native-icons";
 
 import { useAppDispatch } from "../../redux/hooks/hooks";
 import { openToast } from "../../redux/slice/toast/toast";
 import { Image, ImageBackground } from "expo-image";
-
-
 
 export default function ImageFullScreen({
   route,
@@ -73,11 +71,7 @@ export default function ImageFullScreen({
               alignItems: "center",
             }}
           >
-            <MaterialCommunityIcons
-              name="download-box"
-              size={30}
-              color="white"
-            />
+            <RadixIcon name="download" size={25} color="white" />
           </View>
         </Pressable>
       ),
@@ -110,15 +104,22 @@ export default function ImageFullScreen({
               justifyContent: "center",
               width: "100%",
               height: "100%",
+              paddingHorizontal: 30,
             }}
           >
-         
+            <View
+              style={{
+                borderRadius: 20,
+                overflow: "hidden",
+                height: "70%",
+                width: "100%",
+              }}
+            >
               <Image
                 source={{ uri: photoUri }}
-                contentFit="contain"
                 style={{ width: "100%", height: "100%" }}
               />
-         
+            </View>
           </View>
         </ImageBackground>
       </Animated.View>

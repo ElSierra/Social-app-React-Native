@@ -1,10 +1,10 @@
-import { Image } from "expo-image";
+import { Image,ImageBackground } from "expo-image";
 import {
   View,
   Text,
   Animated,
   Image as NativeImage,
-  ImageBackground,
+  
   Pressable,
 } from "react-native";
 import { useAppSelector } from "../../redux/hooks/hooks";
@@ -108,7 +108,7 @@ export default function Header({
             width: 80,
             height: 80,
             borderRadius: 999,
-            top: 80,
+            top: 60 + insets.top,
             padding: 5,
 
             overflow: "hidden",

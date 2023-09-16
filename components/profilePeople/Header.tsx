@@ -113,7 +113,7 @@ export default function Header({
             width: 80,
             height: 80,
             borderRadius: 999,
-            top: 80,
+            top: 60 + insets.top,
             padding: 5,
 
             overflow: "hidden",

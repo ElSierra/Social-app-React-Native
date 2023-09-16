@@ -5,10 +5,7 @@ import { BlurView } from "expo-blur";
 import Animated, { FadeInLeft } from "react-native-reanimated";
 import { useState } from "react";
 import { IPerson } from "../../../types/api";
-import {
-  useLazyFollowUserQuery,
-
-} from "../../../redux/api/services";
+import { useLazyFollowUserQuery } from "../../../redux/api/services";
 import {
   useLazyGetFollowDetailsQuery,
   useLazyGetUserQuery,
@@ -16,7 +13,7 @@ import {
 import { useAppSelector } from "../../../redux/hooks/hooks";
 import useGetMode from "../../../hooks/GetMode";
 import { ProfileIcon } from "../../icons";
-
+import { Image } from "expo-image";
 
 const { width } = Dimensions.get("screen");
 export default function PeopleContainer({
@@ -61,7 +58,7 @@ export default function PeopleContainer({
     >
       <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
         {imageUri ? (
-          <FastImage
+          <Image
             source={{ uri: imageUri }}
             style={{ height: 30, width: 30, borderRadius: 9999 }}
           />

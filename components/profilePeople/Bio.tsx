@@ -41,9 +41,7 @@ export default function Bio({
   const handleFollow = () => {
     setFollowed(!followed);
     followUser({ id })
-      .then((e) => {
-  
-      })
+      .then((e) => {})
       .catch((e) => {});
     if (followed) {
       if (followers) {

@@ -67,11 +67,9 @@ export default function HomeFollowed() {
 
   const [noMore, setNoMore] = useState(false);
 
-  
-
- useEffect(()=>{
-  dispatch(resetAllPosts())
- },[])
+  useEffect(() => {
+    dispatch(resetAllPosts());
+  }, []);
   const [getLazyPost, postRes] = useLazyGetFollowedPostsQuery();
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = useCallback(() => {
@@ -207,7 +205,6 @@ export default function HomeFollowed() {
           exiting={FadeOutDown.springify()}
         >
           <FlashList
-    
             data={posts.data}
             decelerationRate={0.991}
             estimatedItemSize={100}

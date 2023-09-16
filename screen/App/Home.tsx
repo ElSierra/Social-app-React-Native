@@ -20,7 +20,6 @@ import { useNavigationState } from "@react-navigation/native";
 export default function Home({ navigation }: DrawerHomeProp) {
   const dark = useGetMode();
 
-
   const isDark = dark;
   const color = isDark ? "white" : "black";
   const dispatch = useAppDispatch();
@@ -37,7 +36,6 @@ export default function Home({ navigation }: DrawerHomeProp) {
       dispatch(signOut());
     }
   }, [userAuthValidate.data?.msg]);
-
 
   const ref = useRef<any>(null);
   useLayoutEffect(() => {
