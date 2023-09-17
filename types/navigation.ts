@@ -10,7 +10,11 @@ export type RootStackParamList = {
   Main: undefined;
   ImageFullScreen: {
     photoUri: string;
-    id: string;
+    id?: string;
+    dimensions?: {
+      height: number;
+      width: number;
+    }|null;
   };
   VideoFullScreen: {
     videoUri: string;
@@ -32,10 +36,10 @@ export type RootStackParamList = {
   };
   ChatScreen: {
     id: string;
-    chatId:string;
+    chatId: string;
     name: string;
     imageUri: string;
-    receiverId:string;
+    receiverId: string;
   };
   SearchUser: undefined;
   PostContent: undefined;
@@ -87,9 +91,7 @@ export type SearchUserNavigation = NavigationProp<
   RootStackParamList,
   "SearchUser"
 >;
-export type ChatNavigation = NavigationProp<
-  RootStackParamList,"ChatScreen"
->;
+export type ChatNavigation = NavigationProp<RootStackParamList, "ChatScreen">;
 
 export type HomeProp = NativeStackScreenProps<RootStackParamList, "Main">;
 export type DrawerHomeProp = DrawerScreenProps<

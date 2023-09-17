@@ -7,14 +7,18 @@ import useGetMode from "../../hooks/GetMode";
 export default function Bio() {
   const follow = useAppSelector((state) => state.followers);
   const user = useAppSelector((state) => state.user);
-  const dark = useGetMode()
-  const color = dark ? "white": "black"
+  const dark = useGetMode();
+  const color = dark ? "white" : "black";
   return (
-    <View style={{ borderBottomWidth: 1,           borderColor: "#B4B4B4D1", }}>
-      <View style={{paddingHorizontal:15,paddingVertical:10}}>
-        <View style={{ alignItems: "flex-end", width: "100%" }}>
-          <ButtonOutlined />
-        </View>
+    <View style={{ borderBottomWidth: 0.5, borderColor: "#B4B4B4D1", marginTop: 20 }}>
+      <View
+        style={{
+          paddingHorizontal: 15,
+          paddingVertical: 10,
+          flexDirection: "row",
+          justifyContent:"space-between"
+        }}
+      >
         <View style={{}}>
           <Text
             style={{
@@ -42,7 +46,7 @@ export default function Bio() {
             <View
               style={{ flexDirection: "row", alignItems: "center", gap: 5 }}
             >
-              <Text style={{ color,fontFamily: "jakaraBold", fontSize: 16 }}>
+              <Text style={{ color, fontFamily: "jakaraBold", fontSize: 16 }}>
                 {follow.following}
               </Text>
               <Text
@@ -54,7 +58,7 @@ export default function Bio() {
             <View
               style={{ flexDirection: "row", alignItems: "center", gap: 5 }}
             >
-              <Text style={{ color,fontFamily: "jakaraBold", fontSize: 16 }}>
+              <Text style={{ color, fontFamily: "jakaraBold", fontSize: 16 }}>
                 {follow.followers}
               </Text>
               <Text
@@ -64,6 +68,9 @@ export default function Bio() {
               </Text>
             </View>
           </View>
+        </View>
+        <View style={{}}>
+          <ButtonOutlined />
         </View>
       </View>
     </View>

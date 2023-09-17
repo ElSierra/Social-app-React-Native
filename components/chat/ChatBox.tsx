@@ -25,8 +25,8 @@ export default function ChatBox({
         width: "100%",
         flexDirection: "row",
         overflow: "hidden",
-        borderRadius: 20,
-        minHeight: 50,
+        borderRadius: 9999,
+        minHeight: 55,
         borderWidth: 0.5,
         borderColor: "#B4B4B488",
         justifyContent: "space-between",
@@ -45,7 +45,7 @@ export default function ChatBox({
         placeholderTextColor={"grey"}
         cursorColor={color}
         style={{
-          width: "73%",
+          width: "70%",
           height: "100%",
           maxHeight: 100,
           color,
@@ -75,7 +75,7 @@ export default function ChatBox({
               justifyContent: "center",
               alignItems: "center",
             }}
-            android_ripple={{ color: rippleColor, foreground: true }}
+            
           >
             <SendIcon size={25} color={color} />
           </Pressable>

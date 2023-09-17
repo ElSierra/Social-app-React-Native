@@ -74,6 +74,11 @@ const chatList = createSlice({
         );
       }
     },
+
+    clearAllChatData: (state) => {
+      state.data = [];
+      state.new = false;
+    },
   },
   extraReducers: (builder) => {
     builder.addMatcher(
@@ -110,4 +115,5 @@ export const {
   addToChatListStrict,
   clearNewFromChatList,
   addNewIndication,
+  clearAllChatData
 } = chatList.actions;

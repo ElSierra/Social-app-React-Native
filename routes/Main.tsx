@@ -89,6 +89,7 @@ import Notifications, {
 } from "../util/notification";
 import DrawerNavigator from "./Main/DrawerNavigation";
 import { BottomTabNavigator } from "./Main/BottomNavigation";
+import { dismissAllNotificationsAsync } from "expo-notifications";
 const BACKGROUND_FETCH_TASK = "background-fetch";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -123,6 +124,8 @@ export default function Main() {
       .catch((e) => {
         console.log(e);
       });
+      
+    dismissAllNotificationsAsync().then((e)=>{console.log(e)}).catch((e)=>{console.log(e)})
   }, []);
 
   useEffect(() => {
@@ -146,9 +149,11 @@ export default function Main() {
   }, [socket]);
 
   useEffect(() => {
+    const rooms: string[] = [];
     for (let i in chatList) {
-      socket?.emit("chat", chatList[i].id);
+      rooms.push(chatList[i].id);
     }
+    socket?.emit("chat", rooms);
   }, [chatList]);
 
   useEffect(() => {

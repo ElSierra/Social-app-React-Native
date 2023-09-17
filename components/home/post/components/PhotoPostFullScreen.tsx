@@ -30,7 +30,7 @@ export default function PhotoPostFullScreen({
         <View
           style={{
             width: width * 0.95,
-            height: 150,
+            height: 200,
             borderRadius: 15,
             justifyContent:"center",
             alignItems:"center",
@@ -44,7 +44,7 @@ export default function PhotoPostFullScreen({
             }}
             style={{
               width: width  ,
-              height: 150,
+              height: 200,
               paddingHorizontal: 4,
               borderRadius: 15,
             }}

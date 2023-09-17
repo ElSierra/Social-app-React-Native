@@ -96,6 +96,7 @@ export const {
   useTokenValidQuery,
   useLazyGetUserQuery,
   useGetGuestQuery,
+  useLazyGetNotificationsQuery,
   useLazyGetGuestQuery,
   useGetNotificationsQuery,
   useUpdateNotificationIdMutation,

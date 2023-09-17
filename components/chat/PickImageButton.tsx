@@ -10,17 +10,17 @@ export default function PickImageButton({
 }) {
   const dark = useGetMode();
   const backgroundColor = dark ? "white" : "black";
-  const backgroundColorView = !dark ? "white" : "black";
+  const backgroundColorView =  "#FD5E02" ;
   const rippleColor = !dark ? "#ABABAB" : "#55555500";
 
   return (
     <View
       style={{
-        width: 30,
+        width: 40,
         backgroundColor: backgroundColorView,
-        borderRadius: 10,
+        borderRadius: 999,
         overflow: "hidden",
-        height: 30,
+        height: 40,
         marginLeft: 10,
         justifyContent: "center",
         alignItems: "center",
@@ -52,7 +52,7 @@ export default function PickImageButton({
           alignItems: "center",
         }}
       >
-        <CameraIcon color={backgroundColor} size={20} />
+        <CameraIcon color={"white"} size={25} />
       </Pressable>
     </View>
   );

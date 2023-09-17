@@ -19,7 +19,7 @@ export default function IconButtons({
     <View
       style={{
         width: 80,
-        height: 60,
+        height: 50,
         justifyContent: "center",
         alignItems: "center",
         borderRadius:9999,

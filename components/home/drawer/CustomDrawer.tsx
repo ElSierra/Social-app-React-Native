@@ -32,6 +32,7 @@ import { InAppBrowser } from "react-native-inappbrowser-reborn";
 import { resetPost } from "../../../redux/slice/post";
 import { resetFollowers } from "../../../redux/slice/user/followers";
 import socket from "../../../util/socket";
+import { clearAllChatData } from "../../../redux/slice/chat/chatlist";
 
 export default function CustomDrawerContent(
   props: DrawerContentComponentProps
@@ -220,7 +221,7 @@ export default function CustomDrawerContent(
               props.navigation.closeDrawer();
               dispatch(resetPost());
               dispatch(signOut());
-         
+              dispatch(clearAllChatData());
               dispatch(resetFollowers());
             }}
             android_ripple={{ color: pressColor, foreground: true }}

@@ -1,11 +1,13 @@
 import { View, Text, FlatList, Dimensions } from "react-native";
-import React from "react";
+import React, { useCallback } from "react";
 import { NotificationIcon } from "../../components/icons";
 import useGetMode from "../../hooks/GetMode";
 import { useGetNotificationsQuery } from "../../redux/api/user";
 import NotificationBuilder from "../../components/notifications/NotificationBuilder";
 import { Image } from "expo-image";
 import AnimatedScreen from "../../components/global/AnimatedScreen";
+import { useFocusEffect } from "@react-navigation/native";
+import { ActivityIndicator } from "react-native-paper";
 export default function Notifications() {
   const dark = useGetMode();
   const { width } = Dimensions.get("screen");
@@ -16,16 +18,18 @@ export default function Notifications() {
     notifications.data?.notifications
   );
 
+  useFocusEffect(
+    useCallback(() => {
+      notifications.refetch();
+    }, [])
+  );
   return (
-    <AnimatedScreen
-      style={{
-      }}
-    >
+    <AnimatedScreen style={{          marginTop: 120,}}>
       {notifications.data?.notifications?.length === 0 && (
         <View
           style={{
             justifyContent: "center",
-           
+
             alignItems: "center",
           }}
         >
@@ -40,11 +44,26 @@ export default function Notifications() {
         </View>
       )}
       <FlatList
-      contentContainerStyle={{paddingTop:100}}
+      ListEmptyComponent={notifications.isLoading?<ActivityIndicator size={20} color={color}/>: undefined}
+        contentContainerStyle={{
+
+          gap: 10,
+          paddingHorizontal: 10,
+        }}
         renderItem={({ item, index }) => (
           <NotificationBuilder
             text={item.text}
             id={item.id}
+            position={
+              item.id === notifications.data?.notifications[0].id
+                ? "first"
+                : item.id ===
+                  notifications.data?.notifications[
+                    notifications.data?.notifications?.length - 1
+                  ].id
+                ? "last"
+                : "middle"
+            }
             userName={item.notifUser?.userName}
             userId={item?.notifUser?.id}
             index={index}

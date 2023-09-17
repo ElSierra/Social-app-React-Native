@@ -20,6 +20,7 @@ export default function NotificationBuilder({
   userId,
   userName,
   verified,
+  position,
 }: {
   imageUri?: string;
   text: string;
@@ -31,10 +32,12 @@ export default function NotificationBuilder({
   id: string;
   index: number;
   type: "Follow" | "Posts" | "Reminder" | "Suggestions";
+  position: "first" | "last" | "middle";
 }) {
   const dark = useGetMode();
   const color = !dark ? "black" : "white";
   const rColor = dark ? "#555555" : "#B0B0B0";
+  const backgroundColor = !dark ? "#F2F3F799" : "#25252599";
   const navigate = useNavigation<HomeNavigationProp>();
   return (
     <View
@@ -42,11 +45,11 @@ export default function NotificationBuilder({
         flexDirection: "row",
         paddingHorizontal: 10,
         borderColor: "#B4B4B488",
-        borderTopWidth: index == 0 ? 1 : 0,
+        borderRadius: 999,
         padding: 3,
-        borderBottomWidth: 1,
+        backgroundColor,
         alignItems: "center",
-        width,
+        width: "100%",
         justifyContent: "space-between",
       }}
     >
@@ -74,7 +77,7 @@ export default function NotificationBuilder({
 
               gap: 10,
               padding: 10,
-              
+
               borderRadius: 10,
             }}
           >
@@ -99,7 +102,7 @@ export default function NotificationBuilder({
                 numberOfLines={2}
                 style={{
                   width: width / 1.7,
-                  fontSize: 12,
+                  fontSize: 14,
                   fontFamily: "jakaraBold",
                   includeFontPadding: false,
                 }}

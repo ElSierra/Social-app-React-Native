@@ -33,7 +33,7 @@ import { useEffect } from "react";
 import socket from "../../util/socket";
 import { IMessageSocket } from "../../types/socket";
 import SearchBar from "../../components/discover/SearchBar";
-
+import { Text, View } from "react-native";
 const Tab = createBottomTabNavigator<BottomRootStackParamList>();
 export function BottomTabNavigator() {
   const dark = useGetMode();
@@ -204,9 +204,47 @@ export function BottomTabNavigator() {
         options={({ navigation }) => {
           return {
             title: "Notifications",
+            headerTitle: () => {
+              return (
+                <View style={{marginTop:20}}>
+                  <Text
+                    style={{
+                      fontFamily: "uberBold",
+                      fontSize: 30,
+                      
+                      color,
+                      height: 28,
+                    }}
+                  >
+                    Notifications
+                  </Text>
+                  <Text
+                    style={{ fontFamily: "jakara", includeFontPadding: false }}
+                  >
+                    Check Your Notifications
+                  </Text>
+                </View>
+              );
+            },
             headerTitleAlign: "left",
-            headerTitleStyle: { fontFamily: "uberBold", fontSize: 18, color, paddingLeft:5 },
-            
+
+            headerBackground: () => (
+              <BlurView
+                style={{
+                  opacity: 0,
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  top: 0,
+                  right: 0,
+                }}
+                tint={tint}
+                intensity={100}
+              />
+            ),
+            headerBackgroundContainerStyle: {
+              borderBottomWidth: 0,
+            },
           };
         }}
       />

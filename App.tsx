@@ -77,8 +77,20 @@ export default function App() {
     );
     const subscriptionResponse =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log("response", response.notification.request.content);
+        console.log("response", response.actionIdentifier);
+        console.log("🚀 ~ file: App.tsx:81 ~ Notifications.addNotificationResponseReceivedListener ~ response:")
+        if (response.actionIdentifier === "message") {
+          const userText = response.userText;
+          console.log(
+            "🚀✅✅ ~ file: App.tsx:83 ~ Notifications.addNotificationResponseReceivedListener ~ userText:",
+            userText
+          );
+        }
       });
+
+    Notifications.getNotificationCategoriesAsync().then((e) => {
+      console.log(e[0]);
+    });
     return () => {
       subscription.remove();
       subscriptionResponse.remove();
