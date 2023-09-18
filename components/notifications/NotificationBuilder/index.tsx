@@ -103,6 +103,7 @@ export default function NotificationBuilder({
                 style={{
                   width: width / 1.7,
                   fontSize: 14,
+                  color,
                   fontFamily: "jakaraBold",
                   includeFontPadding: false,
                 }}
