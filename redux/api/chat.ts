@@ -44,4 +44,4 @@ export const chatApi = createApi({
   }),
 });
 
-export const { useGetAllChatsQuery,useLazyGetAllMessagesQuery } = chatApi;
+export const { useGetAllChatsQuery,useLazyGetAllMessagesQuery,useLazyGetAllChatsQuery } = chatApi;

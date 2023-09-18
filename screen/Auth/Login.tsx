@@ -80,9 +80,17 @@ export default function Login({ navigation }: LoginScreen) {
       .catch((e) => {
         console.log(e);
         Vibration.vibrate(5);
-        if (e?.data?.status) {
+        if (e?.data?.msg) {
+          console.log("🚀 ~ file: Login.tsx:84 ~ onSubmit ~ e:", e.status);
           dispatch(openToast({ text: `${e?.data?.msg}`, type: "Failed" }));
-        }else {
+        } else if (e.status === 429) {
+          dispatch(
+            openToast({
+              text: `Login limit reached, wait and try again`,
+              type: "Failed",
+            })
+          );
+        } else {
           dispatch(openToast({ text: `Network Error`, type: "Failed" }));
         }
       });
@@ -190,7 +198,7 @@ export default function Login({ navigation }: LoginScreen) {
                     });
                   }}
                 >
-                  <Text>Not you ?</Text>
+                  <Text style={{ color }}>Not you ?</Text>
                 </Pressable>
               )}
               <View style={{ gap: 30, marginTop: 70 }}>

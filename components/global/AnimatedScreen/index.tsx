@@ -46,8 +46,8 @@ export default function AnimatedScreen({
       <Animated.View
         style={[
           { flex: 1, backgroundColor: "transparent" },
-          animatedStyle,
           style,
+          animatedStyle,
         ]}
       >
         {children}

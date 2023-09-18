@@ -5,7 +5,6 @@ import {
   ActivityIndicator,
   TouchableWithoutFeedback,
   Dimensions,
-
 } from "react-native";
 import React, {
   useCallback,
@@ -65,6 +64,11 @@ export default function VideoPostFullScreen({
 
   useEffect(() => {
     video.current?.setIsLoopingAsync(true).catch((e) => {});
+    return () => {
+      if (video.current) {
+        video.current.unloadAsync(); // Unload the video resource
+      }
+    };
   }, []);
 
   useMemo(() => {

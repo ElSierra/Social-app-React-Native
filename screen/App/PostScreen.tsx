@@ -24,6 +24,7 @@ import Button from "../../components/global/Buttons/Button";
 import CommentButton from "../../components/home/post/comment/PostButton";
 import uuid from "react-native-uuid";
 import { BlurView } from "expo-blur";
+import Animated, { FadeIn, FadeInLeft, FadeOutLeft } from "react-native-reanimated";
 export default function PostScreen({ navigation, route }: ViewPost) {
   const { params } = route;
   const dispatch = useAppDispatch();
@@ -51,6 +52,7 @@ export default function PostScreen({ navigation, route }: ViewPost) {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
   useEffect(() => {
+ 
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
       () => {
@@ -93,8 +95,8 @@ export default function PostScreen({ navigation, route }: ViewPost) {
   };
   const tint = dark ? "dark" : "light";
   return (
-    <AnimatedScreen>
-      <View style={{ flex: 1, marginTop: 100 }}>
+    
+      <Animated.View entering={FadeInLeft.duration(400)}style={{ flex: 1, marginTop: 100,  }}>
         <FlatList
           ListHeaderComponent={<FullScreenPost {...params} />}
           data={comments}
@@ -168,7 +170,7 @@ export default function PostScreen({ navigation, route }: ViewPost) {
             )}
           </View>
         </View>
-      </View>
-    </AnimatedScreen>
+      </Animated.View>
+
   );
 }

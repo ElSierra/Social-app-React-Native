@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import BouncyCheckbox from "react-native-bouncy-checkbox";
+
 import CheckBoxPair from "./CheckBoxPair";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../../../../redux/hooks/hooks";

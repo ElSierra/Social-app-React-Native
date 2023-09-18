@@ -6,6 +6,7 @@ import { FollowIcon } from "../../icons";
 import useGetMode from "../../../hooks/GetMode";
 import { useNavigation } from "@react-navigation/native";
 import { HomeNavigationProp } from "../../../types/navigation";
+import Animated, { FadeInRight } from "react-native-reanimated";
 
 const { width } = Dimensions.get("screen");
 
@@ -40,7 +41,8 @@ export default function NotificationBuilder({
   const backgroundColor = !dark ? "#F2F3F799" : "#25252599";
   const navigate = useNavigation<HomeNavigationProp>();
   return (
-    <View
+    <Animated.View
+      entering={FadeInRight.springify()}
       style={{
         flexDirection: "row",
         paddingHorizontal: 10,
@@ -114,6 +116,6 @@ export default function NotificationBuilder({
           </View>
         </Pressable>
       </View>
-    </View>
+    </Animated.View>
   );
 }

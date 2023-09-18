@@ -24,8 +24,7 @@ export default function Home({ navigation }: DrawerHomeProp) {
   const color = isDark ? "white" : "black";
   const dispatch = useAppDispatch();
   const [isAll, setIsAll] = useState(true);
-  useGetUserQuery(null);
-  useGetAllChatsQuery(null);
+
   // useGetRandomPostsQuery(null);
   // useGetRandomPeopleQuery(null);
 

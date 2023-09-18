@@ -25,7 +25,6 @@ import useGetMode from "../../../../hooks/GetMode";
 import { current } from "@reduxjs/toolkit";
 import { HomeNavigationProp } from "../../../../types/navigation";
 
-
 function VideoPost({
   videoTitle,
   thumbNail,
@@ -45,9 +44,7 @@ function VideoPost({
   videoViews?: string;
 }) {
 
-  const imageScreenShot = videoUri
-    .replace(".mp4", ".jpg")
-    .replace("video", "pic");
+
   const navigation = useNavigation<HomeNavigationProp>();
   return (
     <View
@@ -86,7 +83,7 @@ function VideoPost({
           </Pressable>
         </View>
         <Image
-          source={{uri:thumbNail ? thumbNail : videoUri}}
+          source={{ uri: thumbNail ? thumbNail : videoUri }}
           style={{ flex: 1, opacity: 0.6 }}
           contentFit="contain"
         />

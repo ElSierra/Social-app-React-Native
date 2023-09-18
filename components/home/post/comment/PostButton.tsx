@@ -25,9 +25,7 @@ export default function CommentButton({
   const rippleColor = !dark ? "white" : "black";
   const color = !dark ? "white" : "black";
   return (
-    <Animated.View
-      entering={FadeInDown.duration(400)}
-      exiting={FadeOutDown.duration(400)}
+    <View
       style={{
         backgroundColor: !isLoading ? backgroundColor : backgroundColorLoad,
         height: 45,
@@ -54,6 +52,6 @@ export default function CommentButton({
       >
         <Text style={{ color, fontFamily: "mulish" }}>Comment</Text>
       </Pressable>
-    </Animated.View>
+    </View>
   );
 }

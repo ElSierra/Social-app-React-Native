@@ -26,7 +26,7 @@ import uuid from "react-native-uuid";
 import TypingBox from "../../components/chat/TypingBox";
 import BSON from "bson";
 import ContextMenu from "react-native-context-menu-view";
-import { HoldItem, HoldMenuProvider } from "react-native-hold-menu";
+
 import { IChatList } from "../../types/api";
 import { findChatById } from "../../util/chatSearch";
 

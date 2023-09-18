@@ -220,7 +220,7 @@ export default function HomeAll() {
           <FlashList
             data={posts.data}
             decelerationRate={0.991}
-            estimatedItemSize={100}
+            estimatedItemSize={300}
             ListFooterComponent={renderFooter}
             refreshControl={
               <RefreshControl

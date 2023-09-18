@@ -54,6 +54,7 @@ import SearchBar from "../components/discover/SearchBar";
 import VideoFullScreen from "../screen/App/VideoFullScreen";
 import { useAppDispatch, useAppSelector } from "../redux/hooks/hooks";
 import {
+  useGetUserQuery,
   useLazyGetFollowDetailsQuery,
   useUpdateNotificationIdMutation,
 } from "../redux/api/user";
@@ -67,7 +68,7 @@ import {
 import ProfilePeople from "../screen/App/ProfilePeople";
 import ChatScreen from "../screen/App/ChatScreen";
 import SearchUsers from "../screen/App/SearchUsers";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+
 import {
   addNewChat,
   addNewIndication,
@@ -90,6 +91,10 @@ import Notifications, {
 import DrawerNavigator from "./Main/DrawerNavigation";
 import { BottomTabNavigator } from "./Main/BottomNavigation";
 import { dismissAllNotificationsAsync } from "expo-notifications";
+import {
+  useGetAllChatsQuery,
+  useLazyGetAllChatsQuery,
+} from "../redux/api/chat";
 const BACKGROUND_FETCH_TASK = "background-fetch";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -118,20 +123,37 @@ export default function Main() {
   const dispatch = useAppDispatch();
   const socket = useSocket();
   const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
+  const [getAllChats] = useLazyGetAllChatsQuery();
+
+  useEffect(() => {
+    getAllChats(null)
+      .then((e) => {})
+      .catch((e) => e);
+  }, []);
+  useGetUserQuery(null);
   useEffect(() => {
     registerForPushNotificationsAsync()
       .then((e) => updateNotificationId({ notificationId: e?.data as string }))
       .catch((e) => {
         console.log(e);
       });
-      
-    dismissAllNotificationsAsync().then((e)=>{console.log(e)}).catch((e)=>{console.log(e)})
+
+    dismissAllNotificationsAsync()
+      .then((e) => {
+        console.log(e);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }, []);
 
   useEffect(() => {
     socket?.on("connected", (connected) => {
       dispatch(openToast({ text: "Connected", type: "Success" }));
     });
+    return () => {
+      socket?.off("connected");
+    };
   }, [socket]);
 
   useEffect(() => {
@@ -154,6 +176,10 @@ export default function Main() {
       rooms.push(chatList[i].id);
     }
     socket?.emit("chat", rooms);
+
+    return () => {
+      socket?.off("chat");
+    };
   }, [chatList]);
 
   useEffect(() => {
@@ -177,6 +203,9 @@ export default function Main() {
         }
       });
     }
+    return () => {
+      socket?.off("newChat");
+    };
   }, [socket]);
 
   useEffect(() => {
@@ -195,11 +224,17 @@ export default function Main() {
         }
       }
     });
+    return () => {
+      socket?.off("message");
+    };
   }, [socket]);
   useEffect(() => {
     socket?.on("online", (online) => {
       dispatch(updateOnlineIds({ ids: online }));
     });
+    return () => {
+      socket?.off("online");
+    };
   }, [socket]);
 
   const appState = useRef(AppState.currentState);
@@ -232,6 +267,7 @@ export default function Main() {
       subscription.remove();
     };
   }, []);
+
   return (
     <BottomSheetModalProvider>
       <BottomSheetContainer>
@@ -242,13 +278,14 @@ export default function Main() {
         >
           <Stack.Screen
             name="Main"
-            options={{ headerShown: false, freezeOnBlur: true }}
+            options={{ headerShown: false }}
             component={BottomTabNavigator}
           />
           <Stack.Screen
             name="Profile"
             options={{
               headerTitle: "",
+
               animation: "fade_from_bottom",
               headerTransparent: true,
               headerTintColor: "white",
@@ -269,7 +306,8 @@ export default function Main() {
             name="ImageFullScreen"
             options={{
               title: "",
-              animation: "fade",
+              animation: "none",
+
               headerTransparent: true,
               headerShadowVisible: false,
               headerTintColor: "white",
@@ -326,7 +364,7 @@ export default function Main() {
             options={{
               title: "",
               contentStyle: { backgroundColor: "black" },
-              animation: "fade",
+              animation: "fade_from_bottom",
               headerTransparent: true,
               headerShadowVisible: false,
               headerTintColor: "white",
@@ -352,7 +390,7 @@ export default function Main() {
                 />
               ),
               title: "Post",
-              animation: "fade",
+              animation: "none",
               headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
               headerShadowVisible: false,
 

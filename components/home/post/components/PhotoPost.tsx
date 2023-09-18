@@ -51,6 +51,7 @@ export default function PhotoPost({
         <Image
           style={{ flex: 1, width: "100%", borderRadius: 15 }}
           contentFit="cover"
+          transition={1000}
           source={{ uri: photoUri[0] }}
         />
       </Pressable>

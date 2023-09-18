@@ -1,12 +1,8 @@
-import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
-import { LinearGradient } from "expo-linear-gradient";
 
 import { Dimensions, Text, View } from "react-native";
 import useGetMode from "../../../hooks/GetMode";
 
 const { width } = Dimensions.get("screen");
-
-const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 export const Skeleton = () => {
   const dark = useGetMode();
   const shimmerColors = dark

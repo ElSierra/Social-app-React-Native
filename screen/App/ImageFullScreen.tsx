@@ -116,6 +116,7 @@ export default function ImageFullScreen({
               }}
             >
               <Image
+                transition={1000}
                 source={{ uri: photoUri }}
                 style={{ width: "100%", height: "100%" }}
               />

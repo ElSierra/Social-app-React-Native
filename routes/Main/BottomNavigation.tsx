@@ -47,6 +47,7 @@ export function BottomTabNavigator() {
   const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
   return (
     <Tab.Navigator
+    
       tabBar={(props) => (
         <BlurView
           style={{
@@ -61,8 +62,9 @@ export function BottomTabNavigator() {
           <BottomTabBar {...props} />
         </BlurView>
       )}
+      
       sceneContainerStyle={{ backgroundColor }}
-      screenOptions={({ navigation, route }) => {
+      screenOptions={({ navigation, route, }) => {
         return {
           tabBarHideOnKeyboard: true,
           tabBarShowLabel: false,

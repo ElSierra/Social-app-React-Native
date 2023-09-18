@@ -56,17 +56,15 @@ export default function Bio({
   };
 
   return (
-    <View style={{ borderBottomWidth: 1, borderColor: "#B4B4B4D1" }}>
-      <View style={{ paddingHorizontal: 15, paddingVertical: 10 }}>
-        <View style={{ alignItems: "flex-end", width: "100%", height: 60 }}>
-          {guestData.data?.data.isFollowed !== undefined && user?.id !== id && (
-            <FollowerUser
-              handleFollow={handleFollow}
-              id={id}
-              followed={followed}
-            />
-          )}
-        </View>
+    <View style={{ borderBottomWidth: 0.5, borderColor: "#B4B4B4D1",marginTop: 20 }}>
+      <View
+        style={{
+          paddingHorizontal: 15,
+          paddingVertical: 10,
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
         <View style={{}}>
           <Text
             style={{
@@ -126,6 +124,15 @@ export default function Bio({
               </Text>
             </View>
           </View>
+        </View>
+        <View style={{}}>
+          {guestData.data?.data.isFollowed !== undefined && user?.id !== id && (
+            <FollowerUser
+              handleFollow={handleFollow}
+              id={id}
+              followed={followed}
+            />
+          )}
         </View>
       </View>
     </View>

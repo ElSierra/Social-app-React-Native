@@ -52,6 +52,10 @@ export default function AudioPost({
       } catch (e) {}
     };
     loadSound();
+
+    return ()=>{
+      sound?._clearSubscriptions()
+    }
   }, []);
   useEffect(() => {
     sound?.setOnPlaybackStatusUpdate((status) => setStatus(status));
