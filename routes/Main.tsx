@@ -130,7 +130,7 @@ export default function Main() {
       .then((e) => {})
       .catch((e) => e);
   }, []);
-  useGetUserQuery(null);
+  const response = useGetUserQuery(null);
   useEffect(() => {
     registerForPushNotificationsAsync()
       .then((e) => updateNotificationId({ notificationId: e?.data as string }))

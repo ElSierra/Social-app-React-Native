@@ -4,6 +4,7 @@ import {
   RefreshControl,
   Text,
   Pressable,
+  FlatList,
 } from "react-native";
 import React, {
   useCallback,
@@ -217,10 +218,10 @@ export default function HomeAll() {
           entering={FadeIn.springify().duration(400)}
           exiting={FadeOutDown.springify()}
         >
-          <FlashList
+          <FlatList
             data={posts.data}
             decelerationRate={0.991}
-            estimatedItemSize={300}
+            // estimatedItemSize={300}
             ListFooterComponent={renderFooter}
             refreshControl={
               <RefreshControl
@@ -231,7 +232,7 @@ export default function HomeAll() {
             }
             onEndReachedThreshold={0.3}
             onEndReached={fetchMoreData}
-            estimatedListSize={{ width, height }}
+            // estimatedListSize={{ width, height }}
             renderItem={renderItem}
             contentContainerStyle={{ paddingTop: 100, paddingBottom: 100 }}
           />

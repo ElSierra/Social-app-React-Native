@@ -13,18 +13,36 @@ export default function Notifications() {
   const { width } = Dimensions.get("screen");
   const color = dark ? "white" : "black";
   const notifications = useGetNotificationsQuery(null);
-  console.log(
-    "🚀 ~ file: Notifications.tsx:11 ~ Notifications ~ notifications:",
-    notifications.data?.notifications
-  );
 
   useFocusEffect(
     useCallback(() => {
       notifications.refetch();
     }, [])
   );
+  const renderItem = ({ item, index }:any) => (
+    <NotificationBuilder
+      text={item.text}
+      id={item.id}
+      position={
+        item.id === notifications.data?.notifications[0].id
+          ? "first"
+          : item.id ===
+            notifications.data?.notifications[
+              notifications.data?.notifications?.length - 1
+            ].id
+          ? "last"
+          : "middle"
+      }
+      userName={item.notifUser?.userName}
+      userId={item?.notifUser?.id}
+      index={index}
+      imageUri={item?.notifUser?.imageUri}
+      date={item.createdAt}
+      type={item.type}
+    />
+  );
   return (
-    <AnimatedScreen style={{          marginTop: 120,}}>
+    <AnimatedScreen style={{ marginTop: 120 }}>
       {notifications.data?.notifications?.length === 0 && (
         <View
           style={{
@@ -44,34 +62,16 @@ export default function Notifications() {
         </View>
       )}
       <FlatList
-      ListEmptyComponent={notifications.isLoading?<ActivityIndicator size={20} color={color}/>: undefined}
+        ListEmptyComponent={
+          notifications.isLoading ? (
+            <ActivityIndicator size={20} color={color} />
+          ) : undefined
+        }
         contentContainerStyle={{
-
           gap: 10,
           paddingHorizontal: 10,
         }}
-        renderItem={({ item, index }) => (
-          <NotificationBuilder
-            text={item.text}
-            id={item.id}
-            position={
-              item.id === notifications.data?.notifications[0].id
-                ? "first"
-                : item.id ===
-                  notifications.data?.notifications[
-                    notifications.data?.notifications?.length - 1
-                  ].id
-                ? "last"
-                : "middle"
-            }
-            userName={item.notifUser?.userName}
-            userId={item?.notifUser?.id}
-            index={index}
-            imageUri={item?.notifUser?.imageUri}
-            date={item.createdAt}
-            type={item.type}
-          />
-        )}
+        renderItem={renderItem}
         data={notifications?.data?.notifications}
       />
     </AnimatedScreen>

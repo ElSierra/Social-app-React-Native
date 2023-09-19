@@ -135,7 +135,8 @@ export default function Login({ navigation }: LoginScreen) {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
       () => {
-        scrollViewRef.current?.scrollTo({ x: 80, y: 0, animated: true });
+        console.log("shsh")
+        scrollViewRef.current?.scrollTo({ x: 300, y: 0,  });
         setKeyboardVisible(true); // or some other action
       }
     );
@@ -174,9 +175,9 @@ export default function Login({ navigation }: LoginScreen) {
                     style={{ height: 200, width }}
                   />
                 ) : (
-                  <View style={{ paddingTop: 100, paddingBottom: 10 }}>
+                  <View style={{ paddingBottom: 10, marginTop:40 }}>
                     <Image
-                      style={{ height: 150, width: 150, borderRadius: 999 }}
+                      style={{ height: 100, width: 100, borderRadius: 999 }}
                       source={{ uri: user?.imageUri }}
                     />
                   </View>

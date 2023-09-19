@@ -44,8 +44,9 @@ export default function ChatList({ offset }: { offset: Animated.Value }) {
               scrollEventThrottle={16}
               contentContainerStyle={{
                 gap: 0,
-                paddingBottom: 100,
+                paddingBottom: 300,
                 paddingTop: 20,
+
               }}
               data={chatList.data}
               onScroll={Animated.event(

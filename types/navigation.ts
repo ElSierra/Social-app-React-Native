@@ -36,7 +36,7 @@ export type RootStackParamList = {
   };
   ChatScreen: {
     id: string;
-    chatId: string;
+    chatId?: string;
     name: string;
     imageUri: string;
     receiverId: string;

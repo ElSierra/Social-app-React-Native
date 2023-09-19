@@ -10,6 +10,7 @@ import { IChatList } from "../../../types/api";
 import { useAppSelector } from "../../../redux/hooks/hooks";
 import Animated, { BounceIn, BounceOut } from "react-native-reanimated";
 import { Image } from "expo-image";
+import { ProfileIcon } from "../../icons";
 const { width } = Dimensions.get("screen");
 export default function ListContainer({ data }: { data: IChatList }) {
   const dark = useGetMode();
@@ -27,6 +28,12 @@ export default function ListContainer({ data }: { data: IChatList }) {
   const isOnline = onlineIds?.some((ids) => ids === receiverId);
 
   const navigation = useNavigation<HomeNavigationProp>();
+  const imageUri =
+    data.users?.length === 1
+      ? data.users[0]?.imageUri
+      : data.users[0]?.id === userId
+      ? data.users[1].imageUri
+      : data.users[0].imageUri;
   return (
     <Pressable
       style={{ width: "100%", padding: 15, paddingHorizontal: 20 }}
@@ -54,21 +61,34 @@ export default function ListContainer({ data }: { data: IChatList }) {
         style={{
           flexDirection: "row",
           width: "100%",
+          alignItems: "center",
           justifyContent: "space-between",
         }}
       >
-        <View style={{ flexDirection: "row", gap: 10 }}>
-          <Image
-            style={{ borderRadius: 999, height: 50, width: 50 }}
-            source={{
-              uri:
-                data.users?.length === 1
-                  ? data.users[0]?.imageUri
-                  : data.users[0]?.id === userId
-                  ? data.users[1].imageUri
-                  : data.users[0].imageUri,
-            }}
-          />
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 10,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {!imageUri ? (
+            <ProfileIcon size={60} color={color} />
+          ) : (
+            <Image
+              transition={1000}
+              placeholder={
+                dark
+                  ? require("../../../assets/images/profile-black.svg")
+                  : require("../../../assets/images/profile-white.svg")
+              }
+              style={{ borderRadius: 999, height: 50, width: 50 }}
+              source={{
+                uri: imageUri,
+              }}
+            />
+          )}
           <View style={{}}>
             <View
               style={{ flexDirection: "row", alignItems: "center", gap: 4 }}
@@ -104,7 +124,7 @@ export default function ListContainer({ data }: { data: IChatList }) {
             <Text
               numberOfLines={1}
               style={{
-                width: width / 1.7,
+                width: width / 1.9,
                 fontFamily: "mulishRegular",
                 fontSize: 16,
                 color: "grey",

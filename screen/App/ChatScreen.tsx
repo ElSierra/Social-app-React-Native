@@ -40,9 +40,9 @@ import useSocket from "../../hooks/Socket";
 import { useLazyGetAllMessagesQuery } from "../../redux/api/chat";
 import { Image } from "expo-image";
 import ChatListView from "../../components/messages/ChatList/ChatListView";
+import { ProfileIcon } from "../../components/icons";
 
 export default function ChatScreen({ navigation, route }: ChatScreenProp) {
- 
   const user = useAppSelector((state) => state.user?.data);
 
   const chatState = useAppSelector((state) => state?.chatlist.data);
@@ -62,7 +62,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   const [isTyping, setIstyping] = useState(false);
   const [getAllMessages] = useLazyGetAllMessagesQuery();
 
-  const renderItem = (({ item }: any) => (
+  const renderItem = ({ item }: any) => (
     <Pressable
       ref={buttonRef}
       onLongPress={(e) => {
@@ -94,7 +94,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
         />
       }
     </Pressable>
-  ));
+  );
 
   useMemo(() => {
     if (route.params?.chatId) {
@@ -106,7 +106,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
         dispatch(
           addToChatListStrict({
             chatList: r.data?.chatList,
-            chatId: route.params.chatId,
+            chatId: route.params.chatId as string,
           })
         );
       });
@@ -114,7 +114,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   }, [route.params?.chatId]);
 
   useMemo(() => {
-    findChatById(route.params.id || route.params.chatId, chatState)
+    findChatById(route.params.id || (route.params.chatId as string), chatState)
       .then((chat) => {
         if (chat) {
           setChats(chat);
@@ -122,9 +122,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
           ("Chat not found");
         }
       })
-      .catch((error) => {
-    
-      });
+      .catch((error) => {});
   }, [chatState]);
 
   useEffect(() => {
@@ -145,7 +143,6 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
 
   useEffect(() => {
     socket?.on("isTyping", (data: { isTyping: boolean; id: string }) => {
-      
       if (data) {
         if (data.id !== user?.id) {
           setIstyping(data.isTyping);
@@ -154,7 +151,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
     });
   }, [socket]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     navigation.setOptions({
       headerTitle: () => {
         return (
@@ -209,12 +206,16 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
               {!route.params.chatId && (
                 <Entypo name="chevron-left" size={30} color={color} />
               )}
-              <Image
-                style={{ height: 40, width: 40, borderRadius: 9999 }}
-                source={{
-                  uri: route.params.imageUri || userChats?.users[0].imageUri,
-                }}
-              />
+              {route.params.imageUri || userChats?.users[0].imageUri ? (
+                <Image
+                  style={{ height: 40, width: 40, borderRadius: 9999 }}
+                  source={{
+                    uri: route.params.imageUri || userChats?.users[0].imageUri,
+                  }}
+                />
+              ) : (
+                <ProfileIcon color={color} size={45} />
+              )}
             </View>
           </Pressable>
         );
@@ -255,7 +256,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
         dispatch(openToast({ text: "Message didnot Send", type: "Failed" }));
       }
     }, 10000);
-  },[messageText])
+  }, [messageText]);
   const [isOpen, setIsOpen] = useState(false);
 
   const [visibleId, setVisibleId] = useState<string | null>(null);
@@ -344,7 +345,12 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
         chatId={route.params.id}
       />
       <View style={{ flex: 1 }}>
-        <ChatListView isTyping={isTyping} messageText={messageText} renderItem={renderItem} userChats={userChats}/>
+        <ChatListView
+          isTyping={isTyping}
+          messageText={messageText}
+          renderItem={renderItem}
+          userChats={userChats}
+        />
         <View
           style={{
             padding: 10,
