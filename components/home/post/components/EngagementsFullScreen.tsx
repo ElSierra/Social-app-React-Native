@@ -11,8 +11,12 @@ import {
   ShareUnfocused,
 } from "../../../icons";
 import useGetMode from "../../../../hooks/GetMode";
-import { useLazyLikePostQuery } from "../../../../redux/api/services";
+import {
+  useLazyLikePostQuery,
+  useLazyRepostQuery,
+} from "../../../../redux/api/services";
 import CommentButton from "./CommentButton";
+import RepostButton from "./RepostButton";
 
 export default function EngagementsFullScreen({
   title,
@@ -20,20 +24,23 @@ export default function EngagementsFullScreen({
   comments,
   isLiked,
   id,
+  isReposted,
 }: {
   title?: string;
   like: number;
   comments?: number;
   id: string;
   isLiked: boolean;
+  isReposted: boolean;
 }) {
   const dark = useGetMode();
   const isDark = dark;
+  const [reposted, setRepost] = useState(() => isReposted);
   const [likeAmount, setLikeAmount] = useState(() => like);
   const [clicked, setClicked] = useState(() => isLiked);
   const [clickedComment, setClickedComment] = useState(false);
   const [likePost] = useLazyLikePostQuery();
-
+  const shareColor = isDark ? "#91EC09" : "#639E0B";
   const handleClicked = (click: boolean) => {
     setClicked(click);
     likePost({ id });
@@ -45,6 +52,13 @@ export default function EngagementsFullScreen({
   };
   const handleClickComment = () => {
     setClickedComment(!clickedComment);
+  };
+
+  const [rePostPost] = useLazyRepostQuery();
+
+  const handleRepost = (repost: boolean) => {
+    setRepost(repost);
+    rePostPost({ id });
   };
 
   const color = isDark ? "white" : "black";
@@ -80,7 +94,12 @@ export default function EngagementsFullScreen({
           clicked={clicked}
           setClicked={handleClicked}
         />
-        <ShareUnfocused size={20} color={color} />
+        <RepostButton
+          isPosted={isReposted}
+          clicked={reposted}
+          setReposted={handleRepost}
+        />
+        <ShareUnfocused size={20} color={shareColor} />
       </View>
     </View>
   );

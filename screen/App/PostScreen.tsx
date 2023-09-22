@@ -96,7 +96,7 @@ export default function PostScreen({ navigation, route }: ViewPost) {
   const tint = dark ? "dark" : "light";
   return (
     
-      <Animated.View entering={FadeInLeft.duration(400)}style={{ flex: 1, marginTop: 100,  }}>
+      <Animated.View entering={FadeIn.duration(400)}style={{ flex: 1, marginTop: 100,  }}>
         <FlatList
           ListHeaderComponent={<FullScreenPost {...params} />}
           data={comments}

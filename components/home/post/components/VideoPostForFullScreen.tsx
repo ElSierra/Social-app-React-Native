@@ -164,7 +164,7 @@ export default function VideoPostFullScreen({
         ></ImageBackground>
       </View>
       {
-        <View style={{ height: "100%", width: "100%", position: "absolute" }}>
+        <View style={{ height: "100%", width: "100%", position: "absolute", }}>
           <TouchableWithoutFeedback
             style={{ flex: 1, width: "100%" }}
             onPress={() => {

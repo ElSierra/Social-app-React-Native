@@ -64,7 +64,7 @@ export default function HomeFollowed() {
   const width = Dimensions.get("screen").width;
 
   const [skip, setSkip] = useState(0);
-
+  const authId = useAppSelector((state) => state.user.data?.id);
   const [noMore, setNoMore] = useState(false);
 
   useEffect(() => {
@@ -175,9 +175,14 @@ export default function HomeFollowed() {
     <PostBuilder
       id={item.id}
       date={item.createdAt}
+      isReposted={
+        item?.repostUser?.find((repostUser) => repostUser?.id === authId)
+          ? true
+          : false
+      }
       comments={item._count.comments}
       like={item._count.like}
-      isLiked={item.isLiked}
+      isLiked={item?.like?.find((like) => like?.userId === authId) ? true : false}
       imageUri={item.user?.imageUri}
       name={item.user?.name}
       thumbNail={item.videoThumbnail}

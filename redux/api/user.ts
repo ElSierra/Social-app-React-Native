@@ -1,6 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { UserState } from "../slice/user";
-import { IGuestData, IUSerData, Notifications } from "../../types/api";
+import {
+  FollowData,
+  FollowingData,
+  IGuestData,
+  IUSerData,
+  Notifications,
+} from "../../types/api";
 import storage from "../storage";
 import { RootState } from "../store";
 
@@ -35,7 +41,7 @@ export const userApi = createApi({
       providesTags: ["guest"],
       keepUnusedDataFor: 10,
     }),
-    getNotifications: builder.query<{ notifications: Notifications[] },null>({
+    getNotifications: builder.query<{ notifications: Notifications[] }, null>({
       query: () => `/get-notifications`,
       keepUnusedDataFor: 10,
     }),
@@ -88,6 +94,20 @@ export const userApi = createApi({
         };
       },
     }),
+    getFollowingList: builder.query<
+      FollowingData[],
+      { take: number; skip: number }
+    >({
+      query: ({ take, skip }) => `/get-following?take=${take}&skip=${skip}`,
+      providesTags: ["user"],
+    }),
+    getFollowersList: builder.query<
+      FollowData[],
+      { take: number; skip: number }
+    >({
+      query: ({ take, skip }) => `/get-followers?take=${take}&skip=${skip}`,
+      providesTags: ["user"],
+    }),
   }),
 });
 
@@ -101,6 +121,8 @@ export const {
   useGetNotificationsQuery,
   useUpdateNotificationIdMutation,
   useUploadProfilePictureMutation,
+  useLazyGetFollowersListQuery,
+  useLazyGetFollowingListQuery,
   useGetFollowDetailsQuery,
   useLazyGetFollowDetailsQuery,
 } = userApi;

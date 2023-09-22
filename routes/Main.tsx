@@ -5,6 +5,7 @@ import {
   Dimensions,
   SafeAreaView,
   Alert,
+  Platform,
 } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
@@ -85,9 +86,7 @@ import { IMessageSocket } from "../types/socket";
 import { useNavigationState } from "@react-navigation/native";
 import useSocket from "../hooks/Socket";
 import oldSocket from "../util/socket";
-import Notifications, {
-  registerForPushNotificationsAsync,
-} from "../util/notification";
+import Notifications from "../util/notification";
 import DrawerNavigator from "./Main/DrawerNavigation";
 import { BottomTabNavigator } from "./Main/BottomNavigation";
 import { dismissAllNotificationsAsync } from "expo-notifications";
@@ -95,6 +94,7 @@ import {
   useGetAllChatsQuery,
   useLazyGetAllChatsQuery,
 } from "../redux/api/chat";
+import FollowingFollowers from "../screen/App/FollowingFollowers";
 const BACKGROUND_FETCH_TASK = "background-fetch";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -132,6 +132,53 @@ export default function Main() {
   }, []);
   const response = useGetUserQuery(null);
   useEffect(() => {
+    async function registerForPushNotificationsAsync() {
+      try {
+        let token;
+
+        const { status: existingStatus } =
+          await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+        if (existingStatus !== "granted") {
+          const { status } = await Notifications.requestPermissionsAsync();
+          finalStatus = status;
+        }
+        if (finalStatus !== "granted") {
+          dispatch(
+            openToast({
+              text: "Notifications are disabled",
+              type: "Failed",
+            })
+          );
+        }
+        token = await Notifications.getExpoPushTokenAsync({
+          projectId: "e618bb47-6149-4585-8cc8-884c5992795e",
+        });
+        console.log(token);
+
+        if (Platform.OS === "android") {
+          Notifications.setNotificationChannelAsync("default", {
+            name: "default",
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: "#8FFF1FC0",
+          });
+          Notifications.setNotificationCategoryAsync("message", [
+            {
+              identifier: "message",
+              buttonTitle: "Reply",
+              textInput: {
+                submitButtonTitle: "reply",
+                placeholder: "Enter Reply",
+              },
+            },
+          ]);
+        }
+
+        return token;
+      } catch (e) {}
+    }
+
     registerForPushNotificationsAsync()
       .then((e) => updateNotificationId({ notificationId: e?.data as string }))
       .catch((e) => {
@@ -306,7 +353,7 @@ export default function Main() {
             name="ImageFullScreen"
             options={{
               title: "",
-              animation: "none",
+              animation: "fade_from_bottom",
 
               headerTransparent: true,
               headerShadowVisible: false,
@@ -402,6 +449,24 @@ export default function Main() {
               },
             }}
             component={PostScreen}
+          />
+          <Stack.Screen
+            name="FollowingFollowers"
+            options={{
+            
+              title: "Follow List",
+              animation: "fade_from_bottom",
+              headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
+              headerShadowVisible: false,
+
+              headerTransparent: true,
+              headerTitleAlign: "center",
+              headerTintColor: color,
+              headerStyle: {
+                backgroundColor: "transparent",
+              },
+            }}
+            component={FollowingFollowers}
           />
           <Stack.Screen
             name="SearchUser"

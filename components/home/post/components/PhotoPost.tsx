@@ -27,6 +27,7 @@ export default function PhotoPost({
         width: "100%",
         height: 200,
         marginTop: 10,
+        marginBottom:10,
         borderRadius: 15,
         overflow: "hidden",
         justifyContent: "center",

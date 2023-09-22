@@ -1,4 +1,4 @@
-import { View, Text, useColorScheme } from "react-native";
+import { View, Text, useColorScheme, Pressable } from "react-native";
 
 import useGetMode from "../../../hooks/GetMode";
 import { useAppSelector } from "../../../redux/hooks/hooks";
@@ -6,11 +6,13 @@ import { ProfileIcon, VerifiedIcon } from "../../icons";
 
 import { useState } from "react";
 import { Image } from "expo-image";
+import { useNavigation } from "@react-navigation/native";
+import { HomeNavigationProp } from "../../../types/navigation";
 
 export default function HeaderDrawer() {
   const dark = useGetMode();
   const isDark = dark;
-
+  const navigation = useNavigation<HomeNavigationProp>();
   const color = isDark ? "white" : "black";
   const user = useAppSelector((state) => state.user.data);
   const follows = useAppSelector((state) => state.followers);
@@ -19,9 +21,9 @@ export default function HeaderDrawer() {
     <View style={{ paddingLeft: 14, flex: 1 }}>
       {user?.imageUri ? (
         <Image
-        priority={"high"}
+          priority={"high"}
           style={{ height: 50, width: 50, borderRadius: 9999 }}
-          source={{ uri: user?.imageUri, }}
+          source={{ uri: user?.imageUri }}
         />
       ) : (
         <ProfileIcon color={color} size={50} />
@@ -51,38 +53,50 @@ export default function HeaderDrawer() {
         </View>
       </View>
       <View style={{ flexDirection: "row", gap: 8 }}>
-        <View style={{ marginTop: 16, flexDirection: "row", gap: 4 }}>
-          <Text
-            style={{
-              fontFamily: "jakaraBold",
-              color,
-              includeFontPadding: false,
-            }}
-          >
-            {follows.following || 0}
-          </Text>
-          <Text
-            style={{ fontFamily: "jakara", color, includeFontPadding: false }}
-          >
-            Following
-          </Text>
-        </View>
-        <View style={{ marginTop: 16, flexDirection: "row", gap: 4 }}>
-          <Text
-            style={{
-              fontFamily: "jakaraBold",
-              color,
-              includeFontPadding: false,
-            }}
-          >
-            {follows.followers || 0}
-          </Text>
-          <Text
-            style={{ fontFamily: "jakara", color, includeFontPadding: false }}
-          >
-            Followers
-          </Text>
-        </View>
+        <Pressable
+          onPress={() => {
+            navigation.navigate("FollowingFollowers", { initial: "Following" });
+          }}
+        >
+          <View style={{ marginTop: 16, flexDirection: "row", gap: 4 }}>
+            <Text
+              style={{
+                fontFamily: "jakaraBold",
+                color,
+                includeFontPadding: false,
+              }}
+            >
+              {follows.following || 0}
+            </Text>
+            <Text
+              style={{ fontFamily: "jakara", color, includeFontPadding: false }}
+            >
+              Following
+            </Text>
+          </View>
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            navigation.navigate("FollowingFollowers", { initial: "Followers" });
+          }}
+        >
+          <View style={{ marginTop: 16, flexDirection: "row", gap: 4 }}>
+            <Text
+              style={{
+                fontFamily: "jakaraBold",
+                color,
+                includeFontPadding: false,
+              }}
+            >
+              {follows.followers || 0}
+            </Text>
+            <Text
+              style={{ fontFamily: "jakara", color, includeFontPadding: false }}
+            >
+              Followers
+            </Text>
+          </View>
+        </Pressable>
       </View>
     </View>
   );

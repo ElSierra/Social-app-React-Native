@@ -31,6 +31,7 @@ export default function PostBuilder({
   title,
   like,
   userId,
+  isReposted,
   id,
   audioUri,
   thumbNail,
@@ -71,6 +72,7 @@ export default function PostBuilder({
             userId,
             audioUri,
             thumbNail,
+            isReposted,
           });
         }}
         android_ripple={{ color: rColor, foreground: true }}
@@ -162,6 +164,7 @@ export default function PostBuilder({
               comments={comments}
               like={like}
               isLiked={isLiked}
+              isReposted ={isReposted}
               id={id}
             />
           </View>

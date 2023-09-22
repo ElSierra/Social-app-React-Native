@@ -14,7 +14,10 @@ export type RootStackParamList = {
     dimensions?: {
       height: number;
       width: number;
-    }|null;
+    } | null;
+  };
+  FollowingFollowers: {
+    initial: "Following" | "Followers"
   };
   VideoFullScreen: {
     videoUri: string;

@@ -54,6 +54,7 @@ import Robot from "../../../components/home/post/misc/Robot";
 export default function HomeAll() {
   const dark = useGetMode();
   const dispatch = useAppDispatch();
+  const authId = useAppSelector((state) => state.user.data?.id);
   const posts = useAppSelector((state) => state.post);
 
   const isDark = dark;
@@ -187,10 +188,15 @@ export default function HomeAll() {
   const renderItem = ({ item }: { item: IPost }) => (
     <PostBuilder
       id={item.id}
+      isReposted={
+        item?.repostUser?.find((repostUser) => repostUser?.id === authId)
+          ? true
+          : false
+      }
       date={item.createdAt}
-      comments={item._count.comments}
-      like={item._count.like}
-      isLiked={item.isLiked}
+      comments={item._count?.comments}
+      like={item._count?.like}
+      isLiked={item?.like?.find((like) => like?.userId === authId) ? true : false}
       thumbNail={item.videoThumbnail}
       imageUri={item.user?.imageUri}
       name={item.user?.name}

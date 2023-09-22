@@ -37,6 +37,7 @@ export default function FullScreenPost({
   like,
   thumbNail,
   id,
+  isReposted,
   audioUri,
 }: IPostBuilder) {
   const width = Dimensions.get("screen").width;
@@ -183,6 +184,7 @@ export default function FullScreenPost({
           </View>
           <EngagementsFullScreen
             title={title}
+            isReposted={isReposted}
             comments={comments}
             like={like}
             isLiked={isLiked}

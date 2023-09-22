@@ -53,9 +53,7 @@ import * as Sentry from "@sentry/react-native";
 import { useGetFollowDetailsQuery } from "./redux/api/user";
 
 import * as NavigationBar from "expo-navigation-bar";
-import Notifications, {
-  registerForPushNotificationsAsync,
-} from "./util/notification";
+import Notifications from "./util/notification";
 import Constants from "expo-constants";
 import * as Device from "expo-device";
 import useSocket from "./hooks/Socket";

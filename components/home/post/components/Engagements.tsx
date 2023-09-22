@@ -11,13 +11,18 @@ import {
   ShareUnfocused,
 } from "../../../icons";
 import useGetMode from "../../../../hooks/GetMode";
-import { useLazyLikePostQuery } from "../../../../redux/api/services";
+import {
+  useLazyLikePostQuery,
+  useLazyRepostQuery,
+} from "../../../../redux/api/services";
+import RepostButton from "./RepostButton";
 
 export default function Engagements({
   title,
   like,
   comments,
   isLiked,
+  isReposted,
   id,
 }: {
   title?: string;
@@ -25,16 +30,18 @@ export default function Engagements({
   comments?: number;
   id: string;
   isLiked: boolean;
+  isReposted: boolean;
 }) {
 
   const dark = useGetMode();
   const isDark = dark;
-  const [likeAmount, setLikeAmount] = useState(()=>like);
-  const [clicked, setClicked] = useState(()=>isLiked);
+  const shareColor = isDark ? "#91EC09" : "#639E0B";
+  const [likeAmount, setLikeAmount] = useState(() => like);
+  const [clicked, setClicked] = useState(() => isLiked);
   const [likePost] = useLazyLikePostQuery();
+  const [rePostPost] = useLazyRepostQuery();
 
-
- 
+  const [reposted, setRepost] = useState(() => isReposted);
 
   const handleClicked = (click: boolean) => {
     setClicked(click);
@@ -44,6 +51,11 @@ export default function Engagements({
     } else {
       setLikeAmount(likeAmount - 1);
     }
+  };
+
+  const handleRepost = (repost: boolean) => {
+    setRepost(repost);
+    rePostPost({ id });
   };
 
   const color = isDark ? "white" : "black";
@@ -60,7 +72,7 @@ export default function Engagements({
       }}
     >
       {title && <Text>{title}</Text>}
-      <View style={{ flexDirection: "row" }}>
+      <View style={{ flexDirection: "row", gap: 10 }}>
         {/* <IconWithValue
         animationRef={animationRef}
           IconUnfocused={MessageUnfocused}
@@ -75,8 +87,13 @@ export default function Engagements({
           clicked={clicked}
           setClicked={handleClicked}
         />
+        <RepostButton
+          isPosted={isReposted}
+          clicked={reposted}
+          setReposted={handleRepost}
+        />
       </View>
-      <ShareUnfocused size={20} color={color} />
+      <ShareUnfocused size={20} color={shareColor} />
     </View>
   );
 }

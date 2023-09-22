@@ -42,9 +42,10 @@ export interface User {
 
 export interface IPost {
   id: string;
-  _count: { like: number; comments: number };
+  _count: { like: number; comments: number; repostUser: number };
   userId: string;
-  isLiked: boolean;
+  like: Array<{ userId: string }>;
+  repostUser: Array<{ id: string }>;
   audioUri: string | null;
   audioTitle: string | null;
   videoUri: string | null;
@@ -92,3 +93,14 @@ export interface Notifications {
   createdAt: string;
   notifUser?: User;
 }
+
+export type FollowData = {
+  id: string;
+  userName: string;
+  name: string;
+  imageUri: string;
+  verified: boolean;
+  isFollowed: boolean;
+};
+
+export type FollowingData = Omit<FollowData, "isFollowed">;

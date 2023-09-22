@@ -17,7 +17,7 @@ export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
   const dark = useGetMode();
   const dispatch = useAppDispatch();
   const [posts, setPosts] = useState<IPost[]>([]);
-
+  const authId = useAppSelector((state) => state.user.data?.id);
   const isDark = dark;
   const color = isDark ? "white" : "black";
 
@@ -27,12 +27,15 @@ export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
 
   const ref = useRef<any>(null);
   const [getLazyPost, postRes] = useLazyGetMyPostsQuery();
+  const [isLoading , setIsLoading] = useState(false)
+  console.log("🚀 ~ file: MyPosts.tsx:30 ~ MyPosts ~ postRes:", postRes.isLoading)
 
   const renderFooter = () => {
-    if (postRes.isLoading) {
+    if (postRes.isLoading || isLoading) {
       return (
         <View
           style={{
+            height:50,
             marginTop: 20,
             width: "100%",
             justifyContent: "center",
@@ -46,7 +49,7 @@ export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
   };
 
   useEffect(() => {
-    getLazyPost({ take: 20, skip })
+    getLazyPost({ take: 10, skip })
       .unwrap()
       .then((e) => {
         setPosts(e.posts);
@@ -61,13 +64,18 @@ export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
   }, []);
 
   const fetchMoreData = () => {
-    if (!noMore && !postRes.error)
-      getLazyPost({ take: 20, skip })
+    setIsLoading(true);
+    console.log("🔥🔥🔥🔥re fetched")
+    if (!noMore && !postRes.error && skip>0)
+      getLazyPost({ take: 10, skip })
         .unwrap()
         .then((e) => {
+          console.log("🚀 ~ file: MyPosts.tsx:73 ~ .then ~ e:", e.posts.length)
+          setIsLoading(false)
+          setPosts((prev)=>[...prev, ...e.posts])
           setSkip(skip + e.posts.length);
 
-          if (e.posts.length === 0) {
+          if (e.posts.length <10) {
             setNoMore(true);
           }
         })
@@ -84,9 +92,14 @@ export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
         id={item.id}
         date={item.createdAt}
         comments={item._count.comments}
+        isReposted={
+          item?.repostUser?.find((repostUser) => repostUser?.id === authId)
+            ? true
+            : false
+        }
         like={item._count.like}
         thumbNail={item.videoThumbnail}
-        isLiked={item.isLiked}
+        isLiked={item?.like?.find((like) => like?.userId === authId) ? true : false}
         imageUri={item.user?.imageUri}
         name={item.user?.name}
         userTag={item.user?.userName}

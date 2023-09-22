@@ -943,3 +943,52 @@ export const FollowIcon = ({
     />
   </Svg>
 );
+
+export const RepostUnFocused = ({
+  size,
+  color,
+}: {
+  size: number;
+  color: string;
+}) => (
+  <Svg width={size} height={size} fill="none" viewBox="0 0 24 24">
+    <Path
+      stroke={color}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeMiterlimit={10}
+      strokeWidth={1.5}
+      d="M3.58 5.16h13.84c1.66 0 3 1.34 3 3v3.32"
+    />
+    <Path
+      stroke={color}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeMiterlimit={10}
+      strokeWidth={1.5}
+      d="M6.74 2 3.58 5.16l3.16 3.16m13.68 10.52H6.58c-1.66 0-3-1.34-3-3v-3.32"
+    />
+    <Path
+      stroke={color}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeMiterlimit={10}
+      strokeWidth={1.5}
+      d="m17.26 22 3.16-3.16-3.16-3.16"
+    />
+  </Svg>
+);
+
+export const Repost = ({ size, color }: { size: number; color: string }) => (
+  <Svg width={size} height={size} fill="none" viewBox="0 0 24 24">
+    <Path
+      fill={color}
+      d="M17.42 4.41H5.39l1.88-1.88c.29-.29.29-.77 0-1.06a.754.754 0 0 0-1.06 0L3.05 4.63a.776.776 0 0 0-.22.53.776.776 0 0 0 .22.53l3.16 3.16c.15.15.34.22.53.22s.38-.07.53-.22c.29-.29.29-.77 0-1.06L5.39 5.91h12.03c1.24 0 2.25 1.01 2.25 2.25v3.32c0 .41.34.75.75.75s.75-.34.75-.75V8.16c0-2.07-1.68-3.75-3.75-3.75z"
+    />
+    <Path
+      fill={color}
+      d="M21.17 18.84a.776.776 0 0 0-.22-.53l-3.16-3.16a.754.754 0 0 0-1.06 0c-.29.29-.29.77 0 1.06l1.88 1.88H6.58c-1.24 0-2.25-1.01-2.25-2.25v-3.32c0-.41-.34-.75-.75-.75s-.75.34-.75.75v3.32c0 2.07 1.68 3.75 3.75 3.75h12.03l-1.88 1.88c-.29.29-.29.77 0 1.06.15.15.34.22.53.22s.38-.07.53-.22l3.16-3.16a.776.776 0 0 0 .22-.53z"
+      opacity={0.4}
+    />
+  </Svg>
+);

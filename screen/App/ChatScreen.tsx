@@ -235,7 +235,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
           id: uuid.v4().toString(),
           createdAt: `${new Date()}`,
         },
-        chatId: route?.params?.id || route.params?.chatId,
+        chatId: route?.params?.id || route.params?.chatId as string,
       })
     );
 

@@ -19,31 +19,33 @@ import Animated, {
 import useGetMode from "../../../../hooks/GetMode";
 import LikeLottie from "../misc/Robot";
 import Lottie from "lottie-react-native";
-import { HeartUnfocused, HeartsFocused } from "../../../icons";
+import { HeartUnfocused, HeartsFocused, Repost, RepostUnFocused } from "../../../icons";
 import MaterialIcons from "@expo/vector-icons/MaterialCommunityIcons";
-export default function LikeButton({
-  isLiked,
+export default function RepostButton({
+  isPosted,
   clicked,
   text,
 
-  setClicked,
+  setReposted,
 }: {
   text?: string;
-  setClicked: (isClicked: boolean) => void;
+  setReposted: (isClicked: boolean) => void;
   clicked: boolean;
-  isLiked?: boolean;
+  isPosted?: boolean;
 }) {
   const dark = useGetMode();
   const isDark = dark;
   const color = isDark ? "white" : "black";
+  const rColor = isDark ? "#75B8C8" : "#11262C";
+  
 
-  const liked = useSharedValue(isLiked ? 1 : 0);
+  const reposted = useSharedValue(isPosted ? 1 : 0);
 
   const outlineStyle = useAnimatedStyle(() => {
     return {
       transform: [
         {
-          scale: interpolate(liked.value, [0, 1], [1, 0], Extrapolate.CLAMP),
+          scale: interpolate(reposted.value, [0, 1], [1, 0], Extrapolate.CLAMP),
         },
       ],
     };
@@ -53,7 +55,7 @@ export default function LikeButton({
     return {
       transform: [
         {
-          scale: liked.value,
+          scale: reposted.value,
         },
       ],
     };
@@ -75,8 +77,8 @@ export default function LikeButton({
           alignItems: "center",
         }}
         onPress={() => {
-          liked.value = withSpring(liked.value ? 0 : 1);
-          setClicked(!clicked);
+          reposted.value = withSpring(reposted.value ? 0 : 1);
+          setReposted(!clicked);
         }}
       >
         <View style={{ width: 18 }}>
@@ -85,20 +87,16 @@ export default function LikeButton({
               <Animated.View
                 style={[StyleSheet.absoluteFillObject, outlineStyle]}
               >
-                <HeartUnfocused size={18} color={"red"} />
+                <RepostUnFocused size={18} color={color} />
               </Animated.View>
 
               <Animated.View style={fillStyle}>
-                <HeartsFocused size={18} color={"red"} />
+                <Repost size={18} color={rColor} />
               </Animated.View>
             </>
           }
         </View>
-        <Text
-          style={{ color, fontFamily: "jakara", includeFontPadding: false }}
-        >
-          {text}
-        </Text>
+       
       </Pressable>
     </View>
   );
