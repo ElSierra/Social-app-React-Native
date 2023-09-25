@@ -24,6 +24,7 @@ import { useAppSelector } from "../../../redux/hooks/hooks";
 
 export default function Posts() {
   const posts = useAppSelector((state) => state.searchPost);
+  const authId = useAppSelector((state) => state.user?.data?.id);
   const [showLoading, setShowLoading] = useState(posts?.data?.length > 8);
   const dark = useGetMode();
   const color = dark ? "white" : "black";
@@ -60,9 +61,7 @@ export default function Posts() {
         style={{ flex: 1 }}
       >
         {posts.loading && (
-          <Animated.View
-            style={[{ gap: 5, padding: 10 }, animatedStyle]}
-          >
+          <Animated.View style={[{ gap: 5, padding: 10 }, animatedStyle]}>
             {[0, 1, 2].map((idx) => (
               <PostSearchSkeleton key={idx} />
             ))}
@@ -73,20 +72,40 @@ export default function Posts() {
           showsVerticalScrollIndicator={false}
           estimatedItemSize={100}
           contentContainerStyle={{
-          paddingTop:20,
+            paddingTop: 20,
             paddingBottom: 100,
             paddingHorizontal: 10,
           }}
           renderItem={({ item }) => (
             <PostsContainer
               id={item.id}
+              date={item.createdAt}
+              comments={item._count.comments}
+              isReposted={
+                item?.repostUser?.find(
+                  (repostUser) => repostUser?.id === authId
+                )
+                  ? true
+                  : false
+              }
+              link={item.link}
+              like={item._count.like}
+              thumbNail={item.videoThumbnail}
+              isLiked={
+                item?.like?.find((like) => like?.userId === authId)
+                  ? true
+                  : false
+              }
               imageUri={item.user?.imageUri}
+              name={item.user?.name}
               userTag={item.user?.userName}
               verified={item.user?.verified}
               audioUri={item.audioUri || undefined}
               photoUri={item.photoUri}
+              videoTitle={item.videoTitle || undefined}
               videoUri={item.videoUri || undefined}
               postText={item.postText}
+              videoViews={item.videoViews?.toString()}
             />
           )}
           keyExtractor={(item) => item.id.toString()}

@@ -1,4 +1,4 @@
-import { View, Text, useColorScheme } from "react-native";
+import { View, Text, useColorScheme, Pressable } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import LikeButton from "./LikeButton";
 import {
@@ -25,6 +25,7 @@ export default function EngagementsFullScreen({
   isLiked,
   id,
   isReposted,
+  handleShare,
 }: {
   title?: string;
   like: number;
@@ -32,6 +33,7 @@ export default function EngagementsFullScreen({
   id: string;
   isLiked: boolean;
   isReposted: boolean;
+  handleShare: () => void;
 }) {
   const dark = useGetMode();
   const isDark = dark;
@@ -99,7 +101,9 @@ export default function EngagementsFullScreen({
           clicked={reposted}
           setReposted={handleRepost}
         />
-        <ShareUnfocused size={20} color={shareColor} />
+        <Pressable onPress={handleShare}>
+          <ShareUnfocused size={20} color={shareColor} />
+        </Pressable>
       </View>
     </View>
   );

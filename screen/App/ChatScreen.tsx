@@ -1,4 +1,4 @@
-import { View, Text, Pressable, FlatList } from "react-native";
+import { View, Text, Pressable, FlatList, Vibration } from "react-native";
 import React, {
   useCallback,
   useEffect,
@@ -65,7 +65,10 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   const renderItem = ({ item }: any) => (
     <Pressable
       ref={buttonRef}
+      delayLongPress={100}
       onLongPress={(e) => {
+        Vibration.vibrate(5);
+        
         handleModalVariables(
           item.id,
           item.text,

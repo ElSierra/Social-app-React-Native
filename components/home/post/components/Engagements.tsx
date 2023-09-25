@@ -1,5 +1,5 @@
-import { View, Text, useColorScheme } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import { View, Text, useColorScheme, Pressable } from "react-native";
+import React, { Ref, useEffect, useRef, useState } from "react";
 import LikeButton from "./LikeButton";
 import {
   ActivityUnfocused,
@@ -24,6 +24,7 @@ export default function Engagements({
   isLiked,
   isReposted,
   id,
+  handleShare,
 }: {
   title?: string;
   like: number;
@@ -31,8 +32,8 @@ export default function Engagements({
   id: string;
   isLiked: boolean;
   isReposted: boolean;
+  handleShare: () => void;
 }) {
-
   const dark = useGetMode();
   const isDark = dark;
   const shareColor = isDark ? "#91EC09" : "#639E0B";
@@ -93,7 +94,9 @@ export default function Engagements({
           setReposted={handleRepost}
         />
       </View>
-      <ShareUnfocused size={20} color={shareColor} />
+      <Pressable onPress={handleShare}>
+        <ShareUnfocused size={20} color={shareColor} />
+      </Pressable>
     </View>
   );
 }

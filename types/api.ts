@@ -46,6 +46,13 @@ export interface IPost {
   userId: string;
   like: Array<{ userId: string }>;
   repostUser: Array<{ id: string }>;
+  link: {
+    id: string;
+    imageHeight?: number;
+    imageUri?: string;
+    imageWidth?: number;
+    title: string;
+  } | null;
   audioUri: string | null;
   audioTitle: string | null;
   videoUri: string | null;

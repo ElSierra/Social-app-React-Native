@@ -98,6 +98,7 @@ export default function PeoplePosts({
       <PostBuilder
         id={item.id}
         date={item.createdAt}
+        link={item.link}
         comments={item._count.comments}
         like={item._count.like}
         thumbNail={item.videoThumbnail}

@@ -194,9 +194,12 @@ export default function HomeAll() {
           : false
       }
       date={item.createdAt}
+      link={item.link}
       comments={item._count?.comments}
       like={item._count?.like}
-      isLiked={item?.like?.find((like) => like?.userId === authId) ? true : false}
+      isLiked={
+        item?.like?.find((like) => like?.userId === authId) ? true : false
+      }
       thumbNail={item.videoThumbnail}
       imageUri={item.user?.imageUri}
       name={item.user?.name}

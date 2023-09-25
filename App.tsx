@@ -177,7 +177,7 @@ function AnimatedSplashScreen({
                 fontSize: 14,
               }}
             >
-              Qui 🚀 beta
+              🌐 www.isaacojo.me
             </Text>
           </Animated.View>
         </Animated.View>

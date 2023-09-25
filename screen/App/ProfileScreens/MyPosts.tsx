@@ -27,15 +27,18 @@ export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
 
   const ref = useRef<any>(null);
   const [getLazyPost, postRes] = useLazyGetMyPostsQuery();
-  const [isLoading , setIsLoading] = useState(false)
-  console.log("🚀 ~ file: MyPosts.tsx:30 ~ MyPosts ~ postRes:", postRes.isLoading)
+  const [isLoading, setIsLoading] = useState(false);
+  console.log(
+    "🚀 ~ file: MyPosts.tsx:30 ~ MyPosts ~ postRes:",
+    postRes.isLoading
+  );
 
   const renderFooter = () => {
     if (postRes.isLoading || isLoading) {
       return (
         <View
           style={{
-            height:50,
+            height: 50,
             marginTop: 20,
             width: "100%",
             justifyContent: "center",
@@ -56,7 +59,6 @@ export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
         setSkip(e.posts?.length);
       })
       .catch((e) => {
-      
         // dispatch(
         //   openToast({ text: "couldn't get recent posts", type: "Failed" })
         // );
@@ -65,17 +67,17 @@ export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
 
   const fetchMoreData = () => {
     setIsLoading(true);
-    console.log("🔥🔥🔥🔥re fetched")
-    if (!noMore && !postRes.error && skip>0)
+    console.log("🔥🔥🔥🔥re fetched");
+    if (!noMore && !postRes.error && skip > 0)
       getLazyPost({ take: 10, skip })
         .unwrap()
         .then((e) => {
-          console.log("🚀 ~ file: MyPosts.tsx:73 ~ .then ~ e:", e.posts.length)
-          setIsLoading(false)
-          setPosts((prev)=>[...prev, ...e.posts])
+          console.log("🚀 ~ file: MyPosts.tsx:73 ~ .then ~ e:", e.posts.length);
+          setIsLoading(false);
+          setPosts((prev) => [...prev, ...e.posts]);
           setSkip(skip + e.posts.length);
 
-          if (e.posts.length <10) {
+          if (e.posts.length < 10) {
             setNoMore(true);
           }
         })
@@ -97,9 +99,12 @@ export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
             ? true
             : false
         }
+        link={item.link}
         like={item._count.like}
         thumbNail={item.videoThumbnail}
-        isLiked={item?.like?.find((like) => like?.userId === authId) ? true : false}
+        isLiked={
+          item?.like?.find((like) => like?.userId === authId) ? true : false
+        }
         imageUri={item.user?.imageUri}
         name={item.user?.name}
         userTag={item.user?.userName}
