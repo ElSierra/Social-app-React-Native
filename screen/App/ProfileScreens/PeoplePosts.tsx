@@ -14,7 +14,6 @@ import {
 } from "../../../redux/api/services";
 import { openToast } from "../../../redux/slice/toast/toast";
 
-
 import Bio from "../../../components/profilePeople/Bio";
 
 export default function PeoplePosts({
@@ -34,15 +33,13 @@ export default function PeoplePosts({
 }) {
   const dark = useGetMode();
   const dispatch = useAppDispatch();
-
+  const authId = useAppSelector((state) => state.user.data?.id);
   const isDark = dark;
   const color = isDark ? "white" : "black";
 
   const [skip, setSkip] = useState(0);
   const [posts, setPosts] = useState<IPost[]>([]);
   const [noMore, setNoMore] = useState(false);
-
- 
 
   const ref = useRef<any>(null);
   const [getLazyPost, postRes] = useLazyGetGuestPostsQuery();
@@ -72,9 +69,9 @@ export default function PeoplePosts({
         setSkip(e.posts?.length);
       })
       .catch((e) => {
-        dispatch(
-          openToast({ text: "couldn't get recent posts", type: "Failed" })
-        );
+        // dispatch(
+        //   openToast({ text: "couldn't get recent posts", type: "Failed" })
+        // );
       });
   }, []);
 
@@ -90,9 +87,9 @@ export default function PeoplePosts({
           }
         })
         .catch((e) => {
-          dispatch(
-            openToast({ text: "couldn't get recent posts", type: "Failed" })
-          );
+          // dispatch(
+          //   openToast({ text: "couldn't get recent posts", type: "Failed" })
+          // );
         });
   };
 
@@ -104,7 +101,14 @@ export default function PeoplePosts({
         comments={item._count.comments}
         like={item._count.like}
         thumbNail={item.videoThumbnail}
-        isLiked={item.isLiked}
+        isReposted={
+          item?.repostUser?.find((repostUser) => repostUser?.id === authId)
+            ? true
+            : false
+        }
+        isLiked={
+          item?.like?.find((like) => like?.userId === authId) ? true : false
+        }
         imageUri={item.user?.imageUri}
         name={item.user?.name}
         userTag={item.user?.userName}

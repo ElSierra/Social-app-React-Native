@@ -36,6 +36,11 @@ export const userApi = createApi({
       providesTags: ["user"],
       extraOptions: { maxRetries: 2 },
     }),
+    logout: builder.query<{ msg: string }, null>({
+      query: () => "/logout",
+      providesTags: ["user"],
+      extraOptions: { maxRetries: 2 },
+    }),
     getGuest: builder.query<{ data: IGuestData }, { id: string }>({
       query: ({ id }) => `/get-guest?id=${id}`,
       providesTags: ["guest"],
@@ -108,6 +113,48 @@ export const userApi = createApi({
       query: ({ take, skip }) => `/get-followers?take=${take}&skip=${skip}`,
       providesTags: ["user"],
     }),
+    updateData: builder.mutation<
+      { msg: string },
+      {
+        userName?: string;
+        password: string;
+        newPassword?: string;
+        name?: string;
+      }
+    >({
+      query: ({ userName, password, newPassword, name }) => {
+        return {
+          url: "/update-data",
+          method: "PUT",
+          body: { userName, password, newPassword, name },
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        };
+      },
+      invalidatesTags: ["user"],
+    }),
+    deleteAccount: builder.mutation<
+      { msg: string },
+      {
+        userName?: string;
+        password: string;
+        newPassword?: string;
+        name?: string;
+      }
+    >({
+      query: ({ password }) => {
+        return {
+          url: "/delete-account",
+          method: "DELETE",
+          body: { password },
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        };
+      },
+      invalidatesTags: ["user"],
+    }),
   }),
 });
 
@@ -123,6 +170,9 @@ export const {
   useUploadProfilePictureMutation,
   useLazyGetFollowersListQuery,
   useLazyGetFollowingListQuery,
+  useLazyLogoutQuery,
+  useDeleteAccountMutation,
+  useUpdateDataMutation,
   useGetFollowDetailsQuery,
   useLazyGetFollowDetailsQuery,
 } = userApi;

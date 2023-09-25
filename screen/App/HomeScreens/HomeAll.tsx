@@ -146,9 +146,9 @@ export default function HomeAll() {
         setSkip(e.posts?.length);
       })
       .catch((e) => {
-        dispatch(
-          openToast({ text: "couldn't get recent posts", type: "Failed" })
-        );
+        // dispatch(
+        //   openToast({ text: "couldn't get recent posts", type: "Failed" })
+        // );
       });
   }, []);
 
@@ -164,9 +164,9 @@ export default function HomeAll() {
           }
         })
         .catch((e) => {
-          dispatch(
-            openToast({ text: "couldn't get recent posts", type: "Failed" })
-          );
+          // dispatch(
+          //   openToast({ text: "couldn't get recent posts", type: "Failed" })
+          // );
         });
   };
   const handleRefetch = () => {
@@ -179,9 +179,9 @@ export default function HomeAll() {
       })
       .catch((e) => {
         setRefreshing(false);
-        dispatch(
-          openToast({ text: "couldn't get recent posts", type: "Failed" })
-        );
+        // dispatch(
+        //   openToast({ text: "couldn't get recent posts", type: "Failed" })
+        // );
       });
   };
 

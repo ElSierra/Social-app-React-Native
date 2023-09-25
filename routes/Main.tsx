@@ -95,6 +95,8 @@ import {
   useLazyGetAllChatsQuery,
 } from "../redux/api/chat";
 import FollowingFollowers from "../screen/App/FollowingFollowers";
+import EditProfile from "../screen/App/EditProfile";
+import ChangeData from "../screen/App/ChangeData";
 const BACKGROUND_FETCH_TASK = "background-fetch";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -132,6 +134,7 @@ export default function Main() {
   }, []);
   const response = useGetUserQuery(null);
   useEffect(() => {
+    console.log(process.env.EXPO_PUBLIC_PROJECT_ID)
     async function registerForPushNotificationsAsync() {
       try {
         let token;
@@ -152,7 +155,7 @@ export default function Main() {
           );
         }
         token = await Notifications.getExpoPushTokenAsync({
-          projectId: "e618bb47-6149-4585-8cc8-884c5992795e",
+          projectId: process.env.EXPO_PUBLIC_PROJECT_ID as string,
         });
         console.log(token);
 
@@ -319,7 +322,9 @@ export default function Main() {
     <BottomSheetModalProvider>
       <BottomSheetContainer>
         <Stack.Navigator
+     
           screenOptions={{
+          
             contentStyle: { backgroundColor },
           }}
         >
@@ -333,7 +338,7 @@ export default function Main() {
             options={{
               headerTitle: "",
 
-              animation: "fade_from_bottom",
+              animation: "none",
               headerTransparent: true,
               headerTintColor: "white",
             }}
@@ -453,7 +458,6 @@ export default function Main() {
           <Stack.Screen
             name="FollowingFollowers"
             options={{
-            
               title: "Follow List",
               animation: "fade_from_bottom",
               headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
@@ -469,6 +473,23 @@ export default function Main() {
             component={FollowingFollowers}
           />
           <Stack.Screen
+            name="EditProfile"
+            options={{
+              title: "Edit Profile",
+           animation:"slide_from_right",
+              headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
+              headerShadowVisible: false,
+
+              headerTransparent: true,
+              headerTitleAlign: "center",
+              headerTintColor: color,
+              headerStyle: {
+                backgroundColor: "transparent",
+              },
+            }}
+            component={EditProfile}
+          />
+          <Stack.Screen
             name="SearchUser"
             component={SearchUsers}
             options={{
@@ -477,6 +498,31 @@ export default function Main() {
               headerStyle: { backgroundColor },
               headerTitle: "",
               headerShadowVisible: false,
+            }}
+          />
+            <Stack.Screen
+            name="ChangeData"
+            component={ChangeData}
+            options={{
+              headerTintColor: color,
+              animation: "fade_from_bottom",
+              headerStyle: { backgroundColor },
+              headerTitle: "",
+              headerShadowVisible: false,
+              headerBackground: () => (
+                <BlurView
+                  style={{
+                    opacity: 0,
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    top: 0,
+                    right: 0,
+                  }}
+                  tint={tint}
+                  intensity={100}
+                />
+              ),
             }}
           />
         </Stack.Navigator>

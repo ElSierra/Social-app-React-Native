@@ -57,9 +57,9 @@ export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
       })
       .catch((e) => {
       
-        dispatch(
-          openToast({ text: "couldn't get recent posts", type: "Failed" })
-        );
+        // dispatch(
+        //   openToast({ text: "couldn't get recent posts", type: "Failed" })
+        // );
       });
   }, []);
 
@@ -80,9 +80,9 @@ export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
           }
         })
         .catch((e) => {
-          dispatch(
-            openToast({ text: "couldn't get recent posts", type: "Failed" })
-          );
+          // dispatch(
+          //   openToast({ text: "couldn't get recent posts", type: "Failed" })
+          // );
         });
   };
 

@@ -22,7 +22,7 @@ export default function PickGifButton({
         borderWidth: 1,
 
         borderStyle: "dashed",
-        backgroundColor: "white",
+       
         borderRadius: 10,
         overflow: "hidden",
         height: 50,
@@ -45,19 +45,18 @@ export default function PickGifButton({
             cropperChooseColor: "#FFFFFF",
           })
             .then((image) => {
-           
               if (image.size > 1200000 || image.mime !== "image/gif") {
                 ToastAndroid.showWithGravityAndOffset(
-                  'Gif of 1MB only!',
+                  "Gif of 1MB only!",
                   ToastAndroid.LONG,
                   ToastAndroid.TOP,
                   25,
-                  50,
+                  50
                 );
 
                 return;
               }
-             
+
               handleSetPhotoPost(image?.mime, image?.path, image?.size);
             })
             .catch((e) => {});
@@ -78,8 +77,10 @@ export default function PickGifButton({
             gap: 4,
           }}
         >
-          <CameraIcon size={20} color="black" />
-          <Text style={{ fontFamily: "jakaraBold" }}>Animated </Text>
+          <CameraIcon size={20} color={borderColor} />
+          <Text style={{ fontFamily: "jakaraBold", color: borderColor }}>
+            Animated{" "}
+          </Text>
         </View>
       </Pressable>
     </View>

@@ -17,7 +17,7 @@ export type RootStackParamList = {
     } | null;
   };
   FollowingFollowers: {
-    initial: "Following" | "Followers"
+    initial: "Following" | "Followers";
   };
   VideoFullScreen: {
     videoUri: string;
@@ -46,6 +46,10 @@ export type RootStackParamList = {
   };
   SearchUser: undefined;
   PostContent: undefined;
+  EditProfile: undefined;
+  ChangeData: {
+    change: "userName" | "password" | "name";
+  };
 };
 
 export type BottomRootStackParamList = {
@@ -86,6 +90,14 @@ export type ChatScreenProp = NativeStackScreenProps<
   RootStackParamList,
   "ChatScreen"
 >;
+export type EditProfileProp = NativeStackScreenProps<
+  RootStackParamList,
+  "EditProfile"
+>;
+export type ChangeDataProp = NativeStackScreenProps<
+  RootStackParamList,
+  "ChangeData"
+>;
 export type SearchUserProp = NativeStackScreenProps<
   RootStackParamList,
   "SearchUser"
@@ -95,7 +107,7 @@ export type SearchUserNavigation = NavigationProp<
   "SearchUser"
 >;
 export type ChatNavigation = NavigationProp<RootStackParamList, "ChatScreen">;
-
+export type ChangeDataNavigationProp = NavigationProp<RootStackParamList, "ChatScreen">;
 export type HomeProp = NativeStackScreenProps<RootStackParamList, "Main">;
 export type DrawerHomeProp = DrawerScreenProps<
   DrawerRootStackParamList,

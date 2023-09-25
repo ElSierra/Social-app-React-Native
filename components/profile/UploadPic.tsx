@@ -10,7 +10,7 @@ export default function PickImageButton({
 }) {
   const dark = useGetMode();
   const borderColor = dark ? "white" : "black";
-  const backgroundColorView = !dark ? "white" : "black";
+
   const rippleColor = !dark ? "#ABABAB" : "#55555500";
   return (
     <View
@@ -21,7 +21,7 @@ export default function PickImageButton({
 
         borderStyle: "dashed",
 
-        backgroundColor: "white",
+        backgroundColor: "#FFFFFF00",
         borderRadius: 10,
         overflow: "hidden",
         height: 50,
@@ -67,8 +67,8 @@ export default function PickImageButton({
             gap: 4,
           }}
         >
-          <CameraIcon size={20} color="black" />
-          <Text style={{ fontFamily: "jakaraBold" }}>Upload</Text>
+          <CameraIcon size={20} color={borderColor} />
+          <Text style={{ fontFamily: "jakaraBold",color:borderColor }}>Upload</Text>
         </View>
       </Pressable>
     </View>

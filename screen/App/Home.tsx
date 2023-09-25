@@ -34,7 +34,7 @@ export default function Home({ navigation }: DrawerHomeProp) {
     if (userAuthValidate.isError) {
       dispatch(signOut());
     }
-  }, [userAuthValidate.data?.msg]);
+  }, [userAuthValidate]);
 
   const ref = useRef<any>(null);
   useLayoutEffect(() => {

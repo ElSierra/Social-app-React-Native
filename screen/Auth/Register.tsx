@@ -34,7 +34,6 @@ import { RegisterScreen } from "../../types/navigation";
 import ReAnimated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { Image } from "expo-image";
 
-
 const width = Dimensions.get("screen").width;
 export default function Register({ navigation }: RegisterScreen) {
   const dark = useGetMode();
@@ -96,12 +95,10 @@ export default function Register({ navigation }: RegisterScreen) {
         navigation.replace("Login");
       })
       .catch((e) => {
-  
         dispatch(openToast({ type: "Failed", text: e?.data.message }));
       });
   };
   useEffect(() => {
-
     if (errors.userName) {
       shakeUserName();
     }
@@ -292,7 +289,9 @@ export default function Register({ navigation }: RegisterScreen) {
                       style={{ marginVertical: 5 }}
                       exiting={FadeOut.springify()}
                     >
-                      <Text style={{ color: "red" }}>{errors.userName?.message}</Text>
+                      <Text style={{ color: "red" }}>
+                        {errors.userName?.message}
+                      </Text>
                     </ReAnimated.View>
                   ) : (
                     <ReAnimated.View
@@ -308,9 +307,8 @@ export default function Register({ navigation }: RegisterScreen) {
                     rules={{
                       required: true,
                       minLength: 1,
-                      pattern:  /^\S*$/,
-                       
-                    
+                      pattern: /^\S*$/,
+
                       // Minimum length requirement
                     }}
                     render={({ field: { onChange, onBlur, value } }) => (
@@ -398,7 +396,6 @@ export default function Register({ navigation }: RegisterScreen) {
                     control={control}
                     rules={{
                       validate: (value) => {
-                  
                         return (
                           value === verifyPassword || "Passwords do not match"
                         );

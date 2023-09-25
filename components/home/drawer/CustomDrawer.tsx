@@ -33,6 +33,7 @@ import { resetPost } from "../../../redux/slice/post";
 import { resetFollowers } from "../../../redux/slice/user/followers";
 import socket from "../../../util/socket";
 import { clearAllChatData } from "../../../redux/slice/chat/chatlist";
+import { useLazyLogoutQuery } from "../../../redux/api/user";
 
 export default function CustomDrawerContent(
   props: DrawerContentComponentProps
@@ -46,7 +47,7 @@ export default function CustomDrawerContent(
   const pressColor = isDark ? "#BEBEBE" : "#4F4F4F";
   const dispatch = useAppDispatch();
   const navigation = useNavigation<HomeNavigationProp>();
-
+  const [logout] = useLazyLogoutQuery();
   const openLink = async () => {
     try {
       const url = "https://isaacojo.me";
@@ -219,6 +220,9 @@ export default function CustomDrawerContent(
             }}
             onPress={() => {
               props.navigation.closeDrawer();
+              logout(null)
+                .then()
+                .catch((e) => {});
               dispatch(resetPost());
               dispatch(signOut());
               dispatch(clearAllChatData());

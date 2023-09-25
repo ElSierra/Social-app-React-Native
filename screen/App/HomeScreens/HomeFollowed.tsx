@@ -87,9 +87,9 @@ export default function HomeFollowed() {
           }
         })
         .catch((e) => {
-          dispatch(
-            openToast({ text: "couldn't get recent posts", type: "Failed" })
-          );
+          // dispatch(
+          //   openToast({ text: "couldn't get recent posts", type: "Failed" })
+          // );
         });
   }, []);
 
@@ -132,9 +132,9 @@ export default function HomeFollowed() {
         setSkip(e.posts?.length);
       })
       .catch((e) => {
-        dispatch(
-          openToast({ text: "couldn't get recent posts", type: "Failed" })
-        );
+        // dispatch(
+        //   openToast({ text: "couldn't get recent posts", type: "Failed" })
+        // );
       });
   }, []);
 
@@ -150,9 +150,9 @@ export default function HomeFollowed() {
           }
         })
         .catch((e) => {
-          dispatch(
-            openToast({ text: "couldn't get recent posts", type: "Failed" })
-          );
+          // dispatch(
+          //   openToast({ text: "couldn't get recent posts", type: "Failed" })
+          // );
         });
   };
   const handleRefetch = () => {
@@ -165,9 +165,9 @@ export default function HomeFollowed() {
       })
       .catch((e) => {
         setRefreshing(false);
-        dispatch(
-          openToast({ text: "couldn't get recent posts", type: "Failed" })
-        );
+        // dispatch(
+        //   openToast({ text: "couldn't get recent posts", type: "Failed" })
+        // );
       });
   };
 

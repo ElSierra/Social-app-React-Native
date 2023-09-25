@@ -1,13 +1,19 @@
 import { View, Text, Pressable } from "react-native";
 import React from "react";
 import useGetMode from "../../hooks/GetMode";
+import { useNavigation } from "@react-navigation/native";
+import { HomeNavigationProp } from "../../types/navigation";
 
 export default function ButtonOutlined() {
-  const dark = useGetMode()
-  const color = dark ? "white" : "black"
+  const dark = useGetMode();
+  const navigate = useNavigation<HomeNavigationProp>();
+  const color = dark ? "white" : "black";
   return (
     <View>
       <Pressable
+        onPress={() => {
+          navigate.navigate("EditProfile");
+        }}
         style={{
           paddingHorizontal: 15,
           paddingVertical: 10,

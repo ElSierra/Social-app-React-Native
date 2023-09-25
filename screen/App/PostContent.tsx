@@ -89,7 +89,7 @@ export default function PostContent({ navigation }: PostContentProp) {
       mimeType,
       uri,
       size,
-      name,
+      userName: name,
     });
     setPostPhoto(null);
   }
