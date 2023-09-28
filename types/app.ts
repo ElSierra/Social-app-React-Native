@@ -1,3 +1,7 @@
+export type ArrElement<ArrType> = ArrType extends readonly (infer ElementType)[]
+  ? ElementType
+  : never;
+
 export type IPostBuilder = {
   imageUri: string;
   photo?: { uri: string; height: number; width: number };

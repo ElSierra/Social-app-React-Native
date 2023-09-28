@@ -115,7 +115,7 @@ export default function PeoplePosts({
             ? {
                 uri: item.photo?.imageUri,
                 width: item.photo?.imageWidth,
-                height: item.photo?.imageWidth,
+                height: item.photo?.imageHeight,
               }
             : undefined
         }

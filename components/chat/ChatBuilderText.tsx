@@ -16,7 +16,7 @@ import { ChatNavigation } from "../../types/navigation";
 import { Image } from "expo-image";
 
 const { width } = Dimensions.get("screen");
- function ChatBuilderText({
+function ChatBuilderText({
   isMe,
   time,
   id,
@@ -25,6 +25,7 @@ const { width } = Dimensions.get("screen");
   isClicked,
   sent,
   photoUri,
+  photo,
 }: {
   isMe: boolean;
   text: string;
@@ -34,7 +35,9 @@ const { width } = Dimensions.get("screen");
   sent: boolean;
   id: string;
   photoUri?: string;
+  photo?: { imageWidth: number; imageHeight: number };
 }) {
+  console.log("🚀 ~ file: ChatBuilderText.tsx:40 ~ o:", photo);
   const dark = useGetMode();
   const backgroundColorForMe = dark ? "#35383A" : "#0c81f8";
   const backgroundColor = dark ? "#181B1D" : "#e8e8eb";
@@ -86,11 +89,13 @@ const { width } = Dimensions.get("screen");
                 navigate.navigate("ImageFullScreen", {
                   photoUri,
                   id,
+                  height: photo?.imageHeight,
+                  width: photo?.imageWidth,
                 });
               }}
             >
               <Image
-                source={{ uri: photoUri, }}
+                source={{ uri: photoUri }}
                 priority={"high"}
                 style={{ width: 200, height: 100, borderRadius: 10 }}
               />
@@ -131,4 +136,4 @@ const { width } = Dimensions.get("screen");
     </Animated.View>
   );
 }
-export default memo(ChatBuilderText)
+export default memo(ChatBuilderText);

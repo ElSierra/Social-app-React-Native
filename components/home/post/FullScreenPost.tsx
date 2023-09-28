@@ -40,6 +40,7 @@ export default function FullScreenPost({
   videoViews,
   title,
   like,
+  photo,
   thumbNail,
   link,
   id,
@@ -157,11 +158,12 @@ export default function FullScreenPost({
                 />
               ))}
             <View>
-              {photoUri.length > 0 && (
+              {photo && (
                 <PhotoPostFullScreen
                   id={id}
-                  photoUri={photoUri}
-                  width={width}
+                  photoUri={photo?.uri}
+                  height={photo?.height}
+                  width={photo?.width}
                 />
               )}
             </View>
@@ -241,7 +243,7 @@ export default function FullScreenPost({
             style={{ position: "absolute", right: 10, top: 10 }}
             exiting={FadeOut.springify()}
           >
-          <Text style={{fontFamily:"uberBold"}}>Qui</Text>
+            <Text style={{ fontFamily: "uberBold" }}>Qui</Text>
           </Animated.View>
         )}
       </View>

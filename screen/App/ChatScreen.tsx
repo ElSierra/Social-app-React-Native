@@ -41,7 +41,9 @@ import { useLazyGetAllMessagesQuery } from "../../redux/api/chat";
 import { Image } from "expo-image";
 import ChatListView from "../../components/messages/ChatList/ChatListView";
 import { ProfileIcon } from "../../components/icons";
-
+import { ArrElement } from "../../types/app";
+import ChatList from "../../components/messages/ChatList";
+import { IChatMessage } from "../../types/api";
 export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   const user = useAppSelector((state) => state.user?.data);
 
@@ -62,13 +64,13 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   const [isTyping, setIstyping] = useState(false);
   const [getAllMessages] = useLazyGetAllMessagesQuery();
 
-  const renderItem = ({ item }: any) => (
+  const renderItem = ({ item }:{item:IChatMessage}) => (
     <Pressable
       ref={buttonRef}
       delayLongPress={100}
       onLongPress={(e) => {
         Vibration.vibrate(5);
-        
+
         handleModalVariables(
           item.id,
           item.text,
@@ -76,7 +78,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
             userChats?.messages[0]?.sender?.id === user?.id &&
             sentSuccess,
           item?.sender?.id === user?.id,
-          item.photoUri
+          item?.photo?.imageUri ? item.photo.imageUri : item.photoUri
         );
         setVisibleId(item.id);
       }}
@@ -84,7 +86,8 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
       {
         <ChatBuilderText
           id={item.id}
-          photoUri={item.photoUri}
+          photo={item?.photo}
+          photoUri={item?.photo?.imageUri ? item.photo.imageUri : item.photoUri}
           isClicked={visibleId}
           isMe={item?.sender?.id === user?.id}
           text={item?.text}
@@ -238,7 +241,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
           id: uuid.v4().toString(),
           createdAt: `${new Date()}`,
         },
-        chatId: route?.params?.id || route.params?.chatId as string,
+        chatId: route?.params?.id || (route.params?.chatId as string),
       })
     );
 
@@ -326,7 +329,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
         socket?.emit("newPhoto", {
           message: {
             sender: { userName: user?.userName || "", id: user?.id as string },
-            photoUri: r.data?.photo,
+            photo: r.data?.photo,
             id,
             createdAt: `${new Date()}`,
           },

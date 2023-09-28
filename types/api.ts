@@ -93,6 +93,12 @@ export interface IChatMessage {
   text: string;
   photoUri?: string;
   id: string;
+  photo?: {
+    id: string;
+    imageUri: string;
+    imageHeight: number;
+    imageWidth: number;
+  };
   sender: {
     userName: string;
     id: string;

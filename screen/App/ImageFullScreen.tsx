@@ -24,7 +24,9 @@ export default function ImageFullScreen({
   route,
   navigation,
 }: ImageFullScreenProp) {
-  const { photoUri, id } = route.params;
+  const { photoUri, id, width, height } = route.params;
+  console.log("🚀 ~ file: ImageFullScreen.tsx:28 ~ height:", height);
+  console.log("🚀 ~ file: ImageFullScreen.tsx:28 ~ width:", width);
   const dispatch = useAppDispatch();
 
   const handleDownload = () => {
@@ -111,14 +113,24 @@ export default function ImageFullScreen({
               style={{
                 borderRadius: 20,
                 overflow: "hidden",
-                height: "70%",
+                maxHeight: "80%",
                 width: "100%",
+                aspectRatio:
+                  width &&
+                  height &&
+                  typeof width == "number" &&
+                  typeof height === "number"
+                    ? `${width.toString()}/${height.toString()}`
+                    : undefined,
               }}
             >
               <Image
                 transition={1000}
                 source={{ uri: photoUri }}
-                style={{ width: "100%", height: "100%" }}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
               />
             </View>
           </View>

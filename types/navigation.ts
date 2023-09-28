@@ -11,10 +11,8 @@ export type RootStackParamList = {
   ImageFullScreen: {
     photoUri: string;
     id?: string;
-    dimensions?: {
-      height: number;
-      width: number;
-    } | null;
+    height?: number;
+    width?: number;
   };
   FollowingFollowers: {
     initial: "Following" | "Followers";
@@ -107,7 +105,10 @@ export type SearchUserNavigation = NavigationProp<
   "SearchUser"
 >;
 export type ChatNavigation = NavigationProp<RootStackParamList, "ChatScreen">;
-export type ChangeDataNavigationProp = NavigationProp<RootStackParamList, "ChatScreen">;
+export type ChangeDataNavigationProp = NavigationProp<
+  RootStackParamList,
+  "ChatScreen"
+>;
 export type HomeProp = NativeStackScreenProps<RootStackParamList, "Main">;
 export type DrawerHomeProp = DrawerScreenProps<
   DrawerRootStackParamList,
