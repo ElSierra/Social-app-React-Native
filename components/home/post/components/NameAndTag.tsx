@@ -17,7 +17,6 @@ export default function NameAndTag({
   const dark = useGetMode();
   const isDark = dark;
   const color = isDark ? "white" : "black";
-  const backgroundColor = isDark ? "white" : "black";
   return (
     <View>
       <View style={{ flexDirection: "row", gap: 2, alignItems: "center" }}>
@@ -31,13 +30,13 @@ export default function NameAndTag({
         >
           {name}
         </Text>
-        {verified && <VerifiedIcon color="green" size={20} />}
+        {verified && <VerifiedIcon color="green" size={16} />}
         <Text
           style={{
             fontFamily: "jakara",
             includeFontPadding: false,
             color: "#7a868f",
-            fontSize: 16,
+            fontSize: 14,
             marginBottom: 2,
           }}
         >

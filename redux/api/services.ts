@@ -32,7 +32,13 @@ export const servicesApi = createApi({
   tagTypes: ["post"],
   endpoints: (builder) => ({
     uploadPhoto: builder.mutation<
-      { photo: string },
+      {
+        photo: {
+          uri: string;
+          width: number;
+          height: number;
+        };
+      },
       { mimeType: string; uri: string }
     >({
       query: (payload) => {
@@ -43,9 +49,9 @@ export const servicesApi = createApi({
         };
         const formData = new FormData();
 
-        formData.append("photos", blob);
+        formData.append("photo", blob);
         return {
-          url: "/upload-photos",
+          url: "/upload-photo",
           method: "POST",
           body: formData,
           headers: {

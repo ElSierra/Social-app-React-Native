@@ -18,6 +18,11 @@ export interface IPostContent {
   photoUri?: string[];
   audioTitle?: string;
   audioUri?: string;
+  photo?: {
+    uri: string;
+    height: number;
+    width: number;
+  };
   videoUri?: string;
   videoTitle?: string;
   postText?: string;
@@ -53,11 +58,18 @@ export interface IPost {
     imageWidth?: number;
     title: string;
   } | null;
+
   audioUri: string | null;
   audioTitle: string | null;
   videoUri: string | null;
   videoTitle: string | null;
   photoUri: string[];
+  photo: {
+    id: string;
+    imageUri: string;
+    imageHeight: number;
+    imageWidth: number;
+  } | null;
   postText: string;
   videoThumbnail: string | null;
   videoViews: number | null;

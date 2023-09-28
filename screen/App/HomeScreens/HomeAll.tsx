@@ -200,6 +200,15 @@ export default function HomeAll() {
       isLiked={
         item?.like?.find((like) => like?.userId === authId) ? true : false
       }
+      photo={
+        item.photo
+          ? {
+              uri: item.photo?.imageUri,
+              width: item.photo?.imageWidth,
+              height: item.photo?.imageWidth,
+            }
+          : undefined
+      }
       thumbNail={item.videoThumbnail}
       imageUri={item.user?.imageUri}
       name={item.user?.name}

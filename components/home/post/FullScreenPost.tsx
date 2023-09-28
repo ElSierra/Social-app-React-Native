@@ -21,8 +21,9 @@ import { useAppSelector } from "../../../redux/hooks/hooks";
 import LinkPost from "./components/LinkPost";
 import Share from "react-native-share";
 import ViewShot from "react-native-view-shot";
-import { useRef } from "react";
-
+import { useRef, useState } from "react";
+import { Image } from "expo-image";
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 export default function FullScreenPost({
   imageUri,
   name,
@@ -49,21 +50,23 @@ export default function FullScreenPost({
   const navigation = useNavigation<HomeNavigationProp>();
   const dark = useGetMode();
   const isDark = dark;
+  const backgroundColor = isDark ? "black" : "white";
   const borderBottomColor = isDark ? "#252222" : "#CCC9C9";
   const color = isDark ? "#FFFFFF" : "#000000";
   const rColor = isDark ? "#FFFFFF2A" : "#0000001B";
   const user = useAppSelector((state) => state.user.data);
   const [dateString, timeString] = dateFormatted(new Date(date)).split(",");
-
+  const [showQ, setShowQ] = useState(false);
   const ref = useRef<any>(null);
 
   const handleShare = () => {
-    console.log("shared");
+    setShowQ(true);
     ref?.current?.capture()?.then((uri: string) => {
       console.log("do something with ", uri);
       Share.open({ urls: [uri] })
         .then((res) => {
           console.log(res);
+          setShowQ(false);
         })
         .catch((err) => {
           err && console.log(err);
@@ -77,11 +80,12 @@ export default function FullScreenPost({
     >
       <View
         style={{
+          backgroundColor,
+
           borderBottomWidth: 0.5,
           borderBottomColor,
 
-          paddingHorizontal: 10,
-          paddingVertical: 10,
+          padding: 10,
         }}
       >
         <View
@@ -197,7 +201,7 @@ export default function FullScreenPost({
                 style={{
                   color: "#7a868f",
                   fontFamily: "mulishMedium",
-                  fontSize: 16,
+                  fontSize: 14,
                 }}
               >
                 {dateString}
@@ -232,6 +236,14 @@ export default function FullScreenPost({
             />
           </View>
         </View>
+        {!showQ && (
+          <Animated.View
+            style={{ position: "absolute", right: 10, top: 10 }}
+            exiting={FadeOut.springify()}
+          >
+          <Text style={{fontFamily:"uberBold"}}>Qui</Text>
+          </Animated.View>
+        )}
       </View>
     </ViewShot>
   );

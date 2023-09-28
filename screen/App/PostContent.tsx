@@ -72,6 +72,9 @@ export default function PostContent({ navigation }: PostContentProp) {
     setPostAudio(null);
   }
   const [fileToServer, setFTServer] = useState<string | undefined>(undefined);
+  const [photoServer, setPhotoServer] = useState<
+    { uri: string; width: number; height: number } | undefined
+  >(undefined);
   const [videoThumbnail, setVideoThumbnail] = useState<string | undefined>(
     undefined
   );
@@ -175,14 +178,14 @@ export default function PostContent({ navigation }: PostContentProp) {
   const [audio] = useUploadAudioMutation();
   const [video] = useUploadVideoMutation();
   const [postContent] = usePostContentMutation();
-  useMemo(() => {
+  useEffect(() => {
     if (postPhoto?.mimeType.startsWith("image/")) {
       setDone(false);
       photo(postPhoto)
         .unwrap()
         .then((r) => {
           setDone(true);
-          setFTServer(r.photo);
+          setPhotoServer(r.photo);
         })
         .catch((e) => {
           setDone(true);
@@ -228,9 +231,16 @@ export default function PostContent({ navigation }: PostContentProp) {
   const handlePostContent = () => {
     Keyboard.dismiss();
     if (postPhoto?.mimeType.startsWith("image/")) {
-      if (fileToServer) {
+      if (photoServer) {
         dispatch(openLoadingModal());
-        postContent({ photoUri: [fileToServer], postText })
+        postContent({
+          photo: {
+            uri: photoServer.uri,
+            height: photoServer.height,
+            width: photoServer.width,
+          },
+          postText,
+        })
           .then((e) => {
             dispatch(
               openToast({ text: "Successfully posted", type: "Success" })
@@ -468,33 +478,35 @@ export default function PostContent({ navigation }: PostContentProp) {
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{ gap: 10, paddingLeft: 10 }}
               data={photos}
-              renderItem={({ item }) => (
-                <View
-                  style={{
-                    height: 100,
-                    width: 100,
-                    borderRadius: 10,
-                    overflow: "hidden",
-                  }}
-                >
-                  <Pressable
-                    android_ripple={{ color: "#FFFFFF", foreground: true }}
-                    style={{ borderRadius: 10 }}
-                    onPress={() => {
-                      setPostPhoto({
-                        uri: item?.node?.image?.uri,
-                        mimeType: item?.node?.type,
-                        size: item?.node?.image?.fileSize || 0,
-                      });
+              renderItem={({ item }) => {
+                return (
+                  <View
+                    style={{
+                      height: 100,
+                      width: 100,
+                      borderRadius: 10,
+                      overflow: "hidden",
                     }}
                   >
-                    <Image
-                      style={{ height: 100, width: 100, borderRadius: 10 }}
-                      source={{ uri: item?.node?.image?.uri }}
-                    />
-                  </Pressable>
-                </View>
-              )}
+                    <Pressable
+                      android_ripple={{ color: "#FFFFFF", foreground: true }}
+                      style={{ borderRadius: 10 }}
+                      onPress={() => {
+                        setPostPhoto({
+                          uri: item?.node?.image?.uri,
+                          mimeType: item?.node?.type,
+                          size: item?.node?.image?.fileSize || 0,
+                        });
+                      }}
+                    >
+                      <Image
+                        style={{ height: 100, width: 100, borderRadius: 10 }}
+                        source={{ uri: item?.node?.image?.uri }}
+                      />
+                    </Pressable>
+                  </View>
+                );
+              }}
             />
           </Animated.View>
         )}

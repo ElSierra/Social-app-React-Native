@@ -14,10 +14,12 @@ import { useState } from "react";
 export default function PhotoPost({
   photoUri,
   width,
+  height,
   id,
 }: {
-  photoUri: string[];
+  photoUri: string;
   width: number;
+  height: number;
   id: string;
 }) {
   const navigation = useNavigation<HomeNavigationProp>();
@@ -27,7 +29,7 @@ export default function PhotoPost({
         width: "100%",
         height: 200,
         marginTop: 10,
-        marginBottom:10,
+        marginBottom: 10,
         borderRadius: 15,
         overflow: "hidden",
         justifyContent: "center",
@@ -38,22 +40,23 @@ export default function PhotoPost({
         android_ripple={{ color: "#000000", foreground: true }}
         onPress={() => {
           navigation.navigate("ImageFullScreen", {
-            photoUri: photoUri[0],
+            photoUri: photoUri,
             id,
+            height,
+            width,
           });
         }}
         style={{
           width: "100%",
           height: 200,
-          paddingHorizontal: 4,
           borderRadius: 15,
         }}
       >
         <Image
-          style={{ flex: 1, width: "100%", borderRadius: 15 }}
+          style={{ height: "100%", width: "100%" }}
           contentFit="cover"
           transition={1000}
-          source={{ uri: photoUri[0] }}
+          source={{ uri: photoUri }}
         />
       </Pressable>
     </View>

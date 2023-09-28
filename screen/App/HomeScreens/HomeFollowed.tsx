@@ -180,6 +180,16 @@ export default function HomeFollowed() {
           ? true
           : false
       }
+      link={item.link}
+      photo={
+        item.photo
+          ? {
+              uri: item.photo?.imageUri,
+              width: item.photo?.imageWidth,
+              height: item.photo?.imageWidth,
+            }
+          : undefined
+      }
       comments={item._count.comments}
       like={item._count.like}
       isLiked={item?.like?.find((like) => like?.userId === authId) ? true : false}

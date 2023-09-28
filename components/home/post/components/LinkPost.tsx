@@ -29,7 +29,7 @@ export default function LinkPost({
 }) {
   const dark = useGetMode();
   const color = dark ? "white" : "black";
-  const backgroundColor = dark ? "#131313" : "#CDCDCD";
+  const backgroundColor = dark ? "#131313" : "#F1F1F1";
   const navigation = useNavigation<HomeNavigationProp>();
   const isDark = dark;
   const toolbarColor = isDark ? "black" : "white";
@@ -113,14 +113,17 @@ export default function LinkPost({
         <View
           style={{
             backgroundColor,
+            height:50,
+            justifyContent:"center",
+            
             paddingHorizontal: 10,
             paddingBottom: 5,
             borderBottomLeftRadius: 15,
             borderBottomRightRadius: 15,
           }}
         >
-          <Text style={{ color, fontFamily: "jakaraBold" }}>{title}</Text>
-          <Text style={{ color }}>{url}</Text>
+          <Text numberOfLines={1} style={{ color, fontFamily: "jakaraBold" }}>{title}</Text>
+          <Text numberOfLines={1} style={{ color }}>{url}</Text>
         </View>
       </Pressable>
     </View>

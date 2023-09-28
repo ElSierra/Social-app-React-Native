@@ -99,6 +99,15 @@ export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
             ? true
             : false
         }
+        photo={
+          item.photo
+            ? {
+                uri: item.photo?.imageUri,
+                width: item.photo?.imageWidth,
+                height: item.photo?.imageWidth,
+              }
+            : undefined
+        }
         link={item.link}
         like={item._count.like}
         thumbNail={item.videoThumbnail}

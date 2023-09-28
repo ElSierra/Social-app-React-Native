@@ -26,13 +26,13 @@ export default function NameAndTagFullScreen({
             style={{
               fontFamily: "jakaraBold",
               includeFontPadding: false,
-              fontSize: 20,
+              fontSize: 18,
               color,
             }}
           >
             {name}
           </Text>
-          {verified && <VerifiedIcon color="green" size={20} />}
+          {verified && <VerifiedIcon color="green" size={15} />}
         </View>
 
         <Text
@@ -40,7 +40,7 @@ export default function NameAndTagFullScreen({
             fontFamily: "jakara",
             includeFontPadding: false,
             color: "#7a868f",
-            fontSize: 16,
+            fontSize: 14,
             marginBottom: 6,
           }}
         >

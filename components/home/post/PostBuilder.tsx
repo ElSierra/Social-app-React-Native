@@ -39,11 +39,13 @@ export default function PostBuilder({
   id,
   audioUri,
   thumbNail,
+  photo,
 }: IPostBuilder) {
   const width = Dimensions.get("screen").width;
   const navigation = useNavigation<HomeNavigationProp>();
   const dark = useGetMode();
   const isDark = dark;
+  const backgroundColor = isDark ? "black": "white"
   const borderBottomColor = isDark ? "#252222" : "#CCC9C9";
   const color = isDark ? "#FFFFFF" : "#000000";
   const rColor = isDark ? "#00000014" : "#BBBBBB";
@@ -81,6 +83,7 @@ export default function PostBuilder({
               isLiked,
               userTag,
               photoUri,
+              photo,
               verified,
               videoUri,
               postText,
@@ -104,6 +107,8 @@ export default function PostBuilder({
               flexDirection: "row",
               width: "100%",
               gap: 10,
+              padding: 10,
+              backgroundColor
             }}
           >
             <View
@@ -168,11 +173,12 @@ export default function PostBuilder({
                   />
                 ))}
               <View>
-                {photoUri.length > 0 && (
+                {photo?.uri && (
                   <PhotoPost
                     id={userId as string}
-                    photoUri={photoUri}
-                    width={width}
+                    photoUri={photo.uri}
+                    width={photo.width}
+                    height={photo.height}
                   />
                 )}
               </View>

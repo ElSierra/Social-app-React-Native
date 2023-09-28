@@ -1,5 +1,6 @@
 export type IPostBuilder = {
   imageUri: string;
+  photo?: { uri: string; height: number; width: number };
   name: string;
   userId?: string;
   date: Date;

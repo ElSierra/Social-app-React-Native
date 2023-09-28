@@ -5,7 +5,6 @@ import { HomeNavigationProp } from "../../../../types/navigation";
 import { SharedElement } from "react-navigation-shared-element";
 import { Image } from "expo-image";
 
-
 export default function PhotoPostFullScreen({
   photoUri,
   width,
@@ -32,26 +31,24 @@ export default function PhotoPostFullScreen({
             width: width * 0.95,
             height: 200,
             borderRadius: 15,
-            justifyContent:"center",
-            alignItems:"center",
+            justifyContent: "center",
+            alignItems: "center",
             overflow: "hidden",
           }}
         >
           <Pressable
             android_ripple={{ color: "#000000", foreground: true }}
             onPress={() => {
-              navigation.navigate("ImageFullScreen", { photoUri: item,id });
+              navigation.navigate("ImageFullScreen", { photoUri: item, id });
             }}
             style={{
-              width: width  ,
+              width: width,
               height: 200,
-              paddingHorizontal: 4,
               borderRadius: 15,
             }}
           >
-            <SharedElement id={id} style={{flex:1}}>
+            <SharedElement id={id} style={{ flex: 1 }}>
               <Image
-               
                 style={{ flex: 1, width: "100%", borderRadius: 15 }}
                 contentFit="cover"
                 source={{ uri: item }}

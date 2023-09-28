@@ -100,7 +100,6 @@ export default function App() {
         <PaperProvider>
           <CustomToast />
           <LoadingModal />
-
           <Navigation />
         </PaperProvider>
       </PersistGate>
