@@ -13,13 +13,13 @@ function ChatListView({
   messageText: string;
   userChats?: IChatList;
   renderItem: ListRenderItem<any>;
-  
 }) {
+  console.log("Messages 🚀🚀🚀🚀👺😒", userChats?.messages);
   return (
     <View style={{ flex: 1 }}>
       <FlatList
         inverted
-        initialNumToRender = {30}
+        initialNumToRender={30}
         ListHeaderComponent={() => {
           return (
             <View

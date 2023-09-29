@@ -134,7 +134,7 @@ export default function Main() {
   }, []);
   const response = useGetUserQuery(null);
   useEffect(() => {
-    console.log(process.env.EXPO_PUBLIC_PROJECT_ID)
+    console.log(process.env.EXPO_PUBLIC_PROJECT_ID);
     async function registerForPushNotificationsAsync() {
       try {
         let token;
@@ -183,7 +183,10 @@ export default function Main() {
     }
 
     registerForPushNotificationsAsync()
-      .then((e) => updateNotificationId({ notificationId: e?.data as string }))
+      .then((e) => {
+        console.log("🚀 ~ file: Main.tsx:187 ~ .then ~ e:", e)
+        updateNotificationId({ notificationId: e?.data as string });
+      })
       .catch((e) => {
         console.log(e);
       });
@@ -261,6 +264,7 @@ export default function Main() {
   useEffect(() => {
     socket?.on("message", (data: IMessageSocket) => {
       if (data) {
+        console.log("🚀 ~ file: Main.tsx:267 ~ socket?.on ~ data:",new Date(), data)
         if (data.message?.sender?.id !== id) {
           dispatch(addNewChat(data));
           dispatch(addNewIndication());
@@ -322,9 +326,7 @@ export default function Main() {
     <BottomSheetModalProvider>
       <BottomSheetContainer>
         <Stack.Navigator
-     
           screenOptions={{
-          
             contentStyle: { backgroundColor },
           }}
         >
@@ -476,7 +478,7 @@ export default function Main() {
             name="EditProfile"
             options={{
               title: "Edit Profile",
-           animation:"slide_from_right",
+              animation: "slide_from_right",
               headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
               headerShadowVisible: false,
 
@@ -500,7 +502,7 @@ export default function Main() {
               headerShadowVisible: false,
             }}
           />
-            <Stack.Screen
+          <Stack.Screen
             name="ChangeData"
             component={ChangeData}
             options={{

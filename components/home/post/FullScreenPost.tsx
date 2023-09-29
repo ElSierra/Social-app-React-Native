@@ -243,7 +243,7 @@ export default function FullScreenPost({
             style={{ position: "absolute", right: 10, top: 10 }}
             exiting={FadeOut.springify()}
           >
-            <Text style={{ fontFamily: "uberBold" }}>Qui</Text>
+            <Text style={{ fontFamily: "uberBold" ,color}}>Qui</Text>
           </Animated.View>
         )}
       </View>

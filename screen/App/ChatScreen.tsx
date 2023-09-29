@@ -132,9 +132,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   }, [chatState]);
 
   useEffect(() => {
-    socket?.on("sent", (sent) => {
-      setSentSuccess(sent);
-    });
+   
   }, [socket]);
   useLayoutEffect(() => {
     socket?.emit("chat", route.params.id);
@@ -154,6 +152,9 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
           setIstyping(data.isTyping);
         }
       }
+    });
+    socket?.on("sent", (sent) => {
+      setSentSuccess(sent);
     });
   }, [socket]);
 
