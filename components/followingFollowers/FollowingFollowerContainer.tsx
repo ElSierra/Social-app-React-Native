@@ -47,7 +47,7 @@ export default function FFContainer({
 
   useEffect(() => {
     socket?.on("hello", (hello) => {
-      console.log("😒", hello);
+     
     });
   }, [socket]);
 

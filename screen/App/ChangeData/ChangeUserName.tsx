@@ -80,7 +80,7 @@ export default function ChangeUserName() {
         dispatch(openToast({ text: r.msg, type: "Success" }));
       })
       .catch((e: any) => {
-        console.log("🚀 ~ file: ChangeName.tsx:82 ~ onSubmit ~ e:", e.data);
+
         if (e.data?.message === "userName already exists") {
           dispatch(openToast({ text: "Username exists", type: "Failed" }));
           return;

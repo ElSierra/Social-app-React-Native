@@ -80,7 +80,7 @@ export default function ChangeName() {
         dispatch(openToast({ text: r.msg, type: "Success" }));
       })
       .catch((e: any) => {
-        console.log("🚀 ~ file: ChangeName.tsx:82 ~ onSubmit ~ e:", e);
+      
         dispatch(openToast({ text: e.data?.msg, type: "Failed" }));
       });
   };

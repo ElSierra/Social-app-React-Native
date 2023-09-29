@@ -14,6 +14,8 @@ import { CheckIcon } from "../icons";
 import { useNavigation } from "@react-navigation/native";
 import { ChatNavigation } from "../../types/navigation";
 import { Image } from "expo-image";
+import { ActivityIndicator } from "react-native-paper";
+import { BlurView } from "expo-blur";
 
 const { width } = Dimensions.get("screen");
 function ChatBuilderText({
@@ -26,6 +28,7 @@ function ChatBuilderText({
   sent,
   photoUri,
   photo,
+  isLast,
 }: {
   isMe: boolean;
   text: string;
@@ -36,8 +39,8 @@ function ChatBuilderText({
   id: string;
   photoUri?: string;
   photo?: { imageWidth: number; imageHeight: number };
+  isLast: boolean;
 }) {
-  console.log("🚀 ~ file: ChatBuilderText.tsx:40 ~ o:", photo);
   const dark = useGetMode();
   const backgroundColorForMe = dark ? "#35383A" : "#0c81f8";
   const backgroundColor = dark ? "#181B1D" : "#e8e8eb";
@@ -94,11 +97,37 @@ function ChatBuilderText({
                 });
               }}
             >
-              <Image
-                source={{ uri: photoUri }}
-                priority={"high"}
-                style={{ width: 200, height: 100, borderRadius: 10 }}
-              />
+              <View
+                style={{ padding: 5, overflow: "hidden", borderRadius: 10 }}
+              >
+                <Image
+                  source={{ uri: photoUri }}
+                  priority={"high"}
+                  style={{
+                    width: 200,
+                    height: 100,
+                    borderRadius: 10,
+                    opacity: !sent && isLast ? 0.4 : 1,
+                  }}
+                />
+                {!sent && isLast && (
+                  <>
+                    <BlurView
+                      style={{ height: 200, width: 600, position: "absolute" }}
+                    />
+                    <ActivityIndicator
+                    color={color}
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                      }}
+                    />
+                  </>
+                )}
+              </View>
             </Pressable>
           )}
           {sent && (

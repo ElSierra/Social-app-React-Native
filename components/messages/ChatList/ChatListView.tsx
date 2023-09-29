@@ -14,7 +14,7 @@ function ChatListView({
   userChats?: IChatList;
   renderItem: ListRenderItem<any>;
 }) {
-  console.log("Messages 🚀🚀🚀🚀👺😒", userChats?.messages);
+
   return (
     <View style={{ flex: 1 }}>
       <FlatList

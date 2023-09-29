@@ -128,7 +128,7 @@ export default function ChangeUserName() {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
       () => {
-        console.log("shsh");
+     
         scrollViewRef.current?.scrollTo({ x: 300, y: 0 });
         setKeyboardVisible(true); // or some other action
       }

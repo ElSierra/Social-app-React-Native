@@ -188,8 +188,6 @@ function AnimatedSplashScreen({
 const Navigation = () => {
   const dark = useGetMode();
   const dispatch = useAppDispatch();
-  const [canProceed, setCanProceed] = useState(false);
-  console.log("🚀 ~ file: App.tsx:208 ~ Navigation ~ canProceed:", canProceed);
   const style = dark ? "light" : "dark";
   useGetFollowDetailsQuery(null);
   const { route } = useAppSelector((state) => state.routes);
@@ -289,7 +287,7 @@ const Navigation = () => {
       // Listen to expo push notifications
       const subscription =
         Notifications.addNotificationResponseReceivedListener((response) => {
-          console.log("here");
+       
           const url = response.notification.request.content.data.url;
 
           // Any custom logic to see whether the URL needs to be handled

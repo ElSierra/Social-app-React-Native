@@ -63,7 +63,7 @@ export default function FullScreenPost({
   const handleShare = () => {
     setShowQ(true);
     ref?.current?.capture()?.then((uri: string) => {
-      console.log("do something with ", uri);
+     
       Share.open({ urls: [uri] })
         .then((res) => {
           console.log(res);

@@ -64,7 +64,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   const [isTyping, setIstyping] = useState(false);
   const [getAllMessages] = useLazyGetAllMessagesQuery();
 
-  const renderItem = ({ item }:{item:IChatMessage}) => (
+  const renderItem = ({ item }: { item: IChatMessage }) => (
     <Pressable
       ref={buttonRef}
       delayLongPress={100}
@@ -92,6 +92,10 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
           isMe={item?.sender?.id === user?.id}
           text={item?.text}
           time={item?.createdAt}
+          isLast={
+            userChats?.messages[0].id === item?.id &&
+            userChats?.messages[0]?.sender?.id === user?.id
+          }
           sent={
             userChats?.messages[0]?.id === item?.id &&
             userChats?.messages[0]?.sender?.id === user?.id &&
@@ -131,9 +135,6 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
       .catch((error) => {});
   }, [chatState]);
 
-  useEffect(() => {
-   
-  }, [socket]);
   useLayoutEffect(() => {
     socket?.emit("chat", route.params.id);
   }, []);
@@ -154,6 +155,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
       }
     });
     socket?.on("sent", (sent) => {
+      console.log("🚀 ~ file: ChatScreen.tsx:155 ~ socket?.on ~ sent:", sent);
       setSentSuccess(sent);
     });
   }, [socket]);
@@ -312,7 +314,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
 
   function handleSetPhotoPost(mimeType: string, uri: string, size: number) {
     const id = new BSON.ObjectId();
-
+    setSentSuccess(false);
     dispatch(
       addNewChat({
         message: {
@@ -327,6 +329,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
     );
     photo({ mimeType, uri })
       .then((r: any) => {
+        setSentSuccess(true);
         socket?.emit("newPhoto", {
           message: {
             sender: { userName: user?.userName || "", id: user?.id as string },
