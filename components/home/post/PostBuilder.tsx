@@ -111,6 +111,7 @@ export default function PostBuilder({
               backgroundColor
             }}
           >
+           
             <View
               style={{
                 height: 50,
