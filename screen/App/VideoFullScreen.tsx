@@ -4,21 +4,53 @@ import AnimatedScreen from "../../components/global/AnimatedScreen";
 import VideoPostFullScreen from "../../components/home/post/components/VideoPostForFullScreen";
 import { VideoFullScreen } from "../../types/navigation";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import RNFetchBlob from "rn-fetch-blob";
+
 import { StatusBar } from "expo-status-bar";
 import { RadixIcon } from "radix-ui-react-native-icons";
+import { useAppDispatch } from "../../redux/hooks/hooks";
+import { openToast } from "../../redux/slice/toast/toast";
+import ReactNativeBlobUtil from "react-native-blob-util";
+import uuid from "react-native-uuid";
 export default function VideoFull({ navigation, route }: VideoFullScreen) {
+  const dispatch = useAppDispatch();
+  console.log("file url", route.params?.videoUri);
   const handleDownload = () => {
-    RNFetchBlob.config({
-      addAndroidDownloads: {
-        useDownloadManager: true,
-        notification: true,
-
-        description: "File downloaded by download manager.",
-      },
+    ReactNativeBlobUtil.config({
+      // response data will be saved to this path if it has access right.
+      // path:
+      //   dirs.DocumentDir +
+      //   `${photoUri?.split(".")[photoUri?.split(".")?.length - 2]}${
+      //     photoUri?.split(".")[photoUri?.split(".")?.length - 1]
+      //   }`,
+      fileCache: true,
     })
-      .fetch("GET", route.params?.videoUri)
-      .then((res) => {});
+      .fetch("GET", route.params?.videoUri, {
+        //some headers ..
+      })
+      .progress((received, total) => {
+        console.log("progress", received, total);
+      })
+      .then(async (res) => {
+        // the path should be dirs.DocumentDir + 'path-to-file.anything'
+        ReactNativeBlobUtil.MediaCollection.copyToMediaStore(
+          {
+            name: uuid.v4(), // name of the file
+            parentFolder: "qui", // subdirectory in the Media Store, e.g. HawkIntech/Files to create a folder HawkIntech with a subfolder Files and save the image within this folder
+            mimeType: `video/${
+              route.params?.videoUri?.split(".")[
+                route.params?.videoUri?.split(".")?.length - 1
+              ]
+            }`,
+          },
+          "Download",
+          res.path()
+        )
+          .then((r) => {
+            console.log(r);
+            dispatch(openToast({ text: "Saved", type: "Info" }));
+          })
+          .catch((e) => {});
+      });
   };
   useLayoutEffect(() => {
     navigation.setOptions({

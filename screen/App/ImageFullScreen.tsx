@@ -13,12 +13,14 @@ import { StatusBar } from "expo-status-bar";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useEffect, useLayoutEffect } from "react";
 import axios from "axios";
-import RNFetchBlob from "rn-fetch-blob";
+
 import { RadixIcon } from "radix-ui-react-native-icons";
 
 import { useAppDispatch } from "../../redux/hooks/hooks";
 import { openToast } from "../../redux/slice/toast/toast";
 import { Image, ImageBackground } from "expo-image";
+import uuid from "react-native-uuid";
+import ReactNativeBlobUtil from "react-native-blob-util";
 
 export default function ImageFullScreen({
   route,
@@ -28,28 +30,45 @@ export default function ImageFullScreen({
   console.log("🚀 ~ file: ImageFullScreen.tsx:28 ~ height:", height);
   console.log("🚀 ~ file: ImageFullScreen.tsx:28 ~ width:", width);
   const dispatch = useAppDispatch();
+  let dirs = ReactNativeBlobUtil.fs.dirs;
 
+  console.log(
+    "sssss",
+    photoUri?.split(".")[photoUri?.split(".")?.length - 1],
+    uuid.v4()
+  );
   const handleDownload = () => {
-    RNFetchBlob.config({
-      addAndroidDownloads: {
-        useDownloadManager: true, // <-- this is the only thing required
-        // Optional, override notification setting (default to true)
-        notification: true,
-        // Optional, but recommended since android DownloadManager will fail when
-        // the url does not contains a file extension, by default the mime type will be text/plain
-        mime: "image/jpg",
-        description: "File downloaded by download manager.",
-      },
+    ReactNativeBlobUtil.config({
       // response data will be saved to this path if it has access right.
+      // path:
+      //   dirs.DocumentDir +
+      //   `${photoUri?.split(".")[photoUri?.split(".")?.length - 2]}${
+      //     photoUri?.split(".")[photoUri?.split(".")?.length - 1]
+      //   }`,
+      fileCache: true,
     })
-      .fetch("GET", route.params?.photoUri)
-      .then((res) => {
-        // the path should be dirs.DocumentDir + 'path-to-file.anything'
-        dispatch(
-          openToast({ text: "File saved in notification", type: "Info" })
-        );
+      .fetch("GET", photoUri, {
+        //some headers ..
       })
-      .catch((e) => {});
+      .then(async (res) => {
+        // the path should be dirs.DocumentDir + 'path-to-file.anything'
+        ReactNativeBlobUtil.MediaCollection.copyToMediaStore(
+          {
+            name: uuid.v4(), // name of the file
+            parentFolder: "qui", // subdirectory in the Media Store, e.g. HawkIntech/Files to create a folder HawkIntech with a subfolder Files and save the image within this folder
+            mimeType: `image/${
+              photoUri?.split(".")[photoUri?.split(".")?.length - 1]
+            }`,
+          },
+          "Download",
+          res.path()
+        )
+          .then((r) => {
+            console.log(r);
+            dispatch(openToast({ text: "Saved", type: "Info" }));
+          })
+          .catch((e) => {});
+      });
   };
   useLayoutEffect(() => {
     navigation.setOptions({

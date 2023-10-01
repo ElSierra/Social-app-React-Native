@@ -54,6 +54,8 @@ export default function PhotoPost({
       >
         <Image
           style={{ height: "100%", width: "100%" }}
+          placeholder={require("../../../../assets/images/placeholder.png")}
+          placeholderContentFit="cover"
           contentFit="cover"
           transition={1000}
           source={{ uri: photoUri }}

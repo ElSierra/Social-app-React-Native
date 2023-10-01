@@ -41,10 +41,17 @@ import { enableFreeze } from "react-native-screens";
 
 import Animated, {
   BounceOutDown,
+  Easing,
   FadeIn,
   FadeInDown,
   FadeInUp,
   FadeOut,
+  runOnJS,
+  useAnimatedReaction,
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withTiming,
 } from "react-native-reanimated";
 import { useNetInfo } from "@react-native-community/netinfo";
 import { openToast } from "./redux/slice/toast/toast";
@@ -76,7 +83,9 @@ export default function App() {
     const subscriptionResponse =
       Notifications.addNotificationResponseReceivedListener((response) => {
         console.log("response", response.actionIdentifier);
-        console.log("🚀 ~ file: App.tsx:81 ~ Notifications.addNotificationResponseReceivedListener ~ response:")
+        console.log(
+          "🚀 ~ file: App.tsx:81 ~ Notifications.addNotificationResponseReceivedListener ~ response:"
+        );
         if (response.actionIdentifier === "message") {
           const userText = response.userText;
           console.log(
@@ -113,23 +122,111 @@ function AnimatedSplashScreen({
   children: ReactNode;
   image: ImageURISource;
 }) {
+  const isAnimationCompleteForQui = useSharedValue(false);
+  const isAllAnimationComplete = useSharedValue(false);
   const [isAppReady, setAppReady] = useState(false);
 
   const onImageLoaded = useCallback(async () => {
-    try {
-      await SplashScreen.hideAsync();
-      // Load stuff
-      await Promise.all([]);
-    } catch (e) {
-      // handle errors
-    } finally {
-      setAppReady(true);
-    }
+    setTimeout(async () => {
+      try {
+        await SplashScreen.hideAsync();
+        // Load stuff
+        await Promise.all([]);
+      } catch (e) {
+        // handle errors
+      } finally {
+        setAppReady(true);
+      }
+    }, 2000);
   }, []);
   const dark = useGetMode();
   const backgroundColor = dark ? "black" : "white";
   const color = !dark ? "black" : "white";
   const style = dark ? "light" : "dark";
+
+  const offset = useSharedValue(0);
+  const opacityK = useSharedValue(0);
+  const offsetK = useSharedValue(0);
+  const backgroundColorOffset = useSharedValue("black");
+
+  const animatedStyles = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateX: withDelay(
+            1000,
+            withTiming(
+              offset.value,
+
+              {
+                duration: 400,
+              },
+              () => {
+                isAnimationCompleteForQui.value = true;
+              }
+            )
+          ),
+        },
+      ],
+    };
+  });
+  const animatedStylesK = useAnimatedStyle(() => {
+    return {
+      opacity: withTiming(opacityK.value),
+      transform: [
+        {
+          translateX: withTiming(
+            offsetK.value,
+
+            {},
+            () => {
+              isAllAnimationComplete.value = true;
+            }
+          ),
+        },
+      ],
+    };
+  });
+  const animateBackgroundEntryStyle = useAnimatedStyle(() => {
+    return {
+      backgroundColor: withTiming(backgroundColorOffset.value, {
+        duration: 2000,
+        easing: Easing.inOut(Easing.quad),
+      }),
+    };
+  });
+  useEffect(() => {
+    offset.value = -10;
+    backgroundColorOffset.value = backgroundColor;
+    // Change this value to move more or less
+  }, [backgroundColor]);
+
+  function callback() {
+    "worklet";
+    runOnJS(onImageLoaded)();
+  }
+
+  useAnimatedReaction(
+    () => {
+      return isAnimationCompleteForQui.value;
+    },
+    (result) => {
+      if (result) {
+        opacityK.value = 1;
+        offsetK.value = -10;
+      }
+    }
+  );
+  useAnimatedReaction(
+    () => {
+      return isAllAnimationComplete.value;
+    },
+    (result) => {
+      if (result) {
+        callback();
+      }
+    }
+  );
 
   return (
     <View style={{ flex: 1 }}>
@@ -139,14 +236,9 @@ function AnimatedSplashScreen({
         <Animated.View
           exiting={FadeOut.duration(800)}
           pointerEvents="none"
-          style={[
-            StyleSheet.absoluteFill,
-            {
-              backgroundColor,
-            },
-          ]}
+          style={[animateBackgroundEntryStyle, StyleSheet.absoluteFill]}
         >
-          <Animated.Image
+          {/* <Animated.Image
             style={{
               width: "100%",
               height: "100%",
@@ -156,7 +248,44 @@ function AnimatedSplashScreen({
             source={image}
             onLoadEnd={onImageLoaded}
             fadeDuration={0}
-          />
+          /> */}
+          <Animated.View
+            exiting={BounceOutDown.duration(800)}
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              flex: 1,
+              flexDirection: "row",
+            }}
+          >
+            <Animated.Text
+              style={[
+                {
+                  fontFamily: "uberBold",
+                  fontSize: 110,
+                  paddingLeft: 20,
+                  paddingBottom: 15,
+                  includeFontPadding: false,
+                },
+                animatedStyles,
+              ]}
+            >
+              Q
+            </Animated.Text>
+            <Animated.Text
+              style={[
+                {
+                  fontFamily: "uberBold",
+                  fontSize: 110,
+                  paddingBottom: 25,
+                  includeFontPadding: false,
+                },
+                animatedStylesK,
+              ]}
+            >
+              ui
+            </Animated.Text>
+          </Animated.View>
           <Animated.View
             entering={FadeIn.springify()}
             style={{
@@ -287,7 +416,6 @@ const Navigation = () => {
       // Listen to expo push notifications
       const subscription =
         Notifications.addNotificationResponseReceivedListener((response) => {
-       
           const url = response.notification.request.content.data.url;
 
           // Any custom logic to see whether the URL needs to be handled

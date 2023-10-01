@@ -15,6 +15,7 @@
     "@react-native-community/netinfo": "9.4.1",
     "@react-native-community/slider": "^4.4.3",
     "@react-native-masked-view/masked-view": "^0.2.9",
+    "@react-native-ml-kit/text-recognition": "^1.5.0",
     "@react-navigation/bottom-tabs": "^6.5.9",
     "@react-navigation/drawer": "^6.6.4",
     "@react-navigation/native": "^6.1.8",
@@ -45,7 +46,9 @@
     "react": "18.2.0",
     "react-hook-form": "^7.46.2",
     "react-native": "0.72.5",
+    "react-native-blob-util": "^0.19.1",
     "react-native-bouncy-checkbox": "^3.0.7",
+    "react-native-circular-progress": "^1.3.9",
     "react-native-context-menu-view": "^1.11.0",
     "react-native-device-info": "^10.9.0",
     "react-native-document-picker": "^9.0.1",
@@ -72,7 +75,6 @@
     "react-navigation-shared-element": "^3.1.3",
     "react-redux": "^8.1.2",
     "redux-persist": "^6.0.0",
-    "rn-fetch-blob": "^0.12.0",
     "socket.io-client": "^4.7.2"
   },
   "devDependencies": {
