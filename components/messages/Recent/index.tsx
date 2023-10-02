@@ -29,7 +29,6 @@ export default function Recent({ offset }: { offset: Animated.Value }) {
 
   const chatList = useAppSelector((state) => state?.chatlist?.data);
 
-
   const onlineUsers = useMemo(() => {
     return chatList.filter((item) => {
       if (item?.users?.length === 1) {
@@ -41,13 +40,11 @@ export default function Recent({ offset }: { offset: Animated.Value }) {
     });
   }, [chatList, onlineIds, userId]);
 
-
-
-
   return (
     <Animated.View
       style={{
         height: headerHeight,
+
         opacity,
       }}
     >

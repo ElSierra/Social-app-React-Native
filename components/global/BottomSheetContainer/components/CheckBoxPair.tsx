@@ -18,6 +18,9 @@ export default function CheckBoxPair({
   const color = !dark ? "black" : "white";
   const fillColor = !dark ? "black" : "white";
   const unFillColor = !dark ? "#505050" : "#757575";
+  const handleUpdateMode = ()=>{
+    dispatch(setMode({ mode: type }));
+  }
   return (
     <View
       style={{
@@ -46,9 +49,7 @@ export default function CheckBoxPair({
         disableBuiltInState
         iconStyle={{ borderColor: "black" }}
         innerIconStyle={{ borderWidth: 0 }}
-        onPress={() => {
-          dispatch(setMode({ mode: type }));
-        }}
+        onPress={handleUpdateMode}
       />
     </View>
   );

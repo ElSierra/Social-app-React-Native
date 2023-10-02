@@ -42,8 +42,6 @@ export default function PickImageButton({
             compressImageQuality: 0.5,
           })
             .then((image) => {
-             
-
               handleSetPhotoPost(image?.mime, image?.path, image?.size);
             })
             .catch((e) => {});

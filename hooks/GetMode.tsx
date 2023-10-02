@@ -1,5 +1,5 @@
 import { View, Text, useColorScheme } from "react-native";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useAppSelector } from "../redux/hooks/hooks";
 
 export default function useGetMode() {
@@ -7,19 +7,11 @@ export default function useGetMode() {
   const [dark, setDark] = useState(false);
   const { mode } = useAppSelector((state) => state.prefs);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (mode === "system") {
-      if (scheme === "dark") {
-        setDark(true);
-      } else {
-        setDark(false);
-      }
+      setDark(scheme === "dark");
     } else {
-      if (mode === "dark") {
-        setDark(true);
-        return;
-      }
-      setDark(false);
+      setDark(mode === "dark");
     }
   }, [mode, scheme]);
 

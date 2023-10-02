@@ -61,9 +61,7 @@ import { useGetFollowDetailsQuery } from "./redux/api/user";
 
 import * as NavigationBar from "expo-navigation-bar";
 import Notifications from "./util/notification";
-import Constants from "expo-constants";
-import * as Device from "expo-device";
-import useSocket from "./hooks/Socket";
+import { PixelRatio } from "react-native";
 enableFreeze(true);
 Sentry.init({
   dsn: "https://a5db1485b6b50a45db57917521128254@o4505750037725184.ingest.sentry.io/4505750586195968",
@@ -117,10 +115,10 @@ export default function App() {
 }
 function AnimatedSplashScreen({
   children,
-  image,
+
 }: {
   children: ReactNode;
-  image: ImageURISource;
+
 }) {
   const isAnimationCompleteForQui = useSharedValue(false);
   const isAllAnimationComplete = useSharedValue(false);
@@ -191,14 +189,14 @@ function AnimatedSplashScreen({
     return {
       backgroundColor: withTiming(backgroundColorOffset.value, {
         duration: 2000,
-        easing: Easing.inOut(Easing.quad),
+
       }),
     };
   });
   useEffect(() => {
-    offset.value = -10;
+    offset.value = -40;
     backgroundColorOffset.value = backgroundColor;
-    // Change this value to move more or less
+
   }, [backgroundColor]);
 
   function callback() {
@@ -213,7 +211,7 @@ function AnimatedSplashScreen({
     (result) => {
       if (result) {
         opacityK.value = 1;
-        offsetK.value = -10;
+        offsetK.value = -40;
       }
     }
   );
@@ -236,7 +234,10 @@ function AnimatedSplashScreen({
         <Animated.View
           exiting={FadeOut.duration(800)}
           pointerEvents="none"
-          style={[animateBackgroundEntryStyle, StyleSheet.absoluteFill]}
+          style={[
+            { flex: 1, justifyContent: "center", alignItems: "center" },
+            animateBackgroundEntryStyle,
+          ]}
         >
           {/* <Animated.Image
             style={{
@@ -252,9 +253,15 @@ function AnimatedSplashScreen({
           <Animated.View
             exiting={BounceOutDown.duration(800)}
             style={{
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
               justifyContent: "center",
+
               alignItems: "center",
-              flex: 1,
+              width: "100%",
+              aspectRatio: 1278 / 2278,
               flexDirection: "row",
             }}
           >
@@ -263,9 +270,9 @@ function AnimatedSplashScreen({
                 {
                   fontFamily: "uberBold",
                   fontSize: 110,
-                  paddingLeft: 20,
-                  paddingBottom: 15,
-                  includeFontPadding: false,
+                  paddingLeft: 60,
+                  textAlign: "center",
+                  color,
                 },
                 animatedStyles,
               ]}
@@ -277,8 +284,8 @@ function AnimatedSplashScreen({
                 {
                   fontFamily: "uberBold",
                   fontSize: 110,
-                  paddingBottom: 25,
-                  includeFontPadding: false,
+                  color,
+                  textAlign: "center",
                 },
                 animatedStylesK,
               ]}
@@ -437,11 +444,6 @@ const Navigation = () => {
   return (
     <NavigationContainer onReady={onLayoutRootView} linking={linking}>
       <AnimatedSplashScreen
-        image={
-          dark
-            ? require("./assets/splash.png")
-            : require("./assets/splash-lightmode.png")
-        }
       >
         <StatusBar
           animated={true}

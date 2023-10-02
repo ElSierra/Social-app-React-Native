@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 
 import CheckBoxPair from "./CheckBoxPair";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAppSelector } from "../../../../redux/hooks/hooks";
 import useGetMode from "../../../../hooks/GetMode";
 
@@ -10,14 +10,15 @@ export default function DarkModeView() {
   const dark = useGetMode();
   const backgroundColor = dark ? "#969696" : "#B5AEAE";
   const color = dark ? "#FFFFFF" : "#000000";
-  const [checked, setChecked] = useState({
-    system: mode === "system",
-    dark: mode === "dark",
-    light: mode === "light",
+  const [checked, setChecked] = useState(() => {
+    return {
+      system: mode === "system",
+      dark: mode === "dark",
+      light: mode === "light",
+    };
   });
 
-
-  useEffect(() => {
+  useMemo(() => {
     setChecked({
       system: mode === "system" ? true : false,
       dark: mode === "dark" ? true : false,
@@ -28,7 +29,7 @@ export default function DarkModeView() {
   return (
     <View style={{ height: "100%", width: "100%" }}>
       <View style={{ padding: 10 }}>
-        <Text style={{ fontFamily: "mulishBold", fontSize: 22 ,color }}>
+        <Text style={{ fontFamily: "mulishBold", fontSize: 22, color }}>
           Dark mode
         </Text>
       </View>

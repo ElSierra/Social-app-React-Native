@@ -20,6 +20,10 @@ import { useAppDispatch } from "../../redux/hooks/hooks";
 import { openToast } from "../../redux/slice/toast/toast";
 import { Image, ImageBackground } from "expo-image";
 import uuid from "react-native-uuid";
+import TextRecognition, {
+  TextRecognitionScript,
+} from "@react-native-ml-kit/text-recognition";
+
 import ReactNativeBlobUtil from "react-native-blob-util";
 
 export default function ImageFullScreen({
@@ -27,10 +31,9 @@ export default function ImageFullScreen({
   navigation,
 }: ImageFullScreenProp) {
   const { photoUri, id, width, height } = route.params;
-  console.log("🚀 ~ file: ImageFullScreen.tsx:28 ~ height:", height);
-  console.log("🚀 ~ file: ImageFullScreen.tsx:28 ~ width:", width);
+
   const dispatch = useAppDispatch();
-  let dirs = ReactNativeBlobUtil.fs.dirs;
+ 
 
   console.log(
     "sssss",
@@ -70,6 +73,7 @@ export default function ImageFullScreen({
           .catch((e) => {});
       });
   };
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
