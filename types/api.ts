@@ -113,6 +113,7 @@ export interface IChatList {
 
 export interface Notifications {
   text: string;
+  to?: string;
   type: "Follow" | "Posts" | "Suggestions" | "Reminder";
   id: string;
   createdAt: string;

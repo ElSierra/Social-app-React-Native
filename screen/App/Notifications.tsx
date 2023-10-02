@@ -8,20 +8,26 @@ import { Image } from "expo-image";
 import AnimatedScreen from "../../components/global/AnimatedScreen";
 import { useFocusEffect } from "@react-navigation/native";
 import { ActivityIndicator } from "react-native-paper";
+import { Notifications as NotificationType} from "../../types/api";
 export default function Notifications() {
   const dark = useGetMode();
   const { width } = Dimensions.get("screen");
   const color = dark ? "white" : "black";
   const notifications = useGetNotificationsQuery(null);
+  console.log(
+    "🚀 ~ file: Notifications.tsx:16 ~ Notifications ~ notifications:",
+    notifications.data
+  );
 
   useFocusEffect(
     useCallback(() => {
       notifications.refetch();
     }, [])
   );
-  const renderItem = ({ item, index }:any) => (
+  const renderItem = ({ item,index }:{ item: NotificationType,index:any}) => (
     <NotificationBuilder
       text={item.text}
+      postId={item?.to}
       id={item.id}
       position={
         item.id === notifications.data?.notifications[0].id

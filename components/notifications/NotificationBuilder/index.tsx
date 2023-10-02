@@ -16,6 +16,7 @@ export default function NotificationBuilder({
   type,
   id,
   date,
+  postId,
   index,
   name,
   userId,
@@ -29,6 +30,7 @@ export default function NotificationBuilder({
   name?: string;
   verified?: boolean;
   userId?: string;
+  postId?: string;
   userName?: string;
   id: string;
   index: number;
@@ -70,6 +72,10 @@ export default function NotificationBuilder({
                 name: name as string,
                 verified: verified as boolean,
               });
+            }
+            if (type === "Posts") {
+              //@ts-ignore
+              navigate.navigate("ViewPost",{postId});
             }
           }}
         >

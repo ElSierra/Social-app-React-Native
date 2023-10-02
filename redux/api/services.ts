@@ -130,6 +130,10 @@ export const servicesApi = createApi({
       providesTags: ["post"],
       extraOptions: { maxRetries: 2 },
     }),
+    getSinglePost: builder.query<{ posts: IPost }, { id: string }>({
+      query: ({ id }) => `/single-post?id=${id}`,
+      extraOptions: { maxRetries: 2 },
+    }),
     getRandomPosts: builder.query<{ posts: IPost[] }, null>({
       query: () => "/random-posts",
       extraOptions: { maxRetries: 2 },
@@ -220,6 +224,7 @@ export const {
   useGetMyPostsQuery,
   useLazyGetMyPostsQuery,
   useLazyLikePostQuery,
+  useLazyGetSinglePostQuery,
   usePostCommentMutation,
   useLazySearchPostsQuery,
   useGetCommentByPostQuery,

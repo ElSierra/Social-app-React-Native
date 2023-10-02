@@ -132,7 +132,7 @@ export default function Main() {
       .then((e) => {})
       .catch((e) => e);
   }, []);
-  const response = useGetUserQuery(null);
+
   useEffect(() => {
     console.log(process.env.EXPO_PUBLIC_PROJECT_ID);
     async function registerForPushNotificationsAsync() {
@@ -316,10 +316,10 @@ export default function Main() {
         socket?.emit("away");
       }
     });
-
-    return () => {
+   return () => {
       subscription.remove();
     };
+ 
   }, []);
 
   return (

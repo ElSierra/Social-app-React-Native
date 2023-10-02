@@ -31,6 +31,7 @@ export type IPostBuilder = {
   like: number;
   id: string;
   audioUri?: string;
+  postId?:string
 };
 
 export type SearchPostBuilder = {

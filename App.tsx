@@ -9,8 +9,9 @@ import {
   AppState,
   useColorScheme,
   Platform,
-  Linking,
 } from "react-native";
+import * as Linking from "expo-linking";
+
 import { NavigationContainer } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
@@ -113,13 +114,7 @@ export default function App() {
     </Provider>
   );
 }
-function AnimatedSplashScreen({
-  children,
-
-}: {
-  children: ReactNode;
-
-}) {
+function AnimatedSplashScreen({ children }: { children: ReactNode }) {
   const isAnimationCompleteForQui = useSharedValue(false);
   const isAllAnimationComplete = useSharedValue(false);
   const [isAppReady, setAppReady] = useState(false);
@@ -189,14 +184,12 @@ function AnimatedSplashScreen({
     return {
       backgroundColor: withTiming(backgroundColorOffset.value, {
         duration: 2000,
-
       }),
     };
   });
   useEffect(() => {
     offset.value = -40;
     backgroundColorOffset.value = backgroundColor;
-
   }, [backgroundColor]);
 
   function callback() {
@@ -390,6 +383,7 @@ const Navigation = () => {
       screens: {
         Main: "/",
         ChatScreen: "messages/:chatId",
+        ViewPost: "posts/:postId",
       },
     },
     async getInitialURL() {
@@ -443,8 +437,7 @@ const Navigation = () => {
 
   return (
     <NavigationContainer onReady={onLayoutRootView} linking={linking}>
-      <AnimatedSplashScreen
-      >
+      <AnimatedSplashScreen>
         <StatusBar
           animated={true}
           style={style}
