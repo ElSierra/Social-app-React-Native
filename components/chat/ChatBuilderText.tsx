@@ -16,6 +16,7 @@ import { ChatNavigation } from "../../types/navigation";
 import { Image } from "expo-image";
 import { ActivityIndicator } from "react-native-paper";
 import { BlurView } from "expo-blur";
+import { isEmoji } from "../../util/emoji";
 
 const { width } = Dimensions.get("screen");
 function ChatBuilderText({
@@ -41,6 +42,7 @@ function ChatBuilderText({
   photo?: { imageWidth: number; imageHeight: number };
   isLast: boolean;
 }) {
+  console.log("🚀 ~ file: ChatBuilderText.tsx:45 ~ isClicked:", isClicked);
   const dark = useGetMode();
   const backgroundColorForMe = dark ? "#35383A" : "#0c81f8";
   const backgroundColor = dark ? "#181B1D" : "#e8e8eb";
@@ -53,6 +55,8 @@ function ChatBuilderText({
       setHeight(height);
     });
   }, []);
+
+  console.log("isEmoji", isEmoji(text));
   return (
     <Animated.View
       exiting={FadeOut.delay(20)}
@@ -66,7 +70,7 @@ function ChatBuilderText({
       <View>
         <View
           style={{
-            padding: 10,
+            padding: isEmoji(text) ? undefined : 10,
             borderRadius: 15,
             maxWidth: width / 1.5,
             flexDirection: "column",
@@ -74,7 +78,12 @@ function ChatBuilderText({
             borderBottomRightRadius: isMe ? 0 : undefined,
             alignSelf: !isMe ? "flex-start" : "flex-end",
             justifyContent: "flex-start",
-            backgroundColor: isMe ? backgroundColorForMe : backgroundColor,
+            backgroundColor:
+              isEmoji(text) || isClicked === id
+                ? "transparent"
+                : isMe
+                ? backgroundColorForMe
+                : backgroundColor,
           }}
         >
           {!photoUri ? (
@@ -82,6 +91,7 @@ function ChatBuilderText({
               style={{
                 fontFamily: "jakara",
                 color: isMe ? "white" : dark ? "white" : "black",
+                fontSize: isEmoji(text) ? 40 : 14,
               }}
             >
               {text}
@@ -116,7 +126,7 @@ function ChatBuilderText({
                       style={{ height: 200, width: 600, position: "absolute" }}
                     />
                     <ActivityIndicator
-                    color={color}
+                      color={color}
                       style={{
                         position: "absolute",
                         top: 0,

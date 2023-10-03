@@ -4,10 +4,12 @@ export type ArrElement<ArrType> = ArrType extends readonly (infer ElementType)[]
 
 export type IPostBuilder = {
   imageUri: string;
+  deletePost?: (id:string) => void;
   photo?: { uri: string; height: number; width: number };
   name: string;
   userId?: string;
   date: Date;
+  myPost?: boolean;
   userTag: string;
   comments?: number;
   isLiked: boolean;
@@ -31,7 +33,7 @@ export type IPostBuilder = {
   like: number;
   id: string;
   audioUri?: string;
-  postId?:string
+  postId?: string;
 };
 
 export type SearchPostBuilder = {

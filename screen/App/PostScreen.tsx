@@ -25,18 +25,9 @@ import Button from "../../components/global/Buttons/Button";
 import CommentButton from "../../components/home/post/comment/PostButton";
 import uuid from "react-native-uuid";
 import { BlurView } from "expo-blur";
-import Animated, {
-  FadeIn,
-  FadeInLeft,
-  FadeOutLeft,
-} from "react-native-reanimated";
-import Notifications from "../../util/notification";
-import { IPostBuilder } from "../../types/app";
+import Animated, { FadeIn } from "react-native-reanimated";
+
 export default function PostScreen({ navigation, route }: ViewPost) {
-  console.log(
-    "🚀 ~ file: PostScreen.tsx:29 ~ PostScreen ~ route:",
-    route.params
-  );
   const { params } = route;
   const dispatch = useAppDispatch();
   const [comments, setComments] = useState<IComment[]>([]);

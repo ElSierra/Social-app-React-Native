@@ -228,7 +228,7 @@ function AnimatedSplashScreen({ children }: { children: ReactNode }) {
           exiting={FadeOut.duration(800)}
           pointerEvents="none"
           style={[
-            { flex: 1, justifyContent: "center", alignItems: "center" },
+            { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor },
             animateBackgroundEntryStyle,
           ]}
         >
@@ -287,7 +287,6 @@ function AnimatedSplashScreen({ children }: { children: ReactNode }) {
             </Animated.Text>
           </Animated.View>
           <Animated.View
-            entering={FadeIn.springify()}
             style={{
               width: "100%",
               justifyContent: "center",

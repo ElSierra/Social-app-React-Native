@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { View, Text } from "react-native";
+
 import Login from "../screen/Auth/Login";
 import useGetMode from "../hooks/GetMode";
 import Register from "../screen/Auth/Register";

@@ -16,8 +16,10 @@ import { dateAgo } from "../../../util/date";
 import { useAppSelector } from "../../../redux/hooks/hooks";
 import LinkPost from "./components/LinkPost";
 import ViewShot from "react-native-view-shot";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Share from "react-native-share";
+import { Button, Menu, Divider, PaperProvider } from "react-native-paper";
+import Animated, { SlideOutRight } from "react-native-reanimated";
 export default function PostBuilder({
   imageUri,
   name,
@@ -38,14 +40,16 @@ export default function PostBuilder({
   isReposted,
   id,
   audioUri,
+  myPost,
   thumbNail,
+  deletePost,
   photo,
 }: IPostBuilder) {
   const width = Dimensions.get("screen").width;
   const navigation = useNavigation<HomeNavigationProp>();
   const dark = useGetMode();
   const isDark = dark;
-  const backgroundColor = isDark ? "black": "white"
+  const backgroundColor = isDark ? "black" : "white";
   const borderBottomColor = isDark ? "#252222" : "#CCC9C9";
   const color = isDark ? "#FFFFFF" : "#000000";
   const rColor = isDark ? "#00000014" : "#BBBBBB";
@@ -65,9 +69,11 @@ export default function PostBuilder({
         });
     });
   };
+
   return (
     <ViewShot ref={ref} options={{ fileName: id, format: "jpg", quality: 0.9 }}>
-      <View
+      <Animated.View
+        exiting={SlideOutRight.springify()}
         style={{
           borderBottomWidth: 0.5,
           borderBottomColor,
@@ -108,10 +114,9 @@ export default function PostBuilder({
               width: "100%",
               gap: 10,
               padding: 10,
-              backgroundColor
+              backgroundColor,
             }}
           >
-           
             <View
               style={{
                 height: 50,
@@ -154,7 +159,10 @@ export default function PostBuilder({
             <View style={{ width: "85%", justifyContent: "flex-start" }}>
               <NameAndTag
                 name={name}
+                deletePost={deletePost}
                 verified={verified}
+                id={id}
+                myPost={myPost || false}
                 userTag={userTag}
                 dateAgo={dateAgo(new Date(date))}
               />
@@ -207,7 +215,7 @@ export default function PostBuilder({
             </View>
           </View>
         </Pressable>
-      </View>
+      </Animated.View>
     </ViewShot>
   );
 }

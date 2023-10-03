@@ -16,7 +16,7 @@ export default function Fab({ item }: { item: JSX.Element }) {
   const isDark = dark;
   const navigation = useNavigation<HomeNavigationProp>();
   const tint = isDark ? "dark" : "light";
-  const backgroundColor = !isDark ? "#DEDEDE" :"#303030"
+  const backgroundColor = !isDark ? "#DEDEDE" : "#303030";
   return (
     <View
       style={{
@@ -24,7 +24,8 @@ export default function Fab({ item }: { item: JSX.Element }) {
         bottom: 100,
         borderRadius: 999,
         right: 10,
-
+        borderColor: "#B4B4B488",
+        borderWidth:1,
         alignItems: "center",
 
         justifyContent: "center",
@@ -53,7 +54,7 @@ export default function Fab({ item }: { item: JSX.Element }) {
             style={{
               width: "100%",
               height: "100%",
-           backgroundColor,
+
               position: "absolute",
               alignItems: "center",
               justifyContent: "center",

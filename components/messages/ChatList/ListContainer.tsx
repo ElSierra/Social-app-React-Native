@@ -79,10 +79,11 @@ export default function ListContainer({ data }: { data: IChatList }) {
             <Image
               transition={1000}
               placeholder={
-                dark
+                !dark
                   ? require("../../../assets/images/profile-black.svg")
                   : require("../../../assets/images/profile-white.svg")
               }
+          
               style={{ borderRadius: 999, height: 50, width: 50 }}
               source={{
                 uri: imageUri,
@@ -130,7 +131,7 @@ export default function ListContainer({ data }: { data: IChatList }) {
                 color: "grey",
               }}
             >
-              {data.messages[0]?.text}
+              {data.messages[0]?.text || data.messages[0]?.photo?.imageUri && "📷"}
             </Text>
           </View>
         </View>

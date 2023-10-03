@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { View, Text, useColorScheme } from "react-native";
+
 import Onboard from "../screen/Onboard";
 import useGetMode from "../hooks/GetMode";
 

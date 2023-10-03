@@ -27,11 +27,9 @@ import Discover from "../../screen/App/Discover";
 import Messages from "../../screen/App/Messages";
 import DrawerNavigator from "./DrawerNavigation";
 import Notifications from "../../screen/App/Notifications";
-import { openToast } from "../../redux/slice/toast/toast";
+
 import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
-import { useEffect } from "react";
-import socket from "../../util/socket";
-import { IMessageSocket } from "../../types/socket";
+
 import SearchBar from "../../components/discover/SearchBar";
 import { Text, View } from "react-native";
 const Tab = createBottomTabNavigator<BottomRootStackParamList>();
@@ -47,7 +45,6 @@ export function BottomTabNavigator() {
   const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
   return (
     <Tab.Navigator
-    
       tabBar={(props) => (
         <BlurView
           style={{
@@ -62,9 +59,8 @@ export function BottomTabNavigator() {
           <BottomTabBar {...props} />
         </BlurView>
       )}
-      
       sceneContainerStyle={{ backgroundColor }}
-      screenOptions={({ navigation, route, }) => {
+      screenOptions={({ navigation, route }) => {
         return {
           tabBarHideOnKeyboard: true,
           tabBarShowLabel: false,
@@ -208,12 +204,12 @@ export function BottomTabNavigator() {
             title: "Notifications",
             headerTitle: () => {
               return (
-                <View style={{marginTop:20}}>
+                <View style={{ marginTop: 20 }}>
                   <Text
                     style={{
                       fontFamily: "uberBold",
                       fontSize: 30,
-                      
+
                       color,
                       height: 28,
                     }}

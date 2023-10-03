@@ -8,7 +8,10 @@ import { useAppDispatch, useAppSelector } from "../../../redux/hooks/hooks";
 
 import { ActivityIndicator } from "react-native-paper";
 import { IPost } from "../../../types/api";
-import { useLazyGetMyPostsQuery } from "../../../redux/api/services";
+import {
+  useDeletePostByIdMutation,
+  useLazyGetMyPostsQuery,
+} from "../../../redux/api/services";
 import { openToast } from "../../../redux/slice/toast/toast";
 
 import Bio from "../../../components/profile/Bio";
@@ -88,10 +91,17 @@ export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
         });
   };
 
+  const [deletePostById] = useDeletePostByIdMutation();
+  const deletePost = (id: string) => {
+    deletePostById({ id }).then((e) => console.log(e));
+    setPosts((prev) => [...prev.filter((prev) => prev.id !== id)]);
+  };
   const renderItem = ({ item }: { item: IPost }) => (
     <>
       <PostBuilder
         id={item.id}
+        myPost={true}
+        deletePost={deletePost}
         date={item.createdAt}
         comments={item._count.comments}
         isReposted={

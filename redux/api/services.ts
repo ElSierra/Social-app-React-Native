@@ -59,7 +59,7 @@ export const servicesApi = createApi({
           },
         };
       },
-      invalidatesTags: ["post"],
+  
     }),
 
     uploadAudio: builder.mutation<
@@ -205,6 +205,23 @@ export const servicesApi = createApi({
     repost: builder.query<{ msg: string }, { id: string }>({
       query: ({ id }) => `/re-post?id=${id}`,
     }),
+    deletePostById: builder.mutation<
+      { msg: string },
+      {
+        id: string;
+      }
+    >({
+      query: ({ id }) => {
+        return {
+          url: "/delete-post",
+          method: "DELETE",
+          body: { id },
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        };
+      },
+    }),
   }),
 });
 
@@ -231,4 +248,5 @@ export const {
   useLazyRepostQuery,
   useLazyGetCommentByPostQuery,
   useLazyGetAllPostsQuery,
+  useDeletePostByIdMutation,
 } = servicesApi;

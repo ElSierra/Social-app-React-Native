@@ -17,7 +17,7 @@ import { useAppDispatch } from "../../redux/hooks/hooks";
 import { openToast } from "../../redux/slice/toast/toast";
 import ReactNativeBlobUtil from "react-native-blob-util";
 import uuid from "react-native-uuid";
-import { Circle } from "react-native-svg";
+
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 export default function VideoFull({ navigation, route }: VideoFullScreen) {
   const dispatch = useAppDispatch();
@@ -25,7 +25,7 @@ export default function VideoFull({ navigation, route }: VideoFullScreen) {
   const [progress, setProgress] = useState({ received: 0, total: 1 });
   const [done, setDone] = useState(true);
   console.log(
-    "🚀 ~ file: VideoFullScreen.tsx:19 ~ VideoFull ~ progress:",
+
     (progress?.received / progress.total) * 100
   );
   const handleDownload = () => {
@@ -126,6 +126,7 @@ export default function VideoFull({ navigation, route }: VideoFullScreen) {
         <VideoPostFullScreen {...route.params} />
         {!done && (
           <TouchableWithoutFeedback>
+            <>
             <Animated.View
               entering={FadeIn.springify()}
               exiting={FadeOut.springify()}
@@ -172,7 +173,7 @@ export default function VideoFull({ navigation, route }: VideoFullScreen) {
               >
                 {Math.floor((progress?.received / progress.total) * 100)}
               </Text>
-            </Animated.View>
+            </Animated.View></>
           </TouchableWithoutFeedback>
         )}
       </AnimatedScreen>

@@ -14,6 +14,7 @@ import { CheckIcon } from "../icons";
 import { useNavigation } from "@react-navigation/native";
 import { ChatNavigation } from "../../types/navigation";
 import { Image } from "expo-image";
+import { isEmoji } from "../../util/emoji";
 
 const { width } = Dimensions.get("screen");
 export default function ModalChatText({
@@ -46,7 +47,7 @@ export default function ModalChatText({
       <View>
         <View
           style={{
-            padding: 10,
+            padding: isEmoji(text) ? undefined :10,
             borderRadius: 15,
             maxWidth: width / 1.5,
             flexDirection: "column",
@@ -54,7 +55,11 @@ export default function ModalChatText({
             borderBottomRightRadius: isMe ? 0 : undefined,
             alignSelf: !isMe ? "flex-start" : "flex-end",
             justifyContent: "flex-start",
-            backgroundColor: isMe ? backgroundColorForMe : backgroundColor,
+            backgroundColor: isEmoji(text)
+              ? "transparent"
+              : isMe
+              ? backgroundColorForMe
+              : backgroundColor,
           }}
         >
           {!photoUri ? (
@@ -62,6 +67,7 @@ export default function ModalChatText({
               style={{
                 fontFamily: "jakara",
                 color: isMe ? "white" : dark ? "white" : "black",
+                fontSize: isEmoji(text) ? 40 : 14,
               }}
             >
               {text}
@@ -71,12 +77,12 @@ export default function ModalChatText({
               onPress={() => {
                 navigate.navigate("ImageFullScreen", {
                   photoUri,
-                  id:"",
+                  id: "",
                 });
               }}
             >
               <Image
-                source={{ uri: photoUri,  }}
+                source={{ uri: photoUri }}
                 priority={"high"}
                 style={{ width: 200, height: 100, borderRadius: 10 }}
               />

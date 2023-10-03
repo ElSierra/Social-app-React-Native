@@ -20,9 +20,7 @@ import { useAppDispatch } from "../../redux/hooks/hooks";
 import { openToast } from "../../redux/slice/toast/toast";
 import { Image, ImageBackground } from "expo-image";
 import uuid from "react-native-uuid";
-import TextRecognition, {
-  TextRecognitionScript,
-} from "@react-native-ml-kit/text-recognition";
+
 
 import ReactNativeBlobUtil from "react-native-blob-util";
 

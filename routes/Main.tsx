@@ -1,64 +1,22 @@
-import {
-  View,
-  Text,
-  useColorScheme,
-  Dimensions,
-  SafeAreaView,
-  Alert,
-  Platform,
-} from "react-native";
+import { Platform } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import {
-  BottomTabBar,
-  createBottomTabNavigator,
-} from "@react-navigation/bottom-tabs";
-import {
-  BottomProp,
-  BottomRootStackParamList,
-  DiscoverProp,
-  DrawerRootStackParamList,
-  RootStackParamList,
-} from "../types/navigation";
-import Home from "../screen/App/Home";
-import {
-  HomeIcon,
-  HomeIconUnfocused,
-  MessageUnfocused,
-  MessagesIcon,
-  NotificationIcon,
-  NotificationUnfocused,
-  SearchIcon,
-  SearchUnfocused,
-} from "../components/icons";
+
+import { RootStackParamList } from "../types/navigation";
 
 import { BlurView } from "expo-blur";
 
-import Discover from "../screen/App/Discover";
-
 import ImageFullScreen from "../screen/App/ImageFullScreen";
 
-import { createDrawerNavigator } from "@react-navigation/drawer";
 import Profile from "../screen/App/Profile";
-import { StatusBar } from "expo-status-bar";
-import CustomDrawerContent from "../components/home/drawer/CustomDrawer";
-import ProfileButton from "../components/home/header/ProfileButton";
-import IconButtons from "../components/global/Buttons/BottomBarButtons";
-import Messages from "../screen/App/Messages";
-import NotificationsPage from "../screen/App/Notifications";
+
 import useGetMode from "../hooks/GetMode";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { BottomSheetContainer } from "../components/global/BottomSheetContainer";
 import PostContent from "../screen/App/PostContent";
-import CustomToast from "../components/global/Toast";
-import InputText from "../screen/Auth/components/InputText";
-import SearchBar from "../components/discover/SearchBar";
+
 import VideoFullScreen from "../screen/App/VideoFullScreen";
 import { useAppDispatch, useAppSelector } from "../redux/hooks/hooks";
-import {
-  useGetUserQuery,
-  useLazyGetFollowDetailsQuery,
-  useUpdateNotificationIdMutation,
-} from "../redux/api/user";
+import { useUpdateNotificationIdMutation } from "../redux/api/user";
 import PostScreen from "../screen/App/PostScreen";
 import { useEffect, useRef, useState } from "react";
 
@@ -78,29 +36,23 @@ import {
 import * as BackgroundFetch from "expo-background-fetch";
 import * as TaskManager from "expo-task-manager";
 import { AppState } from "react-native";
-import { store } from "../redux/store";
 
 import { updateOnlineIds } from "../redux/slice/chat/online";
 import { openToast } from "../redux/slice/toast/toast";
 import { IMessageSocket } from "../types/socket";
-import { useNavigationState } from "@react-navigation/native";
+
 import useSocket from "../hooks/Socket";
-import oldSocket from "../util/socket";
+
 import Notifications from "../util/notification";
-import DrawerNavigator from "./Main/DrawerNavigation";
+
 import { BottomTabNavigator } from "./Main/BottomNavigation";
 import { dismissAllNotificationsAsync } from "expo-notifications";
-import {
-  useGetAllChatsQuery,
-  useLazyGetAllChatsQuery,
-} from "../redux/api/chat";
+import { useLazyGetAllChatsQuery } from "../redux/api/chat";
 import FollowingFollowers from "../screen/App/FollowingFollowers";
 import EditProfile from "../screen/App/EditProfile";
 import ChangeData from "../screen/App/ChangeData";
 const BACKGROUND_FETCH_TASK = "background-fetch";
 const Stack = createNativeStackNavigator<RootStackParamList>();
-
-const width = Dimensions.get("screen").width;
 
 TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
   const now = Date.now();
@@ -184,7 +136,7 @@ export default function Main() {
 
     registerForPushNotificationsAsync()
       .then((e) => {
-        console.log("🚀 ~ file: Main.tsx:187 ~ .then ~ e:", e)
+        console.log("🚀 ~ file: Main.tsx:187 ~ .then ~ e:", e);
         updateNotificationId({ notificationId: e?.data as string });
       })
       .catch((e) => {
@@ -262,9 +214,17 @@ export default function Main() {
   }, [socket]);
 
   useEffect(() => {
+    socket?.on("online", (online) => {
+      dispatch(updateOnlineIds({ ids: online }));
+    });
+
     socket?.on("message", (data: IMessageSocket) => {
       if (data) {
-        console.log("🚀 ~ file: Main.tsx:267 ~ socket?.on ~ data:",new Date(), data)
+        console.log(
+          "🚀 ~ file: Main.tsx:267 ~ socket?.on ~ data:",
+          new Date(),
+          data
+        );
         if (data.message?.sender?.id !== id) {
           dispatch(addNewChat(data));
           dispatch(addNewIndication());
@@ -279,15 +239,8 @@ export default function Main() {
       }
     });
     return () => {
-      socket?.off("message");
-    };
-  }, [socket]);
-  useEffect(() => {
-    socket?.on("online", (online) => {
-      dispatch(updateOnlineIds({ ids: online }));
-    });
-    return () => {
       socket?.off("online");
+      socket?.off("message");
     };
   }, [socket]);
 
@@ -316,10 +269,9 @@ export default function Main() {
         socket?.emit("away");
       }
     });
-   return () => {
+    return () => {
       subscription.remove();
     };
- 
   }, []);
 
   return (
@@ -478,7 +430,7 @@ export default function Main() {
             name="EditProfile"
             options={{
               title: "Edit Profile",
-              animation: "slide_from_right",
+              animation: "none",
               headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
               headerShadowVisible: false,
 
