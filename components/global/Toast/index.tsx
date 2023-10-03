@@ -1,4 +1,4 @@
-import { View, Text, Dimensions , TouchableWithoutFeedback} from "react-native";
+import { View, Text, Dimensions, TouchableWithoutFeedback } from "react-native";
 import React, { useEffect, useState } from "react";
 import Animated, {
   FadeInUp,
@@ -16,7 +16,6 @@ import { useForm } from "react-hook-form";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Image } from "expo-image";
 
-
 const width = Dimensions.get("screen").width;
 export default function CustomToast() {
   const dark = useGetMode();
@@ -24,6 +23,7 @@ export default function CustomToast() {
   const tint = dark ? "dark" : "light";
   const colorForbidden = dark ? "#ff0000" : "#400000";
   const dispatch = useAppDispatch();
+  
   const toastState = useAppSelector((state) => state.toast);
 
   function handleClose() {
@@ -52,6 +52,7 @@ export default function CustomToast() {
     }
   };
   const insets = useSafeAreaInsets();
+  const isHighEndDevice = useAppSelector((state) => state.prefs.isHighEnd);
   return (
     <Portal>
       {toastState.open && (
@@ -76,11 +77,19 @@ export default function CustomToast() {
             entering={FadeInUp.springify().withCallback(callback)}
             exiting={FadeOutUp.springify().delay(1000)}
           >
-            <BlurView
-              tint={tint}
-              style={{ position: "absolute", width, height: 60 + insets.top }}
-              intensity={50}
-            />
+            {isHighEndDevice ? (
+              <BlurView
+                tint={tint}
+                style={{ position: "absolute", width, height: 60 + insets.top }}
+                intensity={50}
+              />
+            ) : (
+              <View
+          
+                style={{ position: "absolute", width, height: 60 + insets.top , backgroundColor: dark ? "#000000EA": "#FFFFFFDB"}}
+               
+              />
+            )}
             <View
               style={{
                 flexDirection: "row",

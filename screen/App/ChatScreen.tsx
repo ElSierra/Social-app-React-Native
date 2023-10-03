@@ -354,7 +354,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
         text={text}
         chatId={route.params.id}
       />
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1}}>
         <ChatListView
           isTyping={isTyping}
           messageText={messageText}

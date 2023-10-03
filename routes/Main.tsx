@@ -1,4 +1,4 @@
-import { Platform } from "react-native";
+import { Platform, View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { RootStackParamList } from "../types/navigation";
@@ -273,7 +273,7 @@ export default function Main() {
       subscription.remove();
     };
   }, []);
-
+  const isHighEndDevice = useAppSelector((state) => state.prefs.isHighEnd);
   return (
     <BottomSheetModalProvider>
       <BottomSheetContainer>
@@ -337,19 +337,36 @@ export default function Main() {
             name="ChatScreen"
             options={{
               headerBackground: () => (
-                <BlurView
-                  style={{
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    top: 0,
-                    right: 0,
-                    borderColor,
-                    borderBottomWidth: 0.5,
-                  }}
-                  tint={tint}
-                  intensity={200}
-                />
+                <>
+                  {isHighEndDevice ? (
+                    <BlurView
+                      style={{
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                        top: 0,
+                        right: 0,
+                        borderColor,
+                        borderBottomWidth: 0.5,
+                      }}
+                      tint={tint}
+                      intensity={200}
+                    />
+                  ) : (
+                    <View
+                      style={{
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                        top: 0,
+                        right: 0,
+                        borderColor,
+                        borderBottomWidth: 0.5,
+                        backgroundColor,
+                      }}
+                    />
+                  )}
+                </>
               ),
               title: "Chat",
               animation: "fade_from_bottom",
@@ -360,7 +377,9 @@ export default function Main() {
               headerTitleAlign: "center",
               headerTintColor: color,
               headerStyle: {
-                backgroundColor: "transparent",
+                backgroundColor: isHighEndDevice
+                  ? "transparent"
+                  : backgroundColor,
               },
             }}
             component={ChatScreen}

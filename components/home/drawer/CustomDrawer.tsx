@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  Linking,
-  useColorScheme,
-  Switch,
-  Pressable,
-} from "react-native";
+import { View, Text, Linking, useColorScheme, Pressable } from "react-native";
 import React, { useState } from "react";
 import {
   DrawerContentComponentProps,
@@ -25,7 +18,7 @@ import {
 } from "../../icons";
 import { HomeNavigationProp } from "../../../types/navigation";
 import useGetMode from "../../../hooks/GetMode";
-import { useAppDispatch } from "../../../redux/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks/hooks";
 import { openSheet } from "../../../redux/slice/bottomSheet";
 import { signOut } from "../../../redux/slice/user";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
@@ -34,7 +27,8 @@ import { resetFollowers } from "../../../redux/slice/user/followers";
 import socket from "../../../util/socket";
 import { clearAllChatData } from "../../../redux/slice/chat/chatlist";
 import { useLazyLogoutQuery } from "../../../redux/api/user";
-
+import { Switch } from "react-native-paper";
+import { setHighEnd } from "../../../redux/slice/prefs";
 export default function CustomDrawerContent(
   props: DrawerContentComponentProps
 ) {
@@ -46,6 +40,7 @@ export default function CustomDrawerContent(
   const toolbarColor = isDark ? "black" : "white";
   const pressColor = isDark ? "#BEBEBE" : "#4F4F4F";
   const dispatch = useAppDispatch();
+  const isHighEndDevice = useAppSelector((state) => state.prefs.isHighEnd);
   const navigation = useNavigation<HomeNavigationProp>();
   const [logout] = useLazyLogoutQuery();
   const openLink = async () => {
@@ -88,20 +83,37 @@ export default function CustomDrawerContent(
       } else Linking.openURL(url);
     } catch (error) {}
   };
+
+  const onToggleSwitch = () => {
+    dispatch(setHighEnd({ isHighEnd: !isHighEndDevice }));
+  };
   return (
     <View style={{ flex: 1, padding: 20 }}>
-      <BlurView
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
+      {isHighEndDevice ? (
+        <BlurView
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
 
-          right: 0,
-          top: 0,
-        }}
-        tint={style}
-        intensity={200}
-      />
+            right: 0,
+            top: 0,
+          }}
+          tint={style}
+          intensity={200}
+        />
+      ) : (
+        <View
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            backgroundColor: isDark ? "black" : "white",
+            right: 0,
+            top: 0,
+          }}
+        />
+      )}
       <DrawerContentScrollView {...props}>
         <HeaderDrawer />
         <View
@@ -142,7 +154,28 @@ export default function CustomDrawerContent(
           }}
         />
       </DrawerContentScrollView>
-
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          paddingRight: 20,
+          paddingBottom: 10,
+        }}
+      >
+        <View>
+          <Text style={{ fontFamily: "mulishBold",color }}>
+            {isHighEndDevice ? "Disable" : "Enable"} Glass UI
+          </Text>
+          <Text style={{ fontFamily: "mulish",color }}>
+            {"May cause performance issue on low end devices"}
+          </Text>
+        </View>
+        <Switch
+          color={color}
+          value={isHighEndDevice}
+          onValueChange={onToggleSwitch}
+        />
+      </View>
       <View
         style={{
           width: "100%",

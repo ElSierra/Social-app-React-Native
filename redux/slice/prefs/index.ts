@@ -2,6 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export type Prefs = {
   mode: "system" | "light" | "dark";
+  isHighEnd: boolean;
 };
 const prefs = createSlice({
   name: "prefs",
@@ -15,8 +16,11 @@ const prefs = createSlice({
     ) => {
       state.mode = action.payload.mode;
     },
+    setHighEnd: (state, action: PayloadAction<{ isHighEnd: boolean }>) => {
+      state.isHighEnd = action.payload.isHighEnd;
+    },
   },
 });
 
 export default prefs.reducer;
-export const { setMode } = prefs.actions;
+export const { setMode, setHighEnd } = prefs.actions;

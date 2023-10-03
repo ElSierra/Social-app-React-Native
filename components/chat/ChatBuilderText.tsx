@@ -17,6 +17,7 @@ import { Image } from "expo-image";
 import { ActivityIndicator } from "react-native-paper";
 import { BlurView } from "expo-blur";
 import { isEmoji } from "../../util/emoji";
+import { useAppSelector } from "../../redux/hooks/hooks";
 
 const { width } = Dimensions.get("screen");
 function ChatBuilderText({
@@ -55,7 +56,7 @@ function ChatBuilderText({
       setHeight(height);
     });
   }, []);
-
+  const isHighEndDevice = useAppSelector((state) => state.prefs.isHighEnd);
   console.log("isEmoji", isEmoji(text));
   return (
     <Animated.View
@@ -122,9 +123,15 @@ function ChatBuilderText({
                 />
                 {!sent && isLast && (
                   <>
-                    <BlurView
-                      style={{ height: 200, width: 600, position: "absolute" }}
-                    />
+                    {isHighEndDevice && (
+                      <BlurView
+                        style={{
+                          height: 200,
+                          width: 600,
+                          position: "absolute",
+                        }}
+                      />
+                    )}
                     <ActivityIndicator
                       color={color}
                       style={{

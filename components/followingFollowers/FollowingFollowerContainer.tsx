@@ -76,7 +76,7 @@ export default function FFContainer({
       }
     });
   }, [socket]);
-
+  const isHighEndDevice = useAppSelector((state)=>state.prefs.isHighEnd)
   return (
     <>
       <Portal>
@@ -90,11 +90,11 @@ export default function FFContainer({
               style={{ justifyContent: "center", alignItems: "center" }}
               onRequestClose={closeModal}
             >
-              <BlurView
+              {isHighEndDevice &&<BlurView
                 tint={tint}
                 style={{ position: "absolute", height, width }}
                 intensity={10}
-              />
+              />}
               <View
                 style={{
                   flex: 1,

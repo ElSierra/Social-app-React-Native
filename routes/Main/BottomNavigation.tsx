@@ -41,23 +41,38 @@ export function BottomTabNavigator() {
   const tint = !isDark ? "light" : "dark";
   const color = isDark ? "white" : "black";
   const backgroundColor = isDark ? "black" : "white";
-
+  const isHighEndDevice = useAppSelector((state) => state.prefs.isHighEnd);
   const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
   return (
     <Tab.Navigator
       tabBar={(props) => (
-        <BlurView
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-          }}
-          tint={tint}
-          intensity={200}
-        >
-          <BottomTabBar {...props} />
-        </BlurView>
+        <>
+          {isHighEndDevice ? (
+            <BlurView
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+              }}
+              tint={tint}
+              intensity={200}
+            >
+              <BottomTabBar {...props} />
+            </BlurView>
+          ) : (
+            <View
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+              }}
+            >
+              <BottomTabBar {...props} />
+            </View>
+          )}
+        </>
       )}
       sceneContainerStyle={{ backgroundColor }}
       screenOptions={({ navigation, route }) => {
@@ -67,7 +82,7 @@ export function BottomTabNavigator() {
           headerStatusBarHeight: 30,
 
           tabBarStyle: {
-            backgroundColor: "transparent",
+            backgroundColor: isHighEndDevice ? "transparent" : backgroundColor,
             elevation: 0,
             height: 65,
             paddingBottom: 10,
@@ -80,17 +95,21 @@ export function BottomTabNavigator() {
             borderColor,
           },
           headerBackground: () => (
-            <BlurView
-              style={{
-                position: "absolute",
-                bottom: 0,
-                left: 0,
-                top: 0,
-                right: 0,
-              }}
-              tint={tint}
-              intensity={200}
-            />
+            <>
+              {isHighEndDevice && (
+                <BlurView
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    top: 0,
+                    right: 0,
+                  }}
+                  tint={tint}
+                  intensity={200}
+                />
+              )}
+            </>
           ),
           tabBarIcon: ({ focused }) => {
             const iconFocused = () => {

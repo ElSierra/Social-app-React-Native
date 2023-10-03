@@ -1,7 +1,5 @@
 import { View, Text, Dimensions, Pressable } from "react-native";
 
-import { Button } from "react-native-paper";
-import { BlurView } from "expo-blur";
 import Animated, { FadeInLeft } from "react-native-reanimated";
 import { useState } from "react";
 import { IPerson } from "../../../types/api";

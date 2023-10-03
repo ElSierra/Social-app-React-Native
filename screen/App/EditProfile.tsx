@@ -36,6 +36,8 @@ export default function EditProfile({ navigation }: EditProfileProp) {
     setIsOpenProfile(false);
   };
 
+  const isHighEndDevice = useAppSelector((state) => state.prefs.isHighEnd);
+
   return (
     <>
       <StatusBar animated={true} style={style} backgroundColor="transparent" />
@@ -58,9 +60,11 @@ export default function EditProfile({ navigation }: EditProfileProp) {
               borderRadius: 999,
             }}
           >
-            <BlurView
-              style={{ height: 150, width: 150, position: "absolute" }}
-            />
+            {isHighEndDevice && (
+              <BlurView
+                style={{ height: 150, width: 150, position: "absolute" }}
+              />
+            )}
             {user.data?.imageUri ? (
               <Image
                 source={{ uri: user.data?.imageUri }}

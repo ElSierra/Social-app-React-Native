@@ -7,6 +7,7 @@ import { Dimensions } from "react-native";
 import Home from "../../screen/App/Home";
 import { BlurView } from "expo-blur";
 import ProfileButton from "../../components/home/header/ProfileButton";
+import { useAppSelector } from "../../redux/hooks/hooks";
 
 const Drawer = createDrawerNavigator<DrawerRootStackParamList>();
 const { width } = Dimensions.get("screen");
@@ -18,6 +19,7 @@ export default function DrawerNavigator() {
   const color = isDark ? "white" : "black";
   const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
   const backgroundColor = isDark ? "black" : "white";
+  const isHighEndDevice = useAppSelector((state) => state.prefs.isHighEnd);
   const [getCurrentFollowData] = useLazyGetFollowDetailsQuery();
   return (
     <Drawer.Navigator
@@ -25,7 +27,10 @@ export default function DrawerNavigator() {
       screenOptions={{
         headerStatusBarHeight: 30,
 
-        drawerStyle: { backgroundColor: "transparent", width: width * 0.85 },
+        drawerStyle: {
+          backgroundColor: !isHighEndDevice ? backgroundColor : "transparent",
+          width: width * 0.85,
+        },
         sceneContainerStyle: { backgroundColor },
       }}
     >
@@ -35,17 +40,21 @@ export default function DrawerNavigator() {
         options={({ navigation }) => {
           return {
             headerBackground: () => (
-              <BlurView
-                style={{
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  top: 0,
-                  right: 0,
-                }}
-                tint={tint}
-                intensity={200}
-              />
+              <>
+                {isHighEndDevice && (
+                  <BlurView
+                    style={{
+                      position: "absolute",
+                      bottom: 0,
+                      left: 0,
+                      top: 0,
+                      right: 0,
+                    }}
+                    tint={tint}
+                    intensity={200}
+                  />
+                )}
+              </>
             ),
 
             drawerItemStyle: { display: "none" },
@@ -54,6 +63,7 @@ export default function DrawerNavigator() {
             headerBackgroundContainerStyle: {
               borderBottomWidth: 0.2,
               borderColor,
+              backgroundColor: !isHighEndDevice ? backgroundColor : undefined,
             },
             headerTransparent: true,
             headerTitleAlign: "center",
@@ -67,7 +77,11 @@ export default function DrawerNavigator() {
                 }}
               />
             ),
-            headerStyle: { backgroundColor: "transparent" },
+            headerStyle: {
+              backgroundColor: !isHighEndDevice
+                ? backgroundColor
+                : "transparent",
+            },
             title: "Qui ",
           };
         }}

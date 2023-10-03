@@ -3,20 +3,17 @@ import { View, Pressable } from "react-native";
 import useGetMode from "../../../../hooks/GetMode";
 import { useNavigation } from "@react-navigation/native";
 import { HomeNavigationProp } from "../../../../types/navigation";
-import Animated, {
-  BounceIn,
-  BounceOut,
-  FadeIn,
-  FadeOut,
-  ZoomIn,
-  ZoomOut,
-} from "react-native-reanimated";
+import DeviceInfo from "react-native-device-info";
+import { useAppSelector } from "../../../../redux/hooks/hooks";
+
 export default function Fab({ item }: { item: JSX.Element }) {
   const dark = useGetMode();
   const isDark = dark;
   const navigation = useNavigation<HomeNavigationProp>();
   const tint = isDark ? "dark" : "light";
   const backgroundColor = !isDark ? "#DEDEDE" : "#303030";
+  const isHighEndDevice = useAppSelector((state)=>state.prefs.isHighEnd)
+
   return (
     <View
       style={{
@@ -25,9 +22,9 @@ export default function Fab({ item }: { item: JSX.Element }) {
         borderRadius: 999,
         right: 10,
         borderColor: "#B4B4B488",
-        borderWidth:1,
+        borderWidth: 1,
         alignItems: "center",
-
+        backgroundColor: !isHighEndDevice ? backgroundColor : undefined,
         justifyContent: "center",
         width: 65,
         height: 65,
@@ -48,18 +45,20 @@ export default function Fab({ item }: { item: JSX.Element }) {
         }}
       >
         <>
-          <BlurView
-            intensity={70}
-            tint={tint}
-            style={{
-              width: "100%",
-              height: "100%",
+          {isHighEndDevice && (
+            <BlurView
+              intensity={70}
+              tint={tint}
+              style={{
+                width: "100%",
+                height: "100%",
 
-              position: "absolute",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          />
+                position: "absolute",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            />
+          )}
           <View style={{ zIndex: 200 }}>{item}</View>
         </>
       </Pressable>
