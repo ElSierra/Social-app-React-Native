@@ -23,7 +23,7 @@ export default function UserContainer({
   isFollowed,
 }: IPerson) {
   const dark = useGetMode();
-  const { height, width } = Dimensions.get("window");
+  const { height, width } = Dimensions.get("screen");
   const color = dark ? "white" : "black";
   const backgroundColor = !dark ? "#E5E9F899" : "#25252599";
   const dispatch = useAppDispatch();

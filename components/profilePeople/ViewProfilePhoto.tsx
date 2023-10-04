@@ -17,7 +17,7 @@ import { Image } from "expo-image";
 
 import { CameraIcon, ProfileIcon } from "../icons";
 
-const { height, width } = Dimensions.get("window");
+const { height, width } = Dimensions.get("screen");
 export const ViewProfilePhoto = ({
   isOpen,
   imageUri,

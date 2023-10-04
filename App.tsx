@@ -327,6 +327,7 @@ const Navigation = () => {
   useGetFollowDetailsQuery(null);
   const { route } = useAppSelector((state) => state.routes);
   const userAuthenticated = useAppSelector((state) => state.user.token);
+  console.log("🚀 ~ file: App.tsx:330 ~ Navigation ~ userAuthenticated:", userAuthenticated)
 
   const netInfo = useNetInfo();
 

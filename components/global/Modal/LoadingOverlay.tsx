@@ -17,7 +17,7 @@ import {
   openLoadingModal,
 } from "../../../redux/slice/modal/loading";
 
-const { height, width } = Dimensions.get("window");
+const { height, width } = Dimensions.get("screen");
 export const LoadingModal = () => {
   const loadingModal = useAppSelector((state) => state.loadingModal);
   const dispatch = useAppDispatch();

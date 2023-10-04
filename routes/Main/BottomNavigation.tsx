@@ -230,7 +230,6 @@ export function BottomTabNavigator() {
                       fontSize: 30,
 
                       color,
-                      height: 28,
                     }}
                   >
                     Notifications

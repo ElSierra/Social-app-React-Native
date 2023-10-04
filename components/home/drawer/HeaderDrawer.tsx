@@ -4,10 +4,11 @@ import useGetMode from "../../../hooks/GetMode";
 import { useAppSelector } from "../../../redux/hooks/hooks";
 import { ProfileIcon, VerifiedIcon } from "../../icons";
 
-import { useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Image } from "expo-image";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { HomeNavigationProp } from "../../../types/navigation";
+import { useGetFollowDetailsQuery } from "../../../redux/api/user";
 
 export default function HeaderDrawer() {
   const dark = useGetMode();
@@ -17,6 +18,12 @@ export default function HeaderDrawer() {
   const user = useAppSelector((state) => state.user.data);
   const follows = useAppSelector((state) => state.followers);
 
+  const getFollowData = useGetFollowDetailsQuery(null);
+
+  useEffect(() => {
+    console.log(getFollowData.data);
+    getFollowData.refetch();
+  }, []);
   return (
     <View style={{ paddingLeft: 14, flex: 1 }}>
       {user?.imageUri ? (

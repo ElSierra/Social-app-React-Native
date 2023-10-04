@@ -194,6 +194,7 @@ export default function PostContent({ navigation }: PostContentProp) {
         });
     }
     if (postAudio) {
+      console.log("🚀 ~ file: PostContent.tsx:197 ~ useEffect ~ postAudio:", postAudio)
       setDone(false);
       audio(postAudio)
         .unwrap()
@@ -202,6 +203,7 @@ export default function PostContent({ navigation }: PostContentProp) {
           setFTServer(r.audio);
         })
         .catch((e) => {
+          console.log("🚀 ~ file: PostContent.tsx:206 ~ useEffect ~ e:", e)
           setDone(true);
 
           dispatch(openToast({ text: "Audio didn't upload", type: "Failed" }));

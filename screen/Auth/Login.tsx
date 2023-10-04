@@ -69,12 +69,13 @@ export default function Login({ navigation }: LoginScreen) {
   }, []);
 
   const onSubmit = (data: { userName: string; password: string }) => {
+    userApi.util.resetApiState();
+    servicesApi.util.resetApiState();
     login({ userName: data.userName.trim(), password: data.password })
       .unwrap()
       .then((e) => {
         Vibration.vibrate(5);
-        userApi.util.resetApiState();
-        servicesApi.util.resetApiState();
+
         dispatch(openToast({ text: "Successful Login", type: "Success" }));
       })
       .catch((e) => {
@@ -83,15 +84,9 @@ export default function Login({ navigation }: LoginScreen) {
         if (e?.data?.msg) {
           console.log("🚀 ~ file: Login.tsx:84 ~ onSubmit ~ e:", e.status);
           dispatch(openToast({ text: `${e?.data?.msg}`, type: "Failed" }));
-        } else if (e.status === 429) {
-          dispatch(
-            openToast({
-              text: `Login limit reached, wait and try again`,
-              type: "Failed",
-            })
-          );
         } else {
-          dispatch(openToast({ text: `Network Error`, type: "Failed" }));
+          console.log("🚀 ~ file: Login.tsx:84 ~ onSubmit ~ e:", e.data);
+          dispatch(openToast({ text: e?.data, type: "Failed" }));
         }
       });
   };

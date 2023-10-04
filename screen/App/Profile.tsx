@@ -1,14 +1,21 @@
 import { View, Text, Animated, ScrollView } from "react-native";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 import AnimatedScreen from "../../components/global/AnimatedScreen";
 import Header from "../../components/profile/Header";
 import ExpoStatusBar from "expo-status-bar/build/ExpoStatusBar";
 import Bio from "../../components/profile/Bio";
 import MyPosts from "./ProfileScreens/MyPosts";
+import { useGetFollowDetailsQuery } from "../../redux/api/user";
 
 export default function Profile() {
   const offset = useRef(new Animated.Value(0)).current;
+  const getFollowData = useGetFollowDetailsQuery(null);
+
+  useEffect(() => {
+    console.log(getFollowData.data);
+    getFollowData.refetch();
+  }, []);
 
   return (
     <AnimatedScreen>
