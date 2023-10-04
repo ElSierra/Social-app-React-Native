@@ -1,8 +1,7 @@
-
 import { Dimensions, Text, View } from "react-native";
 import useGetMode from "../../../hooks/GetMode";
 
-const { width } = Dimensions.get("screen");
+const { width } = Dimensions.get("window");
 
 export const PostSearchSkeleton = () => {
   const dark = useGetMode();

@@ -35,7 +35,7 @@ import { servicesApi } from "../../redux/api/services";
 import { userApi } from "../../redux/api/user";
 import { Image } from "expo-image";
 
-const width = Dimensions.get("screen").width;
+const width = Dimensions.get("window").width;
 export default function Login({ navigation }: LoginScreen) {
   const dark = useGetMode();
   const isDark = dark;
@@ -135,8 +135,8 @@ export default function Login({ navigation }: LoginScreen) {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
       () => {
-        console.log("shsh")
-        scrollViewRef.current?.scrollTo({ x: 300, y: 0,  });
+        console.log("shsh");
+        scrollViewRef.current?.scrollTo({ x: 300, y: 0 });
         setKeyboardVisible(true); // or some other action
       }
     );
@@ -175,7 +175,7 @@ export default function Login({ navigation }: LoginScreen) {
                     style={{ height: 200, width }}
                   />
                 ) : (
-                  <View style={{ paddingBottom: 10, marginTop:40 }}>
+                  <View style={{ paddingBottom: 10, marginTop: 40 }}>
                     <Image
                       style={{ height: 100, width: 100, borderRadius: 999 }}
                       source={{ uri: user?.imageUri }}

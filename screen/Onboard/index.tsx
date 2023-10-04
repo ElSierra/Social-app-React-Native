@@ -24,7 +24,7 @@ import { setRoute } from "../../redux/slice/routes";
 import { murphyLaws } from "../../data/murphy";
 import useGetMode from "../../hooks/GetMode";
 
-const height = Dimensions.get("screen").height;
+const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
 
 

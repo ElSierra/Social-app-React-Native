@@ -15,7 +15,7 @@ import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { HomeNavigationProp } from "../../../types/navigation";
 
-const { width } = Dimensions.get("screen");
+const { width } = Dimensions.get("window");
 export default function PeopleContainer({
   name,
   userName,
@@ -25,7 +25,7 @@ export default function PeopleContainer({
 }: IPerson) {
   const [follow, setFollow] = useState(() => isFollowed);
   const user = useAppSelector((state) => state.user);
-const navigation = useNavigation<HomeNavigationProp>()
+  const navigation = useNavigation<HomeNavigationProp>();
   const [followUser] = useLazyFollowUserQuery();
 
   const dark = useGetMode();
@@ -43,7 +43,17 @@ const navigation = useNavigation<HomeNavigationProp>()
   };
   const isMe = user.data?.userName === userName;
   return (
-    <Pressable onPress={()=>{navigation.navigate("ProfilePeople", {id,imageUri,userTag:userName,name,verified:false})}}>
+    <Pressable
+      onPress={() => {
+        navigation.navigate("ProfilePeople", {
+          id,
+          imageUri,
+          userTag: userName,
+          name,
+          verified: false,
+        });
+      }}
+    >
       <Animated.View
         entering={FadeInLeft.springify()}
         style={{

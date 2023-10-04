@@ -17,7 +17,7 @@ import Followers from "./FollowingFollowerScreens/Followers";
 import Following from "./FollowingFollowerScreens/Following";
 import { StatusBar } from "expo-status-bar";
 
-const { width, height } = Dimensions.get("screen");
+const { width, height } = Dimensions.get("window");
 const renderScene = SceneMap({
   followers: Followers,
   following: Following,
@@ -54,7 +54,7 @@ export default function FollowingFollowers() {
   const tint = dark ? "dark" : "light";
   const style = dark ? "light" : "dark";
   const persons = useAppSelector((state) => state.searchPeople);
-  const { width } = Dimensions.get("screen");
+  const { width } = Dimensions.get("window");
   const borderColor = dark ? "#FFFFFF7D" : "#4545452D";
   const [people, setPeople] = useState(true);
   const layout = useWindowDimensions();

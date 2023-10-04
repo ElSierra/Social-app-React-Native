@@ -5,8 +5,9 @@ import Animated, { FadeInLeft } from "react-native-reanimated";
 import useGetMode from "../../../hooks/GetMode";
 
 
-const height = Dimensions.get("screen").height;
-const width = Dimensions.get("screen").width;
+const height = Dimensions.get("window").height;
+const width = Dimensions.get("window").width;
+console.log("🚀 ~ file: OnboardBuilder.tsx:10 ~ width:", width)
 export default function OnboardBuilder({
   header,
   subText,
@@ -26,12 +27,12 @@ export default function OnboardBuilder({
       <Animated.View
         entering={FadeInLeft.delay(200)}
         style={{
-          width: width * 0.9,
+          width: "90%",
           justifyContent: "center",
           height: height / 2.5,
         }}
       >
-        <Image style={{ flex: 1 }} contentFit="contain" source={imageUri} />
+        <Image style={{ height:"100%" }} contentFit="contain" source={imageUri} />
       </Animated.View>
       <Text
         style={{ fontFamily: "mulishBold", fontSize: 36, width: 300, color }}

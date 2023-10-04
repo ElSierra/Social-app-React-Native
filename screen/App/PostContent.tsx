@@ -44,7 +44,7 @@ import PickVideoButton from "../../components/postContent/PickVideoButton";
 import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated";
 import { Image } from "expo-image";
 
-const width = Dimensions.get("screen").width;
+const width = Dimensions.get("window").width;
 export default function PostContent({ navigation }: PostContentProp) {
   const dark = useGetMode();
   const dispatch = useAppDispatch();

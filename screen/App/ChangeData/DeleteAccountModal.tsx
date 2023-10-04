@@ -26,7 +26,7 @@ import { resetPost } from "../../../redux/slice/post";
 import { clearAllChatData } from "../../../redux/slice/chat/chatlist";
 import { resetFollowers } from "../../../redux/slice/user/followers";
 
-const { height, width } = Dimensions.get("screen");
+const { height, width } = Dimensions.get("window");
 export const DeleteAccountModal = ({
   isOpen,
   closeModal,

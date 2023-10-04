@@ -17,7 +17,7 @@ import {
   openLoadingModal,
 } from "../../../redux/slice/modal/loading";
 
-const { height, width } = Dimensions.get("screen");
+const { height, width } = Dimensions.get("window");
 export const LoadingModal = () => {
   const loadingModal = useAppSelector((state) => state.loadingModal);
   const dispatch = useAppDispatch();
@@ -26,27 +26,28 @@ export const LoadingModal = () => {
   const tint = dark ? "dark" : "light";
   return (
     <Portal>
-    <View style={styles.centeredView}>
-      <Modal
-        statusBarTranslucent
-        animationType="fade"
-        transparent={true}
-        visible={loadingModal.isOpen}
-        onRequestClose={() => {
-          dispatch(closeLoadingModal());
-        }}
-      >
-        <BlurView
-          tint={tint}
-          style={{ position: "absolute", height, width }}
-          intensity={10}
-        />
+      <View style={styles.centeredView}>
+        <Modal
+          statusBarTranslucent
+          animationType="fade"
+          transparent={true}
+          visible={loadingModal.isOpen}
+          onRequestClose={() => {
+            dispatch(closeLoadingModal());
+          }}
+        >
+          <BlurView
+            tint={tint}
+            style={{ position: "absolute", height, width }}
+            intensity={10}
+          />
 
-        <View style={styles.centeredView}>
-          <ActivityIndicator size={"large"} color={color} />
-        </View>
-      </Modal>
-    </View></Portal>
+          <View style={styles.centeredView}>
+            <ActivityIndicator size={"large"} color={color} />
+          </View>
+        </Modal>
+      </View>
+    </Portal>
   );
 };
 
@@ -57,4 +58,3 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-

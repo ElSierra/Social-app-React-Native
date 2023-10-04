@@ -8,7 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import { HomeNavigationProp } from "../../../types/navigation";
 import Animated, { FadeInRight } from "react-native-reanimated";
 
-const { width } = Dimensions.get("screen");
+const { width } = Dimensions.get("window");
 
 export default function NotificationBuilder({
   imageUri,
@@ -75,7 +75,7 @@ export default function NotificationBuilder({
             }
             if (type === "Posts") {
               //@ts-ignore
-              navigate.navigate("ViewPost",{postId});
+              navigate.navigate("ViewPost", { postId });
             }
           }}
         >

@@ -10,7 +10,7 @@ import { Image } from "expo-image";
 import InputText from "../../screen/Auth/components/InputText";
 import useGetMode from "../../hooks/GetMode";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
-const heightFromScreen = Dimensions.get("screen").height;
+const heightFromScreen = Dimensions.get("window").height;
 export default function VideoTextArea(props: TextInputProps) {
   const dark = useGetMode();
   const color = dark ? "white" : "black";

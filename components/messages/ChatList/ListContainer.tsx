@@ -11,7 +11,7 @@ import { useAppSelector } from "../../../redux/hooks/hooks";
 import Animated, { BounceIn, BounceOut } from "react-native-reanimated";
 import { Image } from "expo-image";
 import { ProfileIcon } from "../../icons";
-const { width } = Dimensions.get("screen");
+const { width } = Dimensions.get("window");
 export default function ListContainer({ data }: { data: IChatList }) {
   const dark = useGetMode();
   const color = dark ? "#FFFFFF" : "#000000";
@@ -83,7 +83,6 @@ export default function ListContainer({ data }: { data: IChatList }) {
                   ? require("../../../assets/images/profile-black.svg")
                   : require("../../../assets/images/profile-white.svg")
               }
-          
               style={{ borderRadius: 999, height: 50, width: 50 }}
               source={{
                 uri: imageUri,
@@ -131,7 +130,8 @@ export default function ListContainer({ data }: { data: IChatList }) {
                 color: "grey",
               }}
             >
-              {data.messages[0]?.text || data.messages[0]?.photo?.imageUri && "📷"}
+              {data.messages[0]?.text ||
+                (data.messages[0]?.photo?.imageUri && "📷")}
             </Text>
           </View>
         </View>

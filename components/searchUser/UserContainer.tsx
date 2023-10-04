@@ -14,7 +14,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
 import { addToChatList } from "../../redux/slice/chat/chatlist";
 import { Image } from "expo-image";
 
-const { width } = Dimensions.get("screen");
+const { width } = Dimensions.get("window");
 export default function UserContainer({
   name,
   userName,
@@ -23,10 +23,10 @@ export default function UserContainer({
   isFollowed,
 }: IPerson) {
   const dark = useGetMode();
-  const { height, width } = Dimensions.get("screen");
+  const { height, width } = Dimensions.get("window");
   const color = dark ? "white" : "black";
   const backgroundColor = !dark ? "#E5E9F899" : "#25252599";
-const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const fbuttonBackgroundColor = dark ? "#FFFFFF" : "#000000";
   const tint = dark ? "dark" : "light";
   const fBColor = dark ? "white" : "black";
@@ -45,9 +45,9 @@ const dispatch = useAppDispatch()
   };
 
   useEffect(() => {
-    socket?.on("hello", (hello)=>{
-      console.log("😒", hello)
-    })
+    socket?.on("hello", (hello) => {
+      console.log("😒", hello);
+    });
   }, [socket]);
 
   useEffect(() => {

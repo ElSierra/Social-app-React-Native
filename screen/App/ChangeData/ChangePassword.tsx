@@ -39,7 +39,7 @@ import InputText from "../../Auth/components/InputText";
 import InputPassword from "../../Auth/components/InputPassword";
 import { useNavigation } from "@react-navigation/native";
 
-const width = Dimensions.get("screen").width;
+const width = Dimensions.get("window").width;
 export default function ChangeUserName() {
   const dark = useGetMode();
   const isDark = dark;
@@ -128,7 +128,6 @@ export default function ChangeUserName() {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
       () => {
-     
         scrollViewRef.current?.scrollTo({ x: 300, y: 0 });
         setKeyboardVisible(true); // or some other action
       }
@@ -160,7 +159,7 @@ export default function ChangeUserName() {
               paddingBottom: 50,
             }}
           >
-            <Text style={{ fontFamily: "jakaraBold", fontSize: 20 ,color}}>
+            <Text style={{ fontFamily: "jakaraBold", fontSize: 20, color }}>
               Change Password
             </Text>
             <View style={{ alignItems: "center" }}>
@@ -168,7 +167,9 @@ export default function ChangeUserName() {
                 <Animated.View
                   style={{ transform: [{ translateX: animUser.current }] }}
                 >
-                  <Text style={{ paddingVertical: 5, fontFamily: "jakara",color }}>
+                  <Text
+                    style={{ paddingVertical: 5, fontFamily: "jakara", color }}
+                  >
                     Old Password
                   </Text>
                   <Controller
@@ -197,7 +198,9 @@ export default function ChangeUserName() {
                 <Animated.View
                   style={{ transform: [{ translateX: animPass.current }] }}
                 >
-                  <Text style={{ paddingVertical: 5, fontFamily: "jakara" ,color}}>
+                  <Text
+                    style={{ paddingVertical: 5, fontFamily: "jakara", color }}
+                  >
                     New Password
                   </Text>
                   <Controller

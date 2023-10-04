@@ -40,4 +40,4 @@ function ChatListView({
     </View>
   );
 }
-export default React.memo(ChatListView);
+export default ChatListView

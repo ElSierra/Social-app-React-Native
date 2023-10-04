@@ -16,7 +16,7 @@ import { ChatNavigation } from "../../types/navigation";
 import { Image } from "expo-image";
 import { isEmoji } from "../../util/emoji";
 
-const { width } = Dimensions.get("screen");
+const { width } = Dimensions.get("window");
 export default function ModalChatText({
   isMe,
   time,
@@ -47,7 +47,7 @@ export default function ModalChatText({
       <View>
         <View
           style={{
-            padding: isEmoji(text) ? undefined :10,
+            padding: isEmoji(text) ? undefined : 10,
             borderRadius: 15,
             maxWidth: width / 1.5,
             flexDirection: "column",
@@ -81,11 +81,15 @@ export default function ModalChatText({
                 });
               }}
             >
-              <Image
-                source={{ uri: photoUri }}
-                priority={"high"}
-                style={{ width: 200, height: 100, borderRadius: 10 }}
-              />
+              <View
+                style={{ padding: 5, overflow: "hidden", borderRadius: 10 }}
+              >
+                <Image
+                  source={{ uri: photoUri }}
+                  priority={"high"}
+                  style={{ width: 200, height: 100, borderRadius: 10 }}
+                />
+              </View>
             </Pressable>
           )}
           {sent && (

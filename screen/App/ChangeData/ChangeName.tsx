@@ -39,7 +39,7 @@ import InputText from "../../Auth/components/InputText";
 import InputPassword from "../../Auth/components/InputPassword";
 import { useNavigation } from "@react-navigation/native";
 
-const width = Dimensions.get("screen").width;
+const width = Dimensions.get("window").width;
 export default function ChangeName() {
   const dark = useGetMode();
   const isDark = dark;
@@ -80,7 +80,6 @@ export default function ChangeName() {
         dispatch(openToast({ text: r.msg, type: "Success" }));
       })
       .catch((e: any) => {
-      
         dispatch(openToast({ text: e.data?.msg, type: "Failed" }));
       });
   };
@@ -156,7 +155,7 @@ export default function ChangeName() {
               paddingBottom: 50,
             }}
           >
-            <Text style={{ fontFamily: "jakaraBold", fontSize: 20,color }}>
+            <Text style={{ fontFamily: "jakaraBold", fontSize: 20, color }}>
               Change Your Name
             </Text>
             <View style={{ alignItems: "center" }}>

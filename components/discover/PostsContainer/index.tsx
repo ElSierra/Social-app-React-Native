@@ -12,7 +12,7 @@ import { IPostBuilder, SearchPostBuilder } from "../../../types/app";
 import { useNavigation } from "@react-navigation/native";
 import { HomeNavigationProp } from "../../../types/navigation";
 
-const { width } = Dimensions.get("screen");
+const { width } = Dimensions.get("window");
 export default function PostsContainer({
   id,
   date,

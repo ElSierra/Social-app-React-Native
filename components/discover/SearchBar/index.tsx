@@ -15,7 +15,7 @@ import {
   useLazySearchPostsQuery,
 } from "../../../redux/api/services";
 
-const { width } = Dimensions.get("screen");
+const { width } = Dimensions.get("window");
 export default function SearchBar() {
   const dark = useGetMode();
   const [searchParam, setSearchParam] = useState("");
@@ -42,7 +42,7 @@ export default function SearchBar() {
           width: width * 0.7,
           height: 40,
           borderColor: borderColor,
-         
+
           paddingVertical: 10,
           paddingHorizontal: 20,
           borderRadius: 10,

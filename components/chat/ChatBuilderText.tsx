@@ -19,7 +19,7 @@ import { BlurView } from "expo-blur";
 import { isEmoji } from "../../util/emoji";
 import { useAppSelector } from "../../redux/hooks/hooks";
 
-const { width } = Dimensions.get("screen");
+const { width } = Dimensions.get("window");
 function ChatBuilderText({
   isMe,
   time,
@@ -123,7 +123,7 @@ function ChatBuilderText({
                 />
                 {!sent && isLast && (
                   <>
-                    {isHighEndDevice && (
+                    {
                       <BlurView
                         style={{
                           height: 200,
@@ -131,7 +131,7 @@ function ChatBuilderText({
                           position: "absolute",
                         }}
                       />
-                    )}
+                    }
                     <ActivityIndicator
                       color={color}
                       style={{
@@ -182,4 +182,4 @@ function ChatBuilderText({
     </Animated.View>
   );
 }
-export default memo(ChatBuilderText);
+export default ChatBuilderText;

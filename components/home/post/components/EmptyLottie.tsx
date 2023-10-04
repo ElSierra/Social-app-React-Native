@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import Lottie from "lottie-react-native";
 import { Dimensions } from "react-native";
-const { width } = Dimensions.get("screen");
+const { width } = Dimensions.get("window");
 export default function EmptyLottie() {
   const lottieRef = useRef<Lottie>(null);
 

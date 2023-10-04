@@ -39,7 +39,7 @@ import InputText from "../../Auth/components/InputText";
 import InputPassword from "../../Auth/components/InputPassword";
 import { useNavigation } from "@react-navigation/native";
 
-const width = Dimensions.get("screen").width;
+const width = Dimensions.get("window").width;
 export default function ChangeUserName() {
   const dark = useGetMode();
   const isDark = dark;
@@ -80,7 +80,6 @@ export default function ChangeUserName() {
         dispatch(openToast({ text: r.msg, type: "Success" }));
       })
       .catch((e: any) => {
-
         if (e.data?.message === "userName already exists") {
           dispatch(openToast({ text: "Username exists", type: "Failed" }));
           return;
@@ -160,7 +159,7 @@ export default function ChangeUserName() {
               paddingBottom: 50,
             }}
           >
-            <Text style={{ fontFamily: "jakaraBold", fontSize: 20 , color}}>
+            <Text style={{ fontFamily: "jakaraBold", fontSize: 20, color }}>
               Change @Username
             </Text>
             <View style={{ alignItems: "center" }}>

@@ -60,8 +60,8 @@ export default function HomeAll() {
   const isDark = dark;
   const color = isDark ? "white" : "black";
   const backgroundColor = !isDark ? "white" : "black";
-  const height = Dimensions.get("screen").height;
-  const width = Dimensions.get("screen").width;
+  const height = Dimensions.get("window").height;
+  const width = Dimensions.get("window").width;
 
   const [skip, setSkip] = useState(0);
 

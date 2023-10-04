@@ -14,7 +14,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
 import { addToChatList } from "../../redux/slice/chat/chatlist";
 import { Image } from "expo-image";
 
-const { width } = Dimensions.get("screen");
+const { width } = Dimensions.get("window");
 export default function FFContainer({
   name,
   userName,
@@ -23,7 +23,7 @@ export default function FFContainer({
   isFollowed,
 }: IPerson) {
   const dark = useGetMode();
-  const { height, width } = Dimensions.get("screen");
+  const { height, width } = Dimensions.get("window");
   const color = dark ? "white" : "black";
   const backgroundColor = !dark ? "#E5E9F899" : "#25252599";
   const dispatch = useAppDispatch();
@@ -46,9 +46,7 @@ export default function FFContainer({
   };
 
   useEffect(() => {
-    socket?.on("hello", (hello) => {
-     
-    });
+    socket?.on("hello", (hello) => {});
   }, [socket]);
 
   useEffect(() => {
@@ -76,7 +74,7 @@ export default function FFContainer({
       }
     });
   }, [socket]);
-  const isHighEndDevice = useAppSelector((state)=>state.prefs.isHighEnd)
+  const isHighEndDevice = useAppSelector((state) => state.prefs.isHighEnd);
   return (
     <>
       <Portal>
@@ -90,11 +88,13 @@ export default function FFContainer({
               style={{ justifyContent: "center", alignItems: "center" }}
               onRequestClose={closeModal}
             >
-              {isHighEndDevice &&<BlurView
-                tint={tint}
-                style={{ position: "absolute", height, width }}
-                intensity={10}
-              />}
+              {isHighEndDevice && (
+                <BlurView
+                  tint={tint}
+                  style={{ position: "absolute", height, width }}
+                  intensity={10}
+                />
+              )}
               <View
                 style={{
                   flex: 1,

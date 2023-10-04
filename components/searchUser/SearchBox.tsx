@@ -12,7 +12,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDebounce } from "../../hooks/Debounce";
 import { BlurView } from "expo-blur";
 
-const { width } = Dimensions.get("screen");
+const { width } = Dimensions.get("window");
 export default function SearchBox({
   setSearchParam,
 }: {
@@ -32,7 +32,7 @@ export default function SearchBox({
         {
           width: width * 0.7,
           height: 40,
-      
+
           backgroundColor,
           overflow: "hidden",
           paddingVertical: 10,
@@ -41,7 +41,6 @@ export default function SearchBox({
         },
       ]}
     >
-   
       <TextInput
         cursorColor={color}
         placeholder="@someone"

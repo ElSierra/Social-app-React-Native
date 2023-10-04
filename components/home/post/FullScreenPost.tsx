@@ -47,7 +47,7 @@ export default function FullScreenPost({
   isReposted,
   audioUri,
 }: IPostBuilder) {
-  const width = Dimensions.get("screen").width;
+  const width = Dimensions.get("window").width;
   const navigation = useNavigation<HomeNavigationProp>();
   const dark = useGetMode();
   const isDark = dark;
@@ -63,7 +63,6 @@ export default function FullScreenPost({
   const handleShare = () => {
     setShowQ(true);
     ref?.current?.capture()?.then((uri: string) => {
-     
       Share.open({ urls: [uri] })
         .then((res) => {
           console.log(res);
@@ -243,7 +242,7 @@ export default function FullScreenPost({
             style={{ position: "absolute", right: 10, top: 10 }}
             exiting={FadeOut.springify()}
           >
-            <Text style={{ fontFamily: "uberBold" ,color}}>Qui</Text>
+            <Text style={{ fontFamily: "uberBold", color }}>Qui</Text>
           </Animated.View>
         )}
       </View>

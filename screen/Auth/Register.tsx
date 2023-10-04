@@ -34,7 +34,7 @@ import { RegisterScreen } from "../../types/navigation";
 import ReAnimated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { Image } from "expo-image";
 
-const width = Dimensions.get("screen").width;
+const width = Dimensions.get("window").width;
 export default function Register({ navigation }: RegisterScreen) {
   const dark = useGetMode();
   const isDark = dark;

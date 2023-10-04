@@ -7,7 +7,7 @@ import { useAppSelector } from "../../redux/hooks/hooks";
 import { ProfileIcon } from "../icons";
 import { Image } from "expo-image";
 
-const heightFromScreen = Dimensions.get("screen").height;
+const heightFromScreen = Dimensions.get("window").height;
 export default function TextArea({
   handlePostText,
 }: {

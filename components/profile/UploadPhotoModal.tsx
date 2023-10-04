@@ -23,7 +23,7 @@ import PickImageButton from "./UploadPic";
 import { useUploadProfilePictureMutation } from "../../redux/api/user";
 import PickGifButton from "./UploadGif";
 
-const { height, width } = Dimensions.get("screen");
+const { height, width } = Dimensions.get("window");
 export const UploadPhotoModal = ({
   isOpen,
   closeModal,

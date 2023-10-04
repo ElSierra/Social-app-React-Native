@@ -478,24 +478,10 @@ export default function Main() {
             component={ChangeData}
             options={{
               headerTintColor: color,
-              animation: "fade_from_bottom",
+              animation: "none",
               headerStyle: { backgroundColor },
               headerTitle: "",
               headerShadowVisible: false,
-              headerBackground: () => (
-                <BlurView
-                  style={{
-                    opacity: 0,
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    top: 0,
-                    right: 0,
-                  }}
-                  tint={tint}
-                  intensity={100}
-                />
-              ),
             }}
           />
         </Stack.Navigator>

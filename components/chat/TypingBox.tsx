@@ -3,8 +3,14 @@ import React, { useEffect, useRef } from "react";
 import useGetMode from "../../hooks/GetMode";
 import { formatDateForChat } from "../../util/date";
 import Lottie from "lottie-react-native";
-import Animated, { FadeIn, FadeInDown, FadeInUp, FadeOutDown, FadeOutLeft } from "react-native-reanimated";
-const { width } = Dimensions.get("screen");
+import Animated, {
+  FadeIn,
+  FadeInDown,
+  FadeInUp,
+  FadeOutDown,
+  FadeOutLeft,
+} from "react-native-reanimated";
+const { width } = Dimensions.get("window");
 export default function TypingBox() {
   const dark = useGetMode();
   const backgroundColorForMe = dark ? "#35383A" : "#0c81f8";
@@ -20,7 +26,11 @@ export default function TypingBox() {
     };
   }, []);
   return (
-    <Animated.View entering={FadeInDown.springify()} exiting={FadeOutDown.springify()} style={{ width: "100%", alignItems: "flex-start" }}>
+    <Animated.View
+      entering={FadeInDown.springify()}
+      exiting={FadeOutDown.springify()}
+      style={{ width: "100%", alignItems: "flex-start" }}
+    >
       <View>
         <View
           style={{
@@ -45,7 +55,11 @@ export default function TypingBox() {
             <Lottie
               style={{ width: 40, height: 50, zIndex: 0 }}
               ref={animationRef}
-              source={dark ? require("../../assets/lottie/isTyping-light.json"):require("../../assets/lottie/isTyping-black.json")}
+              source={
+                dark
+                  ? require("../../assets/lottie/isTyping-light.json")
+                  : require("../../assets/lottie/isTyping-black.json")
+              }
             />
           </View>
         </View>

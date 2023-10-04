@@ -10,7 +10,7 @@ import ProfileButton from "../../components/home/header/ProfileButton";
 import { useAppSelector } from "../../redux/hooks/hooks";
 
 const Drawer = createDrawerNavigator<DrawerRootStackParamList>();
-const { width } = Dimensions.get("screen");
+const { width } = Dimensions.get("window");
 export default function DrawerNavigator() {
   const dark = useGetMode();
   const isDark = dark;

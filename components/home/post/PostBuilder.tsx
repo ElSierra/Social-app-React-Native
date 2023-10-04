@@ -45,7 +45,7 @@ export default function PostBuilder({
   deletePost,
   photo,
 }: IPostBuilder) {
-  const width = Dimensions.get("screen").width;
+  const width = Dimensions.get("window").width;
   const navigation = useNavigation<HomeNavigationProp>();
   const dark = useGetMode();
   const isDark = dark;

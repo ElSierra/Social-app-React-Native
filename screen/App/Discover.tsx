@@ -14,7 +14,7 @@ import PagerView from "react-native-pager-view";
 import Posts from "./DiscoverScreens/Posts";
 import Users from "./DiscoverScreens/Users";
 
-const { width, height } = Dimensions.get("screen");
+const { width, height } = Dimensions.get("window");
 const renderScene = SceneMap({
   users: Users,
   posts: Posts,
@@ -27,7 +27,7 @@ const renderTabBar = (props: any) => {
     <TabBar
       {...props}
       indicatorStyle={{ backgroundColor }}
-      android_ripple={{color:"transparent"}}
+      android_ripple={{ color: "transparent" }}
       style={{ backgroundColor: "transparent", elevation: 0, marginTop: 80 }}
       labelStyle={{
         color,
@@ -50,7 +50,7 @@ export default function Discover() {
   const dark = useGetMode();
   const tint = dark ? "dark" : "light";
   const persons = useAppSelector((state) => state.searchPeople);
-  const { width } = Dimensions.get("screen");
+  const { width } = Dimensions.get("window");
   const borderColor = dark ? "#FFFFFF7D" : "#4545452D";
   const [people, setPeople] = useState(true);
   const layout = useWindowDimensions();

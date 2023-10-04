@@ -16,14 +16,14 @@ import { useForm } from "react-hook-form";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Image } from "expo-image";
 
-const width = Dimensions.get("screen").width;
+const width = Dimensions.get("window").width;
 export default function CustomToast() {
   const dark = useGetMode();
   const color = dark ? "white" : "black";
   const tint = dark ? "dark" : "light";
   const colorForbidden = dark ? "#ff0000" : "#400000";
   const dispatch = useAppDispatch();
-  
+
   const toastState = useAppSelector((state) => state.toast);
 
   function handleClose() {
@@ -77,19 +77,12 @@ export default function CustomToast() {
             entering={FadeInUp.springify().withCallback(callback)}
             exiting={FadeOutUp.springify().delay(1000)}
           >
-            {isHighEndDevice ? (
-              <BlurView
-                tint={tint}
-                style={{ position: "absolute", width, height: 60 + insets.top }}
-                intensity={50}
-              />
-            ) : (
-              <View
-          
-                style={{ position: "absolute", width, height: 60 + insets.top , backgroundColor: dark ? "#000000EA": "#FFFFFFDB"}}
-               
-              />
-            )}
+            <BlurView
+              tint={tint}
+              style={{ position: "absolute", width, height: 60 + insets.top }}
+              intensity={50}
+            />
+
             <View
               style={{
                 flexDirection: "row",

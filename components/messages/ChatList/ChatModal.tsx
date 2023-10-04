@@ -19,7 +19,7 @@ import { useAppDispatch } from "../../../redux/hooks/hooks";
 import { deleteMessage } from "../../../redux/slice/chat/chatlist";
 import useSocket from "../../../hooks/Socket";
 
-const { height, width } = Dimensions.get("screen");
+const { height, width } = Dimensions.get("window");
 export const ChatModal = React.memo(
   ({
     isOpen,

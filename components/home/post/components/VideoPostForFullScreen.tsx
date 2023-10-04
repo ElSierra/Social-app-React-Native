@@ -35,7 +35,7 @@ import convertMsToHMS from "../../../../util/convert";
 import { StatusBar } from "expo-status-bar";
 import { Image, ImageBackground } from "expo-image";
 
-const { height } = Dimensions.get("screen");
+const { height } = Dimensions.get("window");
 export default function VideoPostFullScreen({
   videoTitle,
 
@@ -164,7 +164,7 @@ export default function VideoPostFullScreen({
         ></ImageBackground>
       </View>
       {
-        <View style={{ height: "100%", width: "100%", position: "absolute", }}>
+        <View style={{ height: "100%", width: "100%", position: "absolute" }}>
           <TouchableWithoutFeedback
             style={{ flex: 1, width: "100%" }}
             onPress={() => {

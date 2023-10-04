@@ -60,8 +60,8 @@ export default function HomeFollowed() {
   const isDark = dark;
   const color = isDark ? "white" : "black";
   const backgroundColor = !isDark ? "white" : "black";
-  const height = Dimensions.get("screen").height;
-  const width = Dimensions.get("screen").width;
+  const height = Dimensions.get("window").height;
+  const width = Dimensions.get("window").width;
 
   const [skip, setSkip] = useState(0);
   const authId = useAppSelector((state) => state.user.data?.id);
@@ -192,7 +192,9 @@ export default function HomeFollowed() {
       }
       comments={item._count.comments}
       like={item._count.like}
-      isLiked={item?.like?.find((like) => like?.userId === authId) ? true : false}
+      isLiked={
+        item?.like?.find((like) => like?.userId === authId) ? true : false
+      }
       imageUri={item.user?.imageUri}
       name={item.user?.name}
       thumbNail={item.videoThumbnail}
