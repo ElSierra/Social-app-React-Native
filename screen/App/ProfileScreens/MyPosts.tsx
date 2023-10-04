@@ -85,6 +85,7 @@ export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
           }
         })
         .catch((e) => {
+          setIsLoading(false);
           // dispatch(
           //   openToast({ text: "couldn't get recent posts", type: "Failed" })
           // );

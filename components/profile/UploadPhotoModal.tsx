@@ -20,7 +20,10 @@ import { Image } from "expo-image";
 import Button from "../global/Buttons/Button";
 import { CameraIcon, ProfileIcon } from "../icons";
 import PickImageButton from "./UploadPic";
-import { useUploadProfilePictureMutation } from "../../redux/api/user";
+import {
+  useLazyGetUserQuery,
+  useUploadProfilePictureMutation,
+} from "../../redux/api/user";
 import PickGifButton from "./UploadGif";
 
 const { height, width } = Dimensions.get("screen");
@@ -42,10 +45,16 @@ export const UploadPhotoModal = ({
     size: number;
   } | null>(null);
 
+  const [getUser, responseGetUser] = useLazyGetUserQuery();
+
   const [uploadPhoto, response] = useUploadProfilePictureMutation();
 
   const handleSetPostPhoto = (mimeType: string, uri: string, size: number) => {
-    uploadPhoto({ mimeType, uri });
+    uploadPhoto({ mimeType, uri })
+      .unwrap()
+      .then((e) => {
+        getUser(null).then((e)=>{}).catch((e)=>{});
+      });
   };
 
   return (

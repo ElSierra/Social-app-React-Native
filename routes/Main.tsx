@@ -16,7 +16,10 @@ import PostContent from "../screen/App/PostContent";
 
 import VideoFullScreen from "../screen/App/VideoFullScreen";
 import { useAppDispatch, useAppSelector } from "../redux/hooks/hooks";
-import { useUpdateNotificationIdMutation } from "../redux/api/user";
+import {
+  useGetUserQuery,
+  useUpdateNotificationIdMutation,
+} from "../redux/api/user";
 import PostScreen from "../screen/App/PostScreen";
 import { useEffect, useRef, useState } from "react";
 
@@ -78,7 +81,7 @@ export default function Main() {
   const socket = useSocket();
   const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
   const [getAllChats] = useLazyGetAllChatsQuery();
-
+  useGetUserQuery(null);
   useEffect(() => {
     getAllChats(null)
       .then((e) => {})
