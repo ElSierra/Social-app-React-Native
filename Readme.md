@@ -3,6 +3,7 @@
 Welcome to the Social Media App, a mobile application developed using React Native. This app allows users to connect with friends, share posts, photos, and engage in meaningful conversations.
 
 
+https://github.com/ElSierra/Social-app-React-Native/assets/25958179/1e8a6f1e-68a3-4bb5-bfcd-2885c44bbe95
 
 Backend App - [GitHub Repository](https://github.com/ElSierra/SocialApp-NodeJS)
 
