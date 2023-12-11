@@ -3,7 +3,7 @@ import { DrawerRootStackParamList } from "../../types/navigation";
 import useGetMode from "../../hooks/GetMode";
 import CustomDrawerContent from "../../components/home/drawer/CustomDrawer";
 import { useLazyGetFollowDetailsQuery } from "../../redux/api/user";
-import { Dimensions } from "react-native";
+import { Dimensions, Platform } from "react-native";
 import Home from "../../screen/App/Home";
 import { BlurView } from "expo-blur";
 import ProfileButton from "../../components/home/header/ProfileButton";
@@ -78,6 +78,7 @@ export default function DrawerNavigator() {
               />
             ),
             headerStyle: {
+              height:Platform.OS=="ios"? 100: undefined,
               backgroundColor: !isHighEndDevice
                 ? backgroundColor
                 : "transparent",

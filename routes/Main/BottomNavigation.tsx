@@ -31,7 +31,8 @@ import Notifications from "../../screen/App/Notifications";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
 
 import SearchBar from "../../components/discover/SearchBar";
-import { Text, View } from "react-native";
+import { Platform, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 const Tab = createBottomTabNavigator<BottomRootStackParamList>();
 export function BottomTabNavigator() {
   const dark = useGetMode();
@@ -41,6 +42,7 @@ export function BottomTabNavigator() {
   const tint = !isDark ? "light" : "dark";
   const color = isDark ? "white" : "black";
   const backgroundColor = isDark ? "black" : "white";
+  const insets = useSafeAreaInsets();
   const isHighEndDevice = useAppSelector((state) => state.prefs.isHighEnd);
   const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
   return (
@@ -84,7 +86,7 @@ export function BottomTabNavigator() {
           tabBarStyle: {
             backgroundColor: isHighEndDevice ? "transparent" : backgroundColor,
             elevation: 0,
-            height: 65,
+            height: Platform.OS == "ios" ? 40 + insets.bottom : 60,
             paddingBottom: 10,
             borderTopWidth: 0.2,
 
@@ -94,6 +96,7 @@ export function BottomTabNavigator() {
             borderBottomWidth: 0.2,
             borderColor,
           },
+
           headerBackground: () => (
             <>
               {isHighEndDevice && (
@@ -183,6 +186,9 @@ export function BottomTabNavigator() {
             },
             headerShown: true,
             headerTransparent: true,
+            headerStyle: {
+              height: Platform.OS == "ios" ? 140 : undefined,
+            },
             headerBackgroundContainerStyle: {
               borderBottomWidth: 0,
               borderColor,

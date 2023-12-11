@@ -151,7 +151,7 @@ export default function Login({ navigation }: LoginScreen) {
   return (
     <AnimatedScreen>
       <TouchableWithoutFeedback style={{ flex: 1 }} onPress={Keyboard.dismiss}>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, marginTop:40 }}>
           <ScrollView
             ref={scrollViewRef}
             showsVerticalScrollIndicator={false}

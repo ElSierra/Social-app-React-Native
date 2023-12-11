@@ -16,3 +16,6 @@ export default function OnboardNavigation() {
     </Stack.Navigator>
   );
 }
+
+
+

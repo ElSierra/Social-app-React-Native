@@ -14,9 +14,9 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "me.isaacojo.qui"
     },
     "android": {
       "googleServicesFile": "./google-services.json",
@@ -40,8 +40,6 @@
         {
           "icon": "./assets/notification.png",
           "color": "#ffffff"
-          
-         
         }
       ]
     ],

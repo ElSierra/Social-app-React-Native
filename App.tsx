@@ -59,7 +59,7 @@ import { openToast } from "./redux/slice/toast/toast";
 
 import * as Sentry from "@sentry/react-native";
 import { useGetFollowDetailsQuery } from "./redux/api/user";
-import * as Device from 'expo-device';
+import * as Device from "expo-device";
 import * as NavigationBar from "expo-navigation-bar";
 import Notifications from "./util/notification";
 import { PixelRatio } from "react-native";
@@ -109,7 +109,7 @@ export default function App() {
       <PersistGate persistor={persistor}>
         <PaperProvider>
           <CustomToast />
-          <LoadingModal />
+          {/* <LoadingModal /> */}
           <Navigation />
         </PaperProvider>
       </PersistGate>
@@ -327,14 +327,19 @@ const Navigation = () => {
   useGetFollowDetailsQuery(null);
   const { route } = useAppSelector((state) => state.routes);
   const userAuthenticated = useAppSelector((state) => state.user.token);
-  console.log("🚀 ~ file: App.tsx:330 ~ Navigation ~ userAuthenticated:", userAuthenticated)
+  console.log(
+    "🚀 ~ file: App.tsx:330 ~ Navigation ~ userAuthenticated:",
+    userAuthenticated
+  );
 
   const netInfo = useNetInfo();
 
   const barColor = !dark ? "black" : "white";
   useEffect(() => {
     const navBehavior = async () => {
-      await NavigationBar.setBackgroundColorAsync(barColor);
+      Platform.OS === "ios"
+        ? null
+        : await NavigationBar.setBackgroundColorAsync(barColor);
     };
     navBehavior();
   }, [NavigationBar]);
@@ -348,13 +353,15 @@ const Navigation = () => {
   }, [netInfo]);
 
   useEffect(() => {
-    Device.deviceYearClass
-    console.log("🚀 ~ file: App.tsx:351 ~ useEffect ~ Device:", Device.modelName)
+    Device.deviceYearClass;
+    console.log(
+      "🚀 ~ file: App.tsx:351 ~ useEffect ~ Device:",
+      Device.modelName
+    );
     const getRam = DeviceInfo.getTotalMemorySync();
     console.log("🚀 ~ file: App.tsx:351 ~ useEffect ~ getRam:", getRam);
     const isHighEnd =
-      (DeviceInfo.getApiLevelSync() >= 33 && getRam >= 
-      6_442_450_944) ||
+      (DeviceInfo.getApiLevelSync() >= 33 && getRam >= 6_442_450_944) ||
       Platform.OS === "ios";
     console.log("🚀 ~ file: App.tsx:446 ~ useEffect ~ isHighEnd:", isHighEnd);
 

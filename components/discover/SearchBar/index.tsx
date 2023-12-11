@@ -14,6 +14,7 @@ import {
   useLazySearchPeopleQuery,
   useLazySearchPostsQuery,
 } from "../../../redux/api/services";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const { width } = Dimensions.get("window");
 export default function SearchBar() {
@@ -24,6 +25,7 @@ export default function SearchBar() {
   const borderColor = dark ? "#FFFFFF" : "#DAD9D9";
   const backgroundColor = dark ? "#383838" : "#EAEBEB";
   const query = useDebounce(searchParam, 1000);
+  const insets = useSafeAreaInsets();
   const [getSearchPosts, res] = useLazySearchPostsQuery();
   const [getSearchPeople] = useLazySearchPeopleQuery();
 
@@ -41,6 +43,7 @@ export default function SearchBar() {
         {
           width: width * 0.7,
           height: 40,
+        
           borderColor: borderColor,
 
           paddingVertical: 10,

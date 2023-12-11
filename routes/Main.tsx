@@ -419,6 +419,7 @@ export default function Main() {
               ),
               title: "Post",
               animation: "none",
+              presentation:"modal",
               headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
               headerShadowVisible: false,
 
