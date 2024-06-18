@@ -31,7 +31,7 @@ import { useLoginMutation, useRegisterMutation } from "../../redux/api/auth";
 import { signOut } from "../../redux/slice/user";
 import { useForm, Controller } from "react-hook-form";
 import { RegisterScreen } from "../../types/navigation";
-import ReAnimated, { FadeIn, FadeOut } from "react-native-reanimated";
+import ReAnimated, { FadeIn, FadeOut, useAnimatedKeyboard, useAnimatedStyle } from "react-native-reanimated";
 import { Image } from "expo-image";
 
 const width = Dimensions.get("window").width;
@@ -148,7 +148,10 @@ export default function Register({ navigation }: RegisterScreen) {
   };
 
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-
+  const keyboard = useAnimatedKeyboard({isStatusBarTranslucentAndroid:true});
+  const animatedStyles = useAnimatedStyle(() => ({
+    transform: [{ translateY: -keyboard.height.value }],
+  }));
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
@@ -177,7 +180,7 @@ export default function Register({ navigation }: RegisterScreen) {
   return (
     <AnimatedScreen>
       <TouchableWithoutFeedback style={{ flex: 1 }} onPress={Keyboard.dismiss}>
-        <View style={{ flex: 1 ,marginTop:40}}>
+        <ReAnimated.View style={[{ flex: 1 ,marginTop:40},animatedStyles]}>
           <ScrollView
             ref={scrollViewRef}
             showsVerticalScrollIndicator={false}
@@ -488,7 +491,7 @@ export default function Register({ navigation }: RegisterScreen) {
               </View>
             </View>
           </ScrollView>
-        </View>
+        </ReAnimated.View>
       </TouchableWithoutFeedback>
     </AnimatedScreen>
   );

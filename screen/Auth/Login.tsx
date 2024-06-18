@@ -34,6 +34,7 @@ import { LoginScreen } from "../../types/navigation";
 import { servicesApi } from "../../redux/api/services";
 import { userApi } from "../../redux/api/user";
 import { Image } from "expo-image";
+import  ReAnimated,{ useAnimatedKeyboard, useAnimatedStyle } from "react-native-reanimated";
 
 const width = Dimensions.get("window").width;
 export default function Login({ navigation }: LoginScreen) {
@@ -147,11 +148,14 @@ export default function Login({ navigation }: LoginScreen) {
       keyboardDidShowListener.remove();
     };
   }, []);
-
+  const keyboard = useAnimatedKeyboard({isStatusBarTranslucentAndroid:true});
+  const animatedStyles = useAnimatedStyle(() => ({
+    transform: [{ translateY: -keyboard.height.value }],
+  }));
   return (
     <AnimatedScreen>
       <TouchableWithoutFeedback style={{ flex: 1 }} onPress={Keyboard.dismiss}>
-        <View style={{ flex: 1, marginTop:40 }}>
+        <ReAnimated.View style={[{ flex: 1, marginTop:40 },animatedStyles]}>
           <ScrollView
             ref={scrollViewRef}
             showsVerticalScrollIndicator={false}
@@ -319,7 +323,7 @@ export default function Login({ navigation }: LoginScreen) {
               </Pressable>
             </View>
           </View>
-        </View>
+        </ReAnimated.View>
       </TouchableWithoutFeedback>
     </AnimatedScreen>
   );

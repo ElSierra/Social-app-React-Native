@@ -2,6 +2,7 @@ import { View, Text, FlatList, ListRenderItem } from "react-native";
 import React from "react";
 import TypingBox from "../../chat/TypingBox";
 import { IChatList } from "../../../types/api";
+import Animated, { SequencedTransition } from "react-native-reanimated";
 
 function ChatListView({
   isTyping,
@@ -14,10 +15,10 @@ function ChatListView({
   userChats?: IChatList;
   renderItem: ListRenderItem<any>;
 }) {
-
   return (
     <View style={{ flex: 1 }}>
-      <FlatList
+      <Animated.FlatList
+        itemLayoutAnimation={SequencedTransition}
         inverted
         initialNumToRender={30}
         ListHeaderComponent={() => {
@@ -40,4 +41,4 @@ function ChatListView({
     </View>
   );
 }
-export default ChatListView
+export default ChatListView;
