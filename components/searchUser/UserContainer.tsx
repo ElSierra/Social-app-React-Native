@@ -32,7 +32,7 @@ export default function UserContainer({
   const fBColor = dark ? "white" : "black";
   const navigation = useNavigation<any>();
   const socket = useSocket();
-  const user = useAppSelector((state) => state.user.data);
+  const user = useAppSelector((state) => state?.user?.data);
   const [isOpen, setIsOpen] = useState(false);
 
   const closeModal = () => {
@@ -90,6 +90,7 @@ export default function UserContainer({
               onRequestClose={closeModal}
             >
               <BlurView
+                experimentalBlurMethod="dimezisBlurView"
                 tint={tint}
                 style={{ position: "absolute", height, width }}
                 intensity={10}

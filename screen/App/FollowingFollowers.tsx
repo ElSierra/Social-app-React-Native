@@ -73,6 +73,7 @@ export default function FollowingFollowers() {
         {people ? <People people={persons} /> : <Posts posts={posts} />}
       </View> */}
         <BlurView
+          experimentalBlurMethod="dimezisBlurView"
           tint={tint}
           intensity={100}
           style={{

@@ -96,6 +96,7 @@ export default function NameAndTag({
           }
         >
           <BlurView
+            experimentalBlurMethod="dimezisBlurView"
             tint={style}
             style={{ height: "130%", width: "300%", position: "absolute" }}
           />

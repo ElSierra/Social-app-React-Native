@@ -31,12 +31,13 @@ export const LoadingModal = () => {
           statusBarTranslucent
           animationType="fade"
           transparent={true}
-          visible={loadingModal.isOpen}
+          visible={loadingModal?.isOpen}
           onRequestClose={() => {
             dispatch(closeLoadingModal());
           }}
         >
           <BlurView
+            experimentalBlurMethod="dimezisBlurView"
             tint={tint}
             style={{ position: "absolute", height, width }}
             intensity={10}

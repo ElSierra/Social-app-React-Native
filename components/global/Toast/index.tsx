@@ -36,26 +36,26 @@ export default function CustomToast() {
   }
 
   const renderIcon = () => {
-    if (toastState.type === "Failed") {
+    if (toastState?.type === "Failed") {
       return <ForbiddenIcon size={20} color={colorForbidden} />;
-    } else if (toastState.type === "Success") {
+    } else if (toastState?.type === "Success") {
       return <VerifyIcon size={20} color={"green"} />;
-    } else if (toastState.type === "Info") {
+    } else if (toastState?.type === "Info") {
       return <InfoIcon size={20} color={color} />;
-    } else if (toastState.type === "Message") {
+    } else if (toastState?.type === "Message") {
       return (
         <Image
           style={{ height: 20, width: 20, borderRadius: 999 }}
-          source={{ uri: toastState.imageUri }}
+          source={{ uri: toastState?.imageUri }}
         />
       );
     }
   };
   const insets = useSafeAreaInsets();
-  const isHighEndDevice = useAppSelector((state) => state.prefs.isHighEnd);
+  const isHighEndDevice = useAppSelector((state) => state?.prefs?.isHighEnd);
   return (
     <Portal>
-      {toastState.open && (
+      {toastState?.open && (
         <TouchableWithoutFeedback
           onPress={() => {
             console.log("pressed");
@@ -66,9 +66,9 @@ export default function CustomToast() {
               height: 60 + insets.top,
               width: width,
               backgroundColor:
-                toastState.type === "Failed"
+                toastState?.type === "Failed"
                   ? "#D8000061"
-                  : toastState.type === "Success"
+                  : toastState?.type === "Success"
                   ? "#4CF10062"
                   : "#00000058",
               justifyContent: "flex-end",
@@ -78,6 +78,7 @@ export default function CustomToast() {
             exiting={FadeOutUp.springify().delay(1000)}
           >
             <BlurView
+              experimentalBlurMethod="dimezisBlurView"
               tint={tint}
               style={{ position: "absolute", width, height: 60 + insets.top }}
               intensity={50}

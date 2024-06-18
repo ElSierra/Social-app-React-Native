@@ -67,6 +67,7 @@ export default function Discover() {
       </View> */}
       <BlurView
         tint={tint}
+          experimentalBlurMethod="dimezisBlurView"
         intensity={100}
         style={{
           position: "absolute",

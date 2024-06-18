@@ -36,6 +36,7 @@ export default function ChatBox({
       <BlurView
         tint={tint}
         intensity={100}
+        experimentalBlurMethod="dimezisBlurView"
         style={{ width: "100%", height: "100%", position: "absolute" }}
       />
       <PickImageButton handleSetPhotoPost={handleSetPhotoPost} />
@@ -75,7 +76,6 @@ export default function ChatBox({
               justifyContent: "center",
               alignItems: "center",
             }}
-            
           >
             <SendIcon size={25} color={color} />
           </Pressable>

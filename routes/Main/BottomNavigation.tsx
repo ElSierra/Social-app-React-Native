@@ -37,13 +37,13 @@ const Tab = createBottomTabNavigator<BottomRootStackParamList>();
 export function BottomTabNavigator() {
   const dark = useGetMode();
   const dispatch = useAppDispatch();
-  const isNewMessage = useAppSelector((state) => state.chatlist.new);
+  const isNewMessage = useAppSelector((state) => state?.chatlist?.new);
   const isDark = dark;
   const tint = !isDark ? "light" : "dark";
   const color = isDark ? "white" : "black";
   const backgroundColor = isDark ? "black" : "white";
   const insets = useSafeAreaInsets();
-  const isHighEndDevice = useAppSelector((state) => state.prefs.isHighEnd);
+  const isHighEndDevice = useAppSelector((state) => state?.prefs?.isHighEnd);
   const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
   return (
     <Tab.Navigator
@@ -51,6 +51,7 @@ export function BottomTabNavigator() {
         <>
           {isHighEndDevice ? (
             <BlurView
+              experimentalBlurMethod="dimezisBlurView"
               style={{
                 position: "absolute",
                 bottom: 0,
@@ -101,6 +102,7 @@ export function BottomTabNavigator() {
             <>
               {isHighEndDevice && (
                 <BlurView
+                  experimentalBlurMethod="dimezisBlurView"
                   style={{
                     position: "absolute",
                     bottom: 0,
@@ -195,6 +197,7 @@ export function BottomTabNavigator() {
             },
             headerBackground: () => (
               <BlurView
+                experimentalBlurMethod="dimezisBlurView"
                 style={{
                   opacity: 0,
                   position: "absolute",
@@ -252,6 +255,7 @@ export function BottomTabNavigator() {
 
             headerBackground: () => (
               <BlurView
+                experimentalBlurMethod="dimezisBlurView"
                 style={{
                   opacity: 0,
                   position: "absolute",
@@ -276,6 +280,7 @@ export function BottomTabNavigator() {
         options={{
           headerBackground: () => (
             <BlurView
+              experimentalBlurMethod="dimezisBlurView"
               style={{
                 opacity: 0,
                 position: "absolute",

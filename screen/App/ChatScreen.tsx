@@ -30,7 +30,7 @@ import ContextMenu from "react-native-context-menu-view";
 import { IChatList } from "../../types/api";
 import { findChatById } from "../../util/chatSearch";
 
-import Animated from "react-native-reanimated";
+import Animated, { useAnimatedKeyboard, useAnimatedStyle, } from "react-native-reanimated";
 import { ChatModal } from "../../components/messages/ChatList/ChatModal";
 import { Portal } from "react-native-paper";
 import { useNavigation, useNavigationState } from "@react-navigation/native";
@@ -44,15 +44,16 @@ import { ProfileIcon } from "../../components/icons";
 import { ArrElement } from "../../types/app";
 import ChatList from "../../components/messages/ChatList";
 import { IChatMessage } from "../../types/api";
+
 export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   const user = useAppSelector((state) => state.user?.data);
 
-  const chatState = useAppSelector((state) => state?.chatlist.data);
+  const chatState = useAppSelector((state) => state?.chatlist?.data);
   const state = useNavigationState((state) => state);
   const dispatch = useAppDispatch();
   const socket = useSocket();
   const [userChats, setChats] = useState<IChatList | undefined>(undefined);
-  const onlineIds = useAppSelector((state) => state.online.ids);
+  const onlineIds = useAppSelector((state) => state?.online?.ids);
   const isOnline = onlineIds?.some(
     (ids) => ids === (route.params.receiverId || userChats?.users[0].id)
   );
@@ -63,6 +64,10 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   const [sentSuccess, setSentSuccess] = useState(true);
   const [isTyping, setIstyping] = useState(false);
   const [getAllMessages] = useLazyGetAllMessagesQuery();
+  const keyboard = useAnimatedKeyboard({isStatusBarTranslucentAndroid:true});
+  const animatedStyles = useAnimatedStyle(() => ({
+    transform: [{ translateY: -keyboard.height.value }],
+  }));
 
   const renderItem = ({ item }: { item: IChatMessage }) => (
     <Pressable
@@ -124,7 +129,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   }, [route.params?.chatId]);
 
   useMemo(() => {
-    findChatById(route.params.id || (route.params.chatId as string), chatState)
+    findChatById(route.params.id || (route.params.chatId as string), chatState||[])
       .then((chat) => {
         if (chat) {
           setChats(chat);
@@ -354,7 +359,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
         text={text}
         chatId={route.params.id}
       />
-      <View style={{ flex: 1}}>
+      <Animated.View style={[{flex:1},animatedStyles]}>
         <ChatListView
           isTyping={isTyping}
           messageText={messageText}
@@ -383,7 +388,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
             onPress={handleSendMessage}
           />
         </View>
-      </View>
+      </Animated.View>
     </>
   );
 }

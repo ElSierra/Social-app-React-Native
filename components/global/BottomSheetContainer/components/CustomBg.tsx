@@ -40,6 +40,7 @@ export const CustomBackground: React.FC<BottomSheetBackgroundProps> = ({
         style={[containerStyle, { borderRadius: 20, overflow: "hidden",alignItems:"center" }]}
       >
         <BlurView
+          experimentalBlurMethod="dimezisBlurView"
           intensity={100}
           tint={tint}
           style={{ position: "absolute", height: "100%", width: "100%" }}

@@ -44,6 +44,7 @@ export const ViewProfilePhoto = ({
             onRequestClose={closeModal}
           >
             <BlurView
+              experimentalBlurMethod="dimezisBlurView"
               tint={tint}
               style={{ position: "absolute", height, width }}
               intensity={40}

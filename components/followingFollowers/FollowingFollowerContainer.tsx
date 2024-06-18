@@ -33,7 +33,7 @@ export default function FFContainer({
   const fBColor1 = !dark ? "white" : "black";
   const navigation = useNavigation<any>();
   const socket = useSocket();
-  const user = useAppSelector((state) => state.user.data);
+  const user = useAppSelector((state) => state?.user?.data);
   const [isOpen, setIsOpen] = useState(false);
 
   const closeModal = () => {
@@ -74,7 +74,7 @@ export default function FFContainer({
       }
     });
   }, [socket]);
-  const isHighEndDevice = useAppSelector((state) => state.prefs.isHighEnd);
+  const isHighEndDevice = useAppSelector((state) => state?.prefs?.isHighEnd);
   return (
     <>
       <Portal>
@@ -90,6 +90,7 @@ export default function FFContainer({
             >
               {isHighEndDevice && (
                 <BlurView
+                  experimentalBlurMethod="dimezisBlurView"
                   tint={tint}
                   style={{ position: "absolute", height, width }}
                   intensity={10}

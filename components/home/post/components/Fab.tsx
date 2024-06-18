@@ -12,7 +12,7 @@ export default function Fab({ item }: { item: JSX.Element }) {
   const navigation = useNavigation<HomeNavigationProp>();
   const tint = isDark ? "dark" : "light";
   const backgroundColor = !isDark ? "#DEDEDE" : "#303030";
-  const isHighEndDevice = useAppSelector((state) => state.prefs.isHighEnd);
+  const isHighEndDevice = useAppSelector((state) => state?.prefs?.isHighEnd);
 
   return (
     <View
@@ -48,6 +48,7 @@ export default function Fab({ item }: { item: JSX.Element }) {
         <>
           {isHighEndDevice && (
             <BlurView
+              experimentalBlurMethod="dimezisBlurView"
               intensity={40}
               tint={tint}
               style={{

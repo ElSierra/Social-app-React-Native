@@ -35,7 +35,7 @@ export const UploadPhotoModal = ({
   closeModal: () => void;
 }) => {
   const dark = useGetMode();
-  const imageUri = useAppSelector((state) => state.user.data?.imageUri);
+  const imageUri = useAppSelector((state) => state?.user?.data?.imageUri);
   const color = !dark ? "black" : "white";
   const tint = dark ? "dark" : "light";
 
@@ -70,6 +70,7 @@ export const UploadPhotoModal = ({
           >
             <BlurView
               tint={tint}
+                experimentalBlurMethod="dimezisBlurView"
               style={{ position: "absolute", height, width }}
               intensity={40}
             />

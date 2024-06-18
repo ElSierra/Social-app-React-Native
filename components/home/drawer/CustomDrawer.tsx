@@ -40,7 +40,7 @@ export default function CustomDrawerContent(
   const toolbarColor = isDark ? "black" : "white";
   const pressColor = isDark ? "#BEBEBE" : "#4F4F4F";
   const dispatch = useAppDispatch();
-  const isHighEndDevice = useAppSelector((state) => state.prefs.isHighEnd);
+  const isHighEndDevice = useAppSelector((state) => state?.prefs?.isHighEnd);
   const navigation = useNavigation<HomeNavigationProp>();
   const [logout] = useLazyLogoutQuery();
   const openLink = async () => {
@@ -91,6 +91,7 @@ export default function CustomDrawerContent(
     <View style={{ flex: 1, padding: 20 }}>
       {isHighEndDevice ? (
         <BlurView
+          experimentalBlurMethod="dimezisBlurView"
           style={{
             position: "absolute",
             bottom: 0,

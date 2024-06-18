@@ -36,7 +36,7 @@ export default function EditProfile({ navigation }: EditProfileProp) {
     setIsOpenProfile(false);
   };
 
-  const isHighEndDevice = useAppSelector((state) => state.prefs.isHighEnd);
+  const isHighEndDevice = useAppSelector((state) => state?.prefs?.isHighEnd);
 
   return (
     <>
@@ -62,12 +62,13 @@ export default function EditProfile({ navigation }: EditProfileProp) {
           >
             {isHighEndDevice && (
               <BlurView
+                experimentalBlurMethod="dimezisBlurView"
                 style={{ height: 150, width: 150, position: "absolute" }}
               />
             )}
-            {user.data?.imageUri ? (
+            {user?.data?.imageUri ? (
               <Image
-                source={{ uri: user.data?.imageUri }}
+                source={{ uri: user?.data?.imageUri }}
                 style={{ height: "100%", width: "100%", borderRadius: 9999 }}
               />
             ) : (
@@ -84,12 +85,12 @@ export default function EditProfile({ navigation }: EditProfileProp) {
               color,
             }}
           >
-            {user.data?.name}
+            {user?.data?.name}
           </Text>
           <Text
             style={{ fontFamily: "jakara", includeFontPadding: false, color }}
           >
-            @{user.data?.userName}
+            @{user?.data?.userName}
           </Text>
         </View>
         <View style={{ width: "100%", padding: 20, gap: 10 }}>

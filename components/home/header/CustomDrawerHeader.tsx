@@ -24,6 +24,7 @@ function CustomDrawerHeader(props: DrawerHeaderProps) {
   return (
     <SafeAreaView>
       <BlurView
+        experimentalBlurMethod="dimezisBlurView"
         style={[
           style.blurView,
           { borderBlockColor: isDark ? "#0000002F" : "#FFFFFF30" },

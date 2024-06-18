@@ -44,7 +44,7 @@ export default function Login({ navigation }: LoginScreen) {
   const buttonColor = !isDark ? "white" : "black";
   const dispatch = useAppDispatch();
   const borderColor = isDark ? "white" : "black";
-  const user = useAppSelector((state) => state.user.data);
+  const user = useAppSelector((state) => state?.user?.data);
 
   const {
     control,

@@ -70,7 +70,7 @@ TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
 
 export default function Main() {
   const [updateNotificationId] = useUpdateNotificationIdMutation();
-  const chatList = useAppSelector((state) => state.chatlist.data);
+  const chatList = useAppSelector((state) => state?.chatlist?.data);
   const id = useAppSelector((state) => state.user?.data?.id);
   const dark = useGetMode();
   const isDark = dark;
@@ -181,7 +181,8 @@ export default function Main() {
   useEffect(() => {
     const rooms: string[] = [];
     for (let i in chatList) {
-      rooms.push(chatList[i].id);
+
+      rooms.push(chatList[i]?.id);
     }
     socket?.emit("chat", rooms);
 
@@ -276,7 +277,7 @@ export default function Main() {
       subscription.remove();
     };
   }, []);
-  const isHighEndDevice = useAppSelector((state) => state.prefs.isHighEnd);
+  const isHighEndDevice = useAppSelector((state) => state?.prefs?.isHighEnd);
   return (
     <BottomSheetModalProvider>
       <BottomSheetContainer>
@@ -343,6 +344,7 @@ export default function Main() {
                 <>
                   {isHighEndDevice ? (
                     <BlurView
+                      experimentalBlurMethod="dimezisBlurView"
                       style={{
                         position: "absolute",
                         bottom: 0,
@@ -404,6 +406,7 @@ export default function Main() {
             options={{
               headerBackground: () => (
                 <BlurView
+                  experimentalBlurMethod="dimezisBlurView"
                   style={{
                     position: "absolute",
                     bottom: 0,

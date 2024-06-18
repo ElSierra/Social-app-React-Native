@@ -56,7 +56,7 @@ function ChatBuilderText({
       setHeight(height);
     });
   }, []);
-  const isHighEndDevice = useAppSelector((state) => state.prefs.isHighEnd);
+  const isHighEndDevice = useAppSelector((state) => state?.prefs?.isHighEnd);
   console.log("isEmoji", isEmoji(text));
   return (
     <Animated.View
@@ -125,6 +125,7 @@ function ChatBuilderText({
                   <>
                     {
                       <BlurView
+                        experimentalBlurMethod="dimezisBlurView"
                         style={{
                           height: 200,
                           width: 600,

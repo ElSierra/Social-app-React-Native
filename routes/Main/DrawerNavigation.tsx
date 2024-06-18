@@ -19,7 +19,7 @@ export default function DrawerNavigator() {
   const color = isDark ? "white" : "black";
   const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
   const backgroundColor = isDark ? "black" : "white";
-  const isHighEndDevice = useAppSelector((state) => state.prefs.isHighEnd);
+  const isHighEndDevice = useAppSelector((state) => state.prefs?.isHighEnd);
   const [getCurrentFollowData] = useLazyGetFollowDetailsQuery();
   return (
     <Drawer.Navigator
@@ -43,6 +43,7 @@ export default function DrawerNavigator() {
               <>
                 {isHighEndDevice && (
                   <BlurView
+                    experimentalBlurMethod="dimezisBlurView"
                     style={{
                       position: "absolute",
                       bottom: 0,
