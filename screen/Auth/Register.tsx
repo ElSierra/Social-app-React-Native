@@ -151,6 +151,7 @@ export default function Register({ navigation }: RegisterScreen) {
   const keyboard = useAnimatedKeyboard({isStatusBarTranslucentAndroid:true});
   const animatedStyles = useAnimatedStyle(() => ({
     transform: [{ translateY: -keyboard.height.value }],
+    paddingTop:keyboard.height.value
   }));
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -191,15 +192,9 @@ export default function Register({ navigation }: RegisterScreen) {
             }}
           >
             <View style={{ alignItems: "center", marginTop: 50 }}>
-              <View>
-                <Image
-                  source={require("../../assets/images/q.png")}
-                  contentFit="contain"
-                  style={{ height: 50, width }}
-                />
-              </View>
+             
               <Text style={{ color, fontFamily: "mulishBold", fontSize: 24 }}>
-                Sign up to Qui
+                Sign up
               </Text>
               <Text style={{ color, fontFamily: "mulish", fontSize: 14 }}>
                 register to gain acccess to a whole new world

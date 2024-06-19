@@ -151,6 +151,7 @@ export default function Login({ navigation }: LoginScreen) {
   const keyboard = useAnimatedKeyboard({isStatusBarTranslucentAndroid:true});
   const animatedStyles = useAnimatedStyle(() => ({
     transform: [{ translateY: -keyboard.height.value }],
+    paddingTop:keyboard.height.value
   }));
   return (
     <AnimatedScreen>

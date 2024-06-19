@@ -1,4 +1,4 @@
-import { View, Text, Dimensions, useWindowDimensions } from "react-native";
+import { View, Text, Dimensions, useWindowDimensions, Platform } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import AnimatedScreen from "../../components/global/AnimatedScreen";
 
@@ -13,6 +13,7 @@ import useGetMode from "../../hooks/GetMode";
 import PagerView from "react-native-pager-view";
 import Posts from "./DiscoverScreens/Posts";
 import Users from "./DiscoverScreens/Users";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const { width, height } = Dimensions.get("window");
 const renderScene = SceneMap({
@@ -54,7 +55,7 @@ export default function Discover() {
   const borderColor = dark ? "#FFFFFF7D" : "#4545452D";
   const [people, setPeople] = useState(true);
   const layout = useWindowDimensions();
-
+  const {top} = useSafeAreaInsets()
   const [index, setIndex] = useState(0);
   const [routes] = useState([
     { key: "users", title: "Users" },
@@ -71,7 +72,7 @@ export default function Discover() {
         intensity={100}
         style={{
           position: "absolute",
-          height: 129,
+          height: Platform.select({ios:(129 + (top/2)),android:129}),
           width,
           borderBottomWidth: 0.5,
           borderColor,
@@ -79,6 +80,7 @@ export default function Discover() {
       />
 
       <TabView
+      style={{paddingTop:Platform.select({ios:(top/2),android:0})}}
         renderTabBar={renderTabBar}
         navigationState={{ index, routes }}
         renderScene={renderScene}

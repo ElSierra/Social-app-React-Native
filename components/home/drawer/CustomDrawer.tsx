@@ -1,4 +1,4 @@
-import { View, Text, Linking, useColorScheme, Pressable } from "react-native";
+import { View, Text, Linking, useColorScheme, Pressable, Platform } from "react-native";
 import React, { useState } from "react";
 import {
   DrawerContentComponentProps,
@@ -29,11 +29,13 @@ import { clearAllChatData } from "../../../redux/slice/chat/chatlist";
 import { useLazyLogoutQuery } from "../../../redux/api/user";
 import { Switch } from "react-native-paper";
 import { setHighEnd } from "../../../redux/slice/prefs";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 export default function CustomDrawerContent(
   props: DrawerContentComponentProps
 ) {
   const dark = useGetMode();
   const isDark = dark;
+  const insets = useSafeAreaInsets();
   const style = !isDark ? "light" : "dark";
   const backgroundColor = isDark ? "white" : "black";
   const color = isDark ? "white" : "black";
@@ -88,7 +90,7 @@ export default function CustomDrawerContent(
     dispatch(setHighEnd({ isHighEnd: !isHighEndDevice }));
   };
   return (
-    <View style={{ flex: 1, padding: 20 }}>
+    <View style={{ flex: 1, padding: 20,paddingBottom:Platform.select({ios:insets.bottom,android:10}) }}>
       {isHighEndDevice ? (
         <BlurView
           experimentalBlurMethod="dimezisBlurView"

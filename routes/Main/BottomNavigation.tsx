@@ -232,7 +232,7 @@ export function BottomTabNavigator() {
             title: "Notifications",
             headerTitle: () => {
               return (
-                <View style={{ marginTop: 20 }}>
+                <View style={{ marginTop: Platform.select({ios:30,android:20}) }}>
                   <Text
                     style={{
                       fontFamily: "uberBold",
@@ -294,7 +294,7 @@ export function BottomTabNavigator() {
             />
           ),
           headerTitleAlign: "left",
-          headerTitleStyle: { fontFamily: "uberBold", fontSize: 30, color },
+          headerTitleStyle: { fontFamily: "uberBold",paddingTop:10, fontSize: 30, color },
           title: "Messages",
           headerTransparent: true,
           headerBackgroundContainerStyle: undefined,

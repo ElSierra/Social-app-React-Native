@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Pressable, TextInputProps } from "react-native";
+import { View, Text, TextInput, Pressable, TextInputProps,Platform } from "react-native";
 import React from "react";
 import { BlurView } from "expo-blur";
 import { SendIcon } from "../icons";
@@ -51,7 +51,7 @@ export default function ChatBox({
           maxHeight: 100,
           color,
           paddingLeft: 20,
-          paddingVertical: 10,
+          paddingVertical: Platform.select({ios:20,android:10}),
         }}
         {...props}
       />

@@ -67,6 +67,7 @@ export default function ChatScreen({ navigation, route }: ChatScreenProp) {
   const keyboard = useAnimatedKeyboard({isStatusBarTranslucentAndroid:true});
   const animatedStyles = useAnimatedStyle(() => ({
     transform: [{ translateY: -keyboard.height.value }],
+    paddingTop:keyboard.height.value
   }));
 
   const renderItem = ({ item }: { item: IChatMessage }) => (

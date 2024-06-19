@@ -42,8 +42,12 @@
       <key>NSAllowsLocalNetworking</key>
       <true/>
     </dict>
+    <key>NSCameraReactionEffectGesturesEnabledDefault</key>
+    <false/>
     <key>NSMicrophoneUsageDescription</key>
     <string>Allow $(PRODUCT_NAME) to access your microphone</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>We need access to your photo library to allow you to upload photos.</string>
     <key>UIBackgroundModes</key>
     <array>
       <string>fetch</string>

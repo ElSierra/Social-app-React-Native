@@ -27,6 +27,9 @@ export default function CheckBoxPair({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
+        paddingVertical:2,
+        borderRadius:20,
+      
         width: "100%",
       }}
     >
@@ -41,16 +44,18 @@ export default function CheckBoxPair({
       >
         {text}
       </Text>
-      <BouncyCheckbox
-        size={24}
-        isChecked={checked}
-        fillColor={fillColor}
-        unfillColor={unFillColor}
-        disableBuiltInState
-        iconStyle={{ borderColor: "black" }}
-        innerIconStyle={{ borderWidth: 0 }}
-        onPress={handleUpdateMode}
-      />
+   <View key={Math.random()}>
+        <BouncyCheckbox
+          size={24}
+          isChecked={checked}
+          fillColor={fillColor}
+          unFillColor={unFillColor}
+          
+          iconStyle={{ borderColor: "black" }}
+          innerIconStyle={{ borderWidth: 0 }}
+          onPress={handleUpdateMode}
+        />
+   </View>
     </View>
   );
 }
