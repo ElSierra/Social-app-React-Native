@@ -125,7 +125,7 @@ function ChatBuilderText({
                   <>
                     {
                       <BlurView
-                        experimentalBlurMethod="dimezisBlurView"
+                        experimentalBlurMethod=  {isHighEndDevice ?"dimezisBlurView": undefined}
                         style={{
                           height: 200,
                           width: 600,

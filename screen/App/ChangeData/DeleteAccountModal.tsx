@@ -68,7 +68,7 @@ export const DeleteAccountModal = ({
   return (
     <Portal>
       <>
-        <View style={styles.centeredView}>
+        <>
           <Modal
             statusBarTranslucent
             animationType="fade"
@@ -198,7 +198,7 @@ export const DeleteAccountModal = ({
               </View>
             </View>
           </Modal>
-        </View>
+        </>
       </>
     </Portal>
   );

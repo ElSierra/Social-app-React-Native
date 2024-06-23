@@ -78,7 +78,7 @@ export default function CustomToast() {
             exiting={FadeOutUp.springify().delay(1000)}
           >
             <BlurView
-              experimentalBlurMethod="dimezisBlurView"
+              experimentalBlurMethod= {isHighEndDevice ?"dimezisBlurView": undefined}
               tint={tint}
               style={{ position: "absolute", width, height: 60 + insets.top }}
               intensity={50}

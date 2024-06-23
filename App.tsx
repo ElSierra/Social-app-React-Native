@@ -65,6 +65,7 @@ import Notifications from "./util/notification";
 import { PixelRatio } from "react-native";
 import DeviceInfo from "react-native-device-info";
 import { setHighEnd } from "./redux/slice/prefs";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 enableFreeze(true);
 Sentry.init({
   dsn: "https://a5db1485b6b50a45db57917521128254@o4505750037725184.ingest.sentry.io/4505750586195968",
@@ -471,7 +472,9 @@ const Navigation = () => {
           style={style}
           backgroundColor="transparent"
         />
-        {renderRoute()}
+        <GestureHandlerRootView style={{ flex: 1,backgroundColor:dark?"black":"white" }}>
+          {renderRoute()}
+        </GestureHandlerRootView>
       </AnimatedSplashScreen>
     </NavigationContainer>
   );

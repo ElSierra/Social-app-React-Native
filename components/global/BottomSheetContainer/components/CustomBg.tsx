@@ -7,6 +7,7 @@ import Animated, {
 import { View, useColorScheme } from "react-native";
 import { BlurView } from "expo-blur";
 import useGetMode from "../../../../hooks/GetMode";
+import { useAppSelector } from "../../../../redux/hooks/hooks";
 
 export const CustomBackground: React.FC<BottomSheetBackgroundProps> = ({
   style,
@@ -31,7 +32,7 @@ export const CustomBackground: React.FC<BottomSheetBackgroundProps> = ({
     () => [style, containerAnimatedStyle],
     [style, containerAnimatedStyle]
   );
-
+  const isHighEndDevice = useAppSelector((state) => state?.prefs?.isHighEnd);
   // render
   return (
     <>
@@ -40,7 +41,7 @@ export const CustomBackground: React.FC<BottomSheetBackgroundProps> = ({
         style={[containerStyle, { borderRadius: 20, overflow: "hidden",alignItems:"center" }]}
       >
         <BlurView
-          experimentalBlurMethod="dimezisBlurView"
+          experimentalBlurMethod= {isHighEndDevice ?"dimezisBlurView": undefined}
           intensity={100}
           tint={tint}
           style={{ position: "absolute", height: "100%", width: "100%" }}

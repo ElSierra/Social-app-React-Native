@@ -6,7 +6,7 @@ import { useAppSelector } from "../../../../redux/hooks/hooks";
 import useGetMode from "../../../../hooks/GetMode";
 
 export default function DarkModeView() {
-  const mode = useAppSelector((state) => state.prefs.mode);
+  const mode = useAppSelector((state) => state?.prefs?.mode);
   const dark = useGetMode();
   const backgroundColor = dark ? "#969696" : "#B5AEAE";
   const color = dark ? "#FFFFFF" : "#000000";

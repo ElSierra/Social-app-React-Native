@@ -90,7 +90,7 @@ export default function FFContainer({
             >
               {isHighEndDevice && (
                 <BlurView
-                  experimentalBlurMethod="dimezisBlurView"
+                  experimentalBlurMethod= {isHighEndDevice ?"dimezisBlurView": undefined}
                   tint={tint}
                   style={{ position: "absolute", height, width }}
                   intensity={10}

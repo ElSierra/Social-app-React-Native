@@ -58,9 +58,9 @@ export const UploadPhotoModal = ({
   };
 
   return (
-    <Portal>
+    <>
       <>
-        <View style={styles.centeredView}>
+        <>
           <Modal
             statusBarTranslucent
             animationType="fade"
@@ -146,9 +146,9 @@ export const UploadPhotoModal = ({
               </View>
             </View>
           </Modal>
-        </View>
+        </>
       </>
-    </Portal>
+    </>
   );
 };
 

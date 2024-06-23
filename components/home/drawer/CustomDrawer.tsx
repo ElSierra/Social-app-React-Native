@@ -30,6 +30,7 @@ import { useLazyLogoutQuery } from "../../../redux/api/user";
 import { Switch } from "react-native-paper";
 import { setHighEnd } from "../../../redux/slice/prefs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useBottomSheetModal } from "@gorhom/bottom-sheet";
 export default function CustomDrawerContent(
   props: DrawerContentComponentProps
 ) {
@@ -89,11 +90,12 @@ export default function CustomDrawerContent(
   const onToggleSwitch = () => {
     dispatch(setHighEnd({ isHighEnd: !isHighEndDevice }));
   };
+  const modal = useBottomSheetModal()
   return (
     <View style={{ flex: 1, padding: 20,paddingBottom:Platform.select({ios:insets.bottom,android:10}) }}>
       {isHighEndDevice ? (
         <BlurView
-          experimentalBlurMethod="dimezisBlurView"
+          experimentalBlurMethod= {isHighEndDevice ?"dimezisBlurView": undefined}
           style={{
             position: "absolute",
             bottom: 0,

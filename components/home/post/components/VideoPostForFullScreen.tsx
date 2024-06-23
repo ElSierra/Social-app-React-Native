@@ -62,32 +62,38 @@ export default function VideoPostFullScreen({
   const [overlay, setShowOverlay] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+
   useEffect(() => {
-    video.current?.setIsLoopingAsync(true).catch((e) => {});
+    const initializeVideo = async () => {
+      try {
+        await video.current?.setIsLoopingAsync(true);
+      } catch (error) {
+        console.error("Failed to set looping:", error);
+      }
+    };
+    initializeVideo();
+
     return () => {
       if (video.current) {
-        video.current.unloadAsync(); // Unload the video resource
+        video.current.unloadAsync().catch((e) => console.error("Failed to unload video:", e));
       }
     };
   }, []);
 
-  useMemo(() => {
-    if (status?.positionMillis === status?.playableDurationMillis) {
-      setIsLoading(true);
-    } else {
-      setIsLoading(false);
-    }
+  useEffect(() => {
+    setIsLoading(status?.positionMillis === status?.playableDurationMillis);
   }, [status?.positionMillis, status?.playableDurationMillis]);
+
   const handlePlay = () => {
-    setPlay(!play);
-    setShowOverlay(!overlay);
+    setPlay((prev) => !prev);
+    setShowOverlay((prev) => !prev);
   };
 
-  const handleOverlayDelay = () => {
+  const handleOverlayDelay = useCallback(() => {
     setTimeout(() => {
       setShowOverlay(false);
     }, 10000);
-  };
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -193,7 +199,7 @@ export default function VideoPostFullScreen({
           }}
         >
           <Animated.View
-            entering={FadeInDown.springify().withCallback(callback)}
+             entering={FadeInDown.springify().withCallback(() => runOnJS(handleOverlayDelay)())}
             exiting={FadeOutDown.springify()}
             style={{
               position: "absolute",

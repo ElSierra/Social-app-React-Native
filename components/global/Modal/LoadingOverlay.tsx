@@ -24,6 +24,7 @@ export const LoadingModal = () => {
   const dark = useGetMode();
   const color = !dark ? "black" : "white";
   const tint = dark ? "dark" : "light";
+  const isHighEndDevice = useAppSelector((state) => state?.prefs?.isHighEnd);
   return (
     <Portal>
       <View style={styles.centeredView}>
@@ -37,7 +38,7 @@ export const LoadingModal = () => {
           }}
         >
           <BlurView
-            experimentalBlurMethod="dimezisBlurView"
+            experimentalBlurMethod= {isHighEndDevice ?"dimezisBlurView": undefined}
             tint={tint}
             style={{ position: "absolute", height, width }}
             intensity={10}

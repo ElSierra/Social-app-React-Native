@@ -1,8 +1,15 @@
-import React, { ReactNode, useCallback, useMemo, useRef } from "react";
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+} from "react";
 import { View, Text, StyleSheet } from "react-native";
 import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetView,
+  BottomSheetModal,
 } from "@gorhom/bottom-sheet";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks/hooks";
 import { closeSheet } from "../../../redux/slice/bottomSheet";
@@ -11,23 +18,35 @@ import CustomBackground from "./components/CustomBg";
 import DarkModeView from "./components/DarkModeView";
 import useGetMode from "../../../hooks/GetMode";
 
-export const BottomSheetContainer = ({ children }: { children: ReactNode }) => {
+export const BottomSheetContainer = () => {
   const dark = useGetMode();
   const style = dark ? "dark" : "light";
   const BottomSheetState = useAppSelector((state) => state.bottomSheet);
   const dispatch = useAppDispatch();
-  const bottomSheetRef = useRef<BottomSheet>(null);
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ["30%"], []);
 
-  if (BottomSheetState.isOpen) {
-    bottomSheetRef.current?.snapToIndex(0);
-  }
-
   const handleSheetChanges = useCallback((index: number) => {
-    if (index === -1) {
-      dispatch(closeSheet());
-    }
+    console.log("handleSheetChanges", index);
   }, []);
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  // variables
+
+  // callbacks
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  useEffect(() => {
+    if (BottomSheetState.isOpen) {
+      bottomSheetModalRef.current?.present()
+      dispatch(
+        closeSheet()
+      )
+    }
+  }, [BottomSheetState?.isOpen]);
+  console.log("bottomsheet", BottomSheetState);
 
   const renderBackdrop = useCallback(
     (props: any) => (
@@ -46,26 +65,34 @@ export const BottomSheetContainer = ({ children }: { children: ReactNode }) => {
 
   // renders
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        {children}
-        <BottomSheet
-          ref={bottomSheetRef}
-          index={-1}
-          handleIndicatorStyle={{ display: "none" }}
-          enablePanDownToClose
-          snapPoints={snapPoints}
-          backdropComponent={renderBackdrop}
-          onChange={handleSheetChanges}
-          backgroundComponent={CustomBackground}
-        >
-          <BottomSheetView style={styles.contentContainer}>
-            
-            <DarkModeView />
-          </BottomSheetView>
-        </BottomSheet>
-      </View>
-    </GestureHandlerRootView>
+    // <BottomSheetModal
+    //   ref={bottomSheetRef}
+    //   index={1}
+    //   handleIndicatorStyle={{ display: "none" }}
+    //   enablePanDownToClose
+    //   snapPoints={snapPoints}
+    //   backdropComponent={renderBackdrop}
+
+    //   backgroundComponent={CustomBackground}
+    // >
+    //   <BottomSheetView style={styles.contentContainer}>
+
+    //     <DarkModeView />
+    //   </BottomSheetView>
+    // </BottomSheetModal>
+    <BottomSheetModal
+      ref={bottomSheetModalRef}
+      index={0}
+      handleIndicatorStyle={{ display: "none" }}
+      backgroundComponent={CustomBackground}
+      snapPoints={snapPoints}
+      backdropComponent={renderBackdrop}
+      onChange={handleSheetChanges}
+    >
+      <BottomSheetView style={styles.contentContainer}>
+        <DarkModeView />
+      </BottomSheetView>
+    </BottomSheetModal>
   );
 };
 

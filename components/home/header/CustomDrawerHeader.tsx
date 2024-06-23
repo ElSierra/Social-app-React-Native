@@ -16,15 +16,17 @@ import {
   DrawerProps,
 } from "@react-navigation/drawer/lib/typescript/src/types";
 import useGetMode from "../../../hooks/GetMode";
+import { useAppSelector } from "../../../redux/hooks/hooks";
 function CustomDrawerHeader(props: DrawerHeaderProps) {
   const navigation = useNavigation<HomeNavigationProp>();
   const dark = useGetMode();
   const isDark = dark;
   const TextColor = isDark ? "white" : "black";
+  const isHighEndDevice = useAppSelector((state) => state?.prefs?.isHighEnd);
   return (
     <SafeAreaView>
       <BlurView
-        experimentalBlurMethod="dimezisBlurView"
+        experimentalBlurMethod= {isHighEndDevice ?"dimezisBlurView": undefined}
         style={[
           style.blurView,
           { borderBlockColor: isDark ? "#0000002F" : "#FFFFFF30" },

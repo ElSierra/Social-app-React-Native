@@ -67,7 +67,7 @@ export default function ModalChatText({
               style={{
                 fontFamily: "jakara",
                 color: isMe ? "white" : dark ? "white" : "black",
-                fontSize: isEmoji(text) ? 40 : 14,
+                fontSize: isEmoji(text) ? 40 : isModal ? 20 :15,
               }}
             >
               {text}

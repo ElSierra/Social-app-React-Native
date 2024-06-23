@@ -8,6 +8,7 @@ import {
   Pressable,
   View,
   Dimensions,
+  useWindowDimensions,
 } from "react-native";
 import { ActivityIndicator, Portal } from "react-native-paper";
 import useGetMode from "../../../hooks/GetMode";
@@ -15,12 +16,13 @@ import useGetMode from "../../../hooks/GetMode";
 import ChatBuilderText from "../../chat/ChatBuilderText";
 import Animated, { FadeInRight, FadeOutRight } from "react-native-reanimated";
 import ModalChatText from "../../chat/ModalChatText";
-import { useAppDispatch } from "../../../redux/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks/hooks";
 import { deleteMessage } from "../../../redux/slice/chat/chatlist";
 import useSocket from "../../../hooks/Socket";
 
 const { height } = Dimensions.get("screen");
 const { width } = Dimensions.get("window");
+
 export const ChatModal = React.memo(
   ({
     isOpen,
@@ -52,13 +54,16 @@ export const ChatModal = React.memo(
     const dispatch = useAppDispatch();
 
     const deleteMessageHandler = () => {
+      closeModal();
       socket?.emit("deleteMessage", text.id);
       dispatch(deleteMessage({ id: text.id, chatId }));
-      closeModal();
+    
     };
-
+    const isHighEndDevice = useAppSelector((state) => state?.prefs?.isHighEnd);
+  const {height:h,width:w} = useWindowDimensions()
+console.log("pageY",text.pageY)
     return (
-      <View style={styles.centeredView}>
+      <>
         <Modal
           statusBarTranslucent
           animationType="fade"
@@ -67,7 +72,7 @@ export const ChatModal = React.memo(
           onRequestClose={closeModal}
         >
           <BlurView
-            experimentalBlurMethod="dimezisBlurView"
+            experimentalBlurMethod= {isHighEndDevice ?"dimezisBlurView": undefined}
             tint={tint}
             style={{ position: "absolute", height, width }}
             intensity={40}
@@ -99,7 +104,7 @@ export const ChatModal = React.memo(
                 gap: 10,
                 paddingRight: 20,
                 position: "absolute",
-                top: text.pageY,
+                top: h/2,
                 pointerEvents: "box-none",
               }}
             >
@@ -153,7 +158,7 @@ export const ChatModal = React.memo(
             </Animated.View>
           </View>
         </Modal>
-      </View>
+      </>
     );
   }
 );

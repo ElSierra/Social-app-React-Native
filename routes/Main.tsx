@@ -1,4 +1,4 @@
-import { Platform, View } from "react-native";
+import { Platform, View,StyleSheet,Text } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { RootStackParamList } from "../types/navigation";
@@ -10,7 +10,7 @@ import ImageFullScreen from "../screen/App/ImageFullScreen";
 import Profile from "../screen/App/Profile";
 
 import useGetMode from "../hooks/GetMode";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from "@gorhom/bottom-sheet";
 import { BottomSheetContainer } from "../components/global/BottomSheetContainer";
 import PostContent from "../screen/App/PostContent";
 
@@ -21,7 +21,7 @@ import {
   useUpdateNotificationIdMutation,
 } from "../redux/api/user";
 import PostScreen from "../screen/App/PostScreen";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
   updateFollowers,
@@ -278,9 +278,32 @@ export default function Main() {
     };
   }, []);
   const isHighEndDevice = useAppSelector((state) => state?.prefs?.isHighEnd);
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  // variables
+  const snapPoints = useMemo(() => ['25%', '50%'], []);
+
+  // callbacks
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log('handleSheetChanges', index);
+  }, []);
+  useEffect(()=>{handlePresentModalPress()},[])
   return (
     <BottomSheetModalProvider>
-      <BottomSheetContainer>
+           {/* <BottomSheetModal
+          ref={bottomSheetModalRef}
+          index={1}
+          snapPoints={snapPoints}
+          onChange={handleSheetChanges}
+        >
+          <BottomSheetView style={styles.contentContainer}>
+            <Text>Awesome 🎉</Text>
+          </BottomSheetView>
+        </BottomSheetModal> */}
+        <BottomSheetContainer/>
         <Stack.Navigator
           screenOptions={{
             contentStyle: { backgroundColor },
@@ -288,7 +311,8 @@ export default function Main() {
         >
           <Stack.Screen
             name="Main"
-            options={{ headerShown: false }}
+            
+            options={{ headerShown: false,title:"Home" }}
             component={BottomTabNavigator}
           />
           <Stack.Screen
@@ -421,8 +445,8 @@ export default function Main() {
                 />
               ),
               title: "Post",
-              animation: "none",
-              presentation:"modal",
+              animation: "simple_push",
+             
               headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
               headerShadowVisible: false,
 
@@ -492,7 +516,20 @@ export default function Main() {
             }}
           />
         </Stack.Navigator>
-      </BottomSheetContainer>
+
     </BottomSheetModalProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 24,
+    justifyContent: 'center',
+    backgroundColor: 'grey',
+  },
+  contentContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
+});

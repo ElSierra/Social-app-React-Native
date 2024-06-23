@@ -33,9 +33,9 @@ export const ViewProfilePhoto = ({
   const tint = dark ? "dark" : "light";
 
   return (
-    <Portal>
+    <>
       <>
-        <View style={styles.centeredView}>
+        <>
           <Modal
             statusBarTranslucent
             animationType="fade"
@@ -86,9 +86,9 @@ export const ViewProfilePhoto = ({
               </View>
             </View>
           </Modal>
-        </View>
+        </>
       </>
-    </Portal>
+    </>
   );
 };
 
