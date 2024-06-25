@@ -1,4 +1,4 @@
-import { Platform, View,StyleSheet,Text } from "react-native";
+import { Platform, View, StyleSheet, Text } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { RootStackParamList } from "../types/navigation";
@@ -10,7 +10,11 @@ import ImageFullScreen from "../screen/App/ImageFullScreen";
 import Profile from "../screen/App/Profile";
 
 import useGetMode from "../hooks/GetMode";
-import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from "@gorhom/bottom-sheet";
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+  BottomSheetView,
+} from "@gorhom/bottom-sheet";
 import { BottomSheetContainer } from "../components/global/BottomSheetContainer";
 import PostContent from "../screen/App/PostContent";
 
@@ -181,7 +185,6 @@ export default function Main() {
   useEffect(() => {
     const rooms: string[] = [];
     for (let i in chatList) {
-
       rooms.push(chatList[i]?.id);
     }
     socket?.emit("chat", rooms);
@@ -281,19 +284,21 @@ export default function Main() {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
   // variables
-  const snapPoints = useMemo(() => ['25%', '50%'], []);
+  const snapPoints = useMemo(() => ["25%", "50%"], []);
 
   // callbacks
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
   }, []);
   const handleSheetChanges = useCallback((index: number) => {
-    console.log('handleSheetChanges', index);
+    console.log("handleSheetChanges", index);
   }, []);
-  useEffect(()=>{handlePresentModalPress()},[])
+  useEffect(() => {
+    handlePresentModalPress();
+  }, []);
   return (
     <BottomSheetModalProvider>
-           {/* <BottomSheetModal
+      {/* <BottomSheetModal
           ref={bottomSheetModalRef}
           index={1}
           snapPoints={snapPoints}
@@ -303,220 +308,218 @@ export default function Main() {
             <Text>Awesome 🎉</Text>
           </BottomSheetView>
         </BottomSheetModal> */}
-        <BottomSheetContainer/>
-        <Stack.Navigator
-          screenOptions={{
-            contentStyle: { backgroundColor },
+      <BottomSheetContainer />
+      <Stack.Navigator
+        screenOptions={{
+          contentStyle: { backgroundColor },
+        }}
+      >
+        <Stack.Screen
+          name="Main"
+          options={{ headerShown: false, title: "Home" }}
+          component={BottomTabNavigator}
+        />
+        <Stack.Screen
+          name="Profile"
+          options={{
+            headerTitle: "",
+
+            animation: "none",
+            headerTransparent: true,
+            headerTintColor: "white",
           }}
-        >
-          <Stack.Screen
-            name="Main"
-            
-            options={{ headerShown: false,title:"Home" }}
-            component={BottomTabNavigator}
-          />
-          <Stack.Screen
-            name="Profile"
-            options={{
-              headerTitle: "",
+          component={Profile}
+        />
+        <Stack.Screen
+          name="ProfilePeople"
+          options={{
+            headerTitle: "",
+            animation: "fade_from_bottom",
+            headerTransparent: true,
+            headerTintColor: "white",
+          }}
+          component={ProfilePeople}
+        />
+        <Stack.Screen
+          name="ImageFullScreen"
+          options={{
+            title: "",
+            animation: "fade_from_bottom",
 
-              animation: "none",
-              headerTransparent: true,
-              headerTintColor: "white",
-            }}
-            component={Profile}
-          />
-          <Stack.Screen
-            name="ProfilePeople"
-            options={{
-              headerTitle: "",
-              animation: "fade_from_bottom",
-              headerTransparent: true,
-              headerTintColor: "white",
-            }}
-            component={ProfilePeople}
-          />
-          <Stack.Screen
-            name="ImageFullScreen"
-            options={{
-              title: "",
-              animation: "fade_from_bottom",
+            headerTransparent: true,
+            headerShadowVisible: false,
+            headerTintColor: "white",
+          }}
+          component={ImageFullScreen}
+        />
+        <Stack.Screen
+          name="PostContent"
+          options={{
+            title: "",
 
-              headerTransparent: true,
-              headerShadowVisible: false,
-              headerTintColor: "white",
-            }}
-            component={ImageFullScreen}
-          />
-          <Stack.Screen
-            name="PostContent"
-            options={{
-              title: "",
+            headerShown: false,
+            animation: "fade_from_bottom",
+            headerTransparent: true,
+            headerShadowVisible: false,
+            headerTintColor: "white",
+          }}
+          component={PostContent}
+        />
+        <Stack.Screen
+          name="ChatScreen"
+          options={{
+            headerBackground: () => (
+              <>
+                {isHighEndDevice ? (
+                  <BlurView
+                    experimentalBlurMethod="dimezisBlurView"
+                    style={{
+                      position: "absolute",
+                      bottom: 0,
+                      left: 0,
+                      top: 0,
+                      right: 0,
+                      borderColor,
+                      borderBottomWidth: 0.5,
+                    }}
+                    tint={tint}
+                    intensity={200}
+                  />
+                ) : (
+                  <View
+                    style={{
+                      position: "absolute",
+                      bottom: 0,
+                      left: 0,
+                      top: 0,
+                      right: 0,
+                      borderColor,
+                      borderBottomWidth: 0.5,
+                      backgroundColor,
+                    }}
+                  />
+                )}
+              </>
+            ),
+            title: "Chat",
+            animation: "fade_from_bottom",
+            headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
+            headerShadowVisible: false,
 
-              headerShown: false,
-              animation: "fade_from_bottom",
-              headerTransparent: true,
-              headerShadowVisible: false,
-              headerTintColor: "white",
-            }}
-            component={PostContent}
-          />
-          <Stack.Screen
-            name="ChatScreen"
-            options={{
-              headerBackground: () => (
-                <>
-                  {isHighEndDevice ? (
-                    <BlurView
-                      experimentalBlurMethod="dimezisBlurView"
-                      style={{
-                        position: "absolute",
-                        bottom: 0,
-                        left: 0,
-                        top: 0,
-                        right: 0,
-                        borderColor,
-                        borderBottomWidth: 0.5,
-                      }}
-                      tint={tint}
-                      intensity={200}
-                    />
-                  ) : (
-                    <View
-                      style={{
-                        position: "absolute",
-                        bottom: 0,
-                        left: 0,
-                        top: 0,
-                        right: 0,
-                        borderColor,
-                        borderBottomWidth: 0.5,
-                        backgroundColor,
-                      }}
-                    />
-                  )}
-                </>
-              ),
-              title: "Chat",
-              animation: "fade_from_bottom",
-              headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
-              headerShadowVisible: false,
+            headerTransparent: true,
+            headerTitleAlign: "center",
+            headerTintColor: color,
+            headerStyle: {
+              backgroundColor: isHighEndDevice
+                ? "transparent"
+                : backgroundColor,
+            },
+          }}
+          component={ChatScreen}
+        />
+        <Stack.Screen
+          name="VideoFullScreen"
+          options={{
+            title: "",
+            contentStyle: { backgroundColor: "black" },
+            animation: "fade_from_bottom",
+            headerTransparent: true,
+            headerShadowVisible: false,
+            headerTintColor: "white",
+          }}
+          component={VideoFullScreen}
+        />
+        <Stack.Screen
+          name="ViewPost"
+          options={{
+            headerBackground: () => (
+              <BlurView
+                experimentalBlurMethod="dimezisBlurView"
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  top: 0,
+                  right: 0,
+                  borderColor,
+                  borderBottomWidth: 0.5,
+                }}
+                tint={tint}
+                intensity={200}
+              />
+            ),
+            title: "Post",
+            animation: Platform.OS === "android" ? "none" : undefined,
 
-              headerTransparent: true,
-              headerTitleAlign: "center",
-              headerTintColor: color,
-              headerStyle: {
-                backgroundColor: isHighEndDevice
-                  ? "transparent"
-                  : backgroundColor,
-              },
-            }}
-            component={ChatScreen}
-          />
-          <Stack.Screen
-            name="VideoFullScreen"
-            options={{
-              title: "",
-              contentStyle: { backgroundColor: "black" },
-              animation: "fade_from_bottom",
-              headerTransparent: true,
-              headerShadowVisible: false,
-              headerTintColor: "white",
-            }}
-            component={VideoFullScreen}
-          />
-          <Stack.Screen
-            name="ViewPost"
-            options={{
-              headerBackground: () => (
-                <BlurView
-                  experimentalBlurMethod="dimezisBlurView"
-                  style={{
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    top: 0,
-                    right: 0,
-                    borderColor,
-                    borderBottomWidth: 0.5,
-                  }}
-                  tint={tint}
-                  intensity={200}
-                />
-              ),
-              title: "Post",
-              animation: "simple_push",
-             
-              headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
-              headerShadowVisible: false,
+            headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
+            headerShadowVisible: false,
 
-              headerTransparent: true,
-              headerTitleAlign: "center",
-              headerTintColor: color,
-              headerStyle: {
-                backgroundColor: "transparent",
-              },
-            }}
-            component={PostScreen}
-          />
-          <Stack.Screen
-            name="FollowingFollowers"
-            options={{
-              title: "Follow List",
-              animation: "fade_from_bottom",
-              headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
-              headerShadowVisible: false,
+            headerTransparent: true,
+            headerTitleAlign: "center",
+            headerTintColor: color,
+            headerStyle: {
+              backgroundColor: "transparent",
+            },
+          }}
+          component={PostScreen}
+        />
+        <Stack.Screen
+          name="FollowingFollowers"
+          options={{
+            title: "Follow List",
+            animation: "fade_from_bottom",
+            headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
+            headerShadowVisible: false,
 
-              headerTransparent: true,
-              headerTitleAlign: "center",
-              headerTintColor: color,
-              headerStyle: {
-                backgroundColor: "transparent",
-              },
-            }}
-            component={FollowingFollowers}
-          />
-          <Stack.Screen
-            name="EditProfile"
-            options={{
-              title: "Edit Profile",
-              animation: "none",
-              headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
-              headerShadowVisible: false,
+            headerTransparent: true,
+            headerTitleAlign: "center",
+            headerTintColor: color,
+            headerStyle: {
+              backgroundColor: "transparent",
+            },
+          }}
+          component={FollowingFollowers}
+        />
+        <Stack.Screen
+          name="EditProfile"
+          options={{
+            title: "Edit Profile",
+            animation: "none",
+            headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
+            headerShadowVisible: false,
 
-              headerTransparent: true,
-              headerTitleAlign: "center",
-              headerTintColor: color,
-              headerStyle: {
-                backgroundColor: "transparent",
-              },
-            }}
-            component={EditProfile}
-          />
-          <Stack.Screen
-            name="SearchUser"
-            component={SearchUsers}
-            options={{
-              headerTintColor: color,
-              animation: "fade_from_bottom",
-              headerStyle: { backgroundColor },
-              headerTitle: "",
-              headerShadowVisible: false,
-            }}
-          />
-          <Stack.Screen
-            name="ChangeData"
-            component={ChangeData}
-            options={{
-              headerTintColor: color,
-              animation: "none",
-              headerStyle: { backgroundColor },
-              headerTitle: "",
-              headerShadowVisible: false,
-            }}
-          />
-        </Stack.Navigator>
-
+            headerTransparent: true,
+            headerTitleAlign: "center",
+            headerTintColor: color,
+            headerStyle: {
+              backgroundColor: "transparent",
+            },
+          }}
+          component={EditProfile}
+        />
+        <Stack.Screen
+          name="SearchUser"
+          component={SearchUsers}
+          options={{
+            headerTintColor: color,
+            animation: "fade_from_bottom",
+            headerStyle: { backgroundColor },
+            headerTitle: "",
+            headerShadowVisible: false,
+          }}
+        />
+        <Stack.Screen
+          name="ChangeData"
+          component={ChangeData}
+          options={{
+            headerTintColor: color,
+            animation: "none",
+            headerStyle: { backgroundColor },
+            headerTitle: "",
+            headerShadowVisible: false,
+          }}
+        />
+      </Stack.Navigator>
     </BottomSheetModalProvider>
   );
 }
@@ -525,11 +528,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
-    justifyContent: 'center',
-    backgroundColor: 'grey',
+    justifyContent: "center",
+    backgroundColor: "grey",
   },
   contentContainer: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
   },
 });

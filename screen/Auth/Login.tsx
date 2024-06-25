@@ -70,8 +70,8 @@ export default function Login({ navigation }: LoginScreen) {
   }, []);
 
   const onSubmit = (data: { userName: string; password: string }) => {
-    userApi.util.resetApiState();
-    servicesApi.util.resetApiState();
+    // userApi.util.resetApiState();
+    // servicesApi.util.resetApiState();
     login({ userName: data.userName.trim(), password: data.password })
       .unwrap()
       .then((e) => {

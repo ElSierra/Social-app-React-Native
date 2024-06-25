@@ -25,7 +25,11 @@ import Button from "../../components/global/Buttons/Button";
 import CommentButton from "../../components/home/post/comment/PostButton";
 import uuid from "react-native-uuid";
 import { BlurView } from "expo-blur";
-import Animated, { FadeIn } from "react-native-reanimated";
+import Animated, {
+  FadeIn,
+  useAnimatedKeyboard,
+  useAnimatedStyle,
+} from "react-native-reanimated";
 
 export default function PostScreen({ navigation, route }: ViewPost) {
   const { params } = route;
@@ -34,6 +38,11 @@ export default function PostScreen({ navigation, route }: ViewPost) {
   const [commentText, setCommentText] = useState<string | null>(null);
   const user = useAppSelector((state) => state.user.data);
   const [postComment, postCommentResponse] = usePostCommentMutation();
+
+  const keyboard = useAnimatedKeyboard({ isStatusBarTranslucentAndroid: true });
+  const animatedStyles = useAnimatedStyle(() => ({
+    bottom: keyboard.height.value,
+  }));
 
   const dark = useGetMode();
   const color = dark ? "white" : "black";
@@ -199,27 +208,21 @@ export default function PostScreen({ navigation, route }: ViewPost) {
           />
         )}
       />
-      <View
-        style={{
-          position: "absolute",
-          bottom: 0,
-          zIndex: 999,
-          width: "100%",
-          backgroundColor,
-          paddingBottom: 10,
-          paddingHorizontal: 25,
-        }}
-      >
-        <BlurView
-          intensity={200}
-          tint={tint}
-          style={{
+      <Animated.View
+        style={[
+          {
             position: "absolute",
-            width: "150%",
-            height: "150%",
-            opacity: 0.1,
-          }}
-        />
+            bottom: 0,
+            zIndex: 999,
+            width: "100%",
+            backgroundColor,
+            paddingBottom: 10,
+            paddingHorizontal: 25,
+          },
+          animatedStyles,
+        ]}
+      >
+        
         <TextInput
           placeholder="Post comment"
           value={commentText || ""}
@@ -246,7 +249,7 @@ export default function PostScreen({ navigation, route }: ViewPost) {
             />
           )}
         </View>
-      </View>
+      </Animated.View>
     </Animated.View>
   );
 }

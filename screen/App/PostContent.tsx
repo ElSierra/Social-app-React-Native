@@ -7,6 +7,7 @@ import {
   FlatList,
   Dimensions,
   Keyboard,
+  useWindowDimensions,
 } from "react-native";
 import AnimatedScreen from "../../components/global/AnimatedScreen";
 import { CameraIcon, CloseCircleIcon } from "../../components/icons";
@@ -41,8 +42,16 @@ import {
   openLoadingModal,
 } from "../../redux/slice/modal/loading";
 import PickVideoButton from "../../components/postContent/PickVideoButton";
-import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated";
+import Animated, {
+  FadeIn,
+  FadeInDown,
+  FadeOut,
+  FadeOutDown,
+} from "react-native-reanimated";
 import { Image } from "expo-image";
+import { AnimatedCircularProgress } from "react-native-circular-progress";
+
+import * as Progress from "react-native-progress";
 
 const width = Dimensions.get("window").width;
 export default function PostContent({ navigation }: PostContentProp) {
@@ -81,7 +90,7 @@ export default function PostContent({ navigation }: PostContentProp) {
   const [postText, setPostText] = useState<string | undefined>(undefined);
   const [done, setDone] = useState(true);
   const [videoTitle, setVideoTitle] = useState<string | undefined>(undefined);
-
+  const { width } = useWindowDimensions();
   function handleSetAudioPost(
     mimeType: string,
     uri: string,
@@ -194,7 +203,10 @@ export default function PostContent({ navigation }: PostContentProp) {
         });
     }
     if (postAudio) {
-      console.log("🚀 ~ file: PostContent.tsx:197 ~ useEffect ~ postAudio:", postAudio)
+      console.log(
+        "🚀 ~ file: PostContent.tsx:197 ~ useEffect ~ postAudio:",
+        postAudio
+      );
       setDone(false);
       audio(postAudio)
         .unwrap()
@@ -203,7 +215,7 @@ export default function PostContent({ navigation }: PostContentProp) {
           setFTServer(r.audio);
         })
         .catch((e) => {
-          console.log("🚀 ~ file: PostContent.tsx:206 ~ useEffect ~ e:", e)
+          console.log("🚀 ~ file: PostContent.tsx:206 ~ useEffect ~ e:", e);
           setDone(true);
 
           dispatch(openToast({ text: "Audio didn't upload", type: "Failed" }));
@@ -214,11 +226,15 @@ export default function PostContent({ navigation }: PostContentProp) {
       video(postPhoto)
         .unwrap()
         .then((r) => {
+          console.log("🚀 ~ file: PostContent.tsx:229 ~ .then ~ r:", r)
+
           setDone(true);
           setFTServer(r.video);
           setVideoThumbnail(r.thumbNail);
         })
         .catch((e) => {
+          console.log("🚀 ~ file: PostContent.tsx:236 ~ useEffect ~ e:", e)
+
           setDone(true);
 
           dispatch(openToast({ text: "video didn't upload", type: "Failed" }));
@@ -290,6 +306,7 @@ export default function PostContent({ navigation }: PostContentProp) {
     }
     if (postPhoto?.mimeType.startsWith("video/")) {
       if (fileToServer) {
+        console.log("filetoServer", fileToServer);
         dispatch(openLoadingModal());
         postContent({
           videoUri: fileToServer,
@@ -331,6 +348,23 @@ export default function PostContent({ navigation }: PostContentProp) {
         });
     }
   };
+  const [progress, setProgress] = useState(0);
+  console.log(
+    "🚀 ~ file: PostContent.tsx:348 ~ PostContent ~ progress:",
+    progress
+  );
+
+  const [compressing, setCompressing] = useState(false);
+  console.log(
+    "🚀 ~ file: PostContent.tsx:338 ~ PostContent ~ compressing:",
+    compressing
+  );
+
+  useEffect(() => {
+    if (progress > 0.9) {
+      setProgress(0);
+    }
+  }, [progress]);
 
   return (
     <AnimatedScreen>
@@ -462,18 +496,42 @@ export default function PostContent({ navigation }: PostContentProp) {
             style={{
               position: "absolute",
               bottom: 0,
-              flexDirection: "row",
+
               gap: 10,
               width,
               marginBottom: 20,
             }}
           >
+            {(progress > 0 || compressing) && (
+              <Animated.View
+                entering={FadeIn.springify()}
+                exiting={FadeOut.springify()}
+                style={{
+                  width: "100%",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Progress.Bar
+                  progress={progress}
+                  animated
+                  indeterminate={compressing}
+                  color={dark ? "white" : "black"}
+                  width={width * 0.95}
+                />
+              </Animated.View>
+            )}
+
             <FlatList
               horizontal
               ListHeaderComponent={
                 <View style={{ flexDirection: "row", gap: 10 }}>
                   <PickImageButton handleSetPhotoPost={handleSetPhotoPost} />
-                  <PickVideoButton handleSetPhotoPost={handleSetPhotoPost} />
+                  <PickVideoButton
+                    handleSetPhotoPost={handleSetPhotoPost}
+                    setProgress={setProgress}
+                    setIsCompressing={setCompressing}
+                  />
                   <PickAudioButton handleSetAudioPost={handleSetAudioPost} />
                 </View>
               }

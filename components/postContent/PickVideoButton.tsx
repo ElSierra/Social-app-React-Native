@@ -1,12 +1,17 @@
 import { View, Text, Pressable } from "react-native";
 import React from "react";
 import { CameraIcon, VideoIcon } from "../icons";
-import ImagePicker from "react-native-image-crop-picker";
+import ImagePicker, { launchImageLibrary } from "react-native-image-picker";
 import useGetMode from "../../hooks/GetMode";
+import { Video } from "react-native-compressor";
 export default function PickVideoButton({
   handleSetPhotoPost,
+  setProgress,
+  setIsCompressing
 }: {
   handleSetPhotoPost: (mimeType: string, uri: string, size: number) => void;
+  setProgress: any;
+setIsCompressing: any;
 }) {
   const dark = useGetMode();
   const backgroundColor = dark ? "white" : "black";
@@ -28,17 +33,49 @@ export default function PickVideoButton({
     >
       <Pressable
         onPress={() => {
-          ImagePicker.openPicker({
-          
-            mediaType: "video",
-            compressImageQuality: 0.5,
-          })
-            .then((video) => {
-              
+          setIsCompressing(true);
+          launchImageLibrary({ mediaType: "video" }, async (video) => {
+            setIsCompressing(false);
+            console.log("🚀 ~ file: PickVideoButton.tsx:37 ~ launchImageLibrary ~ video:", video)
 
-              handleSetPhotoPost(video?.mime, video?.path, video?.size);
-            })
-            .catch((e) => {});
+            if (video.assets && video.assets.length > 0) {
+              const result = await Video.compress(
+                video?.assets[0].uri as string,
+                {
+                  progressDivider: 10,
+                  downloadProgress: (progress) => {
+                    console.log("Download Progress: ", progress);
+                   
+                  },
+                },
+                (progress) => {
+                  
+                  console.log("Compression Progress: ", progress);
+                  setProgress(progress);
+                }
+              );
+              console.log(
+                "🚀 ~ file: PickVideoButton.tsx:46 ~ launchImageLibrary ~ result:",
+                result
+              );
+
+              handleSetPhotoPost(
+                video?.assets[0]?.type as string,
+                result as string,
+                video?.assets[0].fileSize as number
+              );
+            }
+          });
+          // ImagePicker.openPicker({
+
+          //   mediaType: "video",
+
+          // })
+          //   .then((video) => {
+
+          //     handleSetPhotoPost(video?.mime, video?.path, video?.size);
+          //   })
+          //   .catch((e) => {});
         }}
         android_ripple={{ color: rippleColor, foreground: true }}
         style={{

@@ -21,8 +21,8 @@ export default function Fab({ item }: { item: JSX.Element }) {
         bottom: 100,
         borderRadius: 999,
         right: 10,
-        borderColor: "#99979788",
-        borderWidth: 1.5,
+        borderColor: dark?"#FFFFFF1E":"#00000012",
+        borderWidth: 0.5,
       
         alignItems: "center",
         backgroundColor: !isHighEndDevice ? backgroundColor : undefined,

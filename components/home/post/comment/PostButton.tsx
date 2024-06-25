@@ -50,7 +50,7 @@ export default function CommentButton({
           alignItems: "center",
         }}
       >
-        <Text style={{ color, fontFamily: "mulish" }}>Comment</Text>
+        <Text style={{ color, fontFamily: "mulish" }}>Post</Text>
       </Pressable>
     </View>
   );

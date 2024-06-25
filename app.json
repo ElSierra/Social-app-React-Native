@@ -41,7 +41,8 @@
           "icon": "./assets/notification.png",
           "color": "#ffffff"
         }
-      ]
+      ],
+      "react-native-compressor"
     ],
     "owner": "hojoisaac"
   }

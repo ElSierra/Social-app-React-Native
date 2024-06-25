@@ -2,7 +2,7 @@ import { View, Text, Dimensions, Pressable } from "react-native";
 import React from "react";
 import { Image } from "expo-image";
 import { dateAgo } from "../../../util/date";
-import { FollowIcon } from "../../icons";
+import { FollowIcon, ProfileIcon } from "../../icons";
 import useGetMode from "../../../hooks/GetMode";
 import { useNavigation } from "@react-navigation/native";
 import { HomeNavigationProp } from "../../../types/navigation";
@@ -90,10 +90,14 @@ export default function NotificationBuilder({
             }}
           >
             <View style={{ justifyContent: "center" }}>
-              <Image
-                source={{ uri: imageUri }}
-                style={{ height: 30, width: 30, borderRadius: 999 }}
-              />
+            {imageUri ? (
+            <Image
+              source={{ uri: imageUri }}
+              style={{ height: 30, width: 30, borderRadius: 9999 }}
+            />
+          ) : (
+            <ProfileIcon color={color} size={34} />
+          )}
             </View>
             <View style={{ justifyContent: "center" }}>
               <Text
