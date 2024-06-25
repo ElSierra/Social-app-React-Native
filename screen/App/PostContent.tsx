@@ -47,6 +47,8 @@ import Animated, {
   FadeInDown,
   FadeOut,
   FadeOutDown,
+  useAnimatedKeyboard,
+  useAnimatedStyle,
 } from "react-native-reanimated";
 import { Image } from "expo-image";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
@@ -80,6 +82,11 @@ export default function PostContent({ navigation }: PostContentProp) {
     });
     setPostAudio(null);
   }
+  const keyboard = useAnimatedKeyboard({ isStatusBarTranslucentAndroid: true });
+  const animatedStyles = useAnimatedStyle(() => ({
+    bottom: keyboard.height.value,
+  }));
+
   const [fileToServer, setFTServer] = useState<string | undefined>(undefined);
   const [photoServer, setPhotoServer] = useState<
     { uri: string; width: number; height: number } | undefined
@@ -493,14 +500,14 @@ export default function PostContent({ navigation }: PostContentProp) {
           <Animated.View
             entering={FadeInDown.springify()}
             exiting={FadeOutDown.springify()}
-            style={{
+            style={[{
               position: "absolute",
               bottom: 0,
 
               gap: 10,
               width,
               marginBottom: 20,
-            }}
+            },animatedStyles]}
           >
             {(progress > 0 || compressing) && (
               <Animated.View
