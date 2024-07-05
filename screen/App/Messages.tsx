@@ -1,5 +1,5 @@
 import { View, Text, Animated } from "react-native";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   useFocusEffect,
   useIsFocused,
@@ -13,12 +13,14 @@ import { AddMessage, MessagesIcon } from "../../components/icons";
 import useGetMode from "../../hooks/GetMode";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
 import { clearNewFromChatList } from "../../redux/slice/chat/chatlist";
+import { useLazyGetAllChatsQuery } from "../../redux/api/chat";
 
 export default function Messages() {
   const offset = useRef(new Animated.Value(0)).current;
   const dark = useGetMode();
   const color = dark ? "#FFFFFF" : "#000000";
   const dispatch = useAppDispatch();
+  const [chatlist, chatlistRes] = useLazyGetAllChatsQuery();
   useEffect(() => {
     return () => {
       offset.removeAllListeners();
@@ -27,6 +29,7 @@ export default function Messages() {
 
   useFocusEffect(
     useCallback(() => {
+      chatlist(null).refetch()
       dispatch(clearNewFromChatList());
     }, [])
   );

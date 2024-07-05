@@ -15,8 +15,10 @@ import {
 import { openToast } from "../../../redux/slice/toast/toast";
 
 import Bio from "../../../components/profile/Bio";
+import Animated, { AnimatedRef, ScrollHandlerProcessed, SequencedTransition } from "react-native-reanimated";
+import { ScrollView } from "react-native-gesture-handler";
 
-export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
+export default function MyPosts({ onScroll }: { onScroll: ScrollHandlerProcessed<Record<string, unknown>> }) {
   const dark = useGetMode();
   const dispatch = useAppDispatch();
   const [posts, setPosts] = useState<IPost[]>([]);
@@ -142,17 +144,14 @@ export default function MyPosts({ offset }: { offset: NativeAnimated.Value }) {
   return (
     <>
       <View style={{ flex: 1 }}>
-        <NativeAnimated.FlatList
-          ref={ref}
+        <Animated.FlatList
+          onScroll={onScroll}
+          itemLayoutAnimation={SequencedTransition}
           data={posts.length === 0 ? postRes.data?.posts : posts}
           decelerationRate={0.991}
           ListHeaderComponent={<Bio />}
           ListFooterComponent={renderFooter}
           scrollEventThrottle={16}
-          onScroll={NativeAnimated.event(
-            [{ nativeEvent: { contentOffset: { y: offset } } }],
-            { useNativeDriver: false }
-          )}
           keyExtractor={keyExtractor}
           onEndReachedThreshold={0.3}
           onEndReached={fetchMoreData}

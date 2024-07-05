@@ -234,12 +234,12 @@ export default function HomeAll() {
         <Animated.View
           style={{ flex: 1 }}
           entering={FadeIn.springify().duration(400)}
-          exiting={FadeOutDown.springify()}
+          exiting={FadeOut.springify()}
         >
-          <FlatList
+        <FlashList
             data={posts.data}
             decelerationRate={0.991}
-            // estimatedItemSize={300}
+            estimatedItemSize={250}
             ListFooterComponent={renderFooter}
             refreshControl={
               <RefreshControl
@@ -248,9 +248,10 @@ export default function HomeAll() {
                 colors={["red", "blue"]}
               />
             }
+            keyExtractor={keyExtractor}
             onEndReachedThreshold={0.3}
             onEndReached={fetchMoreData}
-            // estimatedListSize={{ width, height }}
+            estimatedListSize={{ width: width, height: height }}
             renderItem={renderItem}
             contentContainerStyle={{ paddingTop: 100, paddingBottom: 100 }}
           />

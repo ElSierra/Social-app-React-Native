@@ -67,6 +67,8 @@ export default function Header({
   const handleSetOpen = () => {
     setIsOpen(!isOpen);
   };
+
+  console.log("rocket",user.data?.imageUri)
   return (
     <>
     <ViewProfilePhoto isOpen={isOpen} closeModal={handleSetOpen} imageUri={imageUri} />
@@ -147,7 +149,7 @@ export default function Header({
             setIsOpen(true)
           }}
         >
-          {user.data?.imageUri ? (
+          {user?.data?.imageUri ? (
             <Image
               contentFit="cover"
               style={{ height: "100%", width: "100%", borderRadius: 999 }}

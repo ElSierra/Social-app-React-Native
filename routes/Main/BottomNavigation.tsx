@@ -47,6 +47,7 @@ export function BottomTabNavigator() {
   const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
   return (
     <Tab.Navigator
+    
       tabBar={(props) => (
         <>
           {isHighEndDevice ? (
@@ -77,18 +78,19 @@ export function BottomTabNavigator() {
           )}
         </>
       )}
+      
       sceneContainerStyle={{ backgroundColor }}
-      screenOptions={({ navigation, route }) => {
+      screenOptions={({ navigation, route ,}) => {
         return {
           tabBarHideOnKeyboard: true,
           tabBarShowLabel: false,
           headerStatusBarHeight: 30,
-
+animation: "shift",
           tabBarStyle: {
             backgroundColor: isHighEndDevice ? "transparent" : backgroundColor,
             elevation: 0,
             height: Platform.OS == "ios" ? 40 + insets.bottom : 60,
-            paddingBottom: 10,
+            paddingBottom: 20,
             borderTopWidth: 0.2,
 
             borderColor,

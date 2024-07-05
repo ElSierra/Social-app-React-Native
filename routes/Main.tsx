@@ -58,9 +58,10 @@ import { useLazyGetAllChatsQuery } from "../redux/api/chat";
 import FollowingFollowers from "../screen/App/FollowingFollowers";
 import EditProfile from "../screen/App/EditProfile";
 import ChangeData from "../screen/App/ChangeData";
+import { createStackNavigator } from "@react-navigation/stack";
 const BACKGROUND_FETCH_TASK = "background-fetch";
 const Stack = createNativeStackNavigator<RootStackParamList>();
-
+const JStack = createStackNavigator()
 TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
   const now = Date.now();
 
@@ -380,6 +381,7 @@ export default function Main() {
                       top: 0,
                       right: 0,
                       borderColor,
+                      height: 300,
                       borderBottomWidth: 0.5,
                     }}
                     tint={tint}
@@ -395,7 +397,7 @@ export default function Main() {
                       right: 0,
                       borderColor,
                       borderBottomWidth: 0.5,
-                      backgroundColor,
+                      backgroundColor: "red",
                     }}
                   />
                 )}
@@ -410,9 +412,7 @@ export default function Main() {
             headerTitleAlign: "center",
             headerTintColor: color,
             headerStyle: {
-              backgroundColor: isHighEndDevice
-                ? "transparent"
-                : backgroundColor,
+              backgroundColor,
             },
           }}
           component={ChatScreen}
@@ -432,24 +432,24 @@ export default function Main() {
         <Stack.Screen
           name="ViewPost"
           options={{
-            headerBackground: () => (
-              <BlurView
-                experimentalBlurMethod="dimezisBlurView"
-                style={{
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  top: 0,
-                  right: 0,
-                  borderColor,
-                  borderBottomWidth: 0.5,
-                }}
-                tint={tint}
-                intensity={200}
-              />
-            ),
+            // headerBackground: () => (
+            //   <BlurView
+            //     experimentalBlurMethod="dimezisBlurView"
+            //     style={{
+            //       position: "absolute",
+            //       bottom: 0,
+            //       left: 0,
+            //       top: 0,
+            //       right: 0,
+            //       borderColor,
+            //       borderBottomWidth: 0.5,
+            //     }}
+            //     tint={tint}
+            //     intensity={200}
+            //   />
+            // ),
             title: "Post",
-            animation: Platform.OS === "android" ? "none" : undefined,
+      animation:"fade_from_bottom",
 
             headerTitleStyle: { fontFamily: "uberBold", fontSize: 20, color },
             headerShadowVisible: false,

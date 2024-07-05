@@ -129,8 +129,8 @@ export default function PostScreen({ navigation, route }: ViewPost) {
   };
   const tint = dark ? "dark" : "light";
   return (
-    <Animated.View
-      entering={FadeIn.duration(400)}
+    <View
+     
       style={{ flex: 1, marginTop: 100 }}
     >
       <FlatList
@@ -250,6 +250,6 @@ export default function PostScreen({ navigation, route }: ViewPost) {
           )}
         </View>
       </Animated.View>
-    </Animated.View>
+    </View>
   );
 }

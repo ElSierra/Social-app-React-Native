@@ -7,11 +7,22 @@ import ExpoStatusBar from "expo-status-bar/build/ExpoStatusBar";
 import Bio from "../../components/profile/Bio";
 import MyPosts from "./ProfileScreens/MyPosts";
 import { useGetFollowDetailsQuery } from "../../redux/api/user";
+import {
+  useAnimatedRef,
+  useAnimatedScrollHandler,
+  useScrollViewOffset,
+  useSharedValue,
+} from "react-native-reanimated";
 
 export default function Profile() {
-  const offset = useRef(new Animated.Value(0)).current;
   const getFollowData = useGetFollowDetailsQuery(null);
+  const offset = useSharedValue(0);
+  console.log("🚀 ~ file: Profile.tsx:16 ~ Profile ~ offset:", offset);
+  const scrollHandler = useAnimatedScrollHandler((event) => {
+    console.log("🚀 ~ file: Profile.tsx:22 ~ scrollHandler ~ event:", event)
 
+    offset.value = event.contentOffset.y;
+  });
   useEffect(() => {
     console.log(getFollowData.data);
     getFollowData.refetch();
@@ -21,8 +32,8 @@ export default function Profile() {
     <AnimatedScreen>
       <ExpoStatusBar style="light" backgroundColor="transparent" />
       <View style={{ flex: 1 }}>
-        <Header animatedValue={offset} />
-        <MyPosts offset={offset} />
+        <Header offset={offset} />
+        <MyPosts onScroll={scrollHandler} />
       </View>
     </AnimatedScreen>
   );

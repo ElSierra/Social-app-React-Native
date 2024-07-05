@@ -1,12 +1,5 @@
-import { Image,ImageBackground } from "expo-image";
-import {
-  View,
-  Text,
-  Animated,
-  Image as NativeImage,
-  
-  Pressable,
-} from "react-native";
+import { Image, ImageBackground } from "expo-image";
+import { View, Text, Image as NativeImage, Pressable } from "react-native";
 import { useAppSelector } from "../../redux/hooks/hooks";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Button from "../global/Buttons/Button";
@@ -15,39 +8,63 @@ import { ProfileIcon } from "../icons";
 import useGetMode from "../../hooks/GetMode";
 import { UploadPhotoModal } from "./UploadPhotoModal";
 import { useState } from "react";
+import Animated, {
+  Extrapolation,
+  SharedValue,
+  interpolate,
+  useAnimatedReaction,
+  useAnimatedStyle,
+  useSharedValue,
+} from "react-native-reanimated";
 
-
-export default function Header({
-  animatedValue,
-}: {
-  animatedValue: Animated.Value;
-}) {
+export default function Header({ offset }: { offset: SharedValue<number> }) {
   const user = useAppSelector((state) => state.user);
   const follow = useAppSelector((state) => state.followers);
-  const HEADER_HEIGHT = 100;
+  const HEADER_HEIGHT = 300;
   const Header_Min_Height = 70;
   const insets = useSafeAreaInsets();
 
-  const headerHeight = animatedValue.interpolate({
-    inputRange: [0, HEADER_HEIGHT + insets.top],
-    outputRange: [HEADER_HEIGHT + insets.top, insets.top + 58],
-    extrapolate: "clamp",
-  });
-  const imageSize = animatedValue.interpolate({
-    inputRange: [0, 80 + insets.top],
-    outputRange: [80, 0],
-    extrapolate: "clamp",
+  const imageSize = interpolate(offset.value, [0, 80 + insets.top], [80, 0]);
+
+  const opacity = interpolate(offset.value, [0, 1 + insets.top], [1, 0]);
+  const opacityText = interpolate(
+    offset.value,
+    [0, 1 + insets.top + 58],
+    [0, 1]
+  );
+  const h = useSharedValue(300);
+
+  useAnimatedReaction(
+    () => {
+      return offset.value;
+    },
+    (curr) => {
+      console.log(curr);
+      h.value = offset.value / 2;
+    }
+  );
+  const headerHeight = useAnimatedStyle(() => {
+    return {
+      height: interpolate(
+        offset.value,
+        [0, HEADER_HEIGHT + insets.top],
+        [HEADER_HEIGHT / 3 + insets.top, insets.top + 58],
+        Extrapolation.CLAMP
+      ),
+    };
   });
 
-  const opacity = animatedValue.interpolate({
-    inputRange: [0, 1 + insets.top],
-    outputRange: [1, 0],
-    extrapolate: "clamp",
+  const imageStyle = useAnimatedStyle(() => {
+    return {
+      height: interpolate(offset.value, [0, 80 + insets.top], [80, 0]),
+      aspectRatio: 1,
+      opacity: interpolate(offset.value, [0, 1 + insets.top], [1, 0]),
+    };
   });
-  const opacityText = animatedValue.interpolate({
-    inputRange: [0, 1 + insets.top + 58],
-    outputRange: [0, 1],
-    extrapolate: "clamp",
+  const textStyle = useAnimatedStyle(() => {
+    return {
+      opacity: interpolate(offset.value, [0, 1 + insets.top + 58], [0, 1]),
+    };
   });
 
   const dark = useGetMode();
@@ -61,14 +78,7 @@ export default function Header({
   return (
     <>
       <UploadPhotoModal isOpen={isOpen} closeModal={handleSetOpen} />
-      <Animated.View
-        style={[
-          { height: 300, width: "100%" },
-          {
-            height: headerHeight,
-          },
-        ]}
-      >
+      <Animated.View style={[{ width: "100%" }, headerHeight]}>
         <View
           style={{ height: "100%", width: "100%", backgroundColor: "black" }}
         >
@@ -92,8 +102,7 @@ export default function Header({
           >
             <Animated.Text
               style={[
-                { color: "white", fontFamily: "jakaraBold", fontSize: 16 },
-                { opacity: opacityText },
+                { color: "white", fontFamily: "jakaraBold", fontSize: 16 },textStyle
               ]}
             >
               {user.data?.name}
@@ -119,11 +128,7 @@ export default function Header({
             backgroundColor,
             position: "absolute",
           },
-          {
-            height: imageSize,
-            width: imageSize,
-            opacity,
-          },
+          imageStyle,
         ]}
       >
         <Pressable
@@ -136,7 +141,6 @@ export default function Header({
           }}
           onPress={() => {
             handleSetOpen();
-   
           }}
         >
           {user.data?.imageUri ? (
