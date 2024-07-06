@@ -14,7 +14,7 @@ export default function Recent({ offset }: { offset: Animated.Value }) {
 
   const headerHeight = offset.interpolate({
     inputRange: [0, HEADER_HEIGHT],
-    outputRange: [HEADER_HEIGHT / 2, 0],
+    outputRange: [HEADER_HEIGHT / 2, 10],
     extrapolate: "clamp",
   });
   const opacity = offset.interpolate({
@@ -44,7 +44,7 @@ export default function Recent({ offset }: { offset: Animated.Value }) {
     <Animated.View
       style={{
         height: headerHeight,
-
+       
         opacity,
       }}
     >

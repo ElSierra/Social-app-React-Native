@@ -25,7 +25,7 @@ export default function HeaderDrawer() {
     getFollowData.refetch();
   }, []);
   return (
-    <View style={{ paddingLeft: 14, flex: 1 }}>
+    <View style={{  flex: 1 }}>
       {user?.imageUri ? (
         <Image
           priority={"high"}

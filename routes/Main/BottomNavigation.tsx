@@ -47,7 +47,6 @@ export function BottomTabNavigator() {
   const borderColor = isDark ? "#FFFFFF7D" : "#4545452D";
   return (
     <Tab.Navigator
-    
       tabBar={(props) => (
         <>
           {isHighEndDevice ? (
@@ -78,19 +77,18 @@ export function BottomTabNavigator() {
           )}
         </>
       )}
-      
       sceneContainerStyle={{ backgroundColor }}
-      screenOptions={({ navigation, route ,}) => {
+      screenOptions={({ navigation, route }) => {
         return {
           tabBarHideOnKeyboard: true,
           tabBarShowLabel: false,
           headerStatusBarHeight: 30,
-animation: "shift",
+          animation: "shift",
           tabBarStyle: {
             backgroundColor: isHighEndDevice ? "transparent" : backgroundColor,
             elevation: 0,
             height: Platform.OS == "ios" ? 40 + insets.bottom : 60,
-            paddingBottom: 20,
+            paddingTop:10,
             borderTopWidth: 0.2,
 
             borderColor,
@@ -234,7 +232,11 @@ animation: "shift",
             title: "Notifications",
             headerTitle: () => {
               return (
-                <View style={{ marginTop: Platform.select({ios:30,android:20}) }}>
+                <View
+                  style={{
+                    marginTop: Platform.select({ ios: 30, android: 20 }),
+                  }}
+                >
                   <Text
                     style={{
                       fontFamily: "uberBold",
@@ -296,7 +298,12 @@ animation: "shift",
             />
           ),
           headerTitleAlign: "left",
-          headerTitleStyle: { fontFamily: "uberBold",paddingTop:10, fontSize: 30, color },
+          headerTitleStyle: {
+            fontFamily: "uberBold",
+            paddingTop: 10,
+            fontSize: 30,
+            color,
+          },
           title: "Messages",
           headerTransparent: true,
           headerBackgroundContainerStyle: undefined,

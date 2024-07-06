@@ -40,6 +40,7 @@ import Animated, {
   FadeInUp,
   FadeOut,
   FadeOutDown,
+  SequencedTransition,
   ZoomIn,
 } from "react-native-reanimated";
 import EmptyLottie from "../../../components/home/post/components/EmptyLottie";
@@ -72,6 +73,9 @@ export default function HomeAll() {
   const [getLazyPost, postRes] = useLazyGetAllPostsQuery();
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = useCallback(() => {
+    if (!authId) {
+      return;
+    }
     dispatch(resetPost());
     setSkip(0);
     setNoMore(false);
@@ -224,6 +228,8 @@ export default function HomeAll() {
     />
   );
   const keyExtractor = (item: IPost) => item?.id?.toString();
+
+  const AnimatedFlashList = Animated.createAnimatedComponent(FlashList);
   return (
     <View style={{ flex: 1 }}>
       {posts.loading && posts.data.length === 0 ? (
@@ -231,12 +237,8 @@ export default function HomeAll() {
       ) : posts.data.length === 0 ? (
         <EmptyList handleRefetch={handleRefetch} />
       ) : (
-        <Animated.View
-          style={{ flex: 1 }}
-          entering={FadeIn.springify().duration(400)}
-          exiting={FadeOut.springify()}
-        >
-        <FlashList
+        <Animated.View style={{ flex: 1 }}>
+          <FlashList
             data={posts.data}
             decelerationRate={0.991}
             estimatedItemSize={250}

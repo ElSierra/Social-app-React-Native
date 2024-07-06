@@ -146,7 +146,7 @@ export default function CustomDrawerContent(
                   color,
                   fontFamily: "jakaraBold",
                   includeFontPadding: false,
-                  fontSize: 20,
+                  fontSize: 18,
                 }}
               >
                 Profile

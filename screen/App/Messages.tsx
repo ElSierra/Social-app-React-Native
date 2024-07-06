@@ -20,6 +20,8 @@ export default function Messages() {
   const dark = useGetMode();
   const color = dark ? "#FFFFFF" : "#000000";
   const dispatch = useAppDispatch();
+
+  
   const [chatlist, chatlistRes] = useLazyGetAllChatsQuery();
   useEffect(() => {
     return () => {
