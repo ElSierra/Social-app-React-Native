@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  FlatList,
-  Animated,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, FlatList, ActivityIndicator } from "react-native";
 import React from "react";
 import ListContainer from "./ListContainer";
 import { useNavigation } from "@react-navigation/native";
@@ -12,7 +6,12 @@ import { HomeNavigationProp } from "../../../types/navigation";
 import useGetMode from "../../../hooks/GetMode";
 import { useAppSelector } from "../../../redux/hooks/hooks";
 import LoadingIndicator from "../../home/post/components/LoadingIndicator";
-export default function ChatList({ offset }: { offset: Animated.Value }) {
+import Animated, { ScrollHandlerProcessed } from "react-native-reanimated";
+export default function ChatList({
+  scrollHandler,
+}: {
+  scrollHandler: ScrollHandlerProcessed<Record<string, unknown>>;
+}) {
   const dark = useGetMode();
   const chatList = useAppSelector((state) => state.chatlist);
   const backgroundColor = dark ? "#0D0F13" : "#F0F0F0";
@@ -37,7 +36,9 @@ export default function ChatList({ offset }: { offset: Animated.Value }) {
                 alignItems: "center",
               }}
             >
-              <Text style={{fontFamily:"jakaraBold"}}>Start Chatting Now!</Text>
+              <Text style={{ fontFamily: "jakaraBold" }}>
+                Start Chatting Now!
+              </Text>
             </View>
           ) : (
             <Animated.FlatList
@@ -46,13 +47,9 @@ export default function ChatList({ offset }: { offset: Animated.Value }) {
                 gap: 0,
                 paddingBottom: 300,
                 paddingTop: 20,
-
               }}
               data={chatList.data}
-              onScroll={Animated.event(
-                [{ nativeEvent: { contentOffset: { y: offset } } }],
-                { useNativeDriver: false }
-              )}
+              onScroll={scrollHandler}
               keyExtractor={(item) => item?.id?.toString()}
               renderItem={({ item }) => <ListContainer data={item} />}
             />

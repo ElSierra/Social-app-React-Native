@@ -58,7 +58,8 @@ export default function Home({ navigation }: DrawerHomeProp) {
             {isAll ? (
               <Animated.View
                 key={"all"}
-               
+                entering={FadeInRight.springify()}
+                exiting={FadeOutRight.springify()}
               >
                 <Text style={{ fontFamily: "uberBold", fontSize: 12, color }}>
                   {"All Posts"}
@@ -67,7 +68,8 @@ export default function Home({ navigation }: DrawerHomeProp) {
             ) : (
               <Animated.View
                 key={"followed"}
-            
+                entering={FadeInRight.springify()}
+                exiting={FadeOutRight.springify()}
               >
                 <Text style={{ fontFamily: "uberBold", fontSize: 12, color }}>
                   {"Followed Posts"}

@@ -218,8 +218,7 @@ export default function HomeFollowed() {
       ) : (
         <Animated.View
           style={{ flex: 1 }}
-          entering={FadeInDown.springify().duration(400)}
-          exiting={FadeOutDown.springify()}
+    
         >
           <FlashList
             data={posts.data}

@@ -1,4 +1,4 @@
-import { View, Text, Animated } from "react-native";
+import { View, Text } from "react-native";
 import React, { useMemo } from "react";
 import AvatarName from "./AvatarName";
 import { FlatList } from "react-native-gesture-handler";
@@ -6,26 +6,38 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import useGetMode from "../../../hooks/GetMode";
 import { useAppSelector } from "../../../redux/hooks/hooks";
 import Me from "./Me";
+import Animated, {
+  SharedValue,
+  interpolate,
+  useAnimatedStyle,
+} from "react-native-reanimated";
 
-export default function Recent({ offset }: { offset: Animated.Value }) {
+export default function Recent({ offset }: { offset: SharedValue<number> }) {
   const HEADER_HEIGHT = 300;
   const Header_Min_Height = 70;
   const insets = useSafeAreaInsets();
 
-  const headerHeight = offset.interpolate({
-    inputRange: [0, HEADER_HEIGHT],
-    outputRange: [HEADER_HEIGHT / 2, 10],
-    extrapolate: "clamp",
-  });
-  const opacity = offset.interpolate({
-    inputRange: [0, HEADER_HEIGHT / 2],
-    outputRange: [1, 0],
-    extrapolate: "clamp",
-  });
+  // const headerHeight = offset.interpolate({
+  //   inputRange: [0, HEADER_HEIGHT],
+  //   outputRange: [HEADER_HEIGHT / 2, 10],
+  //   extrapolate: "clamp",
+  // });
+  // const opacity = offset.interpolate({
+  //   inputRange: [0, HEADER_HEIGHT / 2],
+  //   outputRange: [1, 0],
+  //   extrapolate: "clamp",
+  // });
   const dark = useGetMode();
   const color = dark ? "#FFFFFF" : "#000000";
   const userId = useAppSelector((state) => state.user?.data?.id);
   const onlineIds = useAppSelector((state) => state?.online?.ids);
+
+  const recentStyle = useAnimatedStyle(() => {
+    return {
+      height: interpolate(offset.value, [0, 800], [HEADER_HEIGHT / 2, 40]),
+      opacity: interpolate(offset.value, [0, 400], [1, 0]),
+    };
+  });
 
   const chatList = useAppSelector((state) => state?.chatlist?.data);
 
@@ -41,13 +53,7 @@ export default function Recent({ offset }: { offset: Animated.Value }) {
   }, [chatList, onlineIds, userId]);
 
   return (
-    <Animated.View
-      style={{
-        height: headerHeight,
-       
-        opacity,
-      }}
-    >
+    <Animated.View style={recentStyle}>
       <View style={{ paddingHorizontal: 14, paddingTop: 0, paddingBottom: 20 }}>
         <Text style={{ fontFamily: "jakara", letterSpacing: 4, color }}>
           ONLINE

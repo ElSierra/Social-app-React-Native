@@ -14,20 +14,23 @@ import useGetMode from "../../hooks/GetMode";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
 import { clearNewFromChatList } from "../../redux/slice/chat/chatlist";
 import { useLazyGetAllChatsQuery } from "../../redux/api/chat";
+import { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated";
 
 export default function Messages() {
-  const offset = useRef(new Animated.Value(0)).current;
+ 
   const dark = useGetMode();
   const color = dark ? "#FFFFFF" : "#000000";
   const dispatch = useAppDispatch();
+  const offset = useSharedValue(0);
+  console.log("🚀 ~ file: Profile.tsx:16 ~ Profile ~ offset:", offset);
+  const scrollHandler = useAnimatedScrollHandler((event) => {
+    console.log("🚀 ~ file: Profile.tsx:22 ~ scrollHandler ~ event:", event)
 
+    offset.value = event.contentOffset.y;
+  });
   
   const [chatlist, chatlistRes] = useLazyGetAllChatsQuery();
-  useEffect(() => {
-    return () => {
-      offset.removeAllListeners();
-    };
-  }, []);
+ 
 
   useFocusEffect(
     useCallback(() => {
@@ -38,7 +41,7 @@ export default function Messages() {
   return (
     <AnimatedScreen style={{ marginTop: 80, flex: 1 }}>
       <Recent offset={offset} />
-      <ChatList offset={offset} />
+      <ChatList scrollHandler={scrollHandler}/>
       <Fab item={<AddMessage size={25} color={color} />} />
     </AnimatedScreen>
   );
