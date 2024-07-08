@@ -108,7 +108,8 @@ function ChatBuilderText({
                 });
               }}
             >
-              <View
+              <Animated.View
+         
                 style={{ padding: 5, overflow: "hidden", borderRadius: 10 }}
               >
                 <Image
@@ -145,7 +146,7 @@ function ChatBuilderText({
                     />
                   </>
                 )}
-              </View>
+              </Animated.View>
             </Pressable>
           )}
           {sent && (

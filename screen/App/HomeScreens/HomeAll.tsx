@@ -5,6 +5,7 @@ import {
   Text,
   Pressable,
   FlatList,
+  ViewToken,
 } from "react-native";
 import React, {
   useCallback,
@@ -51,6 +52,7 @@ import { resetPost as resetFollowedPosts } from "../../../redux/slice/post/follo
 import { DrawerHomeProp, HomeProp } from "../../../types/navigation";
 import storage from "../../../redux/storage";
 import Robot from "../../../components/home/post/misc/Robot";
+import { setPlayingIds } from "../../../redux/slice/post/audio";
 
 export default function HomeAll() {
   const dark = useGetMode();
@@ -67,16 +69,20 @@ export default function HomeAll() {
   const [skip, setSkip] = useState(0);
 
   const [noMore, setNoMore] = useState(false);
-  useEffect(() => {
-    dispatch(resetFollowedPosts());
-  }, []);
-  const [getLazyPost, postRes] = useLazyGetAllPostsQuery();
+
+  const [getLazyPost, postRes] = useLazyGetAllPostsQuery({
+    pollingInterval: 60000,
+  });
   const [refreshing, setRefreshing] = React.useState(false);
+  useEffect(() => {
+    getLazyPost({ take: 20, skip: 0 })
+      .unwrap()
+      .then((r) => {});
+  }, []);
   const onRefresh = useCallback(() => {
     if (!authId) {
       return;
     }
-    dispatch(resetPost());
     setSkip(0);
     setNoMore(false);
     setRefreshing(false),
@@ -113,8 +119,6 @@ export default function HomeAll() {
     } else if (posts.loading) {
       return (
         <Animated.View
-          exiting={FadeOut.duration(50)}
-          entering={FadeIn.duration(50)}
           style={{
             marginTop: 20,
             width: "100%",
@@ -188,8 +192,12 @@ export default function HomeAll() {
         // );
       });
   };
+ 
 
-  const renderItem = ({ item }: { item: IPost }) => (
+
+  const [indexInView, setIndexInView] = useState<Array<number | null>>([]);
+useEffect
+  const renderItem = ({ item, index }: { item: IPost, index:number }) => (
     <PostBuilder
       id={item.id}
       isReposted={
@@ -225,11 +233,36 @@ export default function HomeAll() {
       videoUri={item.videoUri || undefined}
       postText={item.postText}
       videoViews={item.videoViews?.toString()}
+      idx={index}
     />
   );
   const keyExtractor = (item: IPost) => item?.id?.toString();
 
   const AnimatedFlashList = Animated.createAnimatedComponent(FlashList);
+  const viewabilityConfig = {
+    itemVisiblePercentThreshold: 50, // This means a component is considered visible if at least 50% of it is visible
+  };
+
+  const onViewableItemsChanged = useRef<
+    ({
+      viewableItems,
+      changed,
+    }: {
+      viewableItems: Array<ViewToken>;
+      changed: Array<ViewToken>;
+    }) => void
+  >(({ viewableItems, changed }) => {
+    console.log("Viewable Items:", viewableItems);
+    const indexes: Array<number | null> = [];
+    viewableItems.map((view) => {
+      indexes.push(view.index);
+    });
+    setIndexInView(indexes);
+    dispatch(setPlayingIds(indexes))
+    console.log("view", indexes);
+    console.log("Changed in this interaction:", changed);
+  });
+
   return (
     <View style={{ flex: 1 }}>
       {posts.loading && posts.data.length === 0 ? (
@@ -238,10 +271,10 @@ export default function HomeAll() {
         <EmptyList handleRefetch={handleRefetch} />
       ) : (
         <Animated.View style={{ flex: 1 }}>
-          <FlashList
+          <FlatList
             data={posts.data}
             decelerationRate={0.991}
-            estimatedItemSize={250}
+          
             ListFooterComponent={renderFooter}
             refreshControl={
               <RefreshControl
@@ -250,10 +283,12 @@ export default function HomeAll() {
                 colors={["red", "blue"]}
               />
             }
+            onViewableItemsChanged={onViewableItemsChanged.current}
+            viewabilityConfig={viewabilityConfig}
             keyExtractor={keyExtractor}
             onEndReachedThreshold={0.3}
             onEndReached={fetchMoreData}
-            estimatedListSize={{ width: width, height: height }}
+          
             renderItem={renderItem}
             contentContainerStyle={{ paddingTop: 100, paddingBottom: 100 }}
           />

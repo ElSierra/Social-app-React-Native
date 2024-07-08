@@ -44,6 +44,7 @@ export default function PostBuilder({
   thumbNail,
   deletePost,
   photo,
+  idx
 }: IPostBuilder) {
   const width = Dimensions.get("window").width;
   const navigation = useNavigation<HomeNavigationProp>();
@@ -202,7 +203,7 @@ export default function PostBuilder({
                   videoViews={videoViews}
                 />
               )}
-              {audioUri && <AudioPost uri={audioUri} photoUri={imageUri} />}
+              {audioUri && <AudioPost idx={idx} uri={audioUri} photoUri={imageUri} />}
               <Engagements
                 title={title}
                 comments={comments}

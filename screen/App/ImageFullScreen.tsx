@@ -130,7 +130,8 @@ export default function ImageFullScreen({
               paddingHorizontal: 30,
             }}
           >
-            <View
+            <Animated.View
+      
               style={{
                 borderRadius: 20,
                 overflow: "hidden",
@@ -153,7 +154,7 @@ export default function ImageFullScreen({
                   height: "100%",
                 }}
               />
-            </View>
+            </Animated.View>
           </View>
         </ImageBackground>
       </Animated.View>

@@ -41,7 +41,7 @@ export default function Messages() {
   return (
     <AnimatedScreen style={{ marginTop: 80, flex: 1 }}>
       <Recent offset={offset} />
-      <ChatList scrollHandler={scrollHandler}/>
+      <ChatList scrollHandler={scrollHandler} offset={offset}/>
       <Fab item={<AddMessage size={25} color={color} />} />
     </AnimatedScreen>
   );

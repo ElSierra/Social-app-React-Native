@@ -14,14 +14,21 @@ import { Image } from "expo-image";
 import IconButton from "../../../global/Buttons/IconButton";
 import { PlayIcon } from "../../../icons";
 import AudioPlayLottie from "./AudioPlayLottie";
+import { useAppDispatch, useAppSelector } from "../../../../redux/hooks/hooks";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function AudioPost({
   uri,
+  idx,
   photoUri,
 }: {
   uri: string;
   photoUri: string;
+  idx: number;
 }) {
+  const visibleIds = useAppSelector((state) => state.audio?.playingId);
+  console.log("🚀 ~ file: AudioPost.tsx:29 ~ visibleIds:", visibleIds);
+
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const animationRef = useRef<Lottie>(null);
   const [status, setStatus] = useState<any>(null);
@@ -51,11 +58,20 @@ export default function AudioPost({
 
     return () => {
       if (sound) {
-        sound.unloadAsync().catch((e) => console.error("Error unloading sound", e));
+        sound
+          .unloadAsync()
+          .catch((e) => console.error("Error unloading sound", e));
       }
     };
   }, []);
 
+  useEffect(() => {
+    if (!visibleIds?.includes(idx)) {
+      sound?.pauseAsync().then((r) => {
+        console.log("dodneddn");
+      });
+    }
+  }, [visibleIds]);
   useEffect(() => {
     if (!sound) return;
 
@@ -99,12 +115,22 @@ export default function AudioPost({
     }
   }, [status?.isPlaying]);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => {
+        const stop = async () => {
+          try {
+            await sound?.pauseAsync();
+          } catch (e) {}
+        };
+        stop();
+      };
+    }, [])
+  );
+
   return (
     <View style={{ height: 200, width: "100%" }}>
-      <Pressable
-        style={{ flex: 1 }}
-        onPress={handlePlayPause}
-      >
+      <Pressable style={{ flex: 1 }} onPress={handlePlayPause}>
         <View
           style={{
             alignItems: "center",

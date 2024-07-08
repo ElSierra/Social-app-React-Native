@@ -34,8 +34,10 @@ export default function Recent({ offset }: { offset: SharedValue<number> }) {
 
   const recentStyle = useAnimatedStyle(() => {
     return {
-      height: interpolate(offset.value, [0, 800], [HEADER_HEIGHT / 2, 40]),
-      opacity: interpolate(offset.value, [0, 400], [1, 0]),
+     transform:[
+      {translateY:interpolate(offset.value,[0,800],[0, -100])}
+     ],
+      opacity: interpolate(offset.value, [0, 800], [1, 0]),
     };
   });
 

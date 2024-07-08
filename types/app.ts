@@ -1,10 +1,12 @@
+import { Audio } from "expo-av";
+
 export type ArrElement<ArrType> = ArrType extends readonly (infer ElementType)[]
   ? ElementType
   : never;
 
 export type IPostBuilder = {
   imageUri: string;
-  deletePost?: (id:string) => void;
+  deletePost?: (id: string) => void;
   photo?: { uri: string; height: number; width: number };
   name: string;
   userId?: string;
@@ -34,6 +36,9 @@ export type IPostBuilder = {
   id: string;
   audioUri?: string;
   postId?: string;
+  inView?: boolean;
+  idx:number;
+
 };
 
 export type SearchPostBuilder = {

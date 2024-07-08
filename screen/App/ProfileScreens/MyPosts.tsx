@@ -15,7 +15,7 @@ import {
 import { openToast } from "../../../redux/slice/toast/toast";
 
 import Bio from "../../../components/profile/Bio";
-import Animated, { AnimatedRef, ScrollHandlerProcessed, SequencedTransition } from "react-native-reanimated";
+import Animated, { AnimatedRef, LinearTransition, ScrollHandlerProcessed, SequencedTransition } from "react-native-reanimated";
 import { ScrollView } from "react-native-gesture-handler";
 
 export default function MyPosts({ onScroll }: { onScroll: ScrollHandlerProcessed<Record<string, unknown>> }) {
@@ -146,7 +146,7 @@ export default function MyPosts({ onScroll }: { onScroll: ScrollHandlerProcessed
       <View style={{ flex: 1 }}>
         <Animated.FlatList
           onScroll={onScroll}
-          itemLayoutAnimation={SequencedTransition}
+          itemLayoutAnimation={LinearTransition.springify()}
           data={posts.length === 0 ? postRes.data?.posts : posts}
           decelerationRate={0.991}
           ListHeaderComponent={<Bio />}

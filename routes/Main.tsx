@@ -325,7 +325,7 @@ export default function Main() {
           options={{
             headerTitle: "",
 
-            animation: "none",
+            animation: "slide_from_right",
             headerTransparent: true,
             headerTintColor: "white",
           }}

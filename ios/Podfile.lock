@@ -5,16 +5,16 @@ PODS:
   - DoubleConversion (1.1.6)
   - EXApplication (5.9.1):
     - ExpoModulesCore
-  - EXAV (14.0.5):
+  - EXAV (14.0.6):
     - ExpoModulesCore
     - ReactCommon/turbomodule/core
   - EXConstants (16.0.2):
     - ExpoModulesCore
   - EXNotifications (0.28.9):
     - ExpoModulesCore
-  - Expo (51.0.14):
+  - Expo (51.0.16):
     - ExpoModulesCore
-  - ExpoAsset (10.0.9):
+  - ExpoAsset (10.0.10):
     - ExpoModulesCore
   - ExpoBackgroundFetch (12.0.1):
     - ExpoModulesCore
@@ -37,7 +37,7 @@ PODS:
     - SDWebImageWebPCoder (~> 0.14.6)
   - ExpoKeepAwake (13.0.2):
     - ExpoModulesCore
-  - ExpoModulesCore (1.12.15):
+  - ExpoModulesCore (1.12.17):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1108,12 +1108,54 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - react-native-compressor (1.8.25):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - react-native-context-menu-view (1.16.0):
     - React
   - react-native-document-picker (9.3.0):
     - React-Core
   - react-native-get-random-values (1.11.0):
     - React-Core
+  - react-native-image-picker (7.1.2):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - react-native-mmkv (2.12.2):
     - DoubleConversion
     - glog
@@ -1184,7 +1226,7 @@ PODS:
     - Yoga
   - react-native-view-shot (3.8.0):
     - React-Core
-  - react-native-webview (13.8.6):
+  - react-native-webview (13.10.4):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1474,7 +1516,7 @@ PODS:
     - TOCropViewController (~> 2.7.4)
   - RNInAppBrowser (3.7.0):
     - React-Core
-  - RNReanimated (3.10.1):
+  - RNReanimated (3.12.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1599,9 +1641,11 @@ DEPENDENCIES:
   - react-native-blob-util (from `../node_modules/react-native-blob-util`)
   - "react-native-blur (from `../node_modules/@react-native-community/blur`)"
   - "react-native-cameraroll (from `../node_modules/@react-native-camera-roll/camera-roll`)"
+  - react-native-compressor (from `../node_modules/react-native-compressor`)
   - react-native-context-menu-view (from `../node_modules/react-native-context-menu-view`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
+  - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-mmkv (from `../node_modules/react-native-mmkv`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
@@ -1771,12 +1815,16 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/blur"
   react-native-cameraroll:
     :path: "../node_modules/@react-native-camera-roll/camera-roll"
+  react-native-compressor:
+    :path: "../node_modules/react-native-compressor"
   react-native-context-menu-view:
     :path: "../node_modules/react-native-context-menu-view"
   react-native-document-picker:
     :path: "../node_modules/react-native-document-picker"
   react-native-get-random-values:
     :path: "../node_modules/react-native-get-random-values"
+  react-native-image-picker:
+    :path: "../node_modules/react-native-image-picker"
   react-native-mmkv:
     :path: "../node_modules/react-native-mmkv"
   react-native-netinfo:
@@ -1871,11 +1919,11 @@ SPEC CHECKSUMS:
   BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
   EXApplication: c08200c34daca7af7fd76ac4b9d606077410e8ad
-  EXAV: cb6e8dbcc40873d8a386af357e6c2eb55d6d739e
+  EXAV: a1e8d579f0cb4a60792d1686732117420c901b8b
   EXConstants: 409690fbfd5afea964e5e9d6c4eb2c2b59222c59
   EXNotifications: fcecd5a47fc8448d4f6173490b6fa8ee747f687d
-  Expo: 9c87c876b45a6934894ba5e9353ee94fdba48125
-  ExpoAsset: 39e60dc31b16e204a9949caf3edb6dcda322e667
+  Expo: 3f3e1ec56e4d9e14f2352fe030595d906c969928
+  ExpoAsset: 323700f291684f110fb55f0d4022a3362ea9f875
   ExpoBackgroundFetch: a06c553ecaf0bade0acd691042d996b9ce926327
   ExpoBlur: fa53f874e7b208bc3756d1bf07903c12e790beb1
   ExpoDevice: fc94f0e42ecdfd897e7590f2874fc64dfa7e9b1c
@@ -1884,7 +1932,7 @@ SPEC CHECKSUMS:
   ExpoHaptics: 5a3a88971af384255baf2504f38b41189cec6984
   ExpoImage: 2ccccff1219ebc765e344f3338f2430af2df4824
   ExpoKeepAwake: 3b8815d9dd1d419ee474df004021c69fdd316d08
-  ExpoModulesCore: 54c85b57000a2a82e5212d5e42cd7a36524be4ac
+  ExpoModulesCore: b19baadc38e15895b6c3d0d61f75e7b2972f82d6
   ExpoSystemUI: 65007dd0537cb38649ee55b4670a6ed222769b3a
   EXSplashScreen: fbf0ec78e9cee911df188bf17b4fe51d15a84b87
   EXTaskManager: 9c3520305c3aa1b4a12a7c6d1e3f85f2779c06e9
@@ -1926,16 +1974,18 @@ SPEC CHECKSUMS:
   react-native-blob-util: 18b510205c080a453574a7d2344d64673d0ad9af
   react-native-blur: a2acf22fd7bd13621df5e0b1c130b81adea7009c
   react-native-cameraroll: a9138c165c9975da773d26945591d313992c799b
+  react-native-compressor: cef7d532563b6c4b190e69c12b3ffd09d8237483
   react-native-context-menu-view: 30915369a9b5887904c571b616653acf3f1c8edb
   react-native-document-picker: 5b97e24a7f1a1e4a50a72c540a043f32d29a70a2
   react-native-get-random-values: 21325b2244dfa6b58878f51f9aa42821e7ba3d06
+  react-native-image-picker: c3afe5472ef870d98a4b28415fc0b928161ee5f7
   react-native-mmkv: 8c9a677e64a1ac89b0c6cf240feea528318b3074
   react-native-netinfo: bdb108d340cdb41875c9ced535977cac6d2ff321
   react-native-pager-view: c1e29e1a6105a02807392ba822ad322447a72f55
   react-native-safe-area-context: dcab599c527c2d7de2d76507a523d20a0b83823d
   react-native-slider: ce295d2bf830a7990af05b0bd70ab28c133e230c
   react-native-view-shot: 6b7ed61d77d88580fed10954d45fad0eb2d47688
-  react-native-webview: 05bae3a03a1e4f59568dfc05286c0ebf8954106c
+  react-native-webview: 596fb33d67a3cde5a74bf1f6b4c28d3543477fdd
   React-nativeconfig: 9f223cd321823afdecf59ed00861ab2d69ee0fc1
   React-NativeModulesApple: ff7efaff7098639db5631236cfd91d60abff04c0
   React-perflogger: 32ed45d9cee02cf6639acae34251590dccd30994
@@ -1966,7 +2016,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 2282cfbcf86c360d29f44ace393203afd5c6cff7
   RNImageCropPicker: 771e2ca319d2cf92e04ebf334ece892ee9a6728f
   RNInAppBrowser: e36d6935517101ccba0e875bac8ad7b0cb655364
-  RNReanimated: 35f9ac9c3ac42d0497ebd1cce5c39d7687a8493e
+  RNReanimated: f9192536fa8a312c737eaf15c905f78831193ef1
   RNScreens: b32a9ff15bea7fcdbe5dff6477bc503f792b1208
   RNSentry: 7e184247ee04989474d12cce0b7ef7bc4a71632f
   RNShare: 0fad69ae2d71de9d1f7b9a43acf876886a6cb99c
