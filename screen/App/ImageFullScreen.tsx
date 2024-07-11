@@ -6,6 +6,8 @@ import Animated, {
   FadeIn,
   FadeOut,
   SharedTransition,
+  useAnimatedStyle,
+  useSharedValue,
   withTiming,
 } from "react-native-reanimated";
 
@@ -21,8 +23,8 @@ import { openToast } from "../../redux/slice/toast/toast";
 import { Image, ImageBackground } from "expo-image";
 import uuid from "react-native-uuid";
 
-
 import ReactNativeBlobUtil from "react-native-blob-util";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
 export default function ImageFullScreen({
   route,
@@ -31,7 +33,6 @@ export default function ImageFullScreen({
   const { photoUri, id, width, height } = route.params;
 
   const dispatch = useAppDispatch();
- 
 
   console.log(
     "sssss",
@@ -100,64 +101,91 @@ export default function ImageFullScreen({
       ),
     });
   });
+  const scaleContext = useSharedValue(1);
+  const scale = useSharedValue(1);
+
+  const animImageStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scale.value }],
+    };
+  });
+  const pinchGesture = Gesture.Pinch()
+    .onBegin(() => {
+      scaleContext.value = scale.value - 1;
+    })
+
+    .onUpdate((event) => {
+      console.log(
+        "🚀 ~ file: index.tsx:47 ~ App ~ event:",
+        event,
+        scaleContext.value
+      );
+      if (scaleContext.value + event.scale < 0.5) return;
+      if (scaleContext.value + event.scale > 4) return;
+      scale.value = scaleContext.value + event.scale;
+    })
+    .onEnd((e) => {});
   return (
     <>
       <StatusBar animated={true} style="light" backgroundColor="transparent" />
 
-      <Animated.View
-        entering={FadeIn.duration(250)}
-        exiting={FadeOut.duration(250)}
-        style={{
-          flex: 1,
-          backgroundColor: "black",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <ImageBackground
-          source={{ uri: photoUri }}
-          blurRadius={20}
-          imageStyle={{ opacity: 0.5 }}
-          style={{ height: "100%", width: "100%", justifyContent: "center" }}
-          contentFit="cover"
-        >
-          <View
-            style={{
+      <GestureDetector gesture={pinchGesture}>
+        <Animated.View
+          entering={FadeIn.duration(250)}
+          exiting={FadeOut.duration(250)}
+          style={[
+            {
+              flex: 1,
+              backgroundColor: "black",
               alignItems: "center",
               justifyContent: "center",
-              width: "100%",
-              height: "100%",
-              paddingHorizontal: 30,
-            }}
+            },
+          ]}
+        >
+          <ImageBackground
+            source={{ uri: photoUri }}
+            blurRadius={20}
+            imageStyle={{ opacity: 0.5 }}
+            style={{ height: "100%", width: "100%", justifyContent: "center" }}
+            contentFit="cover"
           >
-            <Animated.View
-      
+            <View
               style={{
-                borderRadius: 20,
-                overflow: "hidden",
-                maxHeight: "80%",
+                alignItems: "center",
+                justifyContent: "center",
                 width: "100%",
-                aspectRatio:
-                  width &&
-                  height &&
-                  typeof width == "number" &&
-                  typeof height === "number"
-                    ? `${width.toString()}/${height.toString()}`
-                    : undefined,
+                height: "100%",
+                paddingHorizontal: 30,
               }}
             >
-              <Image
-                transition={1000}
-                source={{ uri: photoUri }}
-                style={{
+              <Animated.View
+                style={[{
+                  borderRadius: 20,
+                  overflow: "hidden",
+                  maxHeight: "80%",
                   width: "100%",
-                  height: "100%",
-                }}
-              />
-            </Animated.View>
-          </View>
-        </ImageBackground>
-      </Animated.View>
+                  aspectRatio:
+                    width &&
+                    height &&
+                    typeof width == "number" &&
+                    typeof height === "number"
+                      ? `${width.toString()}/${height.toString()}`
+                      : undefined,
+                },animImageStyle]}
+              >
+                <Image
+                  transition={1000}
+                  source={{ uri: photoUri }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                  }}
+                />
+              </Animated.View>
+            </View>
+          </ImageBackground>
+        </Animated.View>
+      </GestureDetector>
       {/* <View
         style={{
           elevation:4,

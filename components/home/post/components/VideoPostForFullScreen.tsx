@@ -23,6 +23,7 @@ import Animated, {
   FadeOut,
   FadeOutDown,
   runOnJS,
+  useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
@@ -34,6 +35,7 @@ import Slider from "@react-native-community/slider";
 import convertMsToHMS from "../../../../util/convert";
 import { StatusBar } from "expo-status-bar";
 import { Image, ImageBackground } from "expo-image";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
 const { height } = Dimensions.get("window");
 export default function VideoPostFullScreen({
@@ -62,7 +64,6 @@ export default function VideoPostFullScreen({
   const [overlay, setShowOverlay] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-
   useEffect(() => {
     const initializeVideo = async () => {
       try {
@@ -75,7 +76,9 @@ export default function VideoPostFullScreen({
 
     return () => {
       if (video.current) {
-        video.current.unloadAsync().catch((e) => console.error("Failed to unload video:", e));
+        video.current
+          .unloadAsync()
+          .catch((e) => console.error("Failed to unload video:", e));
       }
     };
   }, []);
@@ -154,6 +157,31 @@ export default function VideoPostFullScreen({
     "worklet";
     runOnJS(handleOverlayDelay)();
   }
+
+  const scaleContext = useSharedValue(1);
+  const scale = useSharedValue(1);
+
+  const animImageStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scale.value }],
+    };
+  });
+  const pinchGesture = Gesture.Pinch()
+    .onBegin(() => {
+      scaleContext.value = scale.value - 1;
+    })
+
+    .onUpdate((event) => {
+      console.log(
+        "🚀 ~ file: index.tsx:47 ~ App ~ event:",
+        event,
+        scaleContext.value
+      );
+      if (scaleContext.value + event.scale < 0.5) return;
+      if (scaleContext.value + event.scale > 4) return;
+      scale.value = scaleContext.value + event.scale;
+    })
+    .onEnd((e) => {});
   return (
     <View
       style={{
@@ -170,26 +198,33 @@ export default function VideoPostFullScreen({
         ></ImageBackground>
       </View>
       {
-        <View style={{ height: "100%", width: "100%", position: "absolute" }}>
-          <TouchableWithoutFeedback
-            style={{ flex: 1, width: "100%" }}
-            onPress={() => {
-              setShowOverlay(true);
-            }}
+        <GestureDetector gesture={pinchGesture}>
+          <Animated.View
+            style={[
+              { height: "100%", width: "100%", position: "absolute" },
+              animImageStyle,
+            ]}
           >
-            <Video
-              ref={video}
-              style={{ flex: 1, width: "100%", borderRadius: 10 }}
-              source={{
-                uri: videoUri,
+            <TouchableWithoutFeedback
+              style={{ flex: 1, width: "100%" }}
+              onPress={() => {
+                setShowOverlay(true);
               }}
-              useNativeControls={false}
-              resizeMode={ResizeMode.CONTAIN}
-              shouldPlay={play}
-              onPlaybackStatusUpdate={(status) => setStatus(() => status)}
-            />
-          </TouchableWithoutFeedback>
-        </View>
+            >
+              <Video
+                ref={video}
+                style={{ flex: 1, width: "100%", borderRadius: 10 }}
+                source={{
+                  uri: videoUri,
+                }}
+                useNativeControls={false}
+                resizeMode={ResizeMode.CONTAIN}
+                shouldPlay={play}
+                onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+              />
+            </TouchableWithoutFeedback>
+          </Animated.View>
+        </GestureDetector>
       }
 
       {overlay && (
@@ -199,7 +234,9 @@ export default function VideoPostFullScreen({
           }}
         >
           <Animated.View
-             entering={FadeInDown.springify().withCallback(() => runOnJS(handleOverlayDelay)())}
+            entering={FadeInDown.springify().withCallback(() =>
+              runOnJS(handleOverlayDelay)()
+            )}
             exiting={FadeOutDown.springify()}
             style={{
               position: "absolute",

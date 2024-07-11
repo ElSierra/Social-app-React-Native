@@ -119,6 +119,8 @@ export default function VideoFull({ navigation, route }: VideoFullScreen) {
     return () => backHandler.remove();
   }, [done]);
 
+
+  
   return (
     <>
       <StatusBar animated={true} style="light" backgroundColor="transparent" />

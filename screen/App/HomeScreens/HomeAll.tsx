@@ -80,27 +80,23 @@ export default function HomeAll() {
       .then((r) => {});
   }, []);
   const onRefresh = useCallback(() => {
-    if (!authId) {
-      return;
-    }
+    if (!authId) return;
     setSkip(0);
     setNoMore(false);
-    setRefreshing(false),
-      getLazyPost({ take: 20, skip })
-        .unwrap()
-        .then((e) => {
-          setSkip(skip + e.posts.length);
+    setRefreshing(true);
+    getLazyPost({ take: 20, skip: 0 })
+      .unwrap()
+      .then((e) => {
+        setSkip(e.posts.length);
+        setRefreshing(false);
+        if (e.posts.length === 0) setNoMore(true);
+      })
+      .catch(() => {
+        setRefreshing(false);
+        dispatch(openToast({ text: "Couldn't get recent posts", type: "Failed" }));
+      });
+  }, [authId, dispatch, getLazyPost]);
 
-          if (e.posts.length === 0) {
-            setNoMore(true);
-          }
-        })
-        .catch((e) => {
-          dispatch(
-            openToast({ text: "couldn't get recent posts", type: "Failed" })
-          );
-        });
-  }, []);
 
   const renderFooter = () => {
     if (noMore) {
@@ -192,12 +188,10 @@ export default function HomeAll() {
         // );
       });
   };
- 
-
 
   const [indexInView, setIndexInView] = useState<Array<number | null>>([]);
-useEffect
-  const renderItem = ({ item, index }: { item: IPost, index:number }) => (
+  useEffect;
+  const renderItem = ({ item, index }: { item: IPost; index: number }) => (
     <PostBuilder
       id={item.id}
       isReposted={
@@ -258,9 +252,15 @@ useEffect
       indexes.push(view.index);
     });
     setIndexInView(indexes);
-    dispatch(setPlayingIds(indexes))
+    dispatch(setPlayingIds(indexes));
     console.log("view", indexes);
     console.log("Changed in this interaction:", changed);
+  });
+
+  const getItemLayout = (data, index) => ({
+    length: data[index].height,
+    offset: data.slice(0, index).reduce((acc, item) => acc + item.height, 0),
+    index,
   });
 
   return (
@@ -271,10 +271,10 @@ useEffect
         <EmptyList handleRefetch={handleRefetch} />
       ) : (
         <Animated.View style={{ flex: 1 }}>
-          <FlatList
-            data={posts.data}
+          <FlashList
+            data={posts?.data}
             decelerationRate={0.991}
-          
+            estimatedItemSize={300}
             ListFooterComponent={renderFooter}
             refreshControl={
               <RefreshControl
@@ -286,9 +286,10 @@ useEffect
             onViewableItemsChanged={onViewableItemsChanged.current}
             viewabilityConfig={viewabilityConfig}
             keyExtractor={keyExtractor}
+          
+            estimatedListSize={{ width: width, height: height }}
             onEndReachedThreshold={0.3}
             onEndReached={fetchMoreData}
-          
             renderItem={renderItem}
             contentContainerStyle={{ paddingTop: 100, paddingBottom: 100 }}
           />
