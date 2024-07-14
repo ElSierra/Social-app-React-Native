@@ -70,9 +70,7 @@ export default function HomeAll() {
 
   const [noMore, setNoMore] = useState(false);
 
-  const [getLazyPost, postRes] = useLazyGetAllPostsQuery({
-    pollingInterval: 60000,
-  });
+  const [getLazyPost, postRes] = useLazyGetAllPostsQuery({});
   const [refreshing, setRefreshing] = React.useState(false);
   useEffect(() => {
     getLazyPost({ take: 20, skip: 0 })
@@ -93,10 +91,11 @@ export default function HomeAll() {
       })
       .catch(() => {
         setRefreshing(false);
-        dispatch(openToast({ text: "Couldn't get recent posts", type: "Failed" }));
+        dispatch(
+          openToast({ text: "Couldn't get recent posts", type: "Failed" })
+        );
       });
   }, [authId, dispatch, getLazyPost]);
-
 
   const renderFooter = () => {
     if (noMore) {
@@ -271,10 +270,10 @@ export default function HomeAll() {
         <EmptyList handleRefetch={handleRefetch} />
       ) : (
         <Animated.View style={{ flex: 1 }}>
-          <FlashList
+          <FlatList
             data={posts?.data}
             decelerationRate={0.991}
-            estimatedItemSize={300}
+            // estimatedItemSize={300}
             ListFooterComponent={renderFooter}
             refreshControl={
               <RefreshControl
@@ -283,11 +282,10 @@ export default function HomeAll() {
                 colors={["red", "blue"]}
               />
             }
-            onViewableItemsChanged={onViewableItemsChanged.current}
-            viewabilityConfig={viewabilityConfig}
+            // onViewableItemsChanged={onViewableItemsChanged.current}
+            // viewabilityConfig={viewabilityConfig}
             keyExtractor={keyExtractor}
-          
-            estimatedListSize={{ width: width, height: height }}
+            // estimatedListSize={{ width: width, height: height }}
             onEndReachedThreshold={0.3}
             onEndReached={fetchMoreData}
             renderItem={renderItem}

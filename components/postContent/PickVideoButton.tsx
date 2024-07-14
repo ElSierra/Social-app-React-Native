@@ -7,11 +7,11 @@ import { Video } from "react-native-compressor";
 export default function PickVideoButton({
   handleSetPhotoPost,
   setProgress,
-  setIsCompressing
+  setIsCompressing,
 }: {
   handleSetPhotoPost: (mimeType: string, uri: string, size: number) => void;
   setProgress: any;
-setIsCompressing: any;
+  setIsCompressing: any;
 }) {
   const dark = useGetMode();
   const backgroundColor = dark ? "white" : "black";
@@ -36,20 +36,22 @@ setIsCompressing: any;
           setIsCompressing(true);
           launchImageLibrary({ mediaType: "video" }, async (video) => {
             setIsCompressing(false);
-            console.log("🚀 ~ file: PickVideoButton.tsx:37 ~ launchImageLibrary ~ video:", video)
+            console.log(
+              "🚀 ~ file: PickVideoButton.tsx:37 ~ launchImageLibrary ~ video:",
+              video
+            );
 
             if (video.assets && video.assets.length > 0) {
               const result = await Video.compress(
                 video?.assets[0].uri as string,
                 {
                   progressDivider: 10,
+
                   downloadProgress: (progress) => {
                     console.log("Download Progress: ", progress);
-                   
                   },
                 },
                 (progress) => {
-                  
                   console.log("Compression Progress: ", progress);
                   setProgress(progress);
                 }

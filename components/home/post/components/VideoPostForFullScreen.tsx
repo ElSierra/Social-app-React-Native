@@ -161,9 +161,12 @@ export default function VideoPostFullScreen({
   const scaleContext = useSharedValue(1);
   const scale = useSharedValue(1);
 
+  const translateX = useSharedValue(0);
+  const translateY = useSharedValue(0);
+  const translateContext = useSharedValue({ x: 0, y: 0 });
   const animImageStyle = useAnimatedStyle(() => {
     return {
-      transform: [{ scale: scale.value }],
+      transform: [{ scale: scale.value }, { translateX: translateX.value }, { translateY: translateY.value }]
     };
   });
   const pinchGesture = Gesture.Pinch()
@@ -182,6 +185,24 @@ export default function VideoPostFullScreen({
       scale.value = scaleContext.value + event.scale;
     })
     .onEnd((e) => {});
+
+
+  const panGesture = Gesture.Pan()
+  .onBegin((event) => {
+    translateContext.value = { x: translateX.value, y: translateY.value };
+  })
+  .onUpdate((event) => {
+    console.log(
+      "x y",
+      translateContext.value.x + event.translationX,
+      translateContext.value.y + event.translationY
+    );
+
+    translateX.value = translateContext.value.x + event.translationX / 4;
+    translateY.value = translateContext.value.y + event.translationY / 4;
+    console.log("🚀 ~ file: index.tsx:pan ~ App ~ event:", event);
+  });
+const composed = Gesture.Simultaneous(pinchGesture, panGesture);
   return (
     <View
       style={{
@@ -198,7 +219,7 @@ export default function VideoPostFullScreen({
         ></ImageBackground>
       </View>
       {
-        <GestureDetector gesture={pinchGesture}>
+        <GestureDetector gesture={composed}>
           <Animated.View
             style={[
               { height: "100%", width: "100%", position: "absolute" },
