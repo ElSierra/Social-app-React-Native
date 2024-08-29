@@ -21,7 +21,7 @@ import useGetMode from "../../../hooks/GetMode";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks/hooks";
 import { openSheet } from "../../../redux/slice/bottomSheet";
 import { signOut } from "../../../redux/slice/user";
-import { InAppBrowser } from "react-native-inappbrowser-reborn";
+
 import { resetPost } from "../../../redux/slice/post";
 import { resetFollowers } from "../../../redux/slice/user/followers";
 import socket from "../../../util/socket";

@@ -12,22 +12,19 @@ import { VideoFullScreen } from "../../types/navigation";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 
 import { StatusBar } from "expo-status-bar";
-import { RadixIcon } from "radix-ui-react-native-icons";
+
 import { useAppDispatch } from "../../redux/hooks/hooks";
 import { openToast } from "../../redux/slice/toast/toast";
 import ReactNativeBlobUtil from "react-native-blob-util";
 import uuid from "react-native-uuid";
-
+import Feather from "@expo/vector-icons/Feather";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 export default function VideoFull({ navigation, route }: VideoFullScreen) {
   const dispatch = useAppDispatch();
   console.log("file url", route.params?.videoUri);
   const [progress, setProgress] = useState({ received: 0, total: 1 });
   const [done, setDone] = useState(true);
-  console.log(
-
-    (progress?.received / progress.total) * 100
-  );
+  console.log((progress?.received / progress.total) * 100);
   const handleDownload = () => {
     setDone(false);
     setProgress({ received: 0, total: 1 });
@@ -94,7 +91,7 @@ export default function VideoFull({ navigation, route }: VideoFullScreen) {
               alignItems: "center",
             }}
           >
-            <RadixIcon name="download" size={25} color="white" />
+            <Feather name="download" size={24} color="white" />
           </View>
         </Pressable>
       ),
@@ -118,8 +115,6 @@ export default function VideoFull({ navigation, route }: VideoFullScreen) {
     return () => backHandler.remove();
   }, [done]);
 
-
-  
   return (
     <>
       <StatusBar animated={true} style="light" backgroundColor="transparent" />
@@ -128,53 +123,54 @@ export default function VideoFull({ navigation, route }: VideoFullScreen) {
         {!done && (
           <TouchableWithoutFeedback>
             <>
-            <Animated.View
-              entering={FadeIn.springify()}
-              exiting={FadeOut.springify()}
-              style={{
-                position: "absolute",
-                top: 0,
-                bottom: 0,
-                left: 0,
-                right: 0,
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "#000000CA",
-              }}
-            >
-              <AnimatedCircularProgress
-                size={80}
-                width={8}
-                fill={(progress?.received / progress.total) * 100}
-                tintColor="#FFFFFF"
-                onAnimationComplete={() => console.log("onAnimationComplete")}
-                backgroundColor="#D1D1D1"
-                dashedBackground={{ width: 2, gap: 2 }}
-              />
-            </Animated.View>
-            <Animated.View
-              entering={FadeIn.springify()}
-              exiting={FadeOut.springify()}
-              style={{
-                position: "absolute",
-                top: 0,
-                bottom: 0,
-                left: 0,
-                right: 0,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Text
+              <Animated.View
+                entering={FadeIn.springify()}
+                exiting={FadeOut.springify()}
                 style={{
-                  fontSize: 30,
-                  color: "white",
-                  fontFamily: "jakaraBold",
+                  position: "absolute",
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: "#000000CA",
                 }}
               >
-                {Math.floor((progress?.received / progress.total) * 100)}
-              </Text>
-            </Animated.View></>
+                <AnimatedCircularProgress
+                  size={80}
+                  width={8}
+                  fill={(progress?.received / progress.total) * 100}
+                  tintColor="#FFFFFF"
+                  onAnimationComplete={() => console.log("onAnimationComplete")}
+                  backgroundColor="#D1D1D1"
+                  dashedBackground={{ width: 2, gap: 2 }}
+                />
+              </Animated.View>
+              <Animated.View
+                entering={FadeIn.springify()}
+                exiting={FadeOut.springify()}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 30,
+                    color: "white",
+                    fontFamily: "jakaraBold",
+                  }}
+                >
+                  {Math.floor((progress?.received / progress.total) * 100)}
+                </Text>
+              </Animated.View>
+            </>
           </TouchableWithoutFeedback>
         )}
       </AnimatedScreen>

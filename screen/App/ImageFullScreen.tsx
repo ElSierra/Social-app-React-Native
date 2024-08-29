@@ -16,7 +16,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useEffect, useLayoutEffect } from "react";
 import axios from "axios";
 
-import { RadixIcon } from "radix-ui-react-native-icons";
 
 import { useAppDispatch } from "../../redux/hooks/hooks";
 import { openToast } from "../../redux/slice/toast/toast";
@@ -25,7 +24,7 @@ import uuid from "react-native-uuid";
 
 import ReactNativeBlobUtil from "react-native-blob-util";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-
+import Feather from '@expo/vector-icons/Feather';
 export default function ImageFullScreen({
   route,
   navigation,
@@ -95,7 +94,7 @@ export default function ImageFullScreen({
               alignItems: "center",
             }}
           >
-            <RadixIcon name="download" size={25} color="white" />
+          <Feather name="download" size={24} color="white" />
           </View>
         </Pressable>
       ),

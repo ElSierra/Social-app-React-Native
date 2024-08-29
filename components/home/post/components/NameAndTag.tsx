@@ -3,9 +3,9 @@ import React from "react";
 import { CloseCircleIcon, TrashIcon, VerifiedIcon } from "../../../icons";
 import useGetMode from "../../../../hooks/GetMode";
 import { Button, Menu, Divider, PaperProvider } from "react-native-paper";
-import { RadixIcon } from "radix-ui-react-native-icons";
-import { BlurView } from "expo-blur";
 
+import { BlurView } from "expo-blur";
+import Entypo from '@expo/vector-icons/Entypo';
 export default function NameAndTag({
   name,
   verified,
@@ -91,7 +91,7 @@ export default function NameAndTag({
           onDismiss={closeMenu}
           anchor={
             <Pressable onPress={openMenu}>
-              <RadixIcon name="dots-horizontal" size={25} color={color} />
+             <Entypo name="dots-three-horizontal" size={24} color="black" />
             </Pressable>
           }
         >
