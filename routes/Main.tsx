@@ -325,7 +325,7 @@ export default function Main() {
           options={{
             headerTitle: "",
 
-            animation: "slide_from_right",
+            animation: Platform.OS === "ios" ? "fade_from_bottom" : "none",
             headerTransparent: true,
             headerTintColor: "white",
           }}

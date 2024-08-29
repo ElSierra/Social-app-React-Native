@@ -43,7 +43,7 @@ export default function SearchBar() {
         {
           width: width * 0.7,
           height: 40,
-        
+          marginLeft: 20,
           borderColor: borderColor,
 
           paddingVertical: 10,
