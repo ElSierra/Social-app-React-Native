@@ -115,7 +115,6 @@ export default function VideoFull({ navigation, route }: VideoFullScreen) {
       "hardwareBackPress",
       backAction
     );
-
     return () => backHandler.remove();
   }, [done]);
 

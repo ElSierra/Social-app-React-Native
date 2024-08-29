@@ -15,6 +15,7 @@ function ChatListView({
   userChats?: IChatList;
   renderItem: ListRenderItem<any>;
 }) {
+  
   return (
     <View style={{ flex: 1 }}>
       <Animated.FlatList

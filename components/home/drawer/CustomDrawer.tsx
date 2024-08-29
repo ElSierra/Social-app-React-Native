@@ -31,6 +31,7 @@ import { Switch } from "react-native-paper";
 import { setHighEnd } from "../../../redux/slice/prefs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomSheetModal } from "@gorhom/bottom-sheet";
+import * as WebBrowser from 'expo-web-browser';
 export default function CustomDrawerContent(
   props: DrawerContentComponentProps
 ) {
@@ -46,53 +47,21 @@ export default function CustomDrawerContent(
   const isHighEndDevice = useAppSelector((state) => state?.prefs?.isHighEnd);
   const navigation = useNavigation<HomeNavigationProp>();
   const [logout] = useLazyLogoutQuery();
-  const openLink = async () => {
-    try {
-      const url = "https://isaacojo.me";
-      if (await InAppBrowser.isAvailable()) {
-        const result = await InAppBrowser.open(url, {
-          // iOS Properties
-          dismissButtonStyle: "cancel",
-          preferredBarTintColor: toolbarColor,
-          preferredControlTintColor: color,
-          readerMode: false,
-          animated: true,
-          modalPresentationStyle: "fullScreen",
-          modalTransitionStyle: "coverVertical",
-          modalEnabled: true,
-          enableBarCollapsing: false,
-          // Android Properties
-          showTitle: true,
-
-          toolbarColor: toolbarColor,
-          secondaryToolbarColor: toolbarColor,
-          navigationBarColor: toolbarColor,
-          navigationBarDividerColor: "white",
-          enableUrlBarHiding: true,
-          enableDefaultShare: true,
-          forceCloseOnRedirection: true,
-          // Specify full animation resource identifier(package:anim/name)
-          // or only resource name(in case of animation bundled with app).
-          animations: {
-            startEnter: "slide_in_right",
-            startExit: "slide_out_left",
-            endEnter: "slide_in_left",
-            endExit: "slide_out_right",
-          },
-          headers: {
-            "my-custom-header": "my custom header value",
-          },
-        });
-      } else Linking.openURL(url);
-    } catch (error) {}
+  const [result, setResult] = useState<WebBrowser.WebBrowserResult | null>(
+    null
+  );
+  const _handlePressButtonAsync = async () => {
+    let result = await WebBrowser.openBrowserAsync("https://www.isaacojo.me",{
+      
+    });
+    setResult(result);
   };
-
   const onToggleSwitch = () => {
     dispatch(setHighEnd({ isHighEnd: !isHighEndDevice }));
   };
   const modal = useBottomSheetModal()
   return (
-    <View style={{ flex: 1, padding: 20,paddingBottom:Platform.select({ios:insets.bottom,android:10}) }}>
+    <View style={{ flex: 1, padding: 20,paddingBottom:Platform.select({ios:insets.bottom,android:40}) }}>
       {isHighEndDevice ? (
         <BlurView
           experimentalBlurMethod= {isHighEndDevice ?"dimezisBlurView": undefined}
@@ -231,9 +200,7 @@ export default function CustomDrawerContent(
               justifyContent: "center",
               alignItems: "center",
             }}
-            onPress={() => {
-              openLink();
-            }}
+            onPress={_handlePressButtonAsync}
             android_ripple={{ color: pressColor, foreground: true }}
           >
             <GlobalIcon size={25} color={color} />

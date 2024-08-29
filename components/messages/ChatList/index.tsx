@@ -35,6 +35,7 @@ export default function ChatList({
   const chatList = useAppSelector((state) => state.chatlist);
   const backgroundColor = dark ? "#0D0F13" : "#F0F0F0";
   const color = !dark ? "black" : "white";
+  
   return (
     <Animated.View
       style={[

@@ -47,11 +47,13 @@ import Animated, {
   FadeInDown,
   FadeInUp,
   FadeOut,
+  interpolateColor,
   runOnJS,
   useAnimatedReaction,
   useAnimatedStyle,
   useSharedValue,
   withDelay,
+  withSpring,
   withTiming,
 } from "react-native-reanimated";
 import { useNetInfo } from "@react-native-community/netinfo";
@@ -144,28 +146,32 @@ function AnimatedSplashScreen({ children }: { children: ReactNode }) {
   const opacityK = useSharedValue(0);
   const offsetK = useSharedValue(0);
   const backgroundColorOffset = useSharedValue("black");
-
+  const colorSwitch = useSharedValue(0);
   const animatedStyles = useAnimatedStyle(() => {
     return {
       transform: [
         {
-          translateX: withDelay(
-            1000,
-            withTiming(
-              offset.value,
-
-              {
-                duration: 400,
-              },
-              () => {
-                isAnimationCompleteForQui.value = true;
-              }
-            )
-          ),
+          translateX: offset.value,
         },
       ],
     };
   });
+
+  useAnimatedReaction(
+    () => {},
+    () => {
+      offset.value = withSpring(
+        -38,
+
+        {
+          duration: 400,
+        },
+        () => {
+          isAnimationCompleteForQui.value = true;
+        }
+      );
+    }
+  );
   const animatedStylesK = useAnimatedStyle(() => {
     return {
       opacity: withTiming(opacityK.value),
@@ -185,14 +191,18 @@ function AnimatedSplashScreen({ children }: { children: ReactNode }) {
   });
   const animateBackgroundEntryStyle = useAnimatedStyle(() => {
     return {
-      backgroundColor: withTiming(backgroundColorOffset.value, {
-        duration: 2000,
-      }),
+      backgroundColor: interpolateColor(
+        colorSwitch.value,
+        [0, 1],
+        ["black", backgroundColor]
+      ),
     };
   });
   useEffect(() => {
     offset.value = -40;
-    backgroundColorOffset.value = backgroundColor;
+    colorSwitch.value = withTiming(1, {
+      duration: 400,
+    });
   }, [backgroundColor]);
 
   function callback() {
@@ -235,7 +245,6 @@ function AnimatedSplashScreen({ children }: { children: ReactNode }) {
               flex: 1,
               justifyContent: "center",
               alignItems: "center",
-              backgroundColor,
             },
             animateBackgroundEntryStyle,
           ]}
@@ -472,7 +481,9 @@ const Navigation = () => {
           style={style}
           backgroundColor="transparent"
         />
-        <GestureHandlerRootView style={{ flex: 1,backgroundColor:dark?"black":"white" }}>
+        <GestureHandlerRootView
+          style={{ flex: 1, backgroundColor: dark ? "black" : "white" }}
+        >
           {renderRoute()}
         </GestureHandlerRootView>
       </AnimatedSplashScreen>

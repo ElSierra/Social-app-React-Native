@@ -99,6 +99,7 @@ export default function MyPosts({ onScroll }: { onScroll: ScrollHandlerProcessed
     deletePostById({ id }).then((e) => console.log(e));
     setPosts((prev) => [...prev.filter((prev) => prev.id !== id)]);
   };
+  
   const renderItem = ({ item }: { item: IPost }) => (
     <>
       <PostBuilder

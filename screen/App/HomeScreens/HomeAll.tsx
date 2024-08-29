@@ -189,7 +189,7 @@ export default function HomeAll() {
   };
 
   const [indexInView, setIndexInView] = useState<Array<number | null>>([]);
-  useEffect;
+
   const renderItem = ({ item, index }: { item: IPost; index: number }) => (
     <PostBuilder
       id={item.id}
@@ -270,13 +270,14 @@ export default function HomeAll() {
         <EmptyList handleRefetch={handleRefetch} />
       ) : (
         <Animated.View style={{ flex: 1 }}>
-          <FlatList
+          <FlashList
             data={posts?.data}
             decelerationRate={0.991}
-            // estimatedItemSize={300}
+            estimatedItemSize={100}
             ListFooterComponent={renderFooter}
             refreshControl={
               <RefreshControl
+                
                 refreshing={refreshing}
                 onRefresh={onRefresh}
                 colors={["red", "blue"]}
@@ -285,7 +286,7 @@ export default function HomeAll() {
             // onViewableItemsChanged={onViewableItemsChanged.current}
             // viewabilityConfig={viewabilityConfig}
             keyExtractor={keyExtractor}
-            // estimatedListSize={{ width: width, height: height }}
+            estimatedListSize={{ width: width, height: height }}
             onEndReachedThreshold={0.3}
             onEndReached={fetchMoreData}
             renderItem={renderItem}

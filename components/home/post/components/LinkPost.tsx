@@ -13,6 +13,7 @@ import { HomeNavigationProp } from "../../../../types/navigation";
 import { useState } from "react";
 import useGetMode from "../../../../hooks/GetMode";
 import InAppBrowser from "react-native-inappbrowser-reborn";
+import * as WebBrowser from "expo-web-browser";
 
 export default function LinkPost({
   photoUri,
@@ -27,6 +28,19 @@ export default function LinkPost({
   title: string;
   url: string;
 }) {
+  const [result, setResult] = useState<WebBrowser.WebBrowserResult | null>(
+    null
+  );
+
+  const doesUrlContainHttp = url.includes("https://") || url.includes("http://");
+  const urlToOpen = doesUrlContainHttp ? url : `https://${url}`;
+
+  const _handlePressButtonAsync = async () => {
+    let result = await WebBrowser.openBrowserAsync(urlToOpen,{
+      
+    });
+    setResult(result);
+  };
   const dark = useGetMode();
   const color = dark ? "white" : "black";
   const backgroundColor = dark ? "#131313" : "#F1F1F1";
@@ -36,6 +50,7 @@ export default function LinkPost({
   const openLink = async () => {
     try {
       if (await InAppBrowser.isAvailable()) {
+        console.log("open link");
         const result = await InAppBrowser.open(url, {
           // iOS Properties
           dismissButtonStyle: "cancel",
@@ -69,6 +84,7 @@ export default function LinkPost({
             "my-custom-header": "my custom header value",
           },
         });
+        console.log("r", result);
       } else Linking.openURL(url);
     } catch (error) {}
   };
@@ -87,9 +103,7 @@ export default function LinkPost({
     >
       <Pressable
         android_ripple={{ color: "#000000", foreground: true }}
-        onPress={() => {
-          openLink();
-        }}
+        onPress={_handlePressButtonAsync}
         style={{
           width: "100%",
           height: photoUri[0] ? 200 : 50,
@@ -113,17 +127,21 @@ export default function LinkPost({
         <View
           style={{
             backgroundColor,
-            height:50,
-            justifyContent:"center",
-            
+            height: 50,
+            justifyContent: "center",
+
             paddingHorizontal: 10,
             paddingBottom: 5,
             borderBottomLeftRadius: 15,
             borderBottomRightRadius: 15,
           }}
         >
-          <Text numberOfLines={1} style={{ color, fontFamily: "jakaraBold" }}>{title}</Text>
-          <Text numberOfLines={1} style={{ color }}>{url}</Text>
+          <Text numberOfLines={1} style={{ color, fontFamily: "jakaraBold" }}>
+            {title}
+          </Text>
+          <Text numberOfLines={1} style={{ color }}>
+            {url}
+          </Text>
         </View>
       </Pressable>
     </View>

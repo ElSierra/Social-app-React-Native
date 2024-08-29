@@ -223,10 +223,11 @@ export default function HomeFollowed() {
           <FlashList
             data={posts.data}
             decelerationRate={0.991}
-            estimatedItemSize={250}
+            estimatedItemSize={600}
             ListFooterComponent={renderFooter}
             refreshControl={
               <RefreshControl
+              style={{marginTop:200}}
                 refreshing={refreshing}
                 onRefresh={onRefresh}
                 colors={["red", "blue"]}
