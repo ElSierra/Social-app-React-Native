@@ -29,7 +29,7 @@ Backend App - [GitHub Repository](https://github.com/ElSierra/SocialApp-NodeJS)
 
 1. Clone this repository: `git clone https://github.com/ElSierra/Social-app-React-Native`
 2. Navigate to the project directory: `cd Social-app-React-Native`
-3. Install dependencies: `npm install`
+3. Install dependencies: `bun install`
 4. Create a `.env` file in the root directory and set up your environment variables:
 
    - EXPO_PUBLIC_API_URL= http://{ip address}
@@ -42,4 +42,4 @@ Backend App - [GitHub Repository](https://github.com/ElSierra/SocialApp-NodeJS)
 
    - EXPO_PROJECT_ID={expo project id}
   
-5. Run the app: npm run android
+5. Run the app: bun run android
