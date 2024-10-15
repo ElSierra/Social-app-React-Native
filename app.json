@@ -19,7 +19,9 @@
         "react-native-screens@~3.31.1"
       ]
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "me.isaacojo.qui"
@@ -49,7 +51,18 @@
         }
       ],
       "react-native-compressor",
-      "react-native-edge-to-edge"
+      "react-native-edge-to-edge",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "newArchEnabled": false
+          },
+          "android": {
+            "newArchEnabled": false
+          }
+        }
+      ]
     ],
     "owner": "hojoisaac"
   }
