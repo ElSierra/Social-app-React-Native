@@ -88,7 +88,8 @@ export function BottomTabNavigator() {
             backgroundColor: isHighEndDevice ? "transparent" : backgroundColor,
             elevation: 0,
             height: Platform.OS == "ios" ? 40 + insets.bottom : 60,
-            paddingTop:10,
+            paddingTop: Platform.OS == "ios" ? 10 : 0,
+            paddingBottom: insets.bottom +10,
             borderTopWidth: 0.2,
 
             borderColor,
