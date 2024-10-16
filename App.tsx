@@ -68,7 +68,7 @@ import { PixelRatio } from "react-native";
 import DeviceInfo from "react-native-device-info";
 import { setHighEnd } from "./redux/slice/prefs";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import SystemNavigationBar from 'react-native-system-navigation-bar';
+import SystemNavigationBar from "react-native-system-navigation-bar";
 
 enableFreeze(true);
 Sentry.init({
@@ -78,7 +78,7 @@ Sentry.init({
 
 const persistor = persistStore(store);
 SplashScreen.preventAutoHideAsync();
-SystemNavigationBar.setNavigationColor('transparent');
+SystemNavigationBar.setNavigationColor("transparent");
 SystemNavigationBar.setNavigationBarContrastEnforced(true);
 export default function App() {
   useEffect(() => {
@@ -478,8 +478,8 @@ const Navigation = () => {
 
   return (
     <NavigationContainer onReady={onLayoutRootView} linking={linking}>
+      <SystemBars style={style} />
       <AnimatedSplashScreen>
-        <SystemBars style={style} />
         <StatusBar
           animated={true}
           style={style}
