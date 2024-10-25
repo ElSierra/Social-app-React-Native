@@ -3,7 +3,7 @@ import React, { useRef } from "react";
 
 import AnimatedScreen from "../../components/global/AnimatedScreen";
 import Header from "../../components/profilePeople/Header";
-import ExpoStatusBar from "expo-status-bar/build/ExpoStatusBar";
+import { StatusBar as ExpoStatusBar } from "expo-status-bar";
 import Bio from "../../components/profile/Bio";
 import MyPosts from "./ProfileScreens/MyPosts";
 import { ProfilePeopleProp } from "../../types/navigation";
@@ -19,7 +19,7 @@ export default function ProfilePeople({
     <AnimatedScreen>
       <ExpoStatusBar style="light" backgroundColor="transparent" />
       <View style={{ flex: 1 }}>
-        <Header animatedValue={offset}  {...route.params}/>
+        <Header animatedValue={offset} {...route.params} />
         <PeoplePosts offset={offset} {...route.params} />
       </View>
     </AnimatedScreen>
