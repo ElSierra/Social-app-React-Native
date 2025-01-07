@@ -43,3 +43,19 @@ Backend App - [GitHub Repository](https://github.com/ElSierra/SocialApp-NodeJS)
    - EXPO_PROJECT_ID={expo project id}
   
 5. Run the app: bun run android
+
+## License  
+
+This project is licensed under the **Creative Commons Attribution 4.0 International (CC BY 4.0)** License.  
+
+### Permissions  
+
+- ✅ Free to use, modify, and distribute **for both non-commercial and commercial purposes**  
+- ✅ Commercial use **is allowed** as long as proper credit is given  
+- ✅ You can adapt and remix this project  
+
+### Requirements
+
+- 📝 **Attribution Required**: You must provide appropriate credit, a link to the license, and indicate if changes were made.  
+
+For full details, refer to the [LICENSE](LICENSE) file.
