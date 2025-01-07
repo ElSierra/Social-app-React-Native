@@ -11,7 +11,6 @@
     <item name="android:textColor">@android:color/black</item>
   </style>
   <style name="Theme.App.SplashScreen" parent="AppTheme">
-  <item name="android:windowIsTranslucent">true</item>
     <item name="android:windowBackground">@drawable/splashscreen</item>
   </style>
 </resources>

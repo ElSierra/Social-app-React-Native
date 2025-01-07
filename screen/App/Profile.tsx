@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from "react";
 
 import AnimatedScreen from "../../components/global/AnimatedScreen";
 import Header from "../../components/profile/Header";
-import ExpoStatusBar from "expo-status-bar/build/ExpoStatusBar";
+import { StatusBar as ExpoStatusBar } from "expo-status-bar";
 import Bio from "../../components/profile/Bio";
 import MyPosts from "./ProfileScreens/MyPosts";
 import { useGetFollowDetailsQuery } from "../../redux/api/user";

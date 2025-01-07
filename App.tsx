@@ -114,8 +114,8 @@ export default function App() {
     <Provider store={store}>
       <PersistGate persistor={persistor}>
         <PaperProvider>
-          <CustomToast />
-          {/* <LoadingModal /> */}
+          <CustomToast /> 
+          <LoadingModal /> 
           <Navigation />
         </PaperProvider>
       </PersistGate>

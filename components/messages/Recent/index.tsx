@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import React, { useMemo } from "react";
 import AvatarName from "./AvatarName";
-import { FlatList } from "react-native-gesture-handler";
+import { FlatList } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import useGetMode from "../../../hooks/GetMode";
 import { useAppSelector } from "../../../redux/hooks/hooks";
