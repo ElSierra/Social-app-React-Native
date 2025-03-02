@@ -29,8 +29,10 @@ const post = createSlice({
     builder.addMatcher(
       servicesApi.endpoints.getAllPosts.matchFulfilled,
       (state, { payload }) => {
-        const data = [...state.data, ...payload.posts];
-        state.data = data;
+        const newPosts = payload.posts.filter(
+          newPost => !state.data.some(existingPost => existingPost.id === newPost.id)
+        );
+        state.data = [...state.data, ...newPosts];
         state.error = null;
         state.loading = false;
       }

@@ -223,7 +223,7 @@ export default function HomeFollowed() {
           <FlashList
             data={posts.data}
             decelerationRate={0.991}
-            estimatedItemSize={600}
+            estimatedItemSize={800}
             ListFooterComponent={renderFooter}
             refreshControl={
               <RefreshControl

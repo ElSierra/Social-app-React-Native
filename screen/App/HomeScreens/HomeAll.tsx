@@ -53,7 +53,7 @@ import { DrawerHomeProp, HomeProp } from "../../../types/navigation";
 import storage from "../../../redux/storage";
 import Robot from "../../../components/home/post/misc/Robot";
 import { setPlayingIds } from "../../../redux/slice/post/audio";
-
+import { LegendList } from "@legendapp/list";
 export default function HomeAll() {
   const dark = useGetMode();
   const dispatch = useAppDispatch();
@@ -269,15 +269,16 @@ export default function HomeAll() {
       ) : posts.data.length === 0 ? (
         <EmptyList handleRefetch={handleRefetch} />
       ) : (
-        <Animated.View style={{ flex: 1 }}>
-          <FlashList
+        <View style={{ flex: 1 }}>
+          <LegendList
             data={posts?.data}
             decelerationRate={0.991}
-            estimatedItemSize={100}
+            estimatedItemSize={800}
+            
+            recycleItems
             ListFooterComponent={renderFooter}
             refreshControl={
               <RefreshControl
-                
                 refreshing={refreshing}
                 onRefresh={onRefresh}
                 colors={["red", "blue"]}
@@ -286,13 +287,12 @@ export default function HomeAll() {
             // onViewableItemsChanged={onViewableItemsChanged.current}
             // viewabilityConfig={viewabilityConfig}
             keyExtractor={keyExtractor}
-            estimatedListSize={{ width: width, height: height }}
             onEndReachedThreshold={0.3}
             onEndReached={fetchMoreData}
             renderItem={renderItem}
             contentContainerStyle={{ paddingTop: 100, paddingBottom: 100 }}
           />
-        </Animated.View>
+        </View>
       )}
       <Fab item={<AddIcon size={30} color={color} />} />
     </View>

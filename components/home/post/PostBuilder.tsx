@@ -73,8 +73,8 @@ export default function PostBuilder({
 
   return (
     <ViewShot ref={ref} options={{ fileName: id, format: "jpg", quality: 0.9 }}>
-      <Animated.View
-        exiting={SlideOutRight.springify()}
+      <View
+     
         style={{
           borderBottomWidth: 0.5,
           borderBottomColor,
@@ -216,7 +216,7 @@ export default function PostBuilder({
             </View>
           </View>
         </Pressable>
-      </Animated.View>
+      </View>
     </ViewShot>
   );
 }
